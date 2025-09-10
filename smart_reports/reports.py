@@ -10,7 +10,8 @@ from smart_reports.complementary_businesses import get_other_businesses_data
 from smart_reports.scoring import *
 from smart_reports.report_generation.pharmacy_report_final import generate_report_from_data
 from typing import Dict, Any
-
+# Import the modular generator
+from smart_reports.html_generator.pharmacy_generator import generate_report
 from typing import Optional
 from .report_generation.report_config import source_current_location, source_custom_locations , source_shop_for_rent
 import json
@@ -278,21 +279,28 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
         Dict[str, Any]: Structured report data matching ResIntelligenceData format
     """
 
-    # Generate the processed report data
-    processed_report_data = await generate_pharmacy_report(req)
+    # # Generate the processed report data
+    # processed_report_data = await generate_pharmacy_report(req)
     
-    # Import the modular generator
-    from .html_generator import PharmacyReportGenerator
-    
-    # Create the generator instance
-    generator = PharmacyReportGenerator()
-    
+    # # save all_shops_data to json file for debugging
+    # debug_path = Path("processed_report_data.json")
+    # with open(debug_path, 'w') as f:
+    #     json.dump(processed_report_data, f, indent=4)
+
+    # read from json file
+    debug_path = Path("processed_report_data.json")
+    with open(debug_path, 'r') as f:
+        processed_report_data = json.load(f)
+
+    # prepare colors and logos
+    # format data desired text
+    # prepare charts and maps
+    # insert formatted text and charts into html templates
+    # combine all html parts into one complete html report
+
     # Generate the HTML report file
-    html_file_path = generator.generate_report({
-        'user_request': req,
-        'analysis_results': processed_report_data
-    })
-    
+    html_file_path = generate_report(req, processed_report_data)
+
     # Return structured data matching ResIntelligenceData format
     return {
         "title": processed_report_data.get("title", f"{req.city_name} Pharmacy Site Analysis Report"),
@@ -316,9 +324,5 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
 async def loading_category_dataset(req: ReqFetchDataset):
 
     data = await fetch_dataset(req)   
-    try:
-        features = data.get("features", []) 
-        return features
-    except Exception as e:
-        print("Error fetching features:", e)
-        return []
+    features = data.get("features", []) 
+    return features

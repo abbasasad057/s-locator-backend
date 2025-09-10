@@ -32,8 +32,6 @@ from config_factory import CONF
 from dine_in_suitability_analysis import analyze_dine_in_sites
 from all_types.request_dtypes import ReqDineInSuitabilityAnalysis
 from all_types.response_dtypes import ResDineInSuitabilityAnalysis
-from all_types.internal_types import UserId
-from smart_reports.reports import generate_pharmacy_report
 from smart_reports.reports import generate_html_pharmacy_report
 # from traffic_data import get_here_traffic_score
 from standalone_google_maps_traffic import analyze_traffic_at_location

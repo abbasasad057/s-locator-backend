@@ -6,8 +6,16 @@ Contains chart and visual component generation functions for pharmacy reports
 from typing import Dict, Any, List
 
 
-def generate_chart_grid(generated_charts: List[str], visual_analysis: Dict[str, Any] = None) -> str:
+def generate_chart_grid(processed_report_data = None) -> str:
     """Generate chart grid HTML"""
+    visual_analysis = processed_report_data.get("visual_analysis", {})
+    charts_data = visual_analysis.get("charts", [])
+
+    generated_charts = []
+    for chart in charts_data:
+        chart_url = chart.get("url", "")
+        generated_charts.append(chart_url)
+    
     if not generated_charts:
         return """
       <div class="map-placeholder">
@@ -51,8 +59,9 @@ def generate_chart_grid(generated_charts: List[str], visual_analysis: Dict[str, 
     
     return chart_html
 
-def generate_investment_insights_list(key_investment_insights: List[Dict[str, Any]]) -> str:
+def generate_investment_insights_list(processed_report_data: List[Dict[str, Any]]) -> str:
     """Generate investment insights list using only available JSON data"""
+    key_investment_insights = processed_report_data.get("key_investment_insights", [])
     if not key_investment_insights:
         return "<li>No investment insights available</li>"
     
@@ -62,20 +71,4 @@ def generate_investment_insights_list(key_investment_insights: List[Dict[str, An
         description = insight.get('description', 'No description available')
         insights_html += f'<li style="margin-bottom: 12px;"><strong>{category}:</strong> {description}</li>'
     
-    return insights_html
-
-def generate_investment_insights_cards(key_investment_insights: List[Dict[str, Any]]) -> str:
-    """Generate investment insights as cards"""
-    insights_html = ""
-    for insight in key_investment_insights[:6]:
-        insights_html += f"""
-      <div style="
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-          ">
-        <h4 style="color: #2c3e50; margin-bottom: 10px">{insight.get('category', 'Strategic Insight')}</h4>
-        <p>{insight.get('description', 'Key strategic insight for pharmacy investment.')}</p>
-      </div>"""
     return insights_html

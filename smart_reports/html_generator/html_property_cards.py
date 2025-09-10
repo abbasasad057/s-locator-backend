@@ -6,10 +6,11 @@ Contains property card generation functions for pharmacy reports
 from typing import Dict, Any, List
 
 
-def generate_property_cards(detailed_analysis: List[Dict[str, Any]], visual_analysis: Dict[str, Any] = None, processed_report_data: Dict[str, Any] = None) -> str:
+def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str:
     """Generate property cards HTML"""
     # Interactive maps mapping removed - not used in current implementation
-    
+    detailed_analysis = processed_report_data.get("detailed_analysis", [])
+    print(f"DEBUG: _generate_methodology_and_analysis_section called with {len(detailed_analysis)} items")
     property_cards_html = ""
     for i, property_data in enumerate(detailed_analysis, 1):
         site_name = property_data.get('site_name', 'Property')

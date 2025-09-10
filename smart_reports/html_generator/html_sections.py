@@ -5,17 +5,17 @@ Contains main section generation functions for pharmacy reports
 
 from typing import Dict, Any, List
 from datetime import datetime
-
+from .html_tables import _get_display_text_with_icon
 # Import functional modules
 from .html_tables import generate_rankings_table, generate_current_location_table, generate_custom_locations_table
 from .html_property_cards import generate_property_cards
 from .html_charts_visuals import generate_chart_grid, generate_investment_insights_list
 
 
-def generate_executive_summary_section(report_data, processed_report_data: Dict[str, Any]) -> str:
+def generate_executive_summary_section(req, processed_report_data: Dict[str, Any]) -> str:
     """Generate Executive Summary Section with rankings and top recommendations"""
     # Extract data
-    city_name = report_data.city_name if report_data else "Unknown City"
+    city_name = req.city_name
     title = processed_report_data.get("title", f"{city_name} Pharmacy Site Analysis Report")
     description = processed_report_data.get("description", "Comprehensive Location Intelligence & Investment Recommendations")
     summary_metrics = processed_report_data.get("summary_metrics", {})
@@ -30,13 +30,6 @@ def generate_executive_summary_section(report_data, processed_report_data: Dict[
     top_recommendation = executive_summary.get("top_recommendation", {})
     total_sites_evaluated = executive_summary.get("total_sites_evaluated", 0)
     
-    nearby_businesses = 0
-    population_age_35_plus = 0
-    avg_income = 0
-    traffic_score_display = "N/A"
-    demographics_score_display = "N/A"
-    competition_score_display = "N/A"
-    
     # Get additional metrics from top property's detailed insights
     detailed_analysis = processed_report_data.get('detailed_analysis', [])
     if detailed_analysis:
@@ -45,7 +38,6 @@ def generate_executive_summary_section(report_data, processed_report_data: Dict[
         detailed_insights = top_property.get('detailed_insights', {})
         business_environment = detailed_insights.get('business_environment', {})
         demographics_match = detailed_insights.get('demographics_match', {})
-        traffic_performance = detailed_insights.get('traffic_performance', {})
         
         # Map the available fields for display
         nearby_businesses = business_environment.get('nearby_businesses_500m', 0)
@@ -57,13 +49,12 @@ def generate_executive_summary_section(report_data, processed_report_data: Dict[
         competing_pharmacies = competitive_position.get('competing_pharmacies', 0)
         
         # Get scores from rankings data using display_text with icons
-        rankings = processed_report_data.get('rankings', [])
         top_ranking = {}
         if rankings:
             top_ranking = next((prop for prop in rankings if prop.get('rank') == 1), {})
         
         # Get display text with icons for each score
-        from .html_tables import _get_display_text_with_icon
+
         traffic_score_display = _get_display_text_with_icon(top_ranking.get('traffic_score_comparison', {}))
         demographics_score_display = _get_display_text_with_icon(top_ranking.get('demographics_score_comparison', {}))
         competition_score_display = _get_display_text_with_icon(top_ranking.get('competition_score_comparison', {}))
@@ -170,13 +161,10 @@ def generate_executive_summary_section(report_data, processed_report_data: Dict[
       </table>
     </div>"""
 
-def generate_methodology_and_analysis_section(report_data, processed_report_data: Dict[str, Any]) -> str:
+def generate_methodology_and_analysis_section(processed_report_data: Dict[str, Any]) -> str:
     """Generate Methodology and Detailed Property Analysis Section"""
-    detailed_analysis = processed_report_data.get("detailed_analysis", [])
-    print(f"DEBUG: _generate_methodology_and_analysis_section called with {len(detailed_analysis)} items")
-    
     # Generate property cards
-    property_cards_html = generate_property_cards(detailed_analysis[:10], processed_report_data.get('visual_analysis', {}), processed_report_data)
+    property_cards_html = generate_property_cards(processed_report_data)
     print(f"DEBUG: Property cards HTML length: {len(property_cards_html)}")
     print(f"DEBUG: First 500 chars of property cards: {property_cards_html[:500]}")
     
@@ -315,7 +303,7 @@ def generate_methodology_and_analysis_section(report_data, processed_report_data
       {property_cards_html}
     </div>"""
 
-def generate_visual_analysis_section(report_data, processed_report_data: Dict[str, Any], generated_maps: List[str], generated_charts: List[str], key_investment_insights: List[Dict[str, Any]]) -> str:
+def generate_visual_analysis_section(processed_report_data: Dict[str, Any]) -> str:
     """Generate Visual Analysis Section with maps, charts, and investment insights"""
     return f"""
     <div class="page page-break">
@@ -359,7 +347,7 @@ def generate_visual_analysis_section(report_data, processed_report_data: Dict[st
           ">
         <h2 style="color: #2c3e50; margin-bottom: 20px">📈 Statistical Analysis</h2>
         <div style="display: flex; flex-direction:column; gap: 24px; margin: 20px 0;">
-          {generate_chart_grid(generated_charts, processed_report_data.get('visual_analysis', {}))}
+          {generate_chart_grid(processed_report_data)}
         </div>
       </div>
 
@@ -418,7 +406,7 @@ def generate_visual_analysis_section(report_data, processed_report_data: Dict[st
       <div class="insights" style="margin-top: 30px;">
         <h3 style="margin-bottom: 15px;">💡 Key Investment Insights</h3>
         <ul style="margin-left: 20px; margin-top: 15px; line-height: 1.6;">
-          {generate_investment_insights_list(key_investment_insights)}
+          {generate_investment_insights_list(processed_report_data)}
         </ul>
       </div>
       

@@ -208,21 +208,22 @@ def generate_custom_locations_table(processed_report_data: Dict[str, Any]) -> st
   </table>"""
 
 def _get_display_text_with_icon(comparison_data: Dict[str, Any]) -> str:
-    """Extract display text with appropriate icon based on comparison type"""
+    """Extract display text with appropriate styled indicator based on comparison type"""
     if not comparison_data:
         return "N/A"
     
-    display_text = comparison_data.get('display_text', '')
+    value = comparison_data.get('value', 0)
+    current_value = comparison_data.get('current_value', 0)
     comparison_type = comparison_data.get('comparison_type', '')
     
-    # Add appropriate icon based on comparison type
+    # Add appropriate styled indicator based on comparison type
     if comparison_type == 'improvement':
-        return f"{display_text} 📈"
+        return f'{value}<span style="color: #22c55e; font-weight: 400;">(<span style="font-weight: 900; font-size: 1.4em;">↑</span> {current_value})</span>'
     elif comparison_type == 'disadvantage':
-        return f"{display_text} 📉"
+        return f'{value}<span style="color: #ef4444; font-weight: 400;">(<span style="font-weight: 900; font-size: 1.4em;">↓</span> {current_value})</span>'
     elif comparison_type == 'difference':
-        # For 'difference' (like 0% difference), just return the display text with no icon
-        return display_text
+        # For 'difference' (like 0% difference), just return the value
+        return str(value)
     else:
-        # For other types, just return the display text
-        return display_text
+        # For other types, just return the value
+        return str(value)

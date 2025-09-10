@@ -33,3 +33,5 @@ tool_bridge_mcp_server/logs/*
 # ignore log files of integration tests
 tests/integration/test_logs/*
 app.log
+
+processed_report_data.json

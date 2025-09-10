@@ -1256,7 +1256,7 @@ async def get_clusters_for_sales_man(
     )
 
     # Save geojson files for interactive plots
-    from use_json import use_json
+    from utils.use_json import use_json
     #make path of static/data into a global variable
     STATIC_DATA_DIR = "static/data"
     # create static data directory if it doesn't exist
