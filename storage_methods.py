@@ -921,7 +921,7 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
 
     # --- Population Layer ---
     if req.population and not req.income:
-        table_name = f"population_all_features_v{req.zoom_level}"
+        table_name = f"schema_marketplace.population_all_features_v{req.zoom_level}"
         sql = f"""
             SELECT ST_AsGeoJSON(t.*)::json AS feature
             FROM (
@@ -937,7 +937,7 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
         }
         layer_type = "population"
         # Population centers
-        centers_table = f"population_centers_v{req.zoom_level}"
+        centers_table = f"schema_marketplace.population_centers_v{req.zoom_level}"
         sql_centers = f"""
             SELECT ST_AsGeoJSON(t.*)::json AS feature
             FROM (
@@ -955,7 +955,7 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
 
     # --- Income Layer ---
     if req.income:
-        table_name = f"area_income_all_features_v{req.zoom_level}"
+        table_name = f"schema_marketplace.area_income_all_features_v{req.zoom_level}"
         sql = f"""
             SELECT ST_AsGeoJSON(t.*)::json AS feature
             FROM (

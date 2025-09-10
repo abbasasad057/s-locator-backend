@@ -3,6 +3,7 @@
     "id": 1,
     "name": "Starter",
     "price": "0 USD",
+    "tagline": "A simpler way to get started",
     "features": [
       {
         "included": true,
@@ -28,12 +29,17 @@
         "subtext": "Priority support",
         "meta": "Priority support not available in Starter"
       }
-    ]
+    ],
+    "ai": {
+      "tier": "Basic AI",
+      "subfeatures": ["AI conversation summaries"]
+    }
   },
   {
     "id": 2,
     "name": "Professional",
     "price": "145.45 USD",
+    "tagline": "Drive productivity in one place",
     "features": [
       {
         "included": true,
@@ -59,12 +65,18 @@
         "subtext": "Dedicated account manager",
         "meta": "Account manager available only in Agency plan"
       }
-    ]
+    ],
+    "ai": {
+      "tier": "Basic AI",
+      "subfeatures": ["AI conversation summaries", "AI workflow generation"]
+    }
   },
   {
     "id": 3,
     "name": "Agency",
     "price": "825 USD",
+    "tagline": "Scale with AI-powered work",
+    "recommended": true,
     "features": [
       {
         "included": true,
@@ -90,6 +102,26 @@
         "subtext": "Dedicated account manager",
         "meta": "Your own dedicated success manager"
       }
-    ]
+    ],
+    "ai": {
+      "tier": "Advanced AI",
+      "subfeatures": [
+        "AI conversation summaries",
+        "AI workflow generation",
+        "AI search",
+        "AI daily recaps",
+        "AI file summaries",
+                "AI conversation summaries",
+        "AI workflow generation",
+        "AI search",
+        "AI daily recaps",
+        "AI file summaries",
+                "AI conversation summaries",
+        "AI workflow generation",
+        "AI search",
+        "AI daily recaps",
+        "AI file summaries"
+      ]
+    }
   }
 ]
