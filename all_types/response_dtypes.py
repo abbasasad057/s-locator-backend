@@ -203,17 +203,6 @@ class ResSrcDistination(BaseModel):
     drive_time_in_min : float
     drive_polygon: str
 
-class PopulationViewportData(BaseModel):
-    type: str = "FeatureCollection"
-    features: List[dict]  # Use dict instead of Feature for flexibility
-    properties: list[str] = []
-    records_count: int
-    zoom_level: int
-    min_lng: Optional[float] = None
-    min_lat: Optional[float] = None
-    max_lng: Optional[float] = None
-    max_lat: Optional[float] = None
-
 
 class ResSalesman(BaseModel):
     success: bool

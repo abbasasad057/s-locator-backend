@@ -12,7 +12,6 @@ from backend_common.database import Database
 import pandas as pd
 from sql_object import SqlObject
 from all_types.request_dtypes import ReqFetchDataset, ReqIntelligenceData
-from all_types.response_dtypes import PopulationViewportData
 from logging_wrapper import apply_decorator_to_module
 from backend_common.auth import firebase_db
 import asyncpg
@@ -610,21 +609,21 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
         type_str = dataset_id[type_start:]
         # Handle multiple types separated by commas
         property_types = [t.strip() for t in type_str.split(",")]
-        
-        # bbox_coords format: [min_lng, min_lat, max_lng, max_lat]
-        min_lng = bbox_coords[0]
-        min_lat = bbox_coords[1]
-        max_lng = bbox_coords[2]
-        max_lat = bbox_coords[3] 
+
+        # bbox_coords format: [bottom_lng, bottom_lat, top_lng, top_lat]
+        bottom_lng = bbox_coords[0]
+        bottom_lat = bbox_coords[1]
+        top_lng = bbox_coords[2]
+        top_lat = bbox_coords[3] 
         
         # Query the database using the correct parameter mapping
         city_data = await Database.fetch(
             SqlObject.real_estate_full_data,
             property_types,  # $1 - category array
-            min_lng,
-            min_lat,
-            max_lng,
-            max_lat
+            bottom_lng,
+            bottom_lat,
+            top_lng,
+            top_lat
         )
         
         # Convert to DataFrame and then to GeoJSON format
@@ -852,8 +851,8 @@ async def get_real_estate_dataset_from_storage(
         features.append(feature)
    
     geojson_data = {"type": "FeatureCollection", "features": features}
-    
-    # Format bounding box as min_lng,min_lat,max_lng,max_lat
+
+    # Format bounding box as bottom_lng,bottom_lat,top_lng,top_lat
     bbox_str = f"{req.bounding_box[0]},{req.bounding_box[1]},{req.bounding_box[2]},{req.bounding_box[3]}"
     
     # Format data type - handle both single string and list formats

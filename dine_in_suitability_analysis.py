@@ -269,15 +269,15 @@ async def fetch_demographics_for_candidates(request: ReqDineInSuitabilityAnalysi
     lats = [c['lat'] for c in candidates]
     lngs = [c['lng'] for c in candidates]
     
-    min_lat, max_lat = min(lats), max(lats)
-    min_lng, max_lng = min(lngs), max(lngs)
+    bottom_lat, top_lat = min(lats), max(lats)
+    bottom_lng, top_lng = min(lngs), max(lngs)
     
     # Add buffer
     buffer = 0.02
-    top_lat = max_lat + buffer
-    bottom_lat = min_lat - buffer
-    top_lng = max_lng + buffer
-    bottom_lng = min_lng - buffer
+    top_lat = top_lat + buffer
+    bottom_lat = bottom_lat - buffer
+    top_lng = top_lng + buffer
+    bottom_lng = bottom_lng - buffer
     
     demographics_request = ReqIntelligenceData(
         top_lng=top_lng,

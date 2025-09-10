@@ -962,4 +962,4 @@ def update_interactive_scatter(selected_variable):
         return {}
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

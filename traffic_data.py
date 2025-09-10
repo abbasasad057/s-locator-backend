@@ -19,13 +19,13 @@ def calculate_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> fl
     
     return R * c
 
-def chunk_bounding_box(min_lng: float, min_lat: float, max_lng: float, max_lat: float, max_size: float = 0.95) -> List[Dict[str, float]]:
+def chunk_bounding_box(bottom_lng: float, bottom_lat: float, top_lng: float, top_lat: float, max_size: float = 0.95) -> List[Dict[str, float]]:
     """Split a large bounding box into smaller chunks that fit HERE API limits"""
     chunks = []
     
     # Calculate how many chunks we need in each direction
-    width = max_lng - min_lng
-    height = max_lat - min_lat
+    width = top_lng - bottom_lng
+    height = top_lat - bottom_lat
     
     lng_chunks = math.ceil(width / max_size)
     lat_chunks = math.ceil(height / max_size)
@@ -40,16 +40,16 @@ def chunk_bounding_box(min_lng: float, min_lat: float, max_lng: float, max_lat: 
     # Create chunks
     for i in range(lng_chunks):
         for j in range(lat_chunks):
-            chunk_min_lng = min_lng + i * lng_step
-            chunk_max_lng = min(min_lng + (i + 1) * lng_step, max_lng)
-            chunk_min_lat = min_lat + j * lat_step
-            chunk_max_lat = min(min_lat + (j + 1) * lat_step, max_lat)
+            chunk_min_lng = bottom_lng + i * lng_step
+            chunk_max_lng = min(bottom_lng + (i + 1) * lng_step, top_lng)
+            chunk_min_lat = bottom_lat + j * lat_step
+            chunk_max_lat = min(bottom_lat + (j + 1) * lat_step, top_lat)
             
             chunks.append({
-                'min_lng': chunk_min_lng,
-                'min_lat': chunk_min_lat,
-                'max_lng': chunk_max_lng,
-                'max_lat': chunk_max_lat,
+                'bottom_lng': chunk_min_lng,
+                'bottom_lat': chunk_min_lat,
+                'top_lng': chunk_max_lng,
+                'top_lat': chunk_max_lat,
                 'bbox_string': f"{chunk_min_lng},{chunk_min_lat},{chunk_max_lng},{chunk_max_lat}"
             })
     
@@ -63,11 +63,11 @@ async def fetch_here_traffic_flow_chunked(bbox: str) -> List[Dict[str, Any]]:
     
     # Parse bounding box
     coords = list(map(float, bbox.split(',')))
-    min_lng, min_lat, max_lng, max_lat = coords
+    bottom_lng, bottom_lat, top_lng, top_lat = coords
     
     # Check if chunking is needed
-    width = max_lng - min_lng
-    height = max_lat - min_lat
+    width = top_lng - bottom_lng
+    height = top_lat - bottom_lat
     max_dimension = max(width, height)
     
     if max_dimension <= 1.0:
@@ -77,7 +77,7 @@ async def fetch_here_traffic_flow_chunked(bbox: str) -> List[Dict[str, Any]]:
     else:
         # Multiple requests - chunking needed
         logger.info(f"Bounding box size {width:.3f}° x {height:.3f}° - chunking required")
-        chunks = chunk_bounding_box(min_lng, min_lat, max_lng, max_lat)
+        chunks = chunk_bounding_box(bottom_lng, bottom_lat, top_lng, top_lat)
         
         all_results = []
         successful_chunks = 0
@@ -247,13 +247,13 @@ def get_traffic_bbox_for_candidates(candidates: List[Dict[str, Any]]) -> str:
     lats = [c['lat'] for c in candidates]
     lngs = [c['lng'] for c in candidates]
     
-    min_lat, max_lat = min(lats), max(lats)
-    min_lng, max_lng = min(lngs), max(lngs)
+    bottom_lat, top_lat = min(lats), max(lats)
+    bottom_lng, top_lng = min(lngs), max(lngs)
     
     # Use smaller buffer to avoid exceeding limits
     # Calculate current dimensions
-    current_width = max_lng - min_lng
-    current_height = max_lat - min_lat
+    current_width = top_lng - bottom_lng
+    current_height = top_lat - bottom_lat
     
     # Use adaptive buffer - smaller for larger areas
     if max(current_width, current_height) > 0.8:
@@ -263,16 +263,16 @@ def get_traffic_bbox_for_candidates(candidates: List[Dict[str, Any]]) -> str:
     else:
         buffer = 0.02   # Normal buffer for small areas
     
-    min_lng -= buffer
-    max_lng += buffer
-    min_lat -= buffer
-    max_lat += buffer
+    bottom_lng -= buffer
+    top_lng += buffer
+    bottom_lat -= buffer
+    top_lat += buffer
     
-    bbox = f"{min_lng},{min_lat},{max_lng},{max_lat}"
+    bbox = f"{bottom_lng},{bottom_lat},{top_lng},{top_lat}"
     
     # Log the final bounding box size for debugging
-    final_width = max_lng - min_lng
-    final_height = max_lat - min_lat
+    final_width = top_lng - bottom_lng
+    final_height = top_lat - bottom_lat
     logger.info(f"Generated traffic bounding box: {final_width:.3f}° x {final_height:.3f}° (buffer: {buffer:.3f}°)")
     
     return bbox

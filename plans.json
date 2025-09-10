@@ -1,40 +1,95 @@
-{
-  "pay_as_you_go": {
-    "title": "Pay As You Go",
+[
+  {
+    "id": 1,
+    "name": "Starter",
+    "price": "0 USD",
     "features": [
-      "Up to 5 users",
-      "10 reports/month",
-      "Email support",
-      "Basic analytics"
-    ],
-    "price_per_report": 5
-  },
-  "packages": {
-    "title": "Packages",
-    "sliders": {
-      "users": {
-        "min": 1,
-        "max": 10,
-        "step": 1,
-        "base_price_per_user": 10,
-        "discount_per_user": 0.05
+      {
+        "included": true,
+        "text": "Feature 1",
+        "subtext": "Basic access to core tools",
+        "meta": "Starter includes limited basic tools only"
       },
-      "reports": {
-        "min": 1,
-        "max": 5,
-        "step": 1,
-        "base_price_per_report": 2,
-        "discount_per_report": 0.02
+      {
+        "included": true,
+        "text": "Feature 2",
+        "subtext": "Limited support",
+        "meta": "Support response within 48 hours"
+      },
+      {
+        "included": false,
+        "text": "Feature 3",
+        "subtext": "Advanced analytics",
+        "meta": "Analytics are disabled in Starter plan"
+      },
+      {
+        "included": false,
+        "text": "Feature 4",
+        "subtext": "Priority support",
+        "meta": "Priority support not available in Starter"
       }
-    },
-    "initial_discount": 0.1
+    ]
   },
-  "enterprise": {
-    "title": "Enterprise Plan",
-    "redirect_url": "/contact"
+  {
+    "id": 2,
+    "name": "Professional",
+    "price": "145.45 USD",
+    "features": [
+      {
+        "included": true,
+        "text": "Feature 1",
+        "subtext": "Full access to core tools",
+        "meta": "Professional plan unlocks all core tools"
+      },
+      {
+        "included": true,
+        "text": "Feature 2",
+        "subtext": "Standard support",
+        "meta": "Support response within 24 hours"
+      },
+      {
+        "included": true,
+        "text": "Feature 3",
+        "subtext": "Advanced analytics",
+        "meta": "Get insights with advanced reports"
+      },
+      {
+        "included": false,
+        "text": "Feature 4",
+        "subtext": "Dedicated account manager",
+        "meta": "Account manager available only in Agency plan"
+      }
+    ]
   },
-  "signup": {
-    "title": "Sign Up",
-    "redirect_url": "https://your-existing-app.com"
+  {
+    "id": 3,
+    "name": "Agency",
+    "price": "825 USD",
+    "features": [
+      {
+        "included": true,
+        "text": "Feature 1",
+        "subtext": "Unlimited access",
+        "meta": "No feature restrictions in Agency plan"
+      },
+      {
+        "included": true,
+        "text": "Feature 2",
+        "subtext": "Premium support",
+        "meta": "Support response within 1 hour"
+      },
+      {
+        "included": true,
+        "text": "Feature 3",
+        "subtext": "Advanced analytics",
+        "meta": "Includes AI-powered insights"
+      },
+      {
+        "included": true,
+        "text": "Feature 4",
+        "subtext": "Dedicated account manager",
+        "meta": "Your own dedicated success manager"
+      }
+    ]
   }
-}
+]

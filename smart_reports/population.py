@@ -5,10 +5,10 @@ from all_types.request_dtypes import ReqIntelligenceData
 async def fetch_demographics(bbox : dict , user_id : str):
     try:
         req_bbox = ReqIntelligenceData(   
-            top_lng=bbox["max_lng"],
-            top_lat=bbox["max_lat"],
-            bottom_lng=bbox["min_lng"],
-            bottom_lat=bbox["min_lat"],
+            top_lng=bbox["top_lng"],
+            top_lat=bbox["top_lat"],
+            bottom_lng=bbox["bottom_lng"],
+            bottom_lat=bbox["bottom_lat"],
             user_id=user_id,
             zoom_level=12,
             income=True,
@@ -84,10 +84,10 @@ async def fetch_household_sizes(bbox : dict):
         
         row = await Database.fetchrow(
             query,
-            bbox["min_lng"],
-            bbox["min_lat"],
-            bbox["max_lng"],
-            bbox["max_lat"]
+            bbox["bottom_lng"],
+            bbox["bottom_lat"],
+            bbox["top_lng"],
+            bbox["top_lat"]
         )
 
         return {
