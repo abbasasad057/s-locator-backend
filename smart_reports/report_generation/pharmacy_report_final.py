@@ -21,7 +21,10 @@ from .data_processor import  process_sites, calculate_statistics
 from .chart_generator import plot_top_stacked, plot_traffic, plot_breakdown, plot_healthcare_vs_competition, plot_score_vs_price
 from .map_generator import create_static_map_png, create_demographic_heatmap_png
 from .report_generator import generate_markdown
-from .report_config import FONT_FAMILY, UNICODE_MINUS, DEFAULT_OUTPUT_DIR, DEFAULT_OUTPUT_FILENAME
+from .report_config import (
+    FONT_FAMILY, UNICODE_MINUS, DEFAULT_OUTPUT_DIR, DEFAULT_OUTPUT_FILENAME,
+    DIR_IMAGE, create_report_asset_path
+)
 # Set up matplotlib for Arabic text support
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = FONT_FAMILY
@@ -30,16 +33,17 @@ plt.rcParams['axes.unicode_minus'] = UNICODE_MINUS
 
 def generate_all_charts(sites: list, outdir: str, top_n: int , criterions : dict) -> dict:
     """Generate all required charts and return their file paths."""
+    # Use image directory for static plot images
+
     charts = {
-        'top_stacked': os.path.join(outdir, 'charts', 'top_stacked.png'),
-        'traffic': os.path.join(outdir, 'charts', 'traffic_flow.png'),
-        'best_breakdown': os.path.join(outdir, 'charts', 'best_breakdown.png'),
-        'price_vs_score' : os.path.join(outdir , 'charts' , 'price_vs_score.png'),
-        'healthcare_competition' : os.path.join(outdir , 'charts' , 'healthcare_competition.png')
+        'top_stacked': create_report_asset_path('top_stacked.png', "image"),
+        'traffic': create_report_asset_path('traffic_flow.png', "image"),
+        'best_breakdown': create_report_asset_path('best_breakdown.png', "image"),
+        'price_vs_score' : create_report_asset_path('price_vs_score.png', "image"),
+        'healthcare_competition' : create_report_asset_path('healthcare_competition.png', "image")
     }
     
     # Generate top stacked chart
-
     list_criterions = list(criterions)
     plot_top_stacked(sites, top_n, charts['top_stacked'] , list_criterions)
     logging.info("✅ Generated top stacked chart")
@@ -58,16 +62,12 @@ def generate_all_charts(sites: list, outdir: str, top_n: int , criterions : dict
     plot_healthcare_vs_competition(sites=sites , outpath=charts['healthcare_competition'] , top_n=top_n)
     return charts
 
-def ensure_directories(outdir: str):
-    """Ensure all required output directories exist."""
-    for sub in ['charts', 'maps', 'data']:
-        os.makedirs(os.path.join(outdir, sub), exist_ok=True)
-
 def generate_all_maps(sites: list, outdir: str, top_n: int) -> tuple:
     """Generate all required maps and return their file paths."""
-    map_png = os.path.join(outdir, 'maps', 'candidates_map.png')
-    heat_png = os.path.join(outdir, 'maps', 'demographics_heatmap.png')
-    
+    # Use image directory from config
+    map_png = create_report_asset_path('candidates_map.png', "image")
+    heat_png = create_report_asset_path('demographics_heatmap.png', "image")
+
     # Generate candidates map
     extent = None
     try:
@@ -86,7 +86,7 @@ def generate_all_maps(sites: list, outdir: str, top_n: int) -> tuple:
     return map_png, heat_png
 
 
-async def generate_report_from_data(
+async def generate_md_report_from_data(
     scores_data: dict,
     criterion_weights : Dict[str , float],
     max_total : float ,
@@ -113,10 +113,6 @@ async def generate_report_from_data(
     print("🚀 Starting Enhanced Pharmacy Site Analysis...")
     print(f"📁 Output directory: {output_dir}")
     print(f"📊 Analyzing top {top_n} locations")
-    
-    # Set up output directory
-    os.makedirs(output_dir, exist_ok=True)
-    ensure_directories(output_dir)
     
     # Process data directly from memory
     logging.info("📊 Processing site data from memory...")

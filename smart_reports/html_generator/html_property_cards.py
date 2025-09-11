@@ -4,6 +4,7 @@ Contains property card generation functions for pharmacy reports
 """
 
 from typing import Dict, Any, List
+from .html_tables import _get_display_text_with_icon
 
 
 def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str:
@@ -133,22 +134,3 @@ def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str
       </div>"""
     return property_cards_html
 
-def _get_display_text_with_icon(comparison_data: Dict[str, Any]) -> str:
-    """Extract display text with appropriate icon based on comparison type"""
-    if not comparison_data:
-        return "N/A"
-    
-    display_text = comparison_data.get('display_text', '')
-    comparison_type = comparison_data.get('comparison_type', '')
-    
-    # Add appropriate icon based on comparison type
-    if comparison_type == 'improvement':
-        return f"{display_text} 📈"
-    elif comparison_type == 'disadvantage':
-        return f"{display_text} 📉"
-    elif comparison_type == 'difference':
-        # For 'difference' (like 0% difference), just return the display text with no icon
-        return display_text
-    else:
-        # For other types, just return the display text
-        return display_text

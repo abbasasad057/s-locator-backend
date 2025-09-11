@@ -5,6 +5,26 @@ Contains all table generation functions for pharmacy reports
 
 from typing import Dict, Any, List
 
+def _get_display_text_with_icon(comparison_data: Dict[str, Any]) -> str:
+    """Extract display text with appropriate styled indicator based on comparison type"""
+    if not comparison_data:
+        return "N/A"
+    
+    value = comparison_data.get('value', 0)
+    current_value = comparison_data.get('current_value', 0)
+    comparison_type = comparison_data.get('comparison_type', '')
+    
+    # Add appropriate styled indicator based on comparison type
+    if comparison_type == 'improvement':
+        return f'{value}<span style="color: #22c55e; font-weight: 400;">(<span style="font-weight: 900; font-size: 1.4em;">↑</span> {current_value})</span>'
+    elif comparison_type == 'disadvantage':
+        return f'{value}<span style="color: #ef4444; font-weight: 400;">(<span style="font-weight: 900; font-size: 1.4em;">↓</span> {current_value})</span>'
+    elif comparison_type == 'difference':
+        # For 'difference' (like 0% difference), just return the value
+        return str(value)
+    else:
+        # For other types, just return the value
+        return str(value)
 
 def generate_rankings_table(rankings: List[Dict[str, Any]]) -> str:
     """Generate rankings table HTML"""
@@ -207,23 +227,3 @@ def generate_custom_locations_table(processed_report_data: Dict[str, Any]) -> st
     </tbody>
   </table>"""
 
-def _get_display_text_with_icon(comparison_data: Dict[str, Any]) -> str:
-    """Extract display text with appropriate styled indicator based on comparison type"""
-    if not comparison_data:
-        return "N/A"
-    
-    value = comparison_data.get('value', 0)
-    current_value = comparison_data.get('current_value', 0)
-    comparison_type = comparison_data.get('comparison_type', '')
-    
-    # Add appropriate styled indicator based on comparison type
-    if comparison_type == 'improvement':
-        return f'{value}<span style="color: #22c55e; font-weight: 400;">(<span style="font-weight: 900; font-size: 1.4em;">↑</span> {current_value})</span>'
-    elif comparison_type == 'disadvantage':
-        return f'{value}<span style="color: #ef4444; font-weight: 400;">(<span style="font-weight: 900; font-size: 1.4em;">↓</span> {current_value})</span>'
-    elif comparison_type == 'difference':
-        # For 'difference' (like 0% difference), just return the value
-        return str(value)
-    else:
-        # For other types, just return the value
-        return str(value)

@@ -5,11 +5,47 @@ Contains main section generation functions for pharmacy reports
 
 from typing import Dict, Any, List
 from datetime import datetime
-from .html_tables import _get_display_text_with_icon
 # Import functional modules
 from .html_tables import generate_rankings_table, generate_current_location_table, generate_custom_locations_table
 from .html_property_cards import generate_property_cards
 from .html_charts_visuals import generate_chart_grid, generate_investment_insights_list
+
+
+def _generate_investment_insights_cards(key_investment_insights: List[Dict[str, Any]]) -> str:
+    """Generate HTML cards for key investment insights"""
+    cards_html = ""
+    
+    for insight in key_investment_insights:
+        category = insight.get('category', '')
+        description = insight.get('description', '')
+        
+        # Choose appropriate icon based on category
+        icon_map = {
+            'Prime Opportunity': '🏆',
+            'Market Dynamics': '📊',
+            'Traffic Advantage': '🚗',
+            'Business Ecosystem': '🏪',
+            'Demographic Alignment': '👥'
+        }
+        icon = icon_map.get(category, '💡')
+        
+        cards_html += f"""
+          <div style="
+                background: rgba(255, 255, 255, 0.1);
+                padding: 20px;
+                border-radius: 10px;
+                border-left: 4px solid #3498db;
+              ">
+            <h4 style="color: white; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+              {icon} {category}
+            </h4>
+            <p style="color: #ecf0f1; margin: 0; line-height: 1.5;">
+              {description}
+            </p>
+          </div>
+        """
+    
+    return cards_html
 
 
 def generate_executive_summary_section(req, processed_report_data: Dict[str, Any]) -> str:
@@ -21,6 +57,7 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
     summary_metrics = processed_report_data.get("summary_metrics", {})
     executive_summary = processed_report_data.get("executive_summary", {})
     rankings = processed_report_data.get("rankings", [])
+    key_investment_insights = processed_report_data.get("key_investment_insights", [])
     
     total_locations = summary_metrics.get("total_locations", 0)
     average_score = summary_metrics.get("average_score", 0)
@@ -30,34 +67,19 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
     top_recommendation = executive_summary.get("top_recommendation", {})
     total_sites_evaluated = executive_summary.get("total_sites_evaluated", 0)
     
-    # Get additional metrics from top property's detailed insights
-    detailed_analysis = processed_report_data.get('detailed_analysis', [])
-    if detailed_analysis:
-        # Find the top ranking property (rank 1) to get its detailed insights
-        top_property = next((prop for prop in detailed_analysis if prop.get('rank') == 1), {})
-        detailed_insights = top_property.get('detailed_insights', {})
-        business_environment = detailed_insights.get('business_environment', {})
-        demographics_match = detailed_insights.get('demographics_match', {})
+    # Extract data from key investment insights for top recommendation details
+    traffic_advantage = next((insight for insight in key_investment_insights if insight.get('category') == 'Traffic Advantage'), {})
+    business_ecosystem = next((insight for insight in key_investment_insights if insight.get('category') == 'Business Ecosystem'), {})
+    demographic_alignment = next((insight for insight in key_investment_insights if insight.get('category') == 'Demographic Alignment'), {})
+    market_dynamics = next((insight for insight in key_investment_insights if insight.get('category') == 'Market Dynamics'), {})
+    
+    # Extract score data for display
+    traffic_score = traffic_advantage.get('traffic_score', 0)
+    avg_speed = traffic_advantage.get('average_speed_kmh', 0)
+    nearby_businesses = business_ecosystem.get('nearby_businesses_count', 0)
+    demographics_score = demographic_alignment.get('demographics_score', 0)
+    total_competitors = market_dynamics.get('total_competitors', 0)
         
-        # Map the available fields for display
-        nearby_businesses = business_environment.get('nearby_businesses_500m', 0)
-        population_age_35_plus = demographics_match.get('population_age_35_plus_percent', 0)
-        avg_income = demographics_match.get('average_income_sar', 0)
-        
-        # Get competition data
-        competitive_position = detailed_insights.get('competitive_position', {})
-        competing_pharmacies = competitive_position.get('competing_pharmacies', 0)
-        
-        # Get scores from rankings data using display_text with icons
-        top_ranking = {}
-        if rankings:
-            top_ranking = next((prop for prop in rankings if prop.get('rank') == 1), {})
-        
-        # Get display text with icons for each score
-
-        traffic_score_display = _get_display_text_with_icon(top_ranking.get('traffic_score_comparison', {}))
-        demographics_score_display = _get_display_text_with_icon(top_ranking.get('demographics_score_comparison', {}))
-        competition_score_display = _get_display_text_with_icon(top_ranking.get('competition_score_comparison', {}))
     
     return f"""
     <div class="page">
@@ -103,8 +125,8 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
         </h2>
         <h3 style="font-size: 1.8em; margin-bottom: 10px">Property #1: {top_recommendation.get('site_name', 'Top Property')}</h3>
         <div class="score-display">{top_recommendation.get('score', 0):.1f}/100</div>
-        <p style="display: none">
-          <strong>Price:</strong> {top_recommendation.get('price_sar', 0):,.0f} SAR
+        <p style="margin-bottom: 20px">
+          <strong>Investment Price:</strong> {top_recommendation.get('price_sar', 0):,.0f} SAR
         </p>
         <div style="
               display: grid;
@@ -113,24 +135,24 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
               margin-top: 20px;
             ">
           <div>
-            <strong>🚗 Traffic Analysis:</strong><br />
-            {traffic_score_display}<br />
-            <small>Target: 20–30 km/h | ℹ️ Light traffic</small>
+            <strong>🚗 Traffic Advantage:</strong><br />
+            {traffic_score:.1f}/100 points<br />
+            <small>Average Speed: {avg_speed:.1f} km/h | ℹ️ Optimal accessibility</small>
           </div>
           <div>
-            <strong>🏪 Business Environment:</strong><br />
-            {nearby_businesses} businesses within 500m<br />
-            <small>✅ Strong ecosystem</small>
+            <strong>🏪 Business Ecosystem:</strong><br />
+            {nearby_businesses} nearby businesses<br />
+            <small>✅ Strong commercial environment</small>
           </div>
           <div>
             <strong>👥 Demographics:</strong><br />
-            {demographics_score_display}<br />
-            <small>Age: {population_age_35_plus:.1f}% | Income: {avg_income:,.0f} SAR</small>
+            {demographics_score:.1f}/100 points<br />
+            <small>Strong market alignment</small>
           </div>
           <div>
-            <strong>☕ Competition:</strong><br />
-            {competition_score_display}<br />
-            <small>({competing_pharmacies} pharmacies)</small>
+            <strong>🏥 Competition:</strong><br />
+            {total_competitors} competing pharmacies<br />
+            <small>Emerging market opportunity</small>
           </div>
         </div>
       </div>

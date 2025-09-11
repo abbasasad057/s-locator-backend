@@ -4,7 +4,6 @@ Data processing utilities for pharmacy site selection analysis.
 import json
 import math
 from typing import List, Dict, Any, Tuple, Optional
-import os 
 from urllib.parse import quote_plus
 
 def to_num(x: Any) -> float:
@@ -164,17 +163,6 @@ def calculate_statistics(sites: List[Dict]) -> Dict[str, float]:
         'total_sites': len(sites)
     }
 
-def relpath_for_md(target: Optional[str], md_path: str) -> Optional[str]:
-    """Calculate relative path for markdown links."""
-    if not target:
-        return None
-    if not os.path.exists(target):
-        return None
-    md_dir = os.path.dirname(md_path) or os.getcwd()
-    try:
-        return os.path.relpath(target, start=md_dir)
-    except Exception:
-        return target
 
 
 def google_maps_link(site: Dict) -> str:

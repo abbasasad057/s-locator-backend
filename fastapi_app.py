@@ -8,7 +8,7 @@ import stripe
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
-
+from smart_reports.report_generation.report_config import setup_report_directories, DEFAULT_OUTPUT_DIR
 from backend_common.background import set_background_tasks
 from backend_common.database import Database
 from backend_common.auth import firebase_db
@@ -43,11 +43,9 @@ app.include_router(campaign_router, prefix="", tags=["Campaign"])
 app.include_router(plans_router, prefix="", tags=["Plans"])
 
 # Create static directory and mount static files
-os.makedirs("static/plots", exist_ok=True)
-try:
-    os.makedirs("static/reports", exist_ok=True)
-except FileExistsError:
-    pass
+# Set up output directories using centralized function
+setup_report_directories()
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 

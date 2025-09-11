@@ -6,8 +6,8 @@ import math
 from typing import List, Dict, Optional, Any
 from .map_generator import generate_site_map_image   
 from typing import Dict, List, Any, Optional
-from .report_config import source_current_location, source_custom_locations, source_shop_for_rent
-from .data_processor import google_maps_link,normalize_score_to_100
+from .report_config import source_current_location, source_custom_locations, DIR_REPORTS, DIR_IMAGE
+from .data_processor import normalize_score_to_100
 from .report_object import generate_detailed_insights_dict, generate_insights_dict, generate_rankings_dict, generate_rankings_dict_with_current_comparison
 
 def generate_detailed_insights(site: Dict) -> str:
@@ -244,8 +244,9 @@ def write_detailed_analysis(
         
         # Maps
         map_image, html_map = generate_site_map_image(s, maps_dir, MAX_TOTAL)
-        map_image_rel = map_image.replace("\\", "/") if map_image else None
-        html_map_rel = html_map.replace("\\", "/") if html_map else None
+        # Make paths relative to markdown directory
+        map_image_rel = os.path.relpath(map_image, os.path.dirname(md_path)).replace("\\", "/") if map_image else None
+        html_map_rel = os.path.relpath(html_map, os.path.dirname(md_path)).replace("\\", "/") if html_map else None
         if map_image_rel:
             md.write(f"![Site Map]({map_image_rel})\n\n")
         if html_map_rel:
@@ -335,10 +336,13 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
     current_location = [site for site in sites_sorted if site.get("source") == source_current_location]
 
     best = top_sites[0] if top_sites else None
-    md_path = os.path.join(outdir, out_md).replace("\\", "/")
+    
+    # Save markdown file in markdown directory (directories assumed to be already created)
+    md_path = os.path.join(DIR_REPORTS, out_md).replace("\\", "/")
     
     report_data = {}
-    maps_dir = os.path.join(outdir, 'maps')
+    # Configure maps directory using config constant
+    maps_dir = os.path.join(outdir, DIR_IMAGE)
     
     with open(md_path, 'w', encoding='utf-8') as md:
 
@@ -503,7 +507,8 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             # rel = relpath_for_md(charts['top_stacked'], md_path)
             path = charts.get('top_stacked')
             if path:
-                chart_path = path.replace('\\', '/')
+                # Make path relative to markdown directory
+                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
                 md.write(f"**Comparative Analysis:**\n\n![Top Candidates Comparison]({chart_path})\n\n\n")
                 md.write(f"**Path : {chart_path}\n\n")
                 visual_analysis["charts"].append({
@@ -515,7 +520,8 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
         if charts.get('traffic') and os.path.exists(charts['traffic']):
             path = charts.get('traffic')
             if path:
-                chart_path = path.replace('\\', '/')
+                # Make path relative to markdown directory
+                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
                 md.write(f"**Traffic Analysis:**\n\n![Traffic Flow Analysis]({chart_path})\n\n\n")
                 md.write(f"**Path : {chart_path}\n\n")
                 visual_analysis["charts"].append({
@@ -527,7 +533,8 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
         if charts.get('best_breakdown') and os.path.exists(charts['best_breakdown']):
             path = charts.get('best_breakdown')
             if path:
-                chart_path = path.replace('\\', '/')
+                # Make path relative to markdown directory
+                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
                 md.write(f"**Best Site Breakdown:**\n\n![Best Site Breakdown]({chart_path})\n\n\n")
                 md.write(f"**Path : {chart_path}\n\n")
                 visual_analysis["charts"].append({
@@ -538,7 +545,8 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
         if charts.get('price_vs_score') and os.path.exists(charts['price_vs_score']):
             path = charts.get('price_vs_score')
             if path:
-                chart_path = path.replace('\\', '/')
+                # Make path relative to markdown directory
+                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
                 md.write(f"**Price VS Final Score :**\n\n![Price VS Score]({chart_path})\n\n\n")
                 md.write(f"**Path : {chart_path}\n\n")
                 visual_analysis["charts"].append({
@@ -549,7 +557,8 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
         if charts.get('healthcare_competition') and os.path.exists(charts['healthcare_competition']):
             path = charts.get('healthcare_competition')
             if path:
-                chart_path = path.replace('\\', '/')
+                # Make path relative to markdown directory
+                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
                 md.write(f"**Healthcare vs pharmacies competition :**\n\n![healthcare_competition]({chart_path})\n\n\n")
                 md.write(f"**Path : {chart_path}\n\n")
                 visual_analysis["charts"].append({
@@ -562,7 +571,8 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
         md.write(f"## {maps_title}\n\n")
         
         if map_png:
-            map_path = map_png.replace('\\', '/')
+            # Make path relative to markdown directory
+            map_path = os.path.relpath(map_png, os.path.dirname(md_path)).replace('\\', '/')
             md.write("**Location Overview:**\n\n")
             md.write(f"![Candidates Map]({map_path})\n\n\n")
             md.write(f"**Path : {map_path}\n\n")
@@ -575,7 +585,8 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             md.write("**Location Overview:** *Map not available*\n\n")
 
         if heat_png:
-            heat_path = heat_png.replace('\\', '/')
+            # Make path relative to markdown directory
+            heat_path = os.path.relpath(heat_png, os.path.dirname(md_path)).replace('\\', '/')
             md.write("**Demographic Distribution:**\n\n")
             md.write(f"![Demographic Heatmap]({heat_path})\n\n\n")
             md.write(f"**Path : {heat_path}\n\n")
@@ -917,8 +928,9 @@ def write_detailed_analysis_with_current(
         
         # Generate insights for current location if exists
         map_image, html_map = generate_site_map_image(s, maps_dir, MAX_TOTAL)
-        map_image_rel = map_image.replace("\\", "/") if map_image else None
-        html_map_rel = html_map.replace("\\", "/") if html_map else None
+        # Make paths relative to markdown directory  
+        map_image_rel = os.path.relpath(map_image, os.path.dirname(md_path)).replace("\\", "/") if map_image else None
+        html_map_rel = os.path.relpath(html_map, os.path.dirname(md_path)).replace("\\", "/") if html_map else None
         if map_image_rel:
             md.write(f"![Top Location Map]({map_image_rel})\n\n")
         if html_map_rel:
@@ -936,8 +948,9 @@ def write_detailed_analysis_with_current(
         current_html_map_rel = None
         if current_s:
             current_map_image, current_html_map = generate_site_map_image(current_s, maps_dir, MAX_TOTAL)
-            current_map_image_rel = current_map_image.replace("\\", "/") if current_map_image else None
-            current_html_map_rel = current_html_map.replace("\\", "/") if current_html_map else None
+            # Make paths relative to markdown directory
+            current_map_image_rel = os.path.relpath(current_map_image, os.path.dirname(md_path)).replace("\\", "/") if current_map_image else None
+            current_html_map_rel = os.path.relpath(current_html_map, os.path.dirname(md_path)).replace("\\", "/") if current_html_map else None
             if current_map_image_rel:
                 md.write(f"![Current Location Map]({current_map_image_rel})\n\n")
             if current_html_map_rel:

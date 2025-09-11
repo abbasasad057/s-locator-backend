@@ -4,6 +4,8 @@ Main generator for pharmacy HTML reports using modular components
 """
 
 from typing import Dict, Any
+
+from all_types.request_dtypes import Reqsmartreport
 from pathlib import Path
 from .css_styles import get_pharmacy_report_css
 from .html_sections import (
@@ -11,12 +13,7 @@ from .html_sections import (
     generate_methodology_and_analysis_section,
     generate_visual_analysis_section,
 )
-
-# Global variable for pharmacy report directory
-PHARMACY_REPORT_BASE_DIR = Path("static/pharmacy_report")
-PHARMACY_REPORT_BASE_DIR.mkdir(parents=True, exist_ok=True)
-
-
+DEFAULT_OUTPUT_DIR = "static"
 def write_html_file(file_path: Path, content: str) -> None:
     """Write HTML content to file"""
     with open(file_path, "w", encoding="utf-8") as f:
@@ -28,6 +25,13 @@ def generate_complete__html_report(
     processed_report_data
 ):
     """Generate the HTML report"""
+    # prepare colors and logos
+    # format data desired text
+    # prepare charts and maps
+    # insert formatted text and charts into html templates
+    # combine all html parts into one complete html report
+
+
     html_content = f"""
         <!DOCTYPE html>
         <html lang="en">
@@ -51,9 +55,9 @@ def generate_complete__html_report(
     return html_content
 
 
-def generate_report(req, processed_report_data) -> str:
+def generate_report(req: Reqsmartreport, processed_report_data) -> str:
     """Generate the complete pharmacy HTML report"""
-    index_path = PHARMACY_REPORT_BASE_DIR / "index.html"
+    index_path = Path(DEFAULT_OUTPUT_DIR) / f"{req.user_id}.html"
 
     html_content = generate_complete__html_report(
         req=req,

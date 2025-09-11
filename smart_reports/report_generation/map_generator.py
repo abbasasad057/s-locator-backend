@@ -10,8 +10,8 @@ import geopandas as gpd
 from shapely.geometry import Point
 from typing import List, Dict, Optional, Tuple
 import logging
-from smart_reports.report_generation.report_config import MAP_DPI, MAP_FIGSIZE
-import os 
+from smart_reports.report_generation.report_config import MAP_DPI, MAP_FIGSIZE, create_report_asset_path
+import os
 from html2image import Html2Image
 import folium
 import random
@@ -143,18 +143,18 @@ def generate_site_map_image(site_data: Dict, output_dir: str , MAX_TOTAL) -> str
     # Save HTML
     site_rank = site_data.get("id", 1)
     html_filename = f"site_{site_rank}_map.html"
-    html_path = os.path.join(output_dir, html_filename)
+    # Save interactive maps in interactive_maps directory
+    html_path = create_report_asset_path(html_filename, "html")
     m.save(html_path)
 
-    # Save PNG
+    # Save PNG in image directory
     png_filename = f"site_{site_rank}_map.png"
-    png_path = os.path.join(output_dir, png_filename)
-
-    # try:
     hti = Html2Image(size=(1200, 800))
     with open(html_path, 'r', encoding='utf-8') as f:
         html_content = f.read()
     hti.screenshot(html_str=html_content, save_as=png_filename)
+
+    png_path = create_report_asset_path(png_filename, "image")
 
     import shutil
     if os.path.exists(png_filename):

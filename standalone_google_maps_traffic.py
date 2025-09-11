@@ -257,8 +257,8 @@ class GoogleMapsTrafficAnalyzer:
 
             # Generate screenshot path
             if save_to_static:
-                # Create static/traffic_screenshots directory if it doesn't exist
-                static_dir = os.path.join("static", "traffic_screenshots")
+                # Create static/images/traffic_screenshots directory if it doesn't exist
+                static_dir = os.path.join("static", "images", "traffic_screenshots")
                 os.makedirs(static_dir, exist_ok=True)
                 
                 # Generate unique filename with timestamp
@@ -651,7 +651,7 @@ class GoogleMapsTrafficAnalyzer:
             
             # If saving to static, handle the static file creation
             if save_to_static:
-                static_dir = os.path.join("static", "traffic_screenshots")
+                static_dir = os.path.join("static", "images", "traffic_screenshots")
                 os.makedirs(static_dir, exist_ok=True)
                 
                 timestamp = int(time.time())
