@@ -12,9 +12,9 @@ from smart_reports.report_generation.pharmacy_report_final import (
     generate_md_report_from_data,
 )
 from typing import Dict, Any
-
+from smart_reports.report_generation.report_config import DIR_REPORTS
 # Import the modular generator
-from smart_reports.html_generator.pharmacy_generator import generate_report
+from smart_reports.html_generator.pharmacy_generator import generate_complete_html_report
 from typing import Optional
 from .report_generation.report_config import (
     source_current_location,
@@ -24,6 +24,10 @@ from .report_generation.report_config import (
 import json
 import os
 
+def write_html_file(file_path: Path, content: str) -> None:
+    """Write HTML content to file"""
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(content)
 
 async def generate_pharmacy_report(req: Reqsmartreport):
     req_dataset = ReqFetchDataset(
@@ -243,7 +247,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     criterion_weights = req.evaluation_metrics.dict()
     max_total = sum(criterion_weights.values())
     report_data = await generate_md_report_from_data(
-        results, criterion_weights, max_total, top_n=10
+        results, criterion_weights, max_total, top_n=10, output_dir=DIR_REPORTS
     )
     return report_data
 
@@ -354,7 +358,10 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
     #     processed_report_data = json.load(f)
 
     # Generate the HTML report file
-    html_file_path = generate_report(req, processed_report_data)
+    html_content = generate_complete_html_report(req, processed_report_data)
+
+    html_file_path = Path(DIR_REPORTS) / f"{req.user_id}.html"
+    write_html_file(html_file_path, html_content)
 
     # Return structured data matching ResIntelligenceData format
     return {

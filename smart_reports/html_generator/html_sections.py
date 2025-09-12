@@ -11,43 +11,6 @@ from .html_property_cards import generate_property_cards
 from .html_charts_visuals import generate_chart_grid, generate_investment_insights_list
 
 
-def _generate_investment_insights_cards(key_investment_insights: List[Dict[str, Any]]) -> str:
-    """Generate HTML cards for key investment insights"""
-    cards_html = ""
-    
-    for insight in key_investment_insights:
-        category = insight.get('category', '')
-        description = insight.get('description', '')
-        
-        # Choose appropriate icon based on category
-        icon_map = {
-            'Prime Opportunity': '🏆',
-            'Market Dynamics': '📊',
-            'Traffic Advantage': '🚗',
-            'Business Ecosystem': '🏪',
-            'Demographic Alignment': '👥'
-        }
-        icon = icon_map.get(category, '💡')
-        
-        cards_html += f"""
-          <div style="
-                background: rgba(255, 255, 255, 0.1);
-                padding: 20px;
-                border-radius: 10px;
-                border-left: 4px solid #3498db;
-              ">
-            <h4 style="color: white; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
-              {icon} {category}
-            </h4>
-            <p style="color: #ecf0f1; margin: 0; line-height: 1.5;">
-              {description}
-            </p>
-          </div>
-        """
-    
-    return cards_html
-
-
 def generate_executive_summary_section(req, processed_report_data: Dict[str, Any]) -> str:
     """Generate Executive Summary Section with rankings and top recommendations"""
     # Extract data
@@ -327,6 +290,7 @@ def generate_methodology_and_analysis_section(processed_report_data: Dict[str, A
 
 def generate_visual_analysis_section(processed_report_data: Dict[str, Any]) -> str:
     """Generate Visual Analysis Section with maps, charts, and investment insights"""
+    candidates_map = "assets/image/candidates_map.png"
     return f"""
     <div class="page page-break">
       <h1 class="section-title">🗺️ Visual Analysis & Regional Overview</h1>
@@ -381,7 +345,7 @@ def generate_visual_analysis_section(processed_report_data: Dict[str, Any]) -> s
         </div>
 
         <div class="map-container">
-          <img src="maps/candidates_map.png" alt="Riyadh Properties Overview Map" class="map-image" />
+          <img src="{candidates_map}" alt="Riyadh Properties Overview Map" class="map-image" />
 
           <p style="margin-top: 15px; color: #7f8c8d">
             <strong>Overview Map Features:</strong> Top 10 analyzed properties

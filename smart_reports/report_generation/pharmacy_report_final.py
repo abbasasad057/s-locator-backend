@@ -22,7 +22,7 @@ from .chart_generator import plot_top_stacked, plot_traffic, plot_breakdown, plo
 from .map_generator import create_static_map_png, create_demographic_heatmap_png
 from .report_generator import generate_markdown
 from .report_config import (
-    FONT_FAMILY, UNICODE_MINUS, DEFAULT_OUTPUT_DIR, DEFAULT_OUTPUT_FILENAME,
+    FONT_FAMILY, UNICODE_MINUS, DEFAULT_OUTPUT_FILENAME,
     DIR_IMAGE, create_report_asset_path
 )
 # Set up matplotlib for Arabic text support
@@ -90,7 +90,7 @@ async def generate_md_report_from_data(
     scores_data: dict,
     criterion_weights : Dict[str , float],
     max_total : float ,
-    output_dir: str = DEFAULT_OUTPUT_DIR,
+    output_dir,
     output_filename: str = DEFAULT_OUTPUT_FILENAME,
     top_n: int = 10,
 ) -> Dict:

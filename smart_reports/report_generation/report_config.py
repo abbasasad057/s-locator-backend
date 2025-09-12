@@ -6,7 +6,6 @@ MAP_DPI = 150
 MAP_FIGSIZE = (10, 7.5)
 FONT_FAMILY = 'Arial'
 UNICODE_MINUS = False
-DEFAULT_OUTPUT_DIR = "static"
 DEFAULT_OUTPUT_FILENAME = "report.md"
 
 # Source type constants

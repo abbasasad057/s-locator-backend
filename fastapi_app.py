@@ -8,7 +8,7 @@ import stripe
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
-from smart_reports.report_generation.report_config import setup_report_directories, DEFAULT_OUTPUT_DIR
+from smart_reports.report_generation.report_config import setup_report_directories
 from backend_common.background import set_background_tasks
 from backend_common.database import Database
 from backend_common.auth import firebase_db

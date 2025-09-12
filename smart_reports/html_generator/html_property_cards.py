@@ -55,6 +55,7 @@ def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str
         competition_score_display = _get_display_text_with_icon(matching_ranking.get('competition_score_comparison', {}))
         
         # Scoring breakdown calculation removed - not used in current implementation
+        maps_path = f"assets/interactive_html/site_{latitude},{longitude}_map.html"
         
         property_cards_html += f"""
       <div class="property-card">
@@ -126,7 +127,7 @@ def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str
 
         <div class="map-container">
           <h4 style="color: #2c3e50; margin-bottom: 15px">📍 Site Location Map</h4>
-          <iframe src="maps/site_{latitude},{longitude}_map.html" width="100%" height="400" style="border:0; border-radius: 12px;"></iframe>
+          <iframe src="{maps_path}" width="100%" height="400" style="border:0; border-radius: 12px;"></iframe>
           <p style="margin-top: 15px; color: #7f8c8d; font-size: 0.9em">
             <strong>Map shows:</strong> Property location, nearby businesses, analysis radius, and traffic patterns.
           </p>

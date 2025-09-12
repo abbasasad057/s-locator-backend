@@ -10,22 +10,24 @@ def generate_chart_grid(processed_report_data = None) -> str:
     """Generate chart grid HTML"""
     visual_analysis = processed_report_data.get("visual_analysis", {})
     charts_data = visual_analysis.get("charts", [])
-
+    score_distribution_chart = "assets/image/score_distribution.png"
+    analysis_dashboard_chart = "assets/image/analysis_dashboard.png"
+    price_vs_score_chart = "assets/image/price_vs_score.png"
     generated_charts = []
     for chart in charts_data:
         chart_url = chart.get("url", "")
         generated_charts.append(chart_url)
     
     if not generated_charts:
-        return """
+        return f"""
       <div class="map-placeholder">
-        <img src="charts/score_distribution.png" alt="Score Distribution" style="width: 100%; height: auto; object-fit: cover;">
+        <img src="{score_distribution_chart}" alt="Score Distribution" style="width: 100%; height: auto; object-fit: cover;">
       </div>
       <div class="map-placeholder">
-        <img src="charts/analysis_dashboard.png" alt="Analysis Dashboard" style="width: 100%; height: auto; object-fit: cover;">
+        <img src="{analysis_dashboard_chart}" alt="Analysis Dashboard" style="width: 100%; height: auto; object-fit: cover;">
       </div>
       <div class="map-placeholder">
-        <img src="charts/price_vs_score.png" alt="Price vs Score" style="width: 100%; height: auto; object-fit: cover;">
+        <img src="{price_vs_score_chart}" alt="Price vs Score" style="width: 100%; height: auto; object-fit: cover;">
       </div>"""
     
     # Get chart titles from visual_analysis if available
@@ -51,7 +53,7 @@ def generate_chart_grid(processed_report_data = None) -> str:
         else:
             chart_name = filename.replace('.png', '').replace('_', ' ').title()
         
-        charts_path = f"charts/{filename}"
+        charts_path = f"assets/image/{filename}"
         chart_html += f"""
       <div class="map-placeholder">
         <img src="{charts_path}" alt="{chart_name}" style="width: 100%; height: auto; object-fit: cover;">
