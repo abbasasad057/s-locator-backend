@@ -276,8 +276,8 @@ async def fetch_all_criterions_data(
     bbox = generate_bbox(lat, lng)
     area_polygon = bbox_to_polygon(bbox=bbox)
     traffic = await fetch_traffic_data(lat, lng)
-    # households = await fetch_household_sizes(bbox)
-    # demographics = await fetch_demographics(bbox, Userid)
+    households = await fetch_household_sizes(bbox)
+    demographics = await fetch_demographics(bbox, Userid)
     households = {}
     demographics = {}
     healthcare = await get_healthcare_data(

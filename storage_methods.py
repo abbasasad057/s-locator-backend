@@ -971,10 +971,6 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
         }
         layer_type = "income"
 
-    if not intelligence_geojson_data or not intelligence_geojson_data["features"]:
-        raise Exception(
-            f"Could not find data for zoom level {req.zoom_level} in table {table_name}"
-        )
 
     filtered_features = []
     density_values = [] if req.income else None

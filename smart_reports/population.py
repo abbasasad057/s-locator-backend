@@ -3,45 +3,27 @@ from backend_common.database import Database
 from all_types.request_dtypes import ReqIntelligenceData
 
 async def fetch_demographics(bbox : dict , user_id : str):
-    try:
-        req_bbox = ReqIntelligenceData(   
-            top_lng=bbox["top_lng"],
-            top_lat=bbox["top_lat"],
-            bottom_lng=bbox["bottom_lng"],
-            bottom_lat=bbox["bottom_lat"],
-            user_id=user_id,
-            zoom_level=12,
-            income=True,
-            population=True
-        )
-        try:
-            data = await fetch_intelligence_by_viewport(req_bbox)
-        except Exception as e:
-            if "Could not find data for zoom level" in str(e):
-            ## Return Default values in case of data not found
-                    return {
-                "total_population": 1500,
-                "avg_density": 3000.0,  # Half of MAX_DENSITY from scoring
-                "avg_median_age": 28.0,
-                "avg_income": 5500.0,   # Half of MAX_INCOME from scoring
-                "percentage_age_above_35": 30.0  # Half of max age percentage
-                }
-            else:
-                raise 
-        print("data pop " , data)
-        features = data["features"]
-        ## Return zeros values in case of an empty dict
-        if not features:
-                return {
-            "total_population": 1500,
-            "avg_density": 3000.0,  # Half of MAX_DENSITY from scoring
-            "avg_median_age": 28.0,
-            "avg_income": 5500.0,   # Half of MAX_INCOME from scoring
-            "percentage_age_above_35": 30.0  # Half of max age percentage
-            }
-    except Exception as e:
-        print(f"Failed to fetch demographics data: {str(e)}")
-        return None
+    req_bbox = ReqIntelligenceData(   
+        top_lng=bbox["top_lng"],
+        top_lat=bbox["top_lat"],
+        bottom_lng=bbox["bottom_lng"],
+        bottom_lat=bbox["bottom_lat"],
+        user_id=user_id,
+        zoom_level=12,
+        income=True,
+        population=True
+    )
+    data = await fetch_intelligence_by_viewport(req_bbox)
+    features = data["features"]
+    ## Return zeros values in case of an empty dict
+    if not features:
+            return {
+        "total_population": 1500,
+        "avg_density": 3000.0,  # Half of MAX_DENSITY from scoring
+        "avg_median_age": 28.0,
+        "avg_income": 5500.0,   # Half of MAX_INCOME from scoring
+        "percentage_age_above_35": 30.0  # Half of max age percentage
+        }
     
     total_population = 0
     pop_density_values = []
@@ -66,6 +48,14 @@ async def fetch_demographics(bbox : dict , user_id : str):
     processed.update({
         "percentage_age_above_35": percentage_age_above_35,
     })
+
+    if total_population == 0:
+        processed.update({
+            "avg_density": 3000.0,  # Half of MAX_DENSITY from scoring
+            "avg_median_age": 28.0,
+            "avg_income": 5500.0,   # Half of MAX_INCOME from scoring
+            "percentage_age_above_35": 30.0  # Half of max age percentage
+        })
 
     return processed
 
