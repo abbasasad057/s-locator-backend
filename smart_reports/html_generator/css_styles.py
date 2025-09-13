@@ -144,6 +144,14 @@ overflow: hidden;
 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
+@media screen and (max-width: 768px) {
+    .rankings-table {
+    display: block;
+    overflow-x: scroll;
+    font-size: x-small;
+    }
+}
+
 .rankings-table th {
 background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
 color: white;
@@ -274,6 +282,32 @@ background: #f8f9fa;
 padding: 30px;
 border-radius: 15px;
 margin: 30px 0;
+}
+
+.collapsible-card {
+background: white;
+border-radius: 12px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+margin-bottom: 18px;
+border-left: 5px solid #3498db;
+overflow: hidden;
+}
+.collapsible-card summary {
+font-size: 1.1em;
+font-weight: 600;
+color: #3498db;
+padding: 18px 24px;
+cursor: pointer;
+background: #f4f8fc;
+border-bottom: 1px solid #e0e7ef;
+}
+.collapsible-card[open] summary {
+background: #e8f4fd;
+}
+.collapsible-card .card-content {
+padding: 18px 24px;
+font-size: 1em;
+color: #2c3e50;
 }
 
 .page-break {

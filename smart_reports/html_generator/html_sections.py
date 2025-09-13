@@ -21,29 +21,28 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
     executive_summary = processed_report_data.get("executive_summary", {})
     rankings = processed_report_data.get("rankings", [])
     key_investment_insights = processed_report_data.get("key_investment_insights", [])
-    
+
     total_locations = summary_metrics.get("total_locations", 0)
     average_score = summary_metrics.get("average_score", 0)
     average_price_sar = summary_metrics.get("average_price_sar", 0)
     competing_pharmacies = summary_metrics.get("competing_pharmacies", 0)
-    
+
     top_recommendation = executive_summary.get("top_recommendation", {})
     total_sites_evaluated = executive_summary.get("total_sites_evaluated", 0)
-    
+
     # Extract data from key investment insights for top recommendation details
     traffic_advantage = next((insight for insight in key_investment_insights if insight.get('category') == 'Traffic Advantage'), {})
     business_ecosystem = next((insight for insight in key_investment_insights if insight.get('category') == 'Business Ecosystem'), {})
     demographic_alignment = next((insight for insight in key_investment_insights if insight.get('category') == 'Demographic Alignment'), {})
     market_dynamics = next((insight for insight in key_investment_insights if insight.get('category') == 'Market Dynamics'), {})
-    
+
     # Extract score data for display
     traffic_score = traffic_advantage.get('traffic_score', 0)
     avg_speed = traffic_advantage.get('average_speed_kmh', 0)
     nearby_businesses = business_ecosystem.get('nearby_businesses_count', 0)
     demographics_score = demographic_alignment.get('demographics_score', 0)
     total_competitors = market_dynamics.get('total_competitors', 0)
-        
-    
+
     return f"""
     <div class="page">
       <div class="hero">
@@ -137,7 +136,6 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
             <th>Competition</th>
             <th>Healthcare Ecosystem</th>
             <th>Complementary Businesses</th>
-            <th>View</th>
           </tr>
         </thead>
         <tbody>
@@ -152,110 +150,110 @@ def generate_methodology_and_analysis_section(processed_report_data: Dict[str, A
     property_cards_html = generate_property_cards(processed_report_data)
     print(f"DEBUG: Property cards HTML length: {len(property_cards_html)}")
     print(f"DEBUG: First 500 chars of property cards: {property_cards_html[:500]}")
-    
+
     return f"""
     <div class="page page-break">
       <h1 class="section-title">📈 Analysis Methodology</h1>
 
-      <div class="methodology">
+    <div class="methodology">
         <h3 style="color: #2c3e50; margin-bottom: 15px">
           📋 How This Analysis Was Conducted
         </h3>
-        <p style="margin-bottom: 20px; font-size: 1.1em">
-          Our site suitability analysis employs a comprehensive, data-driven
-          approach. The methodology integrates multiple data sources and applies weighted
-          scoring to identify optimal locations.
-        </p>
-
-        <div style="
-              display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-              gap: 20px;
-              margin: 20px 0;
-            ">
-          <div style="
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-              ">
-            <h4 style="color: #3498db; margin-bottom: 10px">🚦 Traffic Analysis (25%)</h4>
-            <p><strong>Method:</strong> Real-time traffic flow analysis within 500m radius</p>
-            <p>
-              <strong>Scoring:</strong> Perfect score (100) for speeds ≤40 km/h; penalty of 5 points per 40 km/h above
-              target
-            </p>
-            <p>
-              <strong>Rationale:</strong> Lower traffic speeds indicate better accessibility and parking availability.
-            </p>
+          <p style="margin-bottom: 20px; font-size: 1.1em">
+              This analysis streamlines the process of site selection for pharmacies and cafes by leveraging advanced data aggregation and scoring methodologies. Instead of relying solely on manual searches and local intuition, we utilize real estate listings, demographic data, traffic patterns, and proximity to key amenities to objectively evaluate each location. The result is a focused shortlist of optimal sites, tailored to your business objectives and target audience, enabling confident investment and expansion decisions.
+          </p>
+          <div style="background: #e8f4fd; padding: 16px; border-radius: 8px; margin-bottom: 18px; font-size: 1em;">
+              <strong>Summary:</strong> Locations are assessed using five key criteria: traffic, demographics, competition, healthcare ecosystem, and complementary businesses. Each criterion is scored and weighted to reflect its impact on business success. Detailed explanations are available in the sections below.
           </div>
-
-          <div style="
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-              ">
-            <h4 style="color: #3498db; margin-bottom: 10px">👥 Demographics (30%)</h4>
-            <p><strong>Method:</strong> Spatial join analysis for age and income matching</p>
-            <p>
-              <strong>Scoring:</strong> Perfect score at target age Above 35; penalty of 5 points per year deviation
-            </p>
-            <p>
-              <strong>Rationale:</strong> Target demographic alignment ensures market-product fit.
-            </p>
-          </div>
-
-          <div style="
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-              ">
-            <h4 style="color: #3498db; margin-bottom: 10px">🏪 Competition (15%)</h4>
-            <p><strong>Method:</strong> Competitive mapping within analysis radius</p>
-            <p>
-              <strong>Scoring:</strong> Perfect score for nearest pharmacy is above 500m in living area; penalty of 10
-              points per excess competitor
-            </p>
-            <p>
-              <strong>Rationale:</strong> Balanced competition validates demand while avoiding oversaturation.
-            </p>
-          </div>
-
-          <div style="
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-              ">
-            <h4 style="color: #3498db; margin-bottom: 10px">🏥 Healthcare Ecosystem (20%)</h4>
-            <p><strong>Method:</strong> Scoring based on proximity to nearby hospitals and dentists (≤1500m preferred)
-            </p>
-            <p><strong>Scoring:</strong> Average of proximity scores; closer and more accessible healthcare improves
-              score</p>
-            <p>
-              <strong>Rationale:</strong> A strong healthcare ecosystem increases site attractiveness and convenience
-              for residents.
-            </p>
-          </div>
-
-          <div style="
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-              ">
-            <h4 style="color: #3498db; margin-bottom: 10px">🏪 Complementary Businesses (10%)</h4>
-            <p><strong>Method:</strong> Proximity-based scoring within 1000m; closer businesses improve accessibility
-            </p>
-            <p><strong>Scoring:</strong> Average score across all complementary business types</p>
-            <p>
-              <strong>Rationale:</strong> Access to everyday amenities supports sustained foot traffic and customer
-              satisfaction.
-            </p>
-          </div>
-        </div>
+          <details class="collapsible-card">
+            <summary>🚦 Traffic Analysis (25%) – Evaluates accessibility and visibility</summary>
+            <div class="card-content">
+              <ul style="margin-bottom:12px;">
+                <li><strong>Method:</strong> Real-time traffic flow analysis within a 500m radius, focusing on car traffic as the primary mode of transportation in Saudi Arabia.</li>
+                <li><strong>Scoring:</strong> Locations with slower traffic (≤40 km/h) receive higher scores, as they offer better visibility and accessibility. Penalties are applied for higher speeds.</li>
+                <li><strong>Rationale:</strong> Lower traffic speeds improve accessibility, parking, and the likelihood that passersby will notice the business. High car traffic in front of the store is essential for visibility and walk-in potential.</li>
+              </ul>
+              <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
+              <ul>
+                <li>Entrepreneurs often start by driving around the city or browsing real estate websites for available spaces.</li>
+                <li>Our analysis goes beyond availability, evaluating if the site is in a high-traffic area where cars slow down, increasing visibility for your signage.</li>
+                <li>Traffic flow is assessed for ease of access and parking, which is essential for both cafes and pharmacies.</li>
+                <li>Sites with little or fast-moving traffic are deprioritized, as they are less likely to attract walk-ins or impulse visits.</li>
+              </ul>
+            </div>
+          </details>
+          <details class="collapsible-card">
+            <summary>👥 Demographics (30%) – Assesses market fit and target audience</summary>
+            <div class="card-content">
+              <ul style="margin-bottom:12px;">
+                <li><strong>Method:</strong> Spatial analysis for age, income, and household characteristics using public and government data.</li>
+                <li><strong>Scoring:</strong> Higher scores for locations matching the target age and income profile. Penalties for deviation from target demographics.</li>
+                <li><strong>Rationale:</strong> Ensures market-product fit and maximizes business success. For luxury brands, high-income areas are prioritized; for student-focused businesses, proximity to residential zones with younger populations is emphasized.</li>
+              </ul>
+              <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
+              <ul>
+                <li>Location selection is about the people who live, work, and travel nearby—not just the physical space.</li>
+                <li>High income: prioritize areas with higher income levels and affluent residents.</li>
+                <li>Target age: focus on residential zones with diverse age groups and stable populations.</li>
+                <li>Student-focused businesses: target areas near universities and schools, but the demographic score is based on the actual population, not the presence of amenities.</li>
+                <li>Aggregated demographic data from public sources and government websites provides insights often inaccessible to individual entrepreneurs.</li>
+                <li>Avoids the pitfall of choosing a location based solely on intuition or incomplete information.</li>
+              </ul>
+            </div>
+          </details>
+          <details class="collapsible-card">
+            <summary>🏪 Competition (15%) – Measures market saturation and opportunity</summary>
+            <div class="card-content">
+              <ul style="margin-bottom:12px;">
+                <li><strong>Method:</strong> Competitive mapping within the analysis radius, identifying the number and proximity of similar businesses.</li>
+                <li><strong>Scoring:</strong> Higher scores for locations with fewer competitors nearby; penalties for excess competitors.</li>
+                <li><strong>Rationale:</strong> Balanced competition validates demand while avoiding oversaturation. Helps avoid locations with too many competitors and identifies emerging market opportunities.</li>
+              </ul>
+              <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
+              <ul>
+                <li>Assess the competitive landscape after narrowing down your options.</li>
+                <li>Pharmacies: avoid areas saturated with competitors; seek locations with unmet demand.</li>
+                <li>Cafes: proximity to other food and beverage outlets can be a risk or benefit, depending on foot traffic and customer preferences.</li>
+                <li>Analysis quantifies these factors, helping you avoid oversaturated markets and identify areas with opportunity.</li>
+              </ul>
+            </div>
+          </details>
+          <details class="collapsible-card">
+            <summary>🏥 Healthcare Ecosystem (20%) – Evaluates proximity to healthcare providers</summary>
+            <div class="card-content">
+              <ul style="margin-bottom:12px;">
+                <li><strong>Method:</strong> Scoring based on proximity to hospitals, clinics, and dentists (≤1500m preferred).</li>
+                <li><strong>Scoring:</strong> Higher scores for closer and more accessible healthcare providers. Accessibility for people with disabilities is also considered.</li>
+                <li><strong>Rationale:</strong> A strong healthcare ecosystem increases site attractiveness and convenience for residents and patients. For specialty businesses, proximity to hospitals can drive significant customer traffic.</li>
+              </ul>
+              <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
+              <ul>
+                <li>Pharmacies and health-focused cafes benefit from proximity to hospitals, clinics, or rehabilitation centers.</li>
+                <li>Increases customer flow from patients, healthcare workers, and visitors.</li>
+                <li>Supports specialized offerings, such as accessibility for people with disabilities.</li>
+                <li>Cafes near hospitals may attract visitors seeking a comfortable place to rest or recover.</li>
+                <li>Analysis highlights these opportunities, ensuring your business serves both general and specialized needs.</li>
+              </ul>
+            </div>
+          </details>
+          <details class="collapsible-card">
+            <summary>🏪 Complementary Businesses (10%) – Assesses access to amenities and brand positioning</summary>
+            <div class="card-content">
+              <ul style="margin-bottom:12px;">
+                <li><strong>Method:</strong> Proximity-based scoring within 1000m to nearby businesses and amenities. High-end brands (e.g., Gucci, Prada) are favored for luxury businesses; everyday amenities (offices, schools, malls, hospitals) for general businesses.</li>
+                <li><strong>Scoring:</strong> Higher scores for locations near a greater number and diversity of complementary businesses and amenities.</li>
+                <li><strong>Rationale:</strong> Access to amenities and high-end brands supports sustained foot traffic, customer satisfaction, and brand positioning. This criterion is about the business ecosystem, not the population.</li>
+              </ul>
+              <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
+              <ul>
+                <li>Complementary businesses enhance your site's attractiveness and customer base by creating synergies and increasing convenience for customers.</li>
+                <li>Luxury cafes: proximity to high-end brands and malls increases prestige and draws the right clientele.</li>
+                <li>Pharmacies and everyday cafes: being near offices, schools, malls, and hospitals ensures steady foot traffic and convenience for customers.</li>
+                <li>This analysis identifies these synergies, helping you select locations that benefit from existing business ecosystems and maximize your visibility and customer base.</li>
+                <li>Unlike demographics, this score is based on the presence and diversity of nearby businesses, not the characteristics of the population.</li>
+              </ul>
+            </div>
+          </details>
 
         <div style="
               background: #e8f4fd;
@@ -277,7 +275,7 @@ def generate_methodology_and_analysis_section(processed_report_data: Dict[str, A
           </p>
         </div>
       </div>
-
+        
       <h1 class="section-title">🔍 Detailed Property Analysis</h1>
 
       <p style="font-size: 1.1em; color: #7f8c8d; margin-bottom: 30px">
