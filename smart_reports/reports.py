@@ -231,12 +231,12 @@ async def generate_pharmacy_report(req: Reqsmartreport):
         }
 
     # temporarely store objects in json files for debugging , results, criterion_weights, max_total
-    debug_path = Path("results.json")
-    with open(debug_path, "w") as f:
-        json.dump(results, f, indent=4)
-    debug_path = Path("criterion_weights.json")
-    with open(debug_path, "w") as f:
-        json.dump(req.evaluation_metrics.dict(), f, indent=4)
+    # debug_path = Path("results.json")
+    # with open(debug_path, "w") as f:
+    #     json.dump(results, f, indent=4)
+    # debug_path = Path("criterion_weights.json")
+    # with open(debug_path, "w") as f:
+    #     json.dump(req.evaluation_metrics.dict(), f, indent=4)
 
     # # read from json files
     # with open("results.json", "r") as f:
@@ -278,8 +278,6 @@ async def fetch_all_criterions_data(
     traffic = await fetch_traffic_data(lat, lng)
     households = await fetch_household_sizes(bbox)
     demographics = await fetch_demographics(bbox, Userid)
-    households = {}
-    demographics = {}
     healthcare = await get_healthcare_data(
         area_polygon, lat, lng, hospital, dentists, pharmacies
     )

@@ -31,7 +31,7 @@ async def fetch_demographics(bbox : dict , user_id : str):
     income_values = []
     for f in features:
         props = f["properties"]
-        total_population += props.get("Population_Count") or 0
+        total_population += props.get("Population_Count")
         pop_density_values.append(props.get("Population_Density_KM2", 0))
         age_values.append(props.get("Median_Age_Total") or 0)
         income_values.append(props.get("income", 0))
@@ -48,14 +48,6 @@ async def fetch_demographics(bbox : dict , user_id : str):
     processed.update({
         "percentage_age_above_35": percentage_age_above_35,
     })
-
-    if total_population == 0:
-        processed.update({
-            "avg_density": 3000.0,  # Half of MAX_DENSITY from scoring
-            "avg_median_age": 28.0,
-            "avg_income": 5500.0,   # Half of MAX_INCOME from scoring
-            "percentage_age_above_35": 30.0  # Half of max age percentage
-        })
 
     return processed
 
