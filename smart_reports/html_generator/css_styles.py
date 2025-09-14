@@ -20,6 +20,13 @@ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 min-height: 100vh;
 }
 
+@media (max-width: 768px) {
+    .body { 
+    font-size: x-small;
+    }
+}
+
+
 .report-container {
 margin: 0 auto;
 max-width: 1400px;
@@ -35,6 +42,11 @@ min-height: 100vh;
 page-break-after: always;
 }
 
+@media (max-width: 768px) {
+    .page {
+    padding: 1 rem;
+    }
+}
 .page:last-child {
 page-break-after: avoid;
 }
@@ -244,6 +256,13 @@ display: grid;
 grid-template-columns: repeat(4, 1fr);
 gap: 15px;
 margin-top: 15px;
+}
+
+
+@media (max-width: 768px) {
+    .score-breakdown {
+      grid-template-columns: repeat(1, 1fr);
+    }
 }
 
 .score-item {
