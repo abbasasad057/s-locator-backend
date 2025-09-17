@@ -16,7 +16,7 @@ def create_scatter_plots_html(results: List[Dict[str, Any]]) -> str:
         'Competition_Score': r['competition_score'],
         'Price': r['price'],
         'Business_Count': r['business_count'],
-        'Cafe_Count': r['cafe_count'],
+        'Cafe_Count': r['competitor_count'],
         'Age_Deviation': abs(r['age_difference']),
         'Traffic_Speed': r['avg_road_speed'],
         'Income': r['income'],

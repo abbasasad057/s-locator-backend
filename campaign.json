@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "Dine-in Cafe/Restaurant",
-    "description": "I am looking for best location to open dine in cafe/resturant in Riyad (Free Sample)",
+    "description": "Dine-in Cafe/Restaurant optimal location in Riyadh (Free Sample Report Available)",
     "bgImage": "http://localhost:8000/static/cafe-analysis.png",
     "options": {
       "free_redirect": "http://localhost:8050/cafe-analysis",
@@ -15,7 +15,7 @@
   {
     "id": 2,
     "title": "Warehouse Delivery",
-    "description": "I am looking for a location to open a warehouse for my delivery service where I take goods from and deliver it to majority of people in Riyad in less than 25 mins (Free Sample)",
+    "description": "Warehouse optimal location for my delivery service (Free Sample Report Available)",
     "bgImage": "http://localhost:8000/static/warehouse-analysis.png",
     "options": {
       "free_redirect": "http://localhost:8050/warehouse-analysis",
@@ -28,10 +28,10 @@
   {
     "id": 3,
     "title": "Retail Store/Pharmacy",
-    "description": "I am looking for best location to open a retail store/pharmacy in Riyad (Free Sample)",
+    "description": "Retail Store/Pharmacy optimal location in Riyadh (Free Sample Report Available)",
     "bgImage": "http://localhost:8000/static/pharmacy-analysis.png",
     "options": {
-      "free_redirect": "http://localhost:8050/pharmacy-analysis",
+      "free_redirect": "static/reports/JnaGDCKoSoWtj6NWEVW8MDMBCiA2.html",
       "custom_redirect": {
         "has_account": "http://localhost:8050/",
         "no_account": "/plans"
@@ -41,7 +41,7 @@
   {
     "id": 4,
     "title": "Try Something Else",
-    "description": "Try something else",
+    "description": "Do my own custom analysis (Free Sample data available)",
     "bgImage": "http://localhost:8000/static/custom-analysis.png",
     "options": {
       "free_redirect": "http://localhost:3000/",

@@ -40,17 +40,17 @@ def chunk_bounding_box(bottom_lng: float, bottom_lat: float, top_lng: float, top
     # Create chunks
     for i in range(lng_chunks):
         for j in range(lat_chunks):
-            chunk_min_lng = bottom_lng + i * lng_step
-            chunk_max_lng = min(bottom_lng + (i + 1) * lng_step, top_lng)
-            chunk_min_lat = bottom_lat + j * lat_step
-            chunk_max_lat = min(bottom_lat + (j + 1) * lat_step, top_lat)
+            chunk_bottom_lng = bottom_lng + i * lng_step
+            chunk_top_lng = min(bottom_lng + (i + 1) * lng_step, top_lng)
+            chunk_bottom_lat = bottom_lat + j * lat_step
+            chunk_top_lat = min(bottom_lat + (j + 1) * lat_step, top_lat)
             
             chunks.append({
-                'bottom_lng': chunk_min_lng,
-                'bottom_lat': chunk_min_lat,
-                'top_lng': chunk_max_lng,
-                'top_lat': chunk_max_lat,
-                'bbox_string': f"{chunk_min_lng},{chunk_min_lat},{chunk_max_lng},{chunk_max_lat}"
+                'bottom_lng': chunk_bottom_lng,
+                'bottom_lat': chunk_bottom_lat,
+                'top_lng': chunk_top_lng,
+                'top_lat': chunk_top_lat,
+                'bbox_string': f"{chunk_bottom_lng},{chunk_bottom_lat},{chunk_top_lng},{chunk_top_lat}"
             })
     
     return chunks
