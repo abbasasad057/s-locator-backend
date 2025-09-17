@@ -7,7 +7,7 @@ import os
 import time
 import math
 import logging
-from typing import Dict, Any, Optional, Tuple, Union
+from typing import Dict, Any, Optional, Tuple, Union, Set
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -161,7 +161,7 @@ class GoogleMapsTrafficAnalyzer:
             #     try:
             #         # Method: Reload page with explicit traffic parameter
             #         current_url = self.driver.current_url
-            #         if "&layer=t" not in current_url and "?layer=t" not in current_url:
+            #         if "&layer=t" not in current_url and "?layer=t" not in current_in_url:
             #             separator = "&" if "?" in current_url else "?"
             #             traffic_url = current_url + separator + "layer=t"
             #             self.driver.get(traffic_url)
@@ -392,49 +392,114 @@ class GoogleMapsTrafficAnalyzer:
 
         logger.info(f"Directional cone added pointing {direction}")
 
+    def _analyze_annular_zone(self, image_array: np.ndarray, center_x: int, center_y: int,
+                              height: int, width: int, inner_radius: int, outer_radius: int,
+                              zone_name: str, traffic_analysis: Dict[str, Any],
+                              excluded_pixels: Optional[Set[Tuple[int, int]]] = None):
+        """
+        Analyzes an annular (ring-shaped) zone for traffic colors, excluding specified pixels.
+        """
+        if excluded_pixels is None:
+            excluded_pixels = set()
+
+        zone_colors = []
+        pixels_in_zone = 0
+
+        for y in range(max(0, center_y - outer_radius),
+                      min(height, center_y + outer_radius + 1)):
+            for x in range(max(0, center_x - outer_radius),
+                          min(width, center_x + outer_radius + 1)):
+                distance = math.sqrt((x - center_x)**2 + (y - center_y)**2)
+                if inner_radius < distance <= outer_radius and (x, y) not in excluded_pixels:
+                    rgb = tuple(image_array[y, x][:3])
+                    color_type = self.classify_traffic_color(rgb)
+                    zone_colors.append(color_type)
+                    pixels_in_zone += 1
+
+        # Calculate zone score, ignoring gray pixels
+        non_gray_colors = [c for c in zone_colors if c != 'gray']
+        if non_gray_colors:
+            color_counts = Counter(non_gray_colors)
+            zone_score = sum(
+                count * self.TRAFFIC_SCORES[color]
+                for color, count in color_counts.items()
+            ) / len(non_gray_colors)
+        else:
+            zone_score = 0  # If only gray pixels, score is 0
+
+        traffic_analysis['area_scores'][zone_name] = {
+            'score': zone_score,
+            'pixels': pixels_in_zone,
+            'colors': dict(Counter(zone_colors)) # Report all colors, even gray
+        }
+
+        # Update overall color distribution
+        for color, count in Counter(zone_colors).items():
+            traffic_analysis['color_distribution'][color] += count
+        logger.info(f"Analyzed {zone_name} zone: Score={zone_score}, Pixels={pixels_in_zone}")
+
 
     def find_storefront_traffic(self, image_array: np.ndarray, center_x: int, center_y: int,
-                                max_distance: int = 150) -> Dict[str, Any]:
+                                storefront_direction: str, max_distance: int = 50) -> Tuple[Dict[str, Any], Set[Tuple[int, int]]]:
         """
-        Find the closest traffic color to the center point using a circular search.
+        Find the closest traffic color to the center point using a cone search.
 
         Args:
             image_array: The image as a numpy array.
             center_x, center_y: Center coordinates of the image.
-            max_distance: Maximum distance to search in pixels.
+            storefront_direction: Direction the storefront faces (e.g., 'north', 'northeast').
+            max_distance: Maximum distance to search in pixels (default 50m).
 
         Returns:
-            A dictionary with the storefront analysis results.
+            A tuple containing:
+            - A dictionary with the storefront analysis results.
+            - A set of (x, y) coordinates of pixels checked within the cone.
         """
         height, width = image_array.shape[:2]
+        checked_cone_pixels = set()
 
-        # Search in an expanding circle for the first non-gray pixel
-        for distance in range(1, max_distance):
-            for angle in range(0, 360, 5):  # Check every 5 degrees
+        # Define angle ranges for cone search based on storefront direction
+        # Cone width is 60 degrees (30 degrees on each side of the center direction)
+        direction_angle = self.DIRECTION_ANGLES.get(storefront_direction.lower(), 0)
+        min_angle = (direction_angle - 30 + 360) % 360
+        max_angle = (direction_angle + 30) % 360
+
+        # Adjust for wrapping around 0/360 degrees
+        angle_range = []
+        if min_angle < max_angle:
+            angle_range = range(min_angle, max_angle + 1, 5)
+        else: # Case where cone crosses the 0/360 boundary (e.g., north: 330-30)
+            angle_range = list(range(min_angle, 360, 5)) + list(range(0, max_angle + 1, 5))
+
+
+        # Search in an expanding cone for the first non-gray pixel
+        for distance in range(1, max_distance + 1): # Include max_distance
+            for angle in angle_range:
                 angle_rad = math.radians(angle)
-                x = int(center_x + distance * math.cos(angle_rad))
-                y = int(center_y - distance * math.sin(angle_rad))  # Y is inverted in image coordinates
+                x = int(center_x + distance * math.sin(angle_rad)) # Swapped sin/cos for correct orientation
+                y = int(center_y - distance * math.cos(angle_rad)) # Y is inverted in image coordinates
 
                 if 0 <= x < width and 0 <= y < height:
+                    checked_cone_pixels.add((x, y)) # Add pixel to set of checked pixels
                     rgb = tuple(image_array[y, x][:3])
                     color_type = self.classify_traffic_color(rgb)
 
                     if color_type != 'gray':
-                        logger.info(f"Storefront traffic found: {color_type} at distance {distance}px")
+                        logger.info(f"Storefront traffic found: {color_type} at distance {distance}px in {storefront_direction} cone")
                         return {
                             'found': True,
                             'color': color_type,
                             'distance': distance,
                             'score': self.TRAFFIC_SCORES[color_type],
-                        }
+                        }, checked_cone_pixels
 
-        # If no traffic is found, return default gray score
+        # If no traffic is found, return default gray score and all checked pixels
         return {
             'found': False,
             'color': 'gray',
             'distance': max_distance,
             'score': 0,
-        }
+        }, checked_cone_pixels
 
     def analyze_traffic_in_image(self, image_path: str, center_lat: float, center_lng: float,
                                storefront_direction: str = 'north') -> Dict[str, Any]:
@@ -451,12 +516,12 @@ class GoogleMapsTrafficAnalyzer:
             # Zoom level 18 corresponds to approximately 20m scale
             pixels_per_meter = 1.5  # Adjusted for zoom level 18 (20m scale)
 
-            zones = {
-                'storefront': int(25 * pixels_per_meter),    # 25m radius for storefront
-                '50m': int(50 * pixels_per_meter),           # 50m radius
-                '100m': int(100 * pixels_per_meter),         # 100m radius
-                '150m': int(150 * pixels_per_meter)          # 150m radius
-            }
+            # Define radii for distinct annular zones
+            storefront_cone_radius_px = int(50 * pixels_per_meter)
+            full_50m_circle_radius_px = int(50 * pixels_per_meter) # Full 50m circle for the first area score
+            outer_100m_zone_radius_px = int(100 * pixels_per_meter) # Outer radius for 50m-100m ring
+            outer_150m_zone_radius_px = int(150 * pixels_per_meter) # Outer radius for 100m-150m ring
+
 
             traffic_analysis = {
                 'storefront_score': 0,
@@ -466,9 +531,9 @@ class GoogleMapsTrafficAnalyzer:
                 'storefront_details': {}
             }
 
-            # Find storefront traffic using circular search
-            storefront_result = self.find_storefront_traffic(
-                image_array, center_x, center_y, zones['150m']
+            # Find storefront traffic using cone search
+            storefront_result, cone_pixels_checked = self.find_storefront_traffic(
+                image_array, center_x, center_y, storefront_direction, storefront_cone_radius_px
             )
 
             traffic_analysis['storefront_details'] = storefront_result
@@ -476,51 +541,51 @@ class GoogleMapsTrafficAnalyzer:
 
             # Update color distribution with storefront findings
             if storefront_result['found']:
-                traffic_analysis['color_distribution'][storefront_result['color']] += storefront_result.get('pixels_found', 1)
+                traffic_analysis['color_distribution'][storefront_result['color']] += 1
 
-            # Analyze different distance zones (surrounding area analysis)
-            for zone_name, zone_radius in zones.items():
-                if zone_name == 'storefront':
-                    continue
+            # Analyze the 50m area (full circle excluding the cone)
+            zone_colors_50m_full_circle = []
+            pixels_in_zone_50m_full_circle = 0
+            for y in range(max(0, center_y - full_50m_circle_radius_px),
+                          min(height, center_y + full_50m_circle_radius_px + 1)):
+                for x in range(max(0, center_x - full_50m_circle_radius_px),
+                              min(width, center_x + full_50m_circle_radius_px + 1)):
+                    distance = math.sqrt((x - center_x)**2 + (y - center_y)**2)
+                    if distance <= full_50m_circle_radius_px and (x, y) not in cone_pixels_checked:
+                        rgb = tuple(image_array[y, x][:3])
+                        color_type = self.classify_traffic_color(rgb)
+                        zone_colors_50m_full_circle.append(color_type)
+                        pixels_in_zone_50m_full_circle += 1
 
-                zone_colors = []
-                pixels_in_zone = 0
+            non_gray_colors_50m_full_circle = [c for c in zone_colors_50m_full_circle if c != 'gray']
+            if non_gray_colors_50m_full_circle:
+                color_counts_50m_full_circle = Counter(non_gray_colors_50m_full_circle)
+                zone_score_50m_full_circle = sum(
+                    count * self.TRAFFIC_SCORES[color]
+                    for color, count in color_counts_50m_full_circle.items()
+                ) / len(non_gray_colors_50m_full_circle)
+            else:
+                zone_score_50m_full_circle = 0
 
-                # Analyze annular region (between this radius and previous)
-                prev_radius = zones.get('50m' if zone_name == '100m' else
-                                      '100m' if zone_name == '150m' else 'storefront', 0)
+            traffic_analysis['area_scores']['50m'] = {
+                'score': zone_score_50m_full_circle,
+                'pixels': pixels_in_zone_50m_full_circle,
+                'colors': dict(Counter(zone_colors_50m_full_circle))
+            }
+            for color, count in Counter(zone_colors_50m_full_circle).items():
+                traffic_analysis['color_distribution'][color] += count
+            logger.info(f"Analyzed 50m full circle (excluding cone) zone: Score={zone_score_50m_full_circle}, Pixels={pixels_in_zone_50m_full_circle}")
 
-                for y in range(max(0, center_y - zone_radius),
-                              min(height, center_y + zone_radius + 1)):
-                    for x in range(max(0, center_x - zone_radius),
-                                  min(width, center_x + zone_radius + 1)):
-                        distance = math.sqrt((x - center_x)**2 + (y - center_y)**2)
-                        if prev_radius < distance <= zone_radius:
-                            rgb = tuple(image_array[y, x][:3])
-                            color_type = self.classify_traffic_color(rgb)
-                            zone_colors.append(color_type)
-                            pixels_in_zone += 1
 
-                # Calculate zone score, ignoring gray pixels
-                non_gray_colors = [c for c in zone_colors if c != 'gray']
-                if non_gray_colors:
-                    color_counts = Counter(non_gray_colors)
-                    zone_score = sum(
-                        count * self.TRAFFIC_SCORES[color]
-                        for color, count in color_counts.items()
-                    ) / len(non_gray_colors)
-                else:
-                    zone_score = 0  # If only gray pixels, score is 0
+            # Analyze the 100m area (annular region from 50m to 100m)
+            self._analyze_annular_zone(image_array, center_x, center_y, height, width,
+                                       full_50m_circle_radius_px, outer_100m_zone_radius_px,
+                                       '100m', traffic_analysis)
 
-                traffic_analysis['area_scores'][zone_name] = {
-                    'score': zone_score,
-                    'pixels': pixels_in_zone,
-                    'colors': dict(Counter(zone_colors)) # Report all colors, even gray
-                }
-
-                # Update overall color distribution
-                for color, count in Counter(zone_colors).items():
-                    traffic_analysis['color_distribution'][color] += count
+            # Analyze the 150m area (annular region from 100m to 150m)
+            self._analyze_annular_zone(image_array, center_x, center_y, height, width,
+                                       outer_100m_zone_radius_px, outer_150m_zone_radius_px,
+                                       '150m', traffic_analysis)
 
             traffic_analysis['total_pixels_analyzed'] = sum(traffic_analysis['color_distribution'].values())
 
@@ -535,33 +600,44 @@ class GoogleMapsTrafficAnalyzer:
         if not analysis:
             return {'score': 0, 'details': 'Analysis failed'}
 
-        # 70% weight for storefront traffic
+        # 60% weight for storefront traffic
         storefront_score = analysis.get('storefront_score', 0)
-        storefront_weight = 0.7
+        storefront_weight = 0.6
+        logger.info(f"Storefront Score: {storefront_score}, Weight: {storefront_weight}")
 
-        # 30% weight for surrounding area traffic with distance multipliers
-        area_weight = 0.3
+        # 40% weight for surrounding area traffic with distance multipliers
+        area_weight = 0.4
         area_score = 0
         total_weighted_pixels = 0
 
         area_scores = analysis.get('area_scores', {})
         multipliers = {'50m': 1.0, '100m': 0.5, '150m': 0.25}
 
+        logger.info("Calculating area scores:")
         for zone, multiplier in multipliers.items():
             if zone in area_scores:
                 zone_data = area_scores[zone]
                 zone_score = zone_data.get('score', 0)
                 zone_pixels = zone_data.get('pixels', 0)
 
+                logger.info(f"  Zone '{zone}': Score={zone_score}, Pixels={zone_pixels}, Multiplier={multiplier}")
+
                 weighted_contribution = zone_score * multiplier * zone_pixels
                 area_score += weighted_contribution
                 total_weighted_pixels += zone_pixels * multiplier
+                logger.info(f"    Weighted contribution for '{zone}': {weighted_contribution}")
 
         if total_weighted_pixels > 0:
             area_score = area_score / total_weighted_pixels
+            logger.info(f"Total weighted pixels for area: {total_weighted_pixels}")
+            logger.info(f"Final calculated area score: {area_score}")
+        else:
+            area_score = 0  # If only gray pixels, score is 0
+            logger.info("No non-gray pixels in surrounding area, area score is 0.")
 
         # Calculate final score
         final_score = (storefront_score * storefront_weight) + (area_score * area_weight)
+        logger.info(f"Final Score Calculation: ({storefront_score} * {storefront_weight}) + ({area_score} * {area_weight}) = {final_score}")
 
         return {
             'score': round(final_score, 2),
@@ -657,11 +733,11 @@ class GoogleMapsTrafficAnalyzer:
 
                     if os.path.exists(screenshot_path):
                         os.remove(screenshot_path)
-                        logger.debug(f"Cleaned up original screenshot: {screenshot_path}")
+                        logger.info(f"Cleaned up original screenshot: {screenshot_path}")
 
                     if os.path.exists(pinned_screenshot_path) and pinned_screenshot_path != screenshot_path:
                         os.remove(pinned_screenshot_path)
-                        logger.debug(f"Cleaned up pinned screenshot: {pinned_screenshot_path}")
+                        logger.info(f"Cleaned up pinned screenshot: {pinned_screenshot_path}")
 
                 except PermissionError as pe:
                     logger.warning(f"Could not cleanup screenshot files (permission denied): {pe}")
