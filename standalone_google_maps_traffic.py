@@ -291,17 +291,6 @@ class GoogleMapsTrafficAnalyzer:
             logger.error(f"Failed to capture Google Maps screenshot: {e}")
             return None
 
-    def color_distance(self, color1: Tuple[int, int, int], color2: Tuple[int, int, int]) -> float:
-        """Calculate Euclidean distance between two RGB colors"""
-        # Convert numpy integers to standard python integers to avoid overflow
-        c1 = tuple(map(int, color1))
-        c2 = tuple(map(int, color2))
-        try:
-            return math.sqrt(sum((a - b) ** 2 for a, b in zip(c1, c2)))
-        except OverflowError:
-            # Handle overflow by using a simpler distance calculation
-            return abs(c1[0] - c2[0]) + abs(c1[1] - c2[1]) + abs(c1[2] - c2[2])
-
     def classify_traffic_color(self, rgb: Tuple[int, int, int]) -> str:
         """Classify RGB color into traffic categories"""
         for traffic_type, (min_rgb, max_rgb) in self.TRAFFIC_COLORS.items():
@@ -932,43 +921,3 @@ def analyze_traffic_at_location(lat: float, lng: float, cleanup_screenshots: boo
                                            day_of_week=day_of_week,
                                            target_time=target_time)
 
-
-def compare_multiple_locations(locations: list, cleanup_screenshots: bool = True) -> list:
-    """
-    Analyze traffic for multiple locations and compare them
-
-    Args:
-        locations: List of dicts with 'lat', 'lng', optional 'name', and optional 'storefront_direction' keys
-        cleanup_screenshots: Whether to delete screenshots after analysis
-
-    Returns:
-        List of locations with traffic analysis results, sorted by score
-    """
-    analyzer = GoogleMapsTrafficAnalyzer(cleanup_screenshots=cleanup_screenshots)
-    results = []
-
-    for location in locations:
-        try:
-            storefront_direction = location.get('storefront_direction', 'north') # Reintroduced
-            result = analyzer.analyze_location_traffic(
-                location['lat'], location['lng'],
-                storefront_direction=storefront_direction, # Passed to analyze_location_traffic
-                day_of_week=location.get("day_of_week"),
-                target_time=location.get("target_time")
-            )
-            result['name'] = location.get('name', f"Location_{location['lat']}_{location['lng']}")
-            results.append(result)
-        except Exception as e:
-            logger.error(f"Failed to analyze location {location}: {e}")
-            results.append({
-                'name': location.get('name', f"Location_{location['lat']}_{location['lng']}"),
-                'score': 0,
-                'error': str(e),
-                'coordinates': {'lat': location['lat'], 'lng': location['lng']},
-                'storefront_direction': storefront_direction # Reintroduced
-            })
-
-    # Sort by score (descending)
-    results.sort(key=lambda x: x.get('score', 0), reverse=True)
-
-    return results
