@@ -1,7 +1,7 @@
 from all_types.request_dtypes import List, ReqFetchDataset
 from fastapi import HTTPException
 from typing import List
-from geo_std_utils import cover_circle_with_seven_circles_helper
+from utils.geo_std_utils import cover_circle_with_seven_circles_helper
 from parrallel_create_duplicate_rules import create_duplicate_rules
 from naming_strings import get_plan_name_and_index, make_dataset_filename, TOKEN_SEPARATOR, make_next_page_token_name, make_plan_name
 import asyncio

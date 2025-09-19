@@ -14,16 +14,15 @@ Usage: python pharmacy_report_final.py [scores_path] [output_dir] [output_filena
 """
 import os
 import logging
-from typing import Dict 
-# Import our modular components
+from typing import Dict
 
+from utils.utils import create_report_asset_path
 from .data_processor import  process_sites, calculate_statistics
 from .chart_generator import plot_top_stacked, plot_traffic, plot_breakdown, plot_healthcare_vs_competition, plot_score_vs_price
 from .map_generator import create_static_map_png, create_demographic_heatmap_png
 from .report_generator import generate_markdown
 from .report_config import (
-    FONT_FAMILY, UNICODE_MINUS, DEFAULT_OUTPUT_FILENAME,
-    DIR_IMAGE, create_report_asset_path
+    FONT_FAMILY, UNICODE_MINUS, DEFAULT_OUTPUT_FILENAME
 )
 # Set up matplotlib for Arabic text support
 import matplotlib.pyplot as plt

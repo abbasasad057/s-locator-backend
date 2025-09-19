@@ -31,9 +31,8 @@ from fastapi import HTTPException
 import math
 
 
-
-
 from app_logger import get_logger
+
 logger = get_logger(__name__)
 
 BACKEND_DIR = "Backend/real_estate_storage"
@@ -130,11 +129,11 @@ async def fetch_dataset_id(lyr_id: str) -> Tuple[str, Dict]:
     for d_id, dataset_info in dataset_layer_matching.items():
         if lyr_id in dataset_info["prdcer_lyrs"]:
             return d_id, dataset_info
-    
+
     # If no dataset found, raise appropriate error
     raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, 
-        detail="Dataset not found for this layer"
+        status_code=status.HTTP_404_NOT_FOUND,
+        detail="Dataset not found for this layer",
     )
 
 
@@ -496,36 +495,51 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
     Loads a dataset from file based on its ID.
     """
 
-    #TODO temporary soultion this shouldn't be needed if we were removing the properties from the dataset before saving
+    # TODO temporary soultion this shouldn't be needed if we were removing the properties from the dataset before saving
     def select_sub_properties(dataset):
         fields = [
-            "displayName", "rating", "user_ratings_total","formattedAddress", "internationalPhoneNumber",
-            "types", "priceLevel", "primaryType", "userRatingCount", "location",
-            "name", "id","popularity_score", "photos","types","googleMapsUri","phone"
+            "displayName",
+            "rating",
+            "user_ratings_total",
+            "formattedAddress",
+            "internationalPhoneNumber",
+            "types",
+            "priceLevel",
+            "primaryType",
+            "userRatingCount",
+            "location",
+            "name",
+            "id",
+            "popularity_score",
+            "photos",
+            "types",
+            "googleMapsUri",
+            "phone",
         ]
-    
+
         filtered_features = []
-    
+
         for feature in dataset.get("features", []):
             # Create new filtered feature with proper GeoJSON structure
             filtered_feature = {
                 "type": feature.get("type", "Feature"),
                 "geometry": feature.get("geometry"),  # Keep the geometry
-                "properties": {}  # Start with empty properties dict
+                "properties": {},  # Start with empty properties dict
             }
-            
+
             # Only add the properties we want
             feature_properties = feature.get("properties", {})
             for field in fields:
                 if field in feature_properties:
-                    filtered_feature["properties"][field] = feature_properties[field]
-            
+                    filtered_feature["properties"][field] = feature_properties[
+                        field
+                    ]
+
             filtered_features.append(filtered_feature)
-    
+
         # Update the dataset with filtered features
         dataset["features"] = filtered_features
         return dataset
-
 
     # if the dataset_id contains the word plan '21.57445341427591_39.1728_30000.0_mosque__plan_mosque_Saudi Arabia_Jeddah@#$9'
     # isolate the plan's name from the dataset_id = mosque__plan_mosque_Saudi Arabia_Jeddah
@@ -592,9 +606,9 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
             # Create the final combined GeoJSON
             feat_collec["features"] = all_features
             feat_collec["properties"] = list(properties_set)
-        #TODO temporary soultion this shouldn't be needed if we were removing the properties from the dataset before saving
+        # TODO temporary soultion this shouldn't be needed if we were removing the properties from the dataset before saving
         feat_collec = select_sub_properties(feat_collec)
-    
+
     elif "real_estate" in dataset_id:
         # Parse the real estate dataset ID to extract bounding box and type
         # Format: saudi_real_estate_riyadh_box=46.082,24.172,47.268,25.255_type=warehouse_for_rent
@@ -603,7 +617,7 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
         box_end = dataset_id.find("_type=")
         bbox_str = dataset_id[box_start:box_end]
         bbox_coords = [float(coord) for coord in bbox_str.split(",")]
-        
+
         # Extract type
         type_start = dataset_id.find("type=") + 5
         type_str = dataset_id[type_start:]
@@ -614,8 +628,8 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
         bottom_lng = bbox_coords[0]
         bottom_lat = bbox_coords[1]
         top_lng = bbox_coords[2]
-        top_lat = bbox_coords[3] 
-        
+        top_lat = bbox_coords[3]
+
         # Query the database using the correct parameter mapping
         city_data = await Database.fetch(
             SqlObject.real_estate_full_data,
@@ -623,39 +637,38 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
             bottom_lng,
             bottom_lat,
             top_lng,
-            top_lat
+            top_lat,
         )
-        
+
         # Convert to DataFrame and then to GeoJSON format
         city_df = pd.DataFrame([dict(record) for record in city_data])
-        
+
         # Convert to GeoJSON format
         features = []
         for _, row in city_df.iterrows():
             # Parse coordinates
             coordinates = [float(row["longitude"]), float(row["latitude"])]
-            
+
             # Create properties dict excluding certain columns
             columns_to_drop = ["latitude", "longitude", "city"]
             if "country" in row:
                 columns_to_drop.append("country")
             properties = row.drop(columns_to_drop).to_dict()
-            
+
             feature = {
                 "type": "Feature",
                 "geometry": {"type": "Point", "coordinates": coordinates},
                 "properties": properties,
             }
             features.append(feature)
-        
+
         # Create GeoJSON structure
         feat_collec = {
-            "type": "FeatureCollection", 
+            "type": "FeatureCollection",
             "features": features,
-            "properties": list(city_df.columns) if not city_df.empty else []
+            "properties": list(city_df.columns) if not city_df.empty else [],
         }
 
-            
     else:
         feat_collec = None
         json_content = await Database.fetchrow(
@@ -672,7 +685,7 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
         if json_content:
             feat_collec = orjson.loads(json_content.get("response_data", "{}"))
 
-        #TODO temporary soultion this shouldn't be needed if we were removing the properties from the dataset before saving
+        # TODO temporary soultion this shouldn't be needed if we were removing the properties from the dataset before saving
         if feat_collec:
             feat_collec = select_sub_properties(feat_collec)
 
@@ -829,9 +842,7 @@ async def get_real_estate_dataset_from_storage(
         )
     if req.action == "full data":
         query = SqlObject.real_estate_full_data
-        city_data = await Database.fetch(
-            query, data_type, *req.bounding_box
-        )
+        city_data = await Database.fetch(query, data_type, *req.bounding_box)
     city_df = pd.DataFrame([dict(record) for record in city_data])
     # Convert to GeoJSON format
     features = []
@@ -849,21 +860,21 @@ async def get_real_estate_dataset_from_storage(
             "properties": properties,
         }
         features.append(feature)
-   
+
     geojson_data = {"type": "FeatureCollection", "features": features}
 
     # Format bounding box as bottom_lng,bottom_lat,top_lng,top_lat
     bbox_str = f"{req.bounding_box[0]},{req.bounding_box[1]},{req.bounding_box[2]},{req.bounding_box[3]}"
-    
+
     # Format data type - handle both single string and list formats
     if isinstance(data_type, list):
         type_str = ",".join(data_type)
     else:
         type_str = str(data_type)
-    
+
     # Create the new filename format with explicit prefixes
     bknd_dataset_id = f"saudi_real_estate_{req.city_name.lower()}_box={bbox_str}_type={type_str}"
-    
+
     return geojson_data, bknd_dataset_id, next_page_token
 
 
@@ -905,6 +916,7 @@ def combine_income_and_population_data(population_data, income_data):
 
     return combined_data
 
+
 async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
     """
     Fetches population or income data from PostGIS tables based on viewport and zoom level.
@@ -921,7 +933,9 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
 
     # --- Population Layer ---
     if req.population and not req.income:
-        table_name = f"schema_marketplace.population_all_features_v{req.zoom_level}"
+        table_name = (
+            f"schema_marketplace.population_all_features_v{req.zoom_level}"
+        )
         sql = f"""
             SELECT ST_AsGeoJSON(t.*)::json AS feature
             FROM (
@@ -933,11 +947,13 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
         rows = await Database.fetch(sql)
         intelligence_geojson_data = {
             "type": "FeatureCollection",
-            "features": [r["feature"] for r in rows]
+            "features": [r["feature"] for r in rows],
         }
         layer_type = "population"
         # Population centers
-        centers_table = f"schema_marketplace.population_centers_v{req.zoom_level}"
+        centers_table = (
+            f"schema_marketplace.population_centers_v{req.zoom_level}"
+        )
         sql_centers = f"""
             SELECT ST_AsGeoJSON(t.*)::json AS feature
             FROM (
@@ -950,12 +966,21 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
         if center_rows:
             population_centers = {
                 "type": "FeatureCollection",
-                "features": [json.loads(r["feature"]) if isinstance(r["feature"], str) else r["feature"] for r in center_rows]
+                "features": [
+                    (
+                        json.loads(r["feature"])
+                        if isinstance(r["feature"], str)
+                        else r["feature"]
+                    )
+                    for r in center_rows
+                ],
             }
 
     # --- Income Layer ---
     if req.income:
-        table_name = f"schema_marketplace.area_income_all_features_v{req.zoom_level}"
+        table_name = (
+            f"schema_marketplace.area_income_all_features_v{req.zoom_level}"
+        )
         sql = f"""
             SELECT ST_AsGeoJSON(t.*)::json AS feature
             FROM (
@@ -967,15 +992,14 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
         rows = await Database.fetch(sql)
         intelligence_geojson_data = {
             "type": "FeatureCollection",
-            "features": [r["feature"] for r in rows]
+            "features": [r["feature"] for r in rows],
         }
         layer_type = "income"
-
 
     filtered_features = []
     density_values = [] if req.income else None
     for feature in intelligence_geojson_data.get("features", []):
-        feature=json.loads(feature)
+        feature = json.loads(feature)
         geometry_data = feature.get("geometry")
         if isinstance(geometry_data, str):
             try:
@@ -1005,11 +1029,15 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
     if req.income and density_values:
         min_density = min(density_values)
         max_density = max(density_values)
-        density_range = max_density - min_density if max_density > min_density else 1
+        density_range = (
+            max_density - min_density if max_density > min_density else 1
+        )
 
         processed_features = []
         for feature, raw_density in filtered_features:
-            normalized_density = ((raw_density - min_density) / density_range) * 100
+            normalized_density = (
+                (raw_density - min_density) / density_range
+            ) * 100
             feature["properties"]["density"] = round(normalized_density, 6)
             processed_features.append(feature)
 
@@ -1032,8 +1060,9 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
         "properties": properties,
         "records_count": len(filtered_features),
     }
-    print('data fetched successfully',intelligence_geojson)
+    print("data fetched successfully", intelligence_geojson)
     return intelligence_geojson
+
 
 async def get_full_load_geojson(filenames: list[str]) -> str:
 
@@ -1094,11 +1123,6 @@ FROM
     return merged_geojson
 
 
-# Apply the decorator to all functions in this module
-apply_decorator_to_module(logger)(__name__)
-
-
-
 def calculate_polygon_area_km2(coordinates):
     """
     Calculate approximate area of polygon in square kilometers.
@@ -1131,3 +1155,6 @@ def calculate_polygon_area_km2(coordinates):
 
     return max(area_km2, 0.01)  # Minimum area to avoid division by zero
 
+
+# Apply the decorator to all functions in this module
+apply_decorator_to_module(logger)(__name__)

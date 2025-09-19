@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 from all_types.request_dtypes import Reqsmartreport, ReqFetchDataset
-from smart_reports.utils import generate_bbox, bbox_to_polygon
+from utils.geo_std_utils import bbox_to_polygon
 from data_fetcher import fetch_dataset
 from smart_reports.traffic import fetch_traffic_data
 from smart_reports.population import fetch_demographics, fetch_household_sizes
@@ -12,7 +12,8 @@ from smart_reports.report_generation.pharmacy_report_final import (
     generate_md_report_from_data,
 )
 from typing import Dict, Any
-from smart_reports.report_generation.report_config import DIR_REPORTS
+from utils.geo_std_utils import generate_bbox
+from utils.utils import DIR_REPORTS
 # Import the modular generator
 from smart_reports.html_generator.pharmacy_generator import generate_complete_html_report
 from typing import Optional

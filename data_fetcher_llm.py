@@ -6,7 +6,7 @@ from all_types.request_dtypes import ReqLLMFetchDataset, ReqFetchDataset
 from cost_calculator import calculate_cost
 from config_factory import CONF
 from data_fetcher import fetch_country_city_data, poi_categories
-from geo_std_utils import fetch_lat_lng_bounding_box
+from utils.geo_std_utils import fetch_lat_lng_bounding_box
 import time 
 import uuid
 from fastapi import HTTPException

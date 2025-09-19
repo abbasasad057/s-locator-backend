@@ -11,7 +11,7 @@ from all_types.request_dtypes import (
 from all_types.response_dtypes import ResHubExpansion
 from storage_methods import fetch_intelligence_by_viewport
 from data_fetcher import fetch_dataset
-from geo_std_utils import calculate_distance, fetch_lat_lng_bounding_box
+from utils.geo_std_utils import calculate_distance, fetch_lat_lng_bounding_box
 
 
 def estimate_travel_time_minutes(

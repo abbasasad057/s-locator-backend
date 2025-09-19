@@ -10,11 +10,13 @@ import geopandas as gpd
 from shapely.geometry import Point
 from typing import List, Dict, Optional, Tuple
 import logging
-from smart_reports.report_generation.report_config import MAP_DPI, MAP_FIGSIZE, create_report_asset_path
+from smart_reports.report_generation.report_config import MAP_DPI, MAP_FIGSIZE
 import os
 from html2image import Html2Image
 import folium
 import random
+
+from utils.utils import create_report_asset_path
 
 def generate_site_map_image(site_data: Dict, output_dir: str , MAX_TOTAL) -> str:
     """

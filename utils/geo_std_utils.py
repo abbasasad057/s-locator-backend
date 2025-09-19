@@ -4,6 +4,7 @@ import geopy.distance
 from datetime import timedelta, datetime
 from typing import Optional, Dict, Any, List, Tuple
 from geopy.geocoders import Nominatim
+from shapely.geometry import box
 from all_types.request_dtypes import ReqFetchDataset, ReqGeodata
 from constants import load_country_city
 
@@ -164,3 +165,31 @@ def cover_circle_with_seven_circles_helper(center, radius_km):
         outer_centers.append((outer_center.longitude, outer_center.latitude))
 
     return [center] + outer_centers
+
+
+def generate_bbox(center_lat, center_lng, radius_km=1):
+    delta = radius_km / 111
+    return {
+        "bottom_lng": center_lng - delta,
+        "top_lng": center_lng + delta,
+        "bottom_lat": center_lat - delta,
+        "top_lat": center_lat + delta,
+    }
+
+
+def bbox_to_polygon(bbox):
+    return box(
+        bbox["bottom_lng"],
+        bbox["bottom_lat"],
+        bbox["top_lng"],
+        bbox["top_lat"]
+    )
+
+
+def calculate_distance_point(
+    origin_lat: float, origin_lng: float, dest_lat: float, dest_lng: float
+) -> dict:
+    origin = (origin_lat, origin_lng)  # Latitude, Longitude of the origin
+    destination = (dest_lat, dest_lng)
+    distance = geodesic(origin, destination).meters
+    return {"est_driving_distance_meters": int(distance)}

@@ -8,7 +8,6 @@ import stripe
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
-from smart_reports.report_generation.report_config import setup_report_directories
 from backend_common.background import set_background_tasks
 from backend_common.database import Database
 from backend_common.auth import firebase_db
@@ -23,6 +22,10 @@ from routers.stripe_payments import stripe_router
 from routers.analysis_intelligence import analysis_router
 from routers.campaign import campaign_router
 from routers.plans import plans_router
+from utils.utils import DIR_TRAFFIC_SCREENSHOTS
+from utils.utils import DIR_IMAGE
+from utils.utils import DIR_INTERACTIVE_HTML
+from utils.utils import DIR_REPORTS
 # TODO: Add stripe secret key
 
 stripe.api_key = CONF.stripe_api_key
@@ -41,6 +44,16 @@ app.include_router(stripe_router, tags=["Stripe"])
 app.include_router(analysis_router, tags=["Analysis & Intelligence"])
 app.include_router(campaign_router, prefix="", tags=["Campaign"])
 app.include_router(plans_router, prefix="", tags=["Plans"])
+def setup_report_directories():
+    """
+    Create all necessary directories for report generation.
+    """
+
+    # Create all subdirectories
+    os.makedirs(DIR_REPORTS, exist_ok=True)
+    os.makedirs(DIR_INTERACTIVE_HTML, exist_ok=True)
+    os.makedirs(DIR_IMAGE, exist_ok=True)
+    os.makedirs(DIR_TRAFFIC_SCREENSHOTS, exist_ok=True)
 
 # Create static directory and mount static files
 # Set up output directories using centralized function

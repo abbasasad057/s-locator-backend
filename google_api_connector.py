@@ -6,7 +6,7 @@ import asyncio
 from fastapi import HTTPException
 import requests
 from all_types.request_dtypes import ReqStreeViewCheck, ReqFetchDataset
-from backend_common.utils.utils import convert_strings_to_ints
+from utils.utils import convert_strings_to_ints
 from config_factory import CONF
 from logging_wrapper import apply_decorator_to_module
 from all_types.response_dtypes import (
@@ -20,7 +20,7 @@ from boolean_query_processor import (
     separate_boolean_queries,
     text_search_query_sequence,
 )
-from geo_std_utils import fetch_lat_lng_bounding_box
+from utils.geo_std_utils import fetch_lat_lng_bounding_box
 from mapbox_connector import MapBoxConnector
 from naming_strings import make_dataset_filename, make_dataset_filename_part
 from popularity_algo import process_req_plan, rectify_plan,mark_plan_result

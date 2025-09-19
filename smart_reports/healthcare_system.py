@@ -1,5 +1,5 @@
 
-from smart_reports.utils import calculate_distance
+from utils.geo_std_utils import calculate_distance_point
 from shapely.geometry import Point
 
 
@@ -22,7 +22,7 @@ def process_category_data(area_polygon : dict, lat : float , lng : float , typ ,
         point = Point(place_lng, place_lat)
         if area_polygon.contains(point):
             # Calculate distance
-            dist_data = calculate_distance(lat, lng, place_lat, place_lng)
+            dist_data = calculate_distance_point(lat, lng, place_lat, place_lng)
 
             results[f"nearby_{typ}"].append({
                 "name": feature.get("properties", {}).get("name", ""),

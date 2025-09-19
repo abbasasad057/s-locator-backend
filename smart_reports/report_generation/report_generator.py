@@ -4,9 +4,11 @@ Report generation utilities for pharmacy site selection analysis.
 import os
 import math
 from typing import List, Dict, Optional, Any
+
+from utils.utils import DIR_IMAGE, DIR_REPORTS
 from .map_generator import generate_site_map_image   
 from typing import Dict, List, Any, Optional
-from .report_config import source_current_location, source_custom_locations, DIR_REPORTS, DIR_IMAGE
+from .report_config import source_current_location, source_custom_locations
 from .data_processor import normalize_score_to_100
 from .report_object import generate_detailed_insights_dict, generate_insights_dict, generate_rankings_dict, generate_rankings_dict_with_current_comparison
 

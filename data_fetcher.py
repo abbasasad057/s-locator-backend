@@ -21,7 +21,7 @@ from backend_common.auth import (
 from backend_common.background import get_background_tasks
 from dataset_helper import excecute_dataset_plan
 from backend_common.stripe_backend.customers import fetch_customer
-from backend_common.utils.utils import convert_strings_to_ints
+from utils.utils import convert_strings_to_ints
 from backend_common.gbucket import (
     upload_file_to_google_cloud_bucket,
     delete_file_from_google_cloud_bucket,
@@ -30,7 +30,7 @@ from config_factory import CONF
 from all_types.request_dtypes import *
 from all_types.response_dtypes import ResLyrMapData, LayerInfo
 from cost_calculator import calculate_cost
-from geo_std_utils import fetch_lat_lng_bounding_box
+from utils.geo_std_utils import fetch_lat_lng_bounding_box
 from google_api_connector import (
     fetch_cat_google_maps_api,
     fetch_ggl_nearby,

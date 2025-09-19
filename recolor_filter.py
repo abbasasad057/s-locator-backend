@@ -5,7 +5,7 @@ from all_types.response_dtypes import (
     NearestPointRouteResponse,
 )
 from google_api_connector import calculate_distance_traffic_route
-from geo_std_utils import calculate_distance
+from utils.geo_std_utils import calculate_distance
 from all_types.request_dtypes import *
 from data_fetcher import given_layer_fetch_dataset, fetch_user_layers
 from geopy.distance import geodesic

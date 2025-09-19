@@ -14,7 +14,7 @@ async def fetch_demographics(bbox : dict , user_id : str):
         population=True
     )
     data = await fetch_intelligence_by_viewport(req_bbox)
-    features = data["features"]
+    features = data["data"]["features"]
     ## Return zeros values in case of an empty dict
     if not features:
             return {
