@@ -50,24 +50,31 @@ def generate_rankings_table(rankings: List[Dict[str, Any]]) -> str:
         if price is None:
             price = 0
 
-        # Extract scores from comparison objects in JSON using display_text with icons
+        # Extract scores from comparison objects (if they exist) in JSON using display_text with icons
+        # Provide fallback to direct score values if comparison data is missing
         final_score = _get_display_text_with_icon(
-            property_data.get("final_score_comparison", {})
+            property_data.get("final_score_comparison", {}),
+            property_data.get("final_score"),
         )
         traffic_score = _get_display_text_with_icon(
-            property_data.get("traffic_score_comparison", {})
+            property_data.get("traffic_score_comparison", {}),
+            property_data.get("traffic_score"),
         )
         demographics_score = _get_display_text_with_icon(
-            property_data.get("demographics_score_comparison", {})
+            property_data.get("demographics_score_comparison", {}),
+            property_data.get("demographics_score"),
         )
         competition_score = _get_display_text_with_icon(
-            property_data.get("competition_score_comparison", {})
+            property_data.get("competition_score_comparison", {}),
+            property_data.get("competition_score"),
         )
         healthcare_score = _get_display_text_with_icon(
-            property_data.get("healthcare_ecosystem_score_comparison", {})
+            property_data.get("healthcare_ecosystem_score_comparison", {}),
+            property_data.get("healthcare_ecosystem_score"),
         )
         complementary_score = _get_display_text_with_icon(
-            property_data.get("complementary_businesses_score_comparison", {})
+            property_data.get("complementary_businesses_score_comparison", {}),
+            property_data.get("complementary_businesses_score"),
         )
 
         # Generate Google Maps URL if coordinates are available
