@@ -3,6 +3,7 @@ Pharmacy Report Generator
 Main generator for pharmacy HTML reports using modular components
 """
 
+import logging
 from typing import Dict, Any
 from all_types.request_dtypes import Reqsmartreport
 from pathlib import Path
@@ -12,22 +13,34 @@ from .html_sections import (
     generate_methodology_and_analysis_section,
     generate_visual_analysis_section,
 )
+from .data_validator import validate_inputs, DataValidationError
 
+logger = logging.getLogger(__name__)
 
 
 def generate_complete_html_report(
     req,
     processed_report_data
 ):
-    """Generate the HTML report"""
-    # prepare colors and logos
-    # format data desired text
-    # prepare charts and maps
-    # insert formatted text and charts into html templates
-    # combine all html parts into one complete html report
+    """
+    Generate the HTML report with data validation
 
+    Args:
+        req: Request object
+        processed_report_data: The processed report data
 
-    html_content = f"""
+    Returns:
+        str: Complete HTML report
+
+    Raises:
+        DataValidationError: If data validation fails
+    """
+    try:
+        # Validate data before processing
+        format_type = validate_inputs(processed_report_data)
+        logger.info(f"Generating HTML report for format type: {format_type}")
+
+        html_content = f"""
         <!DOCTYPE html>
         <html lang="en">
 
@@ -47,4 +60,13 @@ def generate_complete_html_report(
             </div>
         </body>
         </html>"""
-    return html_content
+
+        logger.info("HTML report generation completed successfully")
+        return html_content
+
+    except DataValidationError as e:
+        logger.error(f"Data validation failed: {str(e)}")
+        raise
+    except Exception as e:
+        logger.error(f"HTML generation failed: {str(e)}")
+        raise
