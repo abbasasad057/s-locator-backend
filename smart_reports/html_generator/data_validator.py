@@ -27,12 +27,13 @@ def validate_response_data(data: Dict[str, Any]) -> Tuple[bool, str, str]:
         # Check if data has required structure
         if not isinstance(data, dict):
             return False, "invalid", "Data must be a dictionary"
+        rankings = data.get("rankings", [])
 
-        data_section = data.get("data", {})
-        if not data_section:
-            return False, "invalid", "Missing 'data' section in response"
+        if not rankings:
+            data_section = data.get("data", {})
+            if data_section:
+                rankings = data_section.get("rankings", [])
 
-        rankings = data_section.get("rankings", [])
         if not rankings:
             return False, "invalid", "Missing or empty 'rankings' array"
 
