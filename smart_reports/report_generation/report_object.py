@@ -234,16 +234,16 @@ def generate_rankings_dict_with_current_comparison(
         "display_text": "top_val (curr_val, XX% improvement)"
     }
     """
-    
+
     if not top_sites:
         return []
     if not current_location:
         # fallback: no comparison, use original function
         return generate_rankings_dict(top_sites, MAX_TOTAL, CRITERION_WEIGHTS)
-    
+
     current = current_location[0]  # baseline
     rankings = []
-    
+
     # Helper to format comparison data
     def compare_values(top_val, curr_val):
         if curr_val == 0:
@@ -254,7 +254,7 @@ def generate_rankings_dict_with_current_comparison(
                 "comparison_type": "N/A",
                 "display_text": f"{top_val:.1f} ({curr_val:.0f}, N/A)"
             }
-        
+
         diff_pct = abs(top_val - curr_val)
         if top_val > curr_val:
             comparison_type = "improvement"
@@ -265,7 +265,7 @@ def generate_rankings_dict_with_current_comparison(
         else:
             comparison_type = "same"
             display_text = f"{top_val:.1f} ({curr_val:.0f}, 0% difference)"
-        
+
         return {
             "value": round(top_val, 1),
             "current_value": round(curr_val, 1),
@@ -273,7 +273,7 @@ def generate_rankings_dict_with_current_comparison(
             "comparison_type": comparison_type,
             "display_text": display_text
         }
-    
+
     for i, site in enumerate(top_sites, start=1):
         # Top site scores normalized to 100
         final_score = (site['total_score'] / MAX_TOTAL) * 100
@@ -298,18 +298,20 @@ def generate_rankings_dict_with_current_comparison(
         competition_comparison = compare_values(competition, curr_comp)
         healthcare_comparison = compare_values(healthcare, curr_health)
         complementary_comparison = compare_values(complementary, curr_complement)
-        
-        rankings.append({
-            "rank": site["rank"],
-            "site_name": site['display_name'],
-            "price_sar": site.get('price', 0) if site.get('price') else None,
-            "final_score_comparison": final_comparison,
-            "traffic_score_comparison": traffic_comparison,
-            "demographics_score_comparison": demographics_comparison,
-            "competition_score_comparison": competition_comparison,
-            "healthcare_ecosystem_score_comparison": healthcare_comparison,
-            "complementary_businesses_score_comparison": complementary_comparison,
-            "url": site["url"]
-        })
-    
+
+        rankings.append(
+            {
+                "rank": site["rank"],
+                "site_name": site["display_name"],
+                "price_sar": site.get("price", 0) if site.get("price") else None,
+                "final_score_comparison": final_comparison if final_comparison else {},
+                "traffic_score_comparison": traffic_comparison,
+                "demographics_score_comparison": demographics_comparison,
+                "competition_score_comparison": competition_comparison,
+                "healthcare_ecosystem_score_comparison": healthcare_comparison,
+                "complementary_businesses_score_comparison": complementary_comparison,
+                "url": site["url"],
+            }
+        )
+
     return rankings
