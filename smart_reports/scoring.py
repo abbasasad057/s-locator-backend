@@ -148,7 +148,6 @@ def score_competitive(healthcare_data, weight_score):
         "details": {
             "Distance to nearest pharmacy": distance_score * 100,
             "Market saturation": saturation_score * 100,
-            # "Underserved population pockets" : "N/A",
             "competeing pharmacies around" : healthcare_data.get("pharmacy", {}).get("num_of_pharmacies", 0)
         }
     }

@@ -7,8 +7,6 @@ from typing import Dict, Any, List
 
 def _get_display_text_with_icon(comparison_data: Dict[str, Any]) -> str:
     """Extract display text with appropriate styled indicator based on comparison type"""
-    if not comparison_data:
-        return "N/A"
 
     value = comparison_data.get("value", 0)
     comparison_type = comparison_data.get('comparison_type', '')
@@ -31,16 +29,13 @@ def generate_rankings_table(rankings: List[Dict[str, Any]]) -> str:
     """Generate rankings table HTML"""
     table_rows = ""
     for i, property_data in enumerate(rankings, 1):
+        # --- Logic and formatting block ---
         rank_class = "top3" if i <= 3 else ""
+        site_name = property_data.get('site_name', 'Property')
+        price_raw = property_data.get('price_sar', 0)
+        price = price_raw
+        price_display = str(int(price))
 
-        # Extract data with proper field mapping - ONLY use data that exists in JSON
-        site_name = property_data.get('site_name', 'Property')  # Use site_name from JSON
-        price = property_data.get('price_sar', 0)  # Use price_sar from JSON
-        # Handle None price values
-        if price is None:
-            price = 0
-
-        # Extract scores from comparison objects in JSON using display_text with icons
         final_score = _get_display_text_with_icon(property_data.get('final_score_comparison', {}))
         traffic_score = _get_display_text_with_icon(property_data.get('traffic_score_comparison', {}))
         demographics_score = _get_display_text_with_icon(property_data.get('demographics_score_comparison', {}))
@@ -48,19 +43,15 @@ def generate_rankings_table(rankings: List[Dict[str, Any]]) -> str:
         healthcare_score = _get_display_text_with_icon(property_data.get('healthcare_ecosystem_score_comparison', {}))
         complementary_score = _get_display_text_with_icon(property_data.get('complementary_businesses_score_comparison', {}))
 
-        # Generate Google Maps URL if coordinates are available
-        google_maps_url = property_data.get('url', '#')  # Use url from JSON instead of google_maps_url
+        google_maps_url = property_data.get('url', '#')
         if not google_maps_url or google_maps_url == '#':
-            # Try to get coordinates from location object if available
             location = property_data.get('location', {})
             lat = location.get('latitude')
             lng = location.get('longitude')
             if lat and lng:
                 google_maps_url = f"https://www.google.com/maps/search/?api=1&query={lat},{lng}"
 
-        # Format price display
-        price_display = "N/A" if price == 0 and property_data.get('price_sar') is None else f"{price:,.0f}"
-
+        # --- Display block ---
         table_rows += f"""
       <tr>
         <td><a href="{google_maps_url}" target="_blank" class="rank-badge {rank_class}">#{i}</a></td>
@@ -82,38 +73,31 @@ def generate_current_location_table(processed_report_data: Dict[str, Any]) -> st
     if not current_location:
         return ""
 
-    # Generate table rows for current location
     table_rows = ""
     for location_data in current_location:
+        # --- Logic and formatting block ---
         site_name = location_data.get('site_name', 'Your current location')
-        price = location_data.get('price_sar', 0)
+        price_raw = location_data.get('price_sar', 0)
+        price = price_raw
+        price_display = str(int(price))
         rank = location_data.get('rank', 0)
 
-        # Handle None price values
-        if price is None:
-            price = 0
+        final_score = f"{round(location_data.get('final_score', 0), 1)}"
+        traffic_score = f"{round(location_data.get('traffic_score', 0), 1)}"
+        demographics_score = f"{round(location_data.get('demographics_score', 0), 1)}"
+        competition_score = f"{round(location_data.get('competition_score', 0), 1)}"
+        healthcare_score = f"{round(location_data.get('healthcare_ecosystem_score', 0), 1)}"
+        complementary_score = f"{round(location_data.get('complementary_businesses_score', 0), 1)}"
 
-        # Use direct score values from JSON (no comparison objects for current/custom locations)
-        final_score = f"{location_data.get('final_score', 0):.1f}"
-        traffic_score = f"{location_data.get('traffic_score', 0):.1f}"
-        demographics_score = f"{location_data.get('demographics_score', 0):.1f}"
-        competition_score = f"{location_data.get('competition_score', 0):.1f}"
-        healthcare_score = f"{location_data.get('healthcare_ecosystem_score', 0):.1f}"
-        complementary_score = f"{location_data.get('complementary_businesses_score', 0):.1f}"
-
-        # Generate Google Maps URL if coordinates are available
         google_maps_url = location_data.get('url', '#')
         if not google_maps_url or google_maps_url == '#':
-            # Try to get coordinates from location object if available
             location = location_data.get('location', {})
             lat = location.get('latitude')
             lng = location.get('longitude')
             if lat and lng:
                 google_maps_url = f"https://www.google.com/maps/search/?api=1&query={lat},{lng}"
 
-        # Format price display
-        price_display = "N/A" if price == 0 and location_data.get('price_sar') is None else f"{price:,.0f}"
-
+        # --- Display block ---
         table_rows += f"""
       <tr>
         <td><a href="{google_maps_url}" target="_blank" class="rank-badge">#{rank}</a></td>
@@ -156,38 +140,31 @@ def generate_custom_locations_table(processed_report_data: Dict[str, Any]) -> st
     if not custom_locations:
         return ""
 
-    # Generate table rows for custom locations
     table_rows = ""
     for location_data in custom_locations:
+        # --- Logic and formatting block ---
         site_name = location_data.get('site_name', 'Custom location')
-        price = location_data.get('price_sar', 0)
+        price_raw = location_data.get('price_sar', 0)
+        price = price_raw
+        price_display = str(int(price))
         rank = location_data.get('rank', 0)
 
-        # Handle None price values
-        if price is None:
-            price = 0
+        final_score = f"{round(location_data.get('final_score', 0), 1)}"
+        traffic_score = f"{round(location_data.get('traffic_score', 0), 1)}"
+        demographics_score = f"{round(location_data.get('demographics_score', 0), 1)}"
+        competition_score = f"{round(location_data.get('competition_score', 0), 1)}"
+        healthcare_score = f"{round(location_data.get('healthcare_ecosystem_score', 0), 1)}"
+        complementary_score = f"{round(location_data.get('complementary_businesses_score', 0), 1)}"
 
-        # Use direct score values from JSON (no comparison objects for current/custom locations)
-        final_score = f"{location_data.get('final_score', 0):.1f}"
-        traffic_score = f"{location_data.get('traffic_score', 0):.1f}"
-        demographics_score = f"{location_data.get('demographics_score', 0):.1f}"
-        competition_score = f"{location_data.get('competition_score', 0):.1f}"
-        healthcare_score = f"{location_data.get('healthcare_ecosystem_score', 0):.1f}"
-        complementary_score = f"{location_data.get('complementary_businesses_score', 0):.1f}"
-
-        # Generate Google Maps URL if coordinates are available
         google_maps_url = location_data.get('url', '#')
         if not google_maps_url or google_maps_url == '#':
-            # Try to get coordinates from location object if available
             location = location_data.get('location', {})
             lat = location.get('latitude')
             lng = location.get('longitude')
             if lat and lng:
                 google_maps_url = f"https://www.google.com/maps/search/?api=1&query={lat},{lng}"
 
-        # Format price display
-        price_display = "N/A" if price == 0 and location_data.get('price_sar') is None else f"{price:,.0f}"
-
+        # --- Display block ---
         table_rows += f"""
       <tr>
         <td><span class="rank-badge">#{rank}</span></td>
