@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "Dine-in Cafe/Restaurant",
-    "description": "Dine-in Cafe/Restaurant optimal location in Riyadh (Free Sample Report Available)",
+    "description": "☕️🍽️ Dine-in Cafe/Restaurant optimal location in Riyadh (Free Sample Report)",
     "bgImage": "http://localhost:8000/static/cafe-analysis.png",
     "options": {
       "free_redirect": "http://localhost:8050/cafe-analysis",
@@ -13,22 +13,9 @@
     }
   },
   {
-    "id": 2,
-    "title": "Warehouse Delivery",
-    "description": "Warehouse optimal location for my delivery service (Free Sample Report Available)",
-    "bgImage": "http://localhost:8000/static/warehouse-analysis.png",
-    "options": {
-      "free_redirect": "http://localhost:8050/warehouse-analysis",
-      "custom_redirect": {
-        "has_account": "http://localhost:8050/",
-        "no_account": "/plans"
-      }
-    }
-  },
-  {
     "id": 3,
     "title": "Retail Store/Pharmacy",
-    "description": "Retail Store/Pharmacy optimal location in Riyadh (Free Sample Report Available)",
+    "description": "🏬💊 Retail Store/Pharmacy optimal location in Riyadh (Free Sample Report)",
     "bgImage": "http://localhost:8000/static/pharmacy-analysis.png",
     "options": {
       "free_redirect": "static/reports/JnaGDCKoSoWtj6NWEVW8MDMBCiA2.html",
@@ -39,9 +26,22 @@
     }
   },
   {
+    "id": 2,
+    "title": "Warehouse Delivery",
+    "description": "🏭🚚 Warehouse optimal location for my delivery service (Free Sample Report)",
+    "bgImage": "http://localhost:8000/static/warehouse-analysis.png",
+    "options": {
+      "free_redirect": "http://localhost:8050/warehouse-analysis",
+      "custom_redirect": {
+        "has_account": "http://localhost:8050/",
+        "no_account": "/plans"
+      }
+    }
+  },
+  {
     "id": 4,
     "title": "Try Something Else",
-    "description": "Do my own custom analysis (Free Sample data available)",
+    "description": "✨🔍 Do my own custom analysis (Free Sample data)",
     "bgImage": "http://localhost:8000/static/custom-analysis.png",
     "options": {
       "free_redirect": "http://localhost:3000/",
