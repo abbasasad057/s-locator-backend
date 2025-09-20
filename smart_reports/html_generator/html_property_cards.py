@@ -51,9 +51,18 @@ def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str
         if rankings:
             matching_ranking = next((prop for prop in rankings if prop.get('site_name') == site_name), {})
 
-        traffic_score_display = _get_display_text_with_icon(matching_ranking.get('traffic_score_comparison', {}))
-        demographics_score_display = _get_display_text_with_icon(matching_ranking.get('demographics_score_comparison', {}))
-        competition_score_display = _get_display_text_with_icon(matching_ranking.get('competition_score_comparison', {}))
+        traffic_score_display = _get_display_text_with_icon(
+            matching_ranking.get("traffic_score_comparison", {}),
+            matching_ranking.get("traffic_score"),
+        )
+        demographics_score_display = _get_display_text_with_icon(
+            matching_ranking.get("demographics_score_comparison", {}),
+            matching_ranking.get("demographics_score"),
+        )
+        competition_score_display = _get_display_text_with_icon(
+            matching_ranking.get("competition_score_comparison", {}),
+            matching_ranking.get("competition_score"),
+        )
 
         maps_path = f"assets/interactive_html/site_{latitude},{longitude}_map.html"
 
@@ -134,4 +143,3 @@ def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str
         </div>
       </div>"""
     return property_cards_html
-
