@@ -26,6 +26,7 @@ from dataclasses import dataclass
 from pathlib import Path
 import sys
 import os
+
 # Add project root to Python path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(os.path.dirname(current_dir))
@@ -35,6 +36,7 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 from app_logger import get_logger
+
 logger = get_logger(__name__)
 
 
@@ -51,7 +53,10 @@ class Prerequisites:
     real_estate_seeds: List[str] = (
         None  # ["residential_properties", "commercial_properties"]
     )
-    firebase_profile_seeds: List[str] = None  # ["admin_profile_basic", "admin_profile_with_datasets"]
+    geospatial_seeds: bool = False
+    firebase_profile_seeds: List[str] = (
+        None  # ["admin_profile_basic", "admin_profile_with_datasets"]
+    )
     custom_user_config: Optional[Dict[str, Any]] = None
 
 
@@ -130,16 +135,10 @@ class ConfigTestGenerator:
                 # Use custom user configuration
                 custom_config = config.prerequisites.custom_user_config or {}
                 user_data = self.user_seeder.create_user(
-                    email_prefix=custom_config.get(
-                        "email_prefix", "custom_user"
-                    ),
+                    email_prefix=custom_config.get("email_prefix", "custom_user"),
                     password=custom_config.get("password", "CustomPass123!"),
-                    username_prefix=custom_config.get(
-                        "username_prefix", "Custom User"
-                    ),
-                    account_type=custom_config.get(
-                        "account_type", "individual"
-                    ),
+                    username_prefix=custom_config.get("username_prefix", "Custom User"),
+                    account_type=custom_config.get("account_type", "individual"),
                 )
             else:
                 # Default to regular user
@@ -180,9 +179,7 @@ class ConfigTestGenerator:
         # 3. DATABASE SEEDING
         # ======================
         if config.prerequisites.requires_database_seed and self.database_seeder:
-            logger.info(
-                f"🗃️ Setting up database seeding for test: {config.name}"
-            )
+            logger.info(f"🗃️ Setting up database seeding for test: {config.name}")
 
             # Seed Google Maps raw data if specified
             if config.prerequisites.ggl_raw_seeds:
@@ -232,25 +229,37 @@ class ConfigTestGenerator:
                     f"✅ Real estate data seeded with variables: {list(real_estate_vars.keys())}"
                 )
 
+            # seed geospatial data if specificed
+            if config.prerequisites.geospatial_seeds:
+                logger.info(f"Seeding geospatial data")
+                self.database_seeder.seed_geospatial_data()
+                logger.info(f"Finished geospatial data table")
+
             # Seed Firebase profiles if specified
             if config.prerequisites.firebase_profile_seeds:
                 logger.info(
                     f"🔥 Seeding Firebase profiles: {config.prerequisites.firebase_profile_seeds}"
                 )
                 # Use the main user data if available, otherwise None
-                admin_user = context.user_data if context.user_data and context.user_data.account_type == "admin" else None
+                admin_user = (
+                    context.user_data
+                    if context.user_data and context.user_data.account_type == "admin"
+                    else None
+                )
                 firebase_vars = self.database_seeder.seed_firebase_profiles(
                     config.prerequisites.firebase_profile_seeds,
                     context.user_data,
-                    admin_user
+                    admin_user,
                 )
                 context.variables.update(
                     {f"firebase.{k}": v for k, v in firebase_vars.items()}
                 )
                 context.database_vars.update(firebase_vars)
-                
+
                 # Also expose layer IDs in the database namespace for compatibility
-                layer_id_vars = {k: v for k, v in firebase_vars.items() if k.endswith('_layer_id')}
+                layer_id_vars = {
+                    k: v for k, v in firebase_vars.items() if k.endswith("_layer_id")
+                }
                 context.variables.update(
                     {f"database.{k}": v for k, v in layer_id_vars.items()}
                 )
@@ -261,18 +270,28 @@ class ConfigTestGenerator:
                     logger.info(
                         f"🔧 Layer IDs also exposed in database namespace: {list(layer_id_vars.keys())}"
                     )
-                
+
                 # Also seed layer matchings if profiles contain layers
-                logger.info("🔗 Seeding Firebase layer matchings for profile compatibility")
-                layer_matching_vars = self.database_seeder.seed_firebase_layer_matchings()
+                logger.info(
+                    "🔗 Seeding Firebase layer matchings for profile compatibility"
+                )
+                layer_matching_vars = (
+                    self.database_seeder.seed_firebase_layer_matchings()
+                )
                 context.variables.update(
                     {f"firebase.{k}": v for k, v in layer_matching_vars.items()}
                 )
-                logger.info(f"✅ Layer matchings seeded with {len(layer_matching_vars)} entries")
-                
+                logger.info(
+                    f"✅ Layer matchings seeded with {len(layer_matching_vars)} entries"
+                )
+
                 # Also seed user layer matchings
                 logger.info("👤 Seeding Firebase user layer matchings")
-                user_layer_matching_vars = self.database_seeder.seed_firebase_user_layer_matchings(context.user_data.user_id if context.user_data else None)
+                user_layer_matching_vars = (
+                    self.database_seeder.seed_firebase_user_layer_matchings(
+                        context.user_data.user_id if context.user_data else None
+                    )
+                )
                 context.variables.update(
                     {f"firebase.{k}": v for k, v in user_layer_matching_vars.items()}
                 )
@@ -281,9 +300,7 @@ class ConfigTestGenerator:
             # Register tables for cleanup
             if self.database_cleanup_manager:
                 for table in self.database_seeder.created_tables:
-                    self.database_cleanup_manager.register_table_for_cleanup(
-                        table
-                    )
+                    self.database_cleanup_manager.register_table_for_cleanup(table)
                     logger.info(f"📝 Registered table for cleanup: {table}")
 
             # Log all seeded data types
@@ -297,9 +314,7 @@ class ConfigTestGenerator:
             if config.prerequisites.firebase_profile_seeds:
                 seeded_types.append("firebase_profiles")
 
-            logger.info(
-                f"✅ Database seeding completed for types: {seeded_types}"
-            )
+            logger.info(f"✅ Database seeding completed for types: {seeded_types}")
 
         # ======================
         # 4. FINAL SETUP
@@ -312,10 +327,7 @@ class ConfigTestGenerator:
     def substitute_variables(self, data: Any, context: RuntimeContext) -> Any:
         """Replace ${variable} placeholders with actual values"""
         if isinstance(data, dict):
-            return {
-                k: self.substitute_variables(v, context)
-                for k, v in data.items()
-            }
+            return {k: self.substitute_variables(v, context) for k, v in data.items()}
         elif isinstance(data, list):
             return [self.substitute_variables(item, context) for item in data]
         elif isinstance(data, str):
@@ -326,14 +338,10 @@ class ConfigTestGenerator:
                 var_name = match.group(1)
                 if var_name in context.variables:
                     replacement = str(context.variables[var_name])
-                    logger.info(
-                        f"🔄 Substituting ${{{var_name}}} -> {replacement}"
-                    )
+                    logger.info(f"🔄 Substituting ${{{var_name}}} -> {replacement}")
                     return replacement
                 else:
-                    logger.warning(
-                        f"⚠️ Variable ${{{var_name}}} not found in context"
-                    )
+                    logger.warning(f"⚠️ Variable ${{{var_name}}} not found in context")
                     return match.group(0)  # Return original if not found
 
             return re.sub(pattern, replace_var, data)
@@ -348,9 +356,7 @@ class ConfigTestGenerator:
             return config.expected_output
 
         # Construct path to JSON file
-        json_file_path = (
-            Path(__file__).parent.parent / config.expected_output_file
-        )
+        json_file_path = Path(__file__).parent.parent / config.expected_output_file
 
         try:
             logger.info(f"📁 Loading expected output from: {json_file_path}")
@@ -364,9 +370,7 @@ class ConfigTestGenerator:
             )
 
             # Apply template substitution to the loaded JSON
-            expected_output = self.substitute_variables(
-                expected_output, context
-            )
+            expected_output = self.substitute_variables(expected_output, context)
 
             return expected_output
 
@@ -374,9 +378,7 @@ class ConfigTestGenerator:
             logger.error(f"❌ Expected output file not found: {json_file_path}")
             return config.expected_output or {}
         except json.JSONDecodeError as e:
-            logger.error(
-                f"❌ Invalid JSON in {config.expected_output_file}: {e}"
-            )
+            logger.error(f"❌ Invalid JSON in {config.expected_output_file}: {e}")
             return config.expected_output or {}
         except Exception as e:
             logger.error(f"❌ Error loading expected output: {e}")
@@ -478,7 +480,7 @@ class ConfigTestGenerator:
         if isinstance(expected, str):
             if expected in [
                 "non_empty_list",
-                "non_empty_dict", 
+                "non_empty_dict",
                 "exists",
                 "not_exists",
             ] or expected.startswith(
@@ -495,9 +497,7 @@ class ConfigTestGenerator:
                 )
             ):
                 # This is a special validator, check if it passes
-                validation_result = self._validate_special_string(
-                    actual, expected
-                )
+                validation_result = self._validate_special_string(actual, expected)
                 if validation_result:
                     file_handle.write(
                         f"{indent}✅ Validator '{expected}' passed at {path}\n"
@@ -512,9 +512,7 @@ class ConfigTestGenerator:
         # Type comparison (only for non-validator cases)
         if type(actual) != type(expected):
             file_handle.write(f"{indent}❌ Type mismatch at {path}:\n")
-            file_handle.write(
-                f"{indent}   Expected: {type(expected).__name__}\n"
-            )
+            file_handle.write(f"{indent}   Expected: {type(expected).__name__}\n")
             file_handle.write(f"{indent}   Actual:   {type(actual).__name__}\n")
             return
 
@@ -530,9 +528,7 @@ class ConfigTestGenerator:
             # Check for extra keys
             extra_keys = set(actual.keys()) - set(expected.keys())
             if extra_keys:
-                file_handle.write(
-                    f"{indent}ℹ️ Extra keys in actual: {extra_keys}\n"
-                )
+                file_handle.write(f"{indent}ℹ️ Extra keys in actual: {extra_keys}\n")
 
             # Compare common keys
             for key in expected.keys():
@@ -553,9 +549,7 @@ class ConfigTestGenerator:
                     f"{indent}❌ Length mismatch: expected {len(expected)}, got {len(actual)}\n"
                 )
 
-            for i, (actual_item, expected_item) in enumerate(
-                zip(actual, expected)
-            ):
+            for i, (actual_item, expected_item) in enumerate(zip(actual, expected)):
                 self._write_comparison_analysis(
                     file_handle,
                     actual_item,
@@ -607,14 +601,22 @@ class ConfigTestGenerator:
             # 0. PRE-FLIGHT CHECK - Verify expected output file exists
             # ======================
             if config.expected_output_file:
-                expected_file_path = Path(__file__).parent.parent / config.expected_output_file
+                expected_file_path = (
+                    Path(__file__).parent.parent / config.expected_output_file
+                )
                 if not expected_file_path.exists():
-                    logger.error(f"❌ Expected output file missing: {expected_file_path}")
+                    logger.error(
+                        f"❌ Expected output file missing: {expected_file_path}"
+                    )
                     logger.error(f"❌ Test '{config.name}' requires this file to run")
-                    logger.error(f"❌ Please create the expected response file before running this test")
+                    logger.error(
+                        f"❌ Please create the expected response file before running this test"
+                    )
                     return False
                 else:
-                    logger.info(f"✅ Expected output file found: {config.expected_output_file}")
+                    logger.info(
+                        f"✅ Expected output file found: {config.expected_output_file}"
+                    )
 
             # ======================
             # 1. SEEDING - Set up prerequisites
@@ -663,7 +665,7 @@ class ConfigTestGenerator:
                     # Prepare multipart form data
                     files = {}
                     data = {}
-                    
+
                     for key, value in input_data.items():
                         if key == "_form_data":
                             continue  # Skip the flag
@@ -677,11 +679,13 @@ class ConfigTestGenerator:
                         else:
                             # Regular form data
                             data[key] = value
-                    
-                    logger.info(f"📝 Sending multipart form data with fields: {list(data.keys())}")
+
+                    logger.info(
+                        f"📝 Sending multipart form data with fields: {list(data.keys())}"
+                    )
                     if files:
                         logger.info(f"📁 Including files: {list(files.keys())}")
-                    
+
                     response = self.http_client.post(
                         url,
                         headers=headers,
@@ -749,9 +753,7 @@ class ConfigTestGenerator:
             try:
                 actual_body = response.json()
             except json.JSONDecodeError:
-                logger.error(
-                    f"❌ Failed to parse response as JSON: {response.text}"
-                )
+                logger.error(f"❌ Failed to parse response as JSON: {response.text}")
                 return False
 
             # Check status code match
@@ -761,9 +763,7 @@ class ConfigTestGenerator:
             body_match = True
             if "response_body" in expected:
                 expected_body = expected["response_body"]
-                body_match = self.compare_json_objects(
-                    actual_body, expected_body
-                )
+                body_match = self.compare_json_objects(actual_body, expected_body)
 
             # Determine overall test result
             test_passed = status_match and body_match
@@ -780,17 +780,13 @@ class ConfigTestGenerator:
 
             if log_file_path:
                 if test_passed:
-                    logger.info(
-                        f"✅ Test passed. Log written to: {log_file_path}"
-                    )
+                    logger.info(f"✅ Test passed. Log written to: {log_file_path}")
                 else:
                     logger.error(
                         f"❌ Test failed. Detailed comparison written to: {log_file_path}"
                     )
             else:
-                logger.error(
-                    f"❌ Could not write comparison log to file."
-                )
+                logger.error(f"❌ Could not write comparison log to file.")
 
             # If test failed, also log the basic failure info to console
             if not test_passed:
@@ -813,7 +809,6 @@ class ConfigTestGenerator:
             logger.exception("Full exception details:")
             return False
 
-
     def _validate_min_length(self, actual: Any, min_length: int, path: str) -> bool:
         """Helper method to validate min_length"""
         if hasattr(actual, "__len__"):
@@ -824,16 +819,13 @@ class ConfigTestGenerator:
                     f"❌ Min length validation failed at {path}: expected min length {min_length}, got {actual_length}"
                 )
             else:
-                logger.info(
-                    f"✅ min_length validation passed at {path}"
-                )
+                logger.info(f"✅ min_length validation passed at {path}")
             return is_valid
         else:
             logger.error(
                 f"❌ Min length validation failed at {path}: object has no length"
             )
             return False
-
 
     def compare_json_objects(
         self, actual: Any, expected: Any, path: str = "root"
@@ -885,9 +877,7 @@ class ConfigTestGenerator:
                         f"❌ Validation failed at {path}: expected non-empty list, got {type(actual)} with length {len(actual) if isinstance(actual, list) else 'N/A'}"
                     )
                 else:
-                    logger.info(
-                        f"✅ non_empty_list validation passed at {path}"
-                    )
+                    logger.info(f"✅ non_empty_list validation passed at {path}")
                 return is_valid
 
             # Special validator: non_empty_dict
@@ -898,9 +888,7 @@ class ConfigTestGenerator:
                         f"❌ Validation failed at {path}: expected non-empty dict, got {type(actual)} with length {len(actual) if isinstance(actual, dict) else 'N/A'}"
                     )
                 else:
-                    logger.info(
-                        f"✅ non_empty_dict validation passed at {path}"
-                    )
+                    logger.info(f"✅ non_empty_dict validation passed at {path}")
                 return is_valid
 
             # Special validator: exists
@@ -1004,9 +992,7 @@ class ConfigTestGenerator:
                         f"❌ Type validation failed at {path}: expected {expected_type}, got {type(actual).__name__}"
                     )
                 else:
-                    logger.info(
-                        f"✅ type validation passed at {path}: {expected_type}"
-                    )
+                    logger.info(f"✅ type validation passed at {path}: {expected_type}")
                 return is_valid
 
             # Special validator: regex:pattern
@@ -1025,9 +1011,7 @@ class ConfigTestGenerator:
                         logger.info(f"✅ regex validation passed at {path}")
                     return is_valid
                 except re.error as e:
-                    logger.error(
-                        f"❌ Invalid regex pattern at {path}: {pattern} - {e}"
-                    )
+                    logger.error(f"❌ Invalid regex pattern at {path}: {pattern} - {e}")
                     return False
 
             # Special validator: length:number
@@ -1042,9 +1026,7 @@ class ConfigTestGenerator:
                                 f"❌ Length validation failed at {path}: expected length {expected_length}, got {actual_length}"
                             )
                         else:
-                            logger.info(
-                                f"✅ length validation passed at {path}"
-                            )
+                            logger.info(f"✅ length validation passed at {path}")
                         return is_valid
                     else:
                         logger.error(
@@ -1067,9 +1049,7 @@ class ConfigTestGenerator:
                                 f"❌ Min length validation failed at {path}: expected min length {min_length}, got {actual_length}"
                             )
                         else:
-                            logger.info(
-                                f"✅ min_length validation passed at {path}"
-                            )
+                            logger.info(f"✅ min_length validation passed at {path}")
                         return is_valid
                     else:
                         logger.error(
@@ -1092,9 +1072,7 @@ class ConfigTestGenerator:
                                 f"❌ Max length validation failed at {path}: expected max length {max_length}, got {actual_length}"
                             )
                         else:
-                            logger.info(
-                                f"✅ max_length validation passed at {path}"
-                            )
+                            logger.info(f"✅ max_length validation passed at {path}")
                         return is_valid
                     else:
                         logger.error(
@@ -1135,9 +1113,7 @@ class ConfigTestGenerator:
                 if not self.compare_json_objects(
                     actual[key], expected_value, current_path
                 ):
-                    logger.error(
-                        f"❌ Value mismatch for key '{key}' at {current_path}"
-                    )
+                    logger.error(f"❌ Value mismatch for key '{key}' at {current_path}")
                     return False
 
             logger.info(f"✅ Dict comparison passed at {path}")
@@ -1157,9 +1133,7 @@ class ConfigTestGenerator:
                 )
                 return False
 
-            for i, (actual_item, expected_item) in enumerate(
-                zip(actual, expected)
-            ):
+            for i, (actual_item, expected_item) in enumerate(zip(actual, expected)):
                 current_path = f"{path}[{i}]"
                 if not self.compare_json_objects(
                     actual_item, expected_item, current_path
@@ -1213,13 +1187,8 @@ class ConfigTestGenerator:
         ):
             errors.append("Authentication requires a user to be created")
 
-        if (
-            config.prerequisites.requires_database_seed
-            and not self.database_seeder
-        ):
-            errors.append(
-                "Database seeding required but no database seeder provided"
-            )
+        if config.prerequisites.requires_database_seed and not self.database_seeder:
+            errors.append("Database seeding required but no database seeder provided")
 
         # Check if database seeding is requested but no seed lists are provided
         if config.prerequisites.requires_database_seed:
@@ -1232,14 +1201,10 @@ class ConfigTestGenerator:
                 ]
             )
             if not has_seeds:
-                errors.append(
-                    "Database seeding requested but no seed lists provided"
-                )
+                errors.append("Database seeding requested but no seed lists provided")
 
         if errors:
-            logger.error(
-                f"❌ Configuration validation failed for {config.name}:"
-            )
+            logger.error(f"❌ Configuration validation failed for {config.name}:")
             for error in errors:
                 logger.error(f"   - {error}")
             return False

@@ -1,0 +1,291 @@
+{
+    "status_code": 200,
+    "response_body": {
+        "message": "Request received.",
+        "request_id": "req-9c727188-e7ac-46db-830e-b3ccd535e1be",
+        "data": {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [
+                                    46.644463055,
+                                    24.770367816
+                                ],
+                                [
+                                    46.644463055,
+                                    24.757316488
+                                ],
+                                [
+                                    46.658836099,
+                                    24.757316488
+                                ],
+                                [
+                                    46.658836099,
+                                    24.770367816
+                                ],
+                                [
+                                    46.644463055,
+                                    24.770367816
+                                ]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "Main_ID": 278776,
+                        "Grid_ID": 123334412123,
+                        "Level": 12,
+                        "Population_Count": 7895,
+                        "Male_Population": 5143,
+                        "Female_Population": 2752,
+                        "Population_Density_KM2": 3084,
+                        "Median_Age_Total": 32,
+                        "Median_Age_Male": 32,
+                        "Median_Age_Female": 31,
+                        "density": 11.9632
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [
+                                    46.644463055,
+                                    24.757316488
+                                ],
+                                [
+                                    46.644463055,
+                                    24.744263789
+                                ],
+                                [
+                                    46.658836099,
+                                    24.744263789
+                                ],
+                                [
+                                    46.658836099,
+                                    24.757316488
+                                ],
+                                [
+                                    46.644463055,
+                                    24.757316488
+                                ]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "Main_ID": 1040291,
+                        "Grid_ID": 123334412141,
+                        "Level": 12,
+                        "Population_Count": 7450,
+                        "Male_Population": 4608,
+                        "Female_Population": 2842,
+                        "Population_Density_KM2": 2910.2000000000003,
+                        "Median_Age_Total": 33,
+                        "Median_Age_Male": 34,
+                        "Median_Age_Female": 32,
+                        "density": 11.2889
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [
+                                    46.63009001,
+                                    24.744263789
+                                ],
+                                [
+                                    46.63009001,
+                                    24.731209719
+                                ],
+                                [
+                                    46.644463055,
+                                    24.731209719
+                                ],
+                                [
+                                    46.644463055,
+                                    24.744263789
+                                ],
+                                [
+                                    46.63009001,
+                                    24.744263789
+                                ]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "Main_ID": 1174569,
+                        "Grid_ID": 123334412134,
+                        "Level": 12,
+                        "Population_Count": 3939,
+                        "Male_Population": 2368,
+                        "Female_Population": 1571,
+                        "Population_Density_KM2": 1538.7,
+                        "Median_Age_Total": 34,
+                        "Median_Age_Male": 34,
+                        "Median_Age_Female": 33,
+                        "density": 5.968
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [
+                                    46.644463055,
+                                    24.744263789
+                                ],
+                                [
+                                    46.644463055,
+                                    24.731209719
+                                ],
+                                [
+                                    46.658836099,
+                                    24.731209719
+                                ],
+                                [
+                                    46.658836099,
+                                    24.744263789
+                                ],
+                                [
+                                    46.644463055,
+                                    24.744263789
+                                ]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "Main_ID": 1221401,
+                        "Grid_ID": 123334412143,
+                        "Level": 12,
+                        "Population_Count": 10993,
+                        "Male_Population": 6717,
+                        "Female_Population": 4276,
+                        "Population_Density_KM2": 4294.1,
+                        "Median_Age_Total": 33,
+                        "Median_Age_Male": 34,
+                        "Median_Age_Female": 32,
+                        "density": 16.6579
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [
+                                    46.63009001,
+                                    24.757316488
+                                ],
+                                [
+                                    46.63009001,
+                                    24.744263789
+                                ],
+                                [
+                                    46.644463055,
+                                    24.744263789
+                                ],
+                                [
+                                    46.644463055,
+                                    24.757316488
+                                ],
+                                [
+                                    46.63009001,
+                                    24.757316488
+                                ]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "Main_ID": 1253810,
+                        "Grid_ID": 123334412132,
+                        "Level": 12,
+                        "Population_Count": 5725,
+                        "Male_Population": 3356,
+                        "Female_Population": 2369,
+                        "Population_Density_KM2": 2236.3,
+                        "Median_Age_Total": 33,
+                        "Median_Age_Male": 34,
+                        "Median_Age_Female": 33,
+                        "density": 8.6744
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [
+                            [
+                                [
+                                    46.63009001,
+                                    24.770367816
+                                ],
+                                [
+                                    46.63009001,
+                                    24.757316488
+                                ],
+                                [
+                                    46.644463055,
+                                    24.757316488
+                                ],
+                                [
+                                    46.644463055,
+                                    24.770367816
+                                ],
+                                [
+                                    46.63009001,
+                                    24.770367816
+                                ]
+                            ]
+                        ]
+                    },
+                    "properties": {
+                        "Main_ID": 1254080,
+                        "Grid_ID": 123334412114,
+                        "Level": 12,
+                        "Population_Count": 2508,
+                        "Male_Population": 1523,
+                        "Female_Population": 985,
+                        "Population_Density_KM2": 979.7,
+                        "Median_Age_Total": 32,
+                        "Median_Age_Male": 33,
+                        "Median_Age_Female": 31,
+                        "density": 3.7993
+                    }
+                }
+            ],
+            "metadata": {
+                "color": "#e74c3c",
+                "name": "Population Density Layer",
+                "layer_type": "population",
+                "zoom_level": 12,
+                "population_centers": null
+            },
+            "properties": [
+                "Main_ID",
+                "Grid_ID",
+                "Level",
+                "Population_Count",
+                "Male_Population",
+                "Female_Population",
+                "Population_Density_KM2",
+                "Median_Age_Total",
+                "Median_Age_Male",
+                "Median_Age_Female",
+                "density"
+            ],
+            "records_count": 6
+        }
+    }
+}

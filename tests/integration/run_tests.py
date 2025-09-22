@@ -134,12 +134,12 @@ class TestServerManager:
 
     def _select_optimal_port(self):
         """Select the optimal port with a focus on dynamic switching (skip unreliable port killing)"""
-        logger.info(f"🎯 Attempting to use preferred port {self.preferred_port}...")
+        logger.info(f"Attempting to use preferred port {self.preferred_port}...")
         
         # Skip the individual port check - go straight to comprehensive search
         # This ensures we get 8080 → 8081 → 8082 → 8083... sequence
-        logger.info(f"🔄 Starting comprehensive port search from {self.preferred_port}...")
-        logger.info("💡 Skipping port killing (unreliable on Windows) - using dynamic port selection")
+        logger.info(f"Starting comprehensive port search from {self.preferred_port}...")
+        logger.info("Skipping port killing (unreliable on Windows) - using dynamic port selection")
         
         # Find available port starting from preferred port (8080, 8081, 8082...)
         available_port = self.find_available_port(self.preferred_port)
@@ -153,7 +153,7 @@ class TestServerManager:
 
     def setup_test_environment(self):
         """Set up test environment - sets TEST_MODE and loads database config"""
-        logger.info("🔧 Setting up test environment...")
+        logger.info("Setting up test environment...")
         os.environ["TEST_MODE"] = "true"
         
         # Load database configuration from secrets
@@ -161,7 +161,7 @@ class TestServerManager:
             with open("secrets_test/postgres_db.json", "r") as file:
                 config = json.load(file)
                 db_url = config["DATABASE_URL"]
-                logger.info("📊 Database configuration loaded from secrets_test/postgres_db.json")
+                logger.info("Database configuration loaded from secrets_test/postgres_db.json")
                 
                 # Check if database exists and create it if needed
                 self.check_and_create_database(db_url)
@@ -169,7 +169,7 @@ class TestServerManager:
                 # Set environment variable after successful database check/creation
                 os.environ["DATABASE_URL"] = db_url
                 
-                logger.info("📊 Database configuration loaded from secrets_test/postgres_db.json")
+                logger.info("Database configuration loaded from secrets_test/postgres_db.json")
         except FileNotFoundError:
             logger.error("❌ secrets_test/postgres_db.json not found!")
             raise
@@ -184,7 +184,7 @@ class TestServerManager:
 
     def check_and_create_database(self, db_url: str):
         """Check if database exists and create it if it doesn't"""
-        logger.info("🔍 Checking database existence...")
+        logger.info("Checking database existence...")
         
         # Parse the database URL
         parsed = urlparse(db_url)
@@ -195,13 +195,13 @@ class TestServerManager:
         
         try:
             # Try to connect to the target database first
-            logger.info(f"🔗 Attempting to connect to database: {db_name}")
+            logger.info(f"Attempting to connect to database: {db_name}")
             test_conn = psycopg2.connect(db_url)
             test_conn.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
             
             # Database exists, always recreate schema and table for clean state
             logger.info(f"✅ Database '{db_name}' exists and is accessible")
-            logger.info("� Recreating schema and table for clean test state...")
+            logger.info("✅ Recreating schema and table for clean test state...")
             
             # Always recreate schema and table
             self._create_schema_and_table(test_conn)
@@ -210,7 +210,7 @@ class TestServerManager:
             
         except psycopg2.OperationalError as e:
             if "does not exist" in str(e):
-                logger.info(f"📝 Database '{db_name}' does not exist, creating it...")
+                logger.info(f"❌ Database '{db_name}' does not exist, creating it...")
                 return self._create_database(admin_url, db_name)
             else:
                 logger.error(f"❌ Database connection error: {e}")
@@ -269,17 +269,17 @@ class TestServerManager:
             cursor = db_conn.cursor()
             
             # Drop table if it exists (this will also drop any indexes)
-            logger.info("🗑️ Dropping table 'datasets' if it exists...")
+            logger.info("Dropping table 'datasets' if it exists...")
             cursor.execute("DROP TABLE IF EXISTS schema_marketplace.datasets CASCADE")
             logger.info("✅ Table dropped successfully")
             
             # Create schema if it doesn't exist
-            logger.info("📋 Creating schema 'schema_marketplace'...")
+            logger.info("Creating schema 'schema_marketplace'...")
             cursor.execute("CREATE SCHEMA IF NOT EXISTS schema_marketplace")
             logger.info("✅ Schema 'schema_marketplace' created successfully")
             
             # Create table (clean slate)
-            logger.info("📋 Creating table 'datasets' in schema_marketplace...")
+            logger.info("Creating table 'datasets' in schema_marketplace...")
             create_table_sql = """
                 CREATE TABLE IF NOT EXISTS schema_marketplace.datasets
                 (
@@ -323,7 +323,7 @@ class TestServerManager:
         })
         
         try:
-            logger.info(f"📋 Launching server: {' '.join(cmd)}")
+            logger.info(f"Launching server: {' '.join(cmd)}")
             
             self.server_process = subprocess.Popen(
                 cmd,
@@ -483,13 +483,13 @@ def main():
     print("🧪 INTEGRATION TEST RUNNER")
     print("="*80)
     logger.info("🚀 Starting Integration Test Runner...")
-    logger.info("📋 This will start the server in TEST_MODE and run integration tests")
-    logger.info(f"🚪 Using port: {args.port}")
+    logger.info("This will start the server in TEST_MODE and run integration tests")
+    logger.info(f"Using port: {args.port}")
     
     if args.test:
         logger.info(f"🎯 Running specific test: {args.test}")
     if args.keyword:
-        logger.info(f"🔍 Filtering tests with keyword: {args.keyword}")
+        logger.info(f"Filtering tests with keyword: {args.keyword}")
     
     # Start server and run pytest
     manager = TestServerManager(test_port=args.port)
@@ -502,7 +502,7 @@ def main():
             print(f"✅ Using preferred port {server_info['port']}")
             logger.info(f"✅ Successfully using preferred port {server_info['port']}")
         
-        logger.info(f"🌐 Server running at: {server_info['base_url']}")
+        logger.info(f"Server running at: {server_info['base_url']}")
         
         # Set environment variable for pytest fixtures
         os.environ["TEST_SERVER_PORT"] = str(server_info["port"])
