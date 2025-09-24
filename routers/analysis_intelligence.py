@@ -8,7 +8,7 @@ from fastapi import APIRouter, Request, Depends, HTTPException
 from all_types.request_dtypes import (
     ReqModel,
     ReqSrcDistination,
-    ReqIntelligenceData,
+    ReqIntelligenceViewport,
     ReqClustersForSalesManData,
     Reqsmartreport
 )
@@ -31,7 +31,7 @@ from config_factory import CONF
 
 from dine_in_suitability_analysis import analyze_dine_in_sites
 from all_types.request_dtypes import ReqDineInSuitabilityAnalysis
-from all_types.response_dtypes import ResDineInSuitabilityAnalysis
+from all_types.response_dtypes import ResDineInSuitabilityAnalysis, ResIntelligenceViewport
 from smart_reports.reports import generate_html_pharmacy_report
 # from traffic_data import get_here_traffic_score
 from standalone_google_maps_traffic import analyze_traffic_at_location
@@ -56,16 +56,16 @@ async def distance_drivetime_polygon(req: ReqModel[ReqSrcDistination]):
 
 @analysis_router.post(
     CONF.fetch_population_by_viewport,
-    response_model=ResModel[dict],
+    response_model=ResModel[ResIntelligenceViewport],
     dependencies=[Depends(JWTBearer())],
 )
 async def ep_fetch_population_by_viewport(
-    req: ReqModel[ReqIntelligenceData], request: Request
+    req: ReqModel[ReqIntelligenceViewport], request: Request
 ):
     response = await request_handling(
         req.request_body,
-        ReqIntelligenceData,
-        ResModel[dict],
+        ReqIntelligenceViewport,
+        ResModel[ResIntelligenceViewport],
         fetch_intelligence_by_viewport,
         wrap_output=True,
     )

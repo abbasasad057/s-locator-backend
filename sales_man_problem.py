@@ -5,7 +5,7 @@ import geopandas as gpd
 from shapely.geometry import box, Polygon
 import shapely
 from all_types.request_dtypes import (
-    ReqIntelligenceData,
+    ReqIntelligenceViewport,
     ReqFetchDataset,
     ReqClustersForSalesManData,
 )
@@ -61,7 +61,7 @@ async def get_population_and_income(
     bottom_lat = max(point[1] for point in bounding_box)
 
     # Create population-only request using ReqIntelligenceData pydantic model
-    population_request = ReqIntelligenceData(
+    population_request = ReqIntelligenceViewport(
         top_lng=top_lng,
         top_lat=top_lat,
         bottom_lng=bottom_lng,
@@ -73,7 +73,7 @@ async def get_population_and_income(
     )
 
     # Create combined population and income request using ReqIntelligenceData pydantic model
-    income_request = ReqIntelligenceData(
+    income_request = ReqIntelligenceViewport(
         top_lng=top_lng,
         top_lat=top_lat,
         bottom_lng=bottom_lng,

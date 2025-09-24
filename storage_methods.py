@@ -11,7 +11,7 @@ from backend_common.auth import load_user_profile
 from backend_common.database import Database
 import pandas as pd
 from sql_object import SqlObject
-from all_types.request_dtypes import ReqFetchDataset, ReqIntelligenceData
+from all_types.request_dtypes import ReqFetchDataset, ReqIntelligenceViewport
 from logging_wrapper import apply_decorator_to_module
 from backend_common.auth import firebase_db
 import asyncpg
@@ -917,7 +917,7 @@ def combine_income_and_population_data(population_data, income_data):
     return combined_data
 
 
-async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
+async def fetch_intelligence_by_viewport(req: ReqIntelligenceViewport) -> Dict:
     """
     Fetches population or income data from PostGIS tables based on viewport and zoom level.
     """
@@ -1060,7 +1060,7 @@ async def fetch_intelligence_by_viewport(req: ReqIntelligenceData) -> Dict:
         "properties": properties,
         "records_count": len(filtered_features),
     }
-    print("data fetched successfully", intelligence_geojson)
+    logger.info(f"number of features fetched: {len(filtered_features)}")
     return intelligence_geojson
 
 

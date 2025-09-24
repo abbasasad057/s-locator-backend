@@ -30,8 +30,8 @@ class DatabaseCleanupManager:
     """Handles synchronous cleanup of database test data"""
 
     def __init__(self):
-        self.cleanup_registry: Set[str] = set()
         self._connection = None
+        self.created_tables: Set[str] = set()
 
     def _get_sync_connection(self):
         """Get a synchronous database connection"""
@@ -50,10 +50,6 @@ class DatabaseCleanupManager:
 
         return self._connection
 
-    def register_table_for_cleanup(self, table_name: str):
-        """Register a table for cleanup"""
-        self.cleanup_registry.add(table_name)
-
     def _execute_sync(self, query: str, *params):
         """Execute database query synchronously using psycopg2"""
         conn = self._get_sync_connection()
@@ -70,14 +66,11 @@ class DatabaseCleanupManager:
         finally:
             cursor.close()
 
-    def cleanup_all_registered(self):
+    def cleanup_all_registered_tables(self):
         """Synchronously clean up all registered tables"""
-        if not self.cleanup_registry:
-            logger.info("No database tables registered for cleanup")
-            return
 
         cleanup_count = 0
-        for table_name in list(self.cleanup_registry):
+        for table_name in list(self.created_tables):
             try:
                 self._execute_sync(f"DROP TABLE IF EXISTS {table_name}")
                 logger.info(f"🗑️ Dropped table: {table_name}")
@@ -85,8 +78,8 @@ class DatabaseCleanupManager:
             except Exception as e:
                 logger.warning(f"⚠️ Error cleaning up table {table_name}: {e}")
 
-        self.cleanup_registry.clear()
-        logger.info(f"🧹 Cleaned up {cleanup_count} database tables")
+        self.created_tables.clear()
+        logger.info(f"🧹 finished cleaning up {cleanup_count} database tables")
 
         # Close connection after cleanup
         if self._connection and not self._connection.closed:  # ✅ Fixed: removed ()
@@ -97,8 +90,8 @@ class DatabaseSeeder(DatabaseCleanupManager):
     """Handles database seeding for integration tests"""
 
     def __init__(self, test_run_id: str):
+        super().__init__()
         self.test_run_id = test_run_id
-        self.created_tables: Set[str] = set()
         self.seeded_data: Dict[str, List[str]] = (
             {}
         )  # table_name -> list of primary keys
@@ -537,38 +530,41 @@ class DatabaseSeeder(DatabaseCleanupManager):
             # Map geometry to geometry type, others to appropriate types
             column_defs = []
             for col in columns:
+                quoted_col = f'"{col}"'
                 if col == "geometry":
-                    column_defs.append(f'{col} geometry')
+                    column_defs.append(f'{quoted_col} geometry')
                 elif isinstance(first_feature[col], bool):
-                    column_defs.append(f'{col} BOOLEAN')
-                elif isinstance(first_feature[col], int):
-                    column_defs.append(f'{col} INTEGER')
-                elif isinstance(first_feature[col], float):
-                    column_defs.append(f'{col} FLOAT')
+                    column_defs.append(f'{quoted_col} BOOLEAN')
+                elif "id" in col.lower():
+                    column_defs.append(f'{quoted_col} BIGINT')
+                elif isinstance(first_feature[col], (int, float)):
+                    column_defs.append(f'{quoted_col} REAL')
                 else:
-                    column_defs.append(f'{col} TEXT')
+                    column_defs.append(f'{quoted_col} TEXT')
 
             create_table_query = f"""
                 CREATE TABLE IF NOT EXISTS {seed_table_name} (
                     {', '.join(column_defs)}
                 )
             """
-            logger.info(f"Creating table: {seed_table_name} with columns: {columns}")
+            logger.info(f"Creating seed table: {seed_table_name} with columns: {columns}")
+            logger.info(f"Create seed table query: {create_table_query}")
             self._execute_sync(create_table_query)
             self.created_tables.add(seed_table_name)
-            logger.info(f"✅ Created table: {seed_table_name}")
+            logger.info(f"✅ Created seed table: {seed_table_name}")
+            logger.info(f"with columns: {column_defs}")
 
             # Insert test data into the table
             for feature in features:
                 col_names = []
                 values = []
                 for col in columns:
-                    col_names.append(col)
+                    col_names.append(f'"{col}"')
                     values.append(feature[col])
                 placeholders = []
                 for col in columns:
                     if col == "geometry":
-                            placeholders.append("ST_GeomFromWKB(decode(%s, 'hex'))")
+                        placeholders.append("ST_GeomFromWKB(decode(%s, 'hex'))")
                     else:
                         placeholders.append('%s')
                 insert_query = f"""

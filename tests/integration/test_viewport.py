@@ -1,6 +1,6 @@
 from .fixtures.test_utils import create_parametrized_test
 from .fixtures.test_generator import ConfigDrivenTest, Prerequisites, Endpoint
-from all_types.request_dtypes import ReqIntelligenceData
+from all_types.request_dtypes import ReqIntelligenceViewport
 
 
 # Catalog tests for comprehensive save catalog endpoint testing
@@ -20,7 +20,7 @@ CATALOG_MANAGEMENT_TESTS = [
         input_data={
                 "message": "",
                 "request_info": {"request_id": ""},
-                "request_body": ReqIntelligenceData(
+                "request_body": ReqIntelligenceViewport(
                     top_lng=46.6500301,
                     top_lat=24.760447,
                     bottom_lng=46.632883,

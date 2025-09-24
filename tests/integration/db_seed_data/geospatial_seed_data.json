@@ -5,7 +5,7 @@
             "features": [
                 {
                     "Main_ID": 278776,
-                    "Grid_ID": "123334412123",
+                    "Grid_ID": 123334412123,
                     "Level": 12,
                     "Population_Count": 7895,
                     "Male_Population": 5143,
@@ -19,7 +19,7 @@
                 },
                 {
                     "Main_ID": 1040291,
-                    "Grid_ID": "123334412141",
+                    "Grid_ID": 123334412141,
                     "Level": 12,
                     "Population_Count": 7450,
                     "Male_Population": 4608,
@@ -33,7 +33,7 @@
                 },
                 {
                     "Main_ID": 1174569,
-                    "Grid_ID": "123334412134",
+                    "Grid_ID": 123334412134,
                     "Level": 12,
                     "Population_Count": 3939,
                     "Male_Population": 2368,
@@ -47,7 +47,7 @@
                 },
                 {
                     "Main_ID": 1221401,
-                    "Grid_ID": "123334412143",
+                    "Grid_ID": 123334412143,
                     "Level": 12,
                     "Population_Count": 10993,
                     "Male_Population": 6717,
@@ -61,7 +61,7 @@
                 },
                 {
                     "Main_ID": 1253810,
-                    "Grid_ID": "123334412132",
+                    "Grid_ID": 123334412132,
                     "Level": 12,
                     "Population_Count": 5725,
                     "Male_Population": 3356,
@@ -75,7 +75,7 @@
                 },
                 {
                     "Main_ID": 1254080,
-                    "Grid_ID": "123334412114",
+                    "Grid_ID": 123334412114,
                     "Level": 12,
                     "Population_Count": 2508,
                     "Male_Population": 1523,
@@ -96,7 +96,7 @@
             "features": [
                 {
                     "Main_ID": 1424666,
-                    "Grid_ID": "123334244342",
+                    "Grid_ID": 123334244342,
                     "Level": 12,
                     "Population_Count": 26615,
                     "Male_Population": 15756,
@@ -120,7 +120,7 @@
                 },
                 {
                     "Main_ID": 1423614,
-                    "Grid_ID": "123334421422",
+                    "Grid_ID": 123334421422,
                     "Level": 12,
                     "Population_Count": 37212,
                     "Male_Population": 24114,
@@ -144,7 +144,7 @@
                 },
                 {
                     "Main_ID": 1334335,
-                    "Grid_ID": "123334414221",
+                    "Grid_ID": 123334414221,
                     "Level": 12,
                     "Population_Count": 65987,
                     "Male_Population": 52256,
@@ -168,7 +168,7 @@
                 },
                 {
                     "Main_ID": 970693,
-                    "Grid_ID": "123334414343",
+                    "Grid_ID": 123334414343,
                     "Level": 12,
                     "Population_Count": 20961,
                     "Male_Population": 12085,
@@ -199,7 +199,7 @@
             "features": [
                 {
                     "Main_ID": 278776,
-                    "Grid_ID": "123334412123",
+                    "Grid_ID": 123334412123,
                     "Level": 12,
                     "Household_Average_Size": 3.5,
                     "Household_Median_Size": 2,
@@ -208,7 +208,7 @@
                 },
                 {
                     "Main_ID": 1040291,
-                    "Grid_ID": "123334412141",
+                    "Grid_ID": 123334412141,
                     "Level": 12,
                     "Household_Average_Size": 3.0999999046325684,
                     "Household_Median_Size": 2,
@@ -217,7 +217,7 @@
                 },
                 {
                     "Main_ID": 1174569,
-                    "Grid_ID": "123334412134",
+                    "Grid_ID": 123334412134,
                     "Level": 12,
                     "Household_Average_Size": 2.9000000953674316,
                     "Household_Median_Size": 2,
@@ -226,7 +226,7 @@
                 },
                 {
                     "Main_ID": 1221401,
-                    "Grid_ID": "123334412143",
+                    "Grid_ID": 123334412143,
                     "Level": 12,
                     "Household_Average_Size": 3.0999999046325684,
                     "Household_Median_Size": 2,
@@ -235,7 +235,7 @@
                 },
                 {
                     "Main_ID": 1253810,
-                    "Grid_ID": "123334412132",
+                    "Grid_ID": 123334412132,
                     "Level": 12,
                     "Household_Average_Size": 3.0999999046325684,
                     "Household_Median_Size": 2,
@@ -244,7 +244,7 @@
                 },
                 {
                     "Main_ID": 1254080,
-                    "Grid_ID": "123334412114",
+                    "Grid_ID": 123334412114,
                     "Level": 12,
                     "Household_Average_Size": 3.4000000953674316,
                     "Household_Median_Size": 2,
@@ -260,7 +260,7 @@
             "features": [
                 {
                     "Main_ID": 278776,
-                    "Grid_ID": "123334412123",
+                    "Grid_ID": 123334412123,
                     "Level": 12,
                     "Total_housings": 2610,
                     "Residential_housings": 2286,
@@ -278,7 +278,7 @@
                 },
                 {
                     "Main_ID": 1040291,
-                    "Grid_ID": "123334412141",
+                    "Grid_ID": 123334412141,
                     "Level": 12,
                     "Total_housings": 3011,
                     "Residential_housings": 2416,
@@ -296,7 +296,7 @@
                 },
                 {
                     "Main_ID": 1174569,
-                    "Grid_ID": "123334412134",
+                    "Grid_ID": 123334412134,
                     "Level": 12,
                     "Total_housings": 3746,
                     "Residential_housings": 1370,
@@ -314,7 +314,7 @@
                 },
                 {
                     "Main_ID": 1221401,
-                    "Grid_ID": "123334412143",
+                    "Grid_ID": 123334412143,
                     "Level": 12,
                     "Total_housings": 5059,
                     "Residential_housings": 3545,
@@ -332,7 +332,7 @@
                 },
                 {
                     "Main_ID": 1253810,
-                    "Grid_ID": "123334412132",
+                    "Grid_ID": 123334412132,
                     "Level": 12,
                     "Total_housings": 2365,
                     "Residential_housings": 1872,
@@ -350,7 +350,7 @@
                 },
                 {
                     "Main_ID": 1254080,
-                    "Grid_ID": "123334412114",
+                    "Grid_ID": 123334412114,
                     "Level": 12,
                     "Total_housings": 1258,
                     "Residential_housings": 730,
@@ -375,7 +375,7 @@
             "features": [
                 {
                     "Main_ID": 278776,
-                    "Grid_ID": "123334412123",
+                    "Grid_ID": 123334412123,
                     "Level": 12,
                     "Population_Count": 7895,
                     "Male_Population": 5143,
@@ -390,7 +390,7 @@
                 },
                 {
                     "Main_ID": 1040291,
-                    "Grid_ID": "123334412141",
+                    "Grid_ID": 123334412141,
                     "Level": 12,
                     "Population_Count": 7450,
                     "Male_Population": 4608,
@@ -405,7 +405,7 @@
                 },
                 {
                     "Main_ID": 1174569,
-                    "Grid_ID": "123334412134",
+                    "Grid_ID": 123334412134,
                     "Level": 12,
                     "Population_Count": 3939,
                     "Male_Population": 2368,
@@ -420,7 +420,7 @@
                 },
                 {
                     "Main_ID": 1221401,
-                    "Grid_ID": "123334412143",
+                    "Grid_ID": 123334412143,
                     "Level": 12,
                     "Population_Count": 10993,
                     "Male_Population": 6717,
@@ -435,7 +435,7 @@
                 },
                 {
                     "Main_ID": 1253810,
-                    "Grid_ID": "123334412132",
+                    "Grid_ID": 123334412132,
                     "Level": 12,
                     "Population_Count": 5725,
                     "Male_Population": 3356,
@@ -450,7 +450,7 @@
                 },
                 {
                     "Main_ID": 1254080,
-                    "Grid_ID": "123334412114",
+                    "Grid_ID": 123334412114,
                     "Level": 12,
                     "Population_Count": 2508,
                     "Male_Population": 1523,

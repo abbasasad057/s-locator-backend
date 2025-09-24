@@ -6,6 +6,7 @@ from all_types.request_dtypes import ReqFetchDataset
 
 T = TypeVar("T")
 
+
 class ResDineInSuitabilityAnalysis(BaseModel):
     report_url: str
     analysis_summary: dict
@@ -13,8 +14,10 @@ class ResDineInSuitabilityAnalysis(BaseModel):
     total_properties_analyzed: int
     report_filename: str
 
+
 class PropertyAnalysisResult(BaseModel):
     """Individual property analysis result"""
+
     rank: int
     property_id: str
     final_score: float
@@ -25,14 +28,17 @@ class PropertyAnalysisResult(BaseModel):
     demographics_score: float
     competition_score: float
 
+
 class AnalysisSummary(BaseModel):
     """Summary statistics for the analysis"""
+
     total_properties: int
     avg_score: float
     top_score: float
     avg_price: float
     total_businesses: int
     total_competitors: int
+
 
 class ResModel(BaseModel, Generic[T]):
     message: str
@@ -69,7 +75,7 @@ class card_metadata(BaseModel):
 class GeoJson(BaseModel):
     type: Literal["FeatureCollection"]
     features: List[Feature]
-    properties:list[str]
+    properties: list[str]
 
 
 class CityData(BaseModel):
@@ -149,6 +155,7 @@ class PaymentMethod(BaseModel):
     type: str
     details: Dict[str, Any]
 
+
 class GglPlaceDetails(BaseModel):
     id: str
     name: str
@@ -156,8 +163,10 @@ class GglPlaceDetails(BaseModel):
     types: List[str]
     photos: Optional[List[Dict[str, Any]]] = None
 
+
 class ResGetPaymentMethods(BaseModel):
     payment_methods: List[PaymentMethod]
+
 
 # types for llm agents
 class ResGradientColorBasedOnZoneLLM(BaseModel):
@@ -169,38 +178,36 @@ class ResLLMFetchDataset(BaseModel):
     """Extract Location Based Information from the Query"""
 
     query: str = Field(
-        default = "",
-        description = "Original query passed by the user."
+        default="", description="Original query passed by the user."
     )
     is_valid: Literal["Valid", "Invalid"] = Field(
         default="",
-        description="Status is valid if the user query is from approved categories and cities. Otherwise, it is invalid."
+        description="Status is valid if the user query is from approved categories and cities. Otherwise, it is invalid.",
     )
     reason: str = Field(
-        default = "",
-        description = """Response message for the User after processing the query. It helps user to identify issues in the query like if city and 
-                          place is an approved city or place or not."""
+        default="",
+        description="""Response message for the User after processing the query. It helps user to identify issues in the query like if city and 
+                          place is an approved city or place or not.""",
     )
 
     endpoint: Literal["/fastapi/fetch_dataset"] = "/fastapi/fetch_dataset"
 
-    suggestions : List[str] = Field(
-        default = [],
-        description = "List of suggestions to improve the query."
+    suggestions: List[str] = Field(
+        default=[], description="List of suggestions to improve the query."
     )
 
     body: Optional[ReqFetchDataset] = Field(
         default=None,
-        description="An object containing detailed request parameters for fetching dataset"
+        description="An object containing detailed request parameters for fetching dataset",
     )
     cost: str = Field(
-        default = '',
-        description = "The cost value returned by calculate_cost_tool"
+        default="", description="The cost value returned by calculate_cost_tool"
     )
 
+
 class ResSrcDistination(BaseModel):
-    distance_in_km : float 
-    drive_time_in_min : float
+    distance_in_km: float
+    drive_time_in_min: float
     drive_polygon: str
 
 
@@ -211,6 +218,11 @@ class ResSalesman(BaseModel):
     metadata: dict[str, Any]
 
 
+class ResIntelligenceViewport(GeoJson):
+    metadata: dict[str, Any]
+    records_count: int
+
+
 class ResHubExpansion(BaseModel):
     """Response model for hub expansion analysis"""
 
@@ -219,18 +231,24 @@ class ResHubExpansion(BaseModel):
     primary_recommendation: Dict[str, Any]
     alternative_locations: List[Dict[str, Any]]
     market_competitive_analysis: Dict[str, Any]
+
+
 class ResIntelligenceData(BaseModel):
     title: str
     description: str
-    summary_metrics: Dict[str, Any]  # key metrics like total locations and average score
-    executive_summary: Dict[str, Any]  # top recommendation and evaluation overview
+    summary_metrics: Dict[
+        str, Any
+    ]  # key metrics like total locations and average score
+    executive_summary: Dict[
+        str, Any
+    ]  # top recommendation and evaluation overview
     key_investment_insights: List[Dict[str, Any]]  # main insights per category
     rankings: List[Dict[str, Any]]  # site rankings and scores
-    custom_locations : Optional[List[Dict[str,Any]]] = None
-    current_location : Optional[List[Dict[str,Any]]] = None
+    custom_locations: Optional[List[Dict[str, Any]]] = None
+    current_location: Optional[List[Dict[str, Any]]] = None
     detailed_analysis: List[Dict[str, Any]]  # full analysis per site
-    custom_detailed_analysis : Optional[List[Dict[str , Any]]] = None
-    current_detailed_analysis : Optional[List[Dict[str , Any]]] = None
+    custom_detailed_analysis: Optional[List[Dict[str, Any]]] = None
+    current_detailed_analysis: Optional[List[Dict[str, Any]]] = None
     visual_analysis: Dict[str, List[Dict[str, Any]]]  # charts and maps
     methodology: Dict[str, Any]  # scoring method and criteria
     statistical_insights: List[Dict[str, Any]]  # statistical observations

@@ -88,7 +88,7 @@ def database_cleanup_manager():
     manager = DatabaseCleanupManager()
     yield manager
     # Synchronous cleanup at end of test
-    manager.cleanup_all_registered()
+    manager.cleanup_all_registered_tables()
 
 
 @pytest.fixture(scope="session", autouse=True)

@@ -5,7 +5,7 @@ import geopandas as gpd
 from shapely.geometry import Point
 from all_types.request_dtypes import (
     ReqFetchDataset,
-    ReqIntelligenceData,
+    ReqIntelligenceViewport,
     ReqHubExpansion,
 )
 from all_types.response_dtypes import ResHubExpansion
@@ -91,7 +91,7 @@ async def fetch_population_data(
     bottom_lng = bbox_coords[3]
 
     # Create intelligence data request for population
-    intel_req = ReqIntelligenceData(
+    intel_req = ReqIntelligenceViewport(
         top_lng=top_lng,
         top_lat=top_lat,
         bottom_lng=bottom_lng,

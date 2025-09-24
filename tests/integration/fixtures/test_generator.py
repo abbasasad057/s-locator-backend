@@ -297,25 +297,6 @@ class ConfigTestGenerator:
                 )
                 logger.info(f"✅ User layer matchings seeded")
 
-            # Register tables for cleanup
-            if self.database_cleanup_manager:
-                for table in self.database_seeder.created_tables:
-                    self.database_cleanup_manager.register_table_for_cleanup(table)
-                    logger.info(f"📝 Registered table for cleanup: {table}")
-
-            # Log all seeded data types
-            seeded_types = []
-            if config.prerequisites.ggl_raw_seeds:
-                seeded_types.append("google_maps_raw")
-            if config.prerequisites.dataset_seeds:
-                seeded_types.append("transformed_datasets")
-            if config.prerequisites.real_estate_seeds:
-                seeded_types.append("real_estate_data")
-            if config.prerequisites.firebase_profile_seeds:
-                seeded_types.append("firebase_profiles")
-
-            logger.info(f"✅ Database seeding completed for types: {seeded_types}")
-
         # ======================
         # 4. FINAL SETUP
         # ======================

@@ -9,6 +9,7 @@ from all_types.internal_types import CtlgItems, UserId, BooleanQuery
 
 U = TypeVar("U")
 
+
 class Coordinate(BaseModel):
     lat: Optional[float] = None
     lng: Optional[float] = None
@@ -41,8 +42,6 @@ class ReqSavePrdcerCtlg(CtlgItems):
 
 class ReqDeletePrdcerCtlg(UserId):
     prdcer_ctlg_id: str
-
-
 
 
 class ZoneLayerInfo(BaseModel):
@@ -139,7 +138,9 @@ class LayerReference(BaseModel):
 # User prompt -> llm
 class ReqLLMEditBasedon(BaseModel):
     user_id: str
-    layers: List[LayerReference] = Field(..., description="List of layers with required id and name fields")
+    layers: List[LayerReference] = Field(
+        ..., description="List of layers with required id and name fields"
+    )
     prompt: str
 
 
@@ -165,7 +166,7 @@ class ReqSrcDistination(BaseModel):
     destination: Coordinate
 
 
-class ReqIntelligenceData(BaseModel):
+class ReqIntelligenceViewport(BaseModel):
     top_lng: float
     top_lat: float
     bottom_lng: float
@@ -184,6 +185,7 @@ class ReqClustersForSalesManData(BooleanQuery, UserId, ReqCityCountry):
 
 class ReqHubExpansion(BaseModel):
     """Default configuration for hub expansion analysis"""
+
     # User context
     user_id: str = "default_user"
     # Location context
@@ -276,34 +278,34 @@ class ReqHubExpansion(BaseModel):
     # User context
     user_id: str = "default_user"
 
-from all_types.internal_types import UserId
 
 class ReqDineInSuitabilityAnalysis(ReqCityCountry, UserId):
     """Request model for dine-in suitability analysis with default configuration"""
-    
+
     # No need for city_name, country_name, user_id - they come from parent classes
-    
+
     # Analysis parameters
-    dine_in_type: str  
+    dine_in_type: str
     target_age: int = 30
-    
+
     # Analysis configuration with defaults
     analysis_radius: int = 1000
     target_max_speed_kmh: int = 20
     optimal_nearby_businesses: int = 20
     max_competitors: int = 3
-    
+
     # Scoring weights
     traffic_weight: float = 0.25
     business_density_weight: float = 0.40
     demographics_weight: float = 0.20
     competition_weight: float = 0.15
-    
+
     # Scoring parameters
     speed_penalty_per_2kmh: int = 5
     age_penalty_per_year: int = 5
     business_penalty_per_missing: int = 4
     competitor_penalty_per_excess: int = 10
+
 
 class EvaluationMetrics(BaseModel):
     traffic: float = 25.0
@@ -312,10 +314,15 @@ class EvaluationMetrics(BaseModel):
     healthcare: float = 20.0
     complementary: float = 10.0
 
+
 class Reqsmartreport(UserId):
     city_name: str = "Riyadh"
     country_name: str = "Saudi Arabia"
     Type: str = "Pharmacy"
-    evaluation_metrics: EvaluationMetrics = EvaluationMetrics() 
-    custom_locations : Optional[List[Coordinate]] = None # In case the client or user wants to analyze specific locations that don't exist in our db so he will provide the coordinates
-    current_location : Optional[Coordinate] = None #In case a client wants to analyze his current location
+    evaluation_metrics: EvaluationMetrics = EvaluationMetrics()
+    custom_locations: Optional[List[Coordinate]] = (
+        None  # In case the client or user wants to analyze specific locations that don't exist in our db so he will provide the coordinates
+    )
+    current_location: Optional[Coordinate] = (
+        None  # In case a client wants to analyze his current location
+    )

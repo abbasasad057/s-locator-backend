@@ -13,7 +13,7 @@ from storage_methods import fetch_intelligence_by_viewport
 from traffic_data import fetch_here_traffic_flow, calculate_traffic_score, get_traffic_bbox_for_candidates
 from screenshot_utils import setup_webdriver, capture_map_screenshot, cleanup_webdriver
 from report_generator import create_property_map, create_overview_map, generate_complete_html_report
-from all_types.request_dtypes import ReqFetchDataset, ReqIntelligenceData, ReqDineInSuitabilityAnalysis
+from all_types.request_dtypes import ReqFetchDataset, ReqIntelligenceViewport, ReqDineInSuitabilityAnalysis
 from all_types.internal_types import UserId
 
 from app_logger import get_logger
@@ -279,7 +279,7 @@ async def fetch_demographics_for_candidates(request: ReqDineInSuitabilityAnalysi
     top_lng = top_lng + buffer
     bottom_lng = bottom_lng - buffer
     
-    demographics_request = ReqIntelligenceData(
+    demographics_request = ReqIntelligenceViewport(
         top_lng=top_lng,
         top_lat=top_lat,
         bottom_lng=bottom_lng,

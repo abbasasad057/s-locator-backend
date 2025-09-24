@@ -1,9 +1,9 @@
 from storage_methods import fetch_intelligence_by_viewport
 from backend_common.database import Database
-from all_types.request_dtypes import ReqIntelligenceData
+from all_types.request_dtypes import ReqIntelligenceViewport
 
 async def fetch_demographics(bbox : dict , user_id : str):
-    req_bbox = ReqIntelligenceData(   
+    req_bbox = ReqIntelligenceViewport(   
         top_lng=bbox["top_lng"],
         top_lat=bbox["top_lat"],
         bottom_lng=bbox["bottom_lng"],
