@@ -514,46 +514,69 @@ class DatabaseSeeder(DatabaseCleanupManager):
         # SELECT * FROM schema_marketplace.housing_all_features_v12;
         # SELECT * FROM schema_marketplace.area_income_all_features_v12;
 
-        # create tables
-        table_names = [
-            "schema_marketplace.population_all_features_v12",
-            "schema_marketplace.population_centers_v12",
-            "schema_marketplace.household_all_features_v12",
-            "schema_marketplace.housing_all_features_v12",
-            "schema_marketplace.area_income_all_features_v12",
-        ]
+
+
         # Load test data from JSON
         geospatial_data = self._load_db_seed_data("geospatial_seed_data.json")
 
-        # install postgress extension in test db using sql command
+        # install postgis extension in test db using sql command
         self._execute_sync("CREATE EXTENSION IF NOT EXISTS postgis;")
 
         for key, seed_item in geospatial_data.items():
             seed_table_name = seed_item["seed_table_name"]
             seed_data = seed_item["seed_data"]
 
-            logger.info(f"Creating table: {seed_table_name}")
+            features = seed_data.get("features", [])
+            if not features:
+                logger.warning(f"No features found for {seed_table_name}")
+                continue
+
+            # Dynamically create columns based on feature keys
+            first_feature = features[0]
+            columns = list(first_feature.keys())
+            # Map geometry to geometry type, others to appropriate types
+            column_defs = []
+            for col in columns:
+                if col == "geometry":
+                    column_defs.append(f'{col} geometry')
+                elif isinstance(first_feature[col], bool):
+                    column_defs.append(f'{col} BOOLEAN')
+                elif isinstance(first_feature[col], int):
+                    column_defs.append(f'{col} INTEGER')
+                elif isinstance(first_feature[col], float):
+                    column_defs.append(f'{col} FLOAT')
+                else:
+                    column_defs.append(f'{col} TEXT')
+
             create_table_query = f"""
                 CREATE TABLE IF NOT EXISTS {seed_table_name} (
-                    feature JSON
-                    )
+                    {', '.join(column_defs)}
+                )
             """
+            logger.info(f"Creating table: {seed_table_name} with columns: {columns}")
             self._execute_sync(create_table_query)
             self.created_tables.add(seed_table_name)
             logger.info(f"✅ Created table: {seed_table_name}")
 
             # Insert test data into the table
-            for feature in seed_data.get("features", []):
+            for feature in features:
+                col_names = []
+                values = []
+                for col in columns:
+                    col_names.append(col)
+                    values.append(feature[col])
+                placeholders = []
+                for col in columns:
+                    if col == "geometry":
+                            placeholders.append("ST_GeomFromWKB(decode(%s, 'hex'))")
+                    else:
+                        placeholders.append('%s')
                 insert_query = f"""
-                    INSERT INTO {seed_table_name} (feature)
-                    VALUES (%s)
+                    INSERT INTO {seed_table_name} ({', '.join(col_names)})
+                    VALUES ({', '.join(placeholders)})
                 """
-                self._execute_sync(insert_query, json.dumps(feature))
+                self._execute_sync(insert_query, *values)
             logger.info(f"✅ Seeded geospatial data into table: {seed_table_name}")
-
-            # # Track for cleanup
-            # if seed_table_name not in self.cleanup_registry:
-            #     self.register_table_for_cleanup(seed_table_name)
 
             logger.info(f"✅ Data seeded for {seed_table_name}")
 

@@ -2,7 +2,7 @@
     "status_code": 200,
     "response_body": {
         "message": "Request received.",
-        "request_id": "req-9c727188-e7ac-46db-830e-b3ccd535e1be",
+        "request_id": "min_length:1",
         "data": {
             "type": "FeatureCollection",
             "features": [

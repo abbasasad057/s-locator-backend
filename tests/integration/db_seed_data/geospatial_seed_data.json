@@ -4,262 +4,464 @@
         "seed_data": {
             "features": [
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [
-                                    46.644463055,
-                                    24.770367816
-                                ],
-                                [
-                                    46.644463055,
-                                    24.757316488
-                                ],
-                                [
-                                    46.658836099,
-                                    24.757316488
-                                ],
-                                [
-                                    46.658836099,
-                                    24.770367816
-                                ],
-                                [
-                                    46.644463055,
-                                    24.770367816
-                                ]
-                            ]
-                        ]
-                    },
-                    "properties": {
-                        "Main_ID": 278776,
-                        "Grid_ID": 123334412123,
-                        "Level": 12,
-                        "Population_Count": 7895,
-                        "Male_Population": 5143,
-                        "Female_Population": 2752,
-                        "Population_Density_KM2": 3084,
-                        "Median_Age_Total": 32,
-                        "Median_Age_Male": 32,
-                        "Median_Age_Female": 31,
-                        "density": 11.9632
-                    }
+                    "Main_ID": 278776,
+                    "Grid_ID": "123334412123",
+                    "Level": 12,
+                    "Population_Count": 7895,
+                    "Male_Population": 5143,
+                    "Female_Population": 2752,
+                    "Population_Density_KM2": 3084,
+                    "Median_Age_Total": 32,
+                    "Median_Age_Male": 32,
+                    "Median_Age_Female": 31,
+                    "density": 11.9632,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D52474003F640D336C538407731F0C37D52474055884D7EDFC13840DB53C6BD5454474055884D7EDFC13840DB53C6BD5454474003F640D336C538407731F0C37D52474003F640D336C53840"
                 },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [
-                                    46.644463055,
-                                    24.757316488
-                                ],
-                                [
-                                    46.644463055,
-                                    24.744263789
-                                ],
-                                [
-                                    46.658836099,
-                                    24.744263789
-                                ],
-                                [
-                                    46.658836099,
-                                    24.757316488
-                                ],
-                                [
-                                    46.644463055,
-                                    24.757316488
-                                ]
-                            ]
-                        ]
-                    },
-                    "properties": {
-                        "Main_ID": 1040291,
-                        "Grid_ID": 123334412141,
-                        "Level": 12,
-                        "Population_Count": 7450,
-                        "Male_Population": 4608,
-                        "Female_Population": 2842,
-                        "Population_Density_KM2": 2910.2,
-                        "Median_Age_Total": 33,
-                        "Median_Age_Male": 34,
-                        "Median_Age_Female": 32,
-                        "density": 11.2889
-                    }
+                    "Main_ID": 1040291,
+                    "Grid_ID": "123334412141",
+                    "Level": 12,
+                    "Population_Count": 7450,
+                    "Male_Population": 4608,
+                    "Female_Population": 2842,
+                    "Population_Density_KM2": 2910.2,
+                    "Median_Age_Total": 33,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 32,
+                    "density": 11.2889,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D52474055884D7EDFC138407731F0C37D524740B90E591288BE3840DB53C6BD54544740B90E591288BE3840DB53C6BD5454474055884D7EDFC138407731F0C37D52474055884D7EDFC13840"
                 },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [
-                                    46.63009001,
-                                    24.744263789
-                                ],
-                                [
-                                    46.63009001,
-                                    24.731209719
-                                ],
-                                [
-                                    46.644463055,
-                                    24.731209719
-                                ],
-                                [
-                                    46.644463055,
-                                    24.744263789
-                                ],
-                                [
-                                    46.63009001,
-                                    24.744263789
-                                ]
-                            ]
-                        ]
-                    },
-                    "properties": {
-                        "Main_ID": 1174569,
-                        "Grid_ID": 123334412134,
-                        "Level": 12,
-                        "Population_Count": 3939,
-                        "Male_Population": 2368,
-                        "Female_Population": 1571,
-                        "Population_Density_KM2": 1538.7,
-                        "Median_Age_Total": 34,
-                        "Median_Age_Male": 34,
-                        "Median_Age_Female": 33,
-                        "density": 5.968
-                    }
+                    "Main_ID": 1174569,
+                    "Grid_ID": "123334412134",
+                    "Level": 12,
+                    "Population_Count": 3939,
+                    "Male_Population": 2368,
+                    "Female_Population": 1571,
+                    "Population_Density_KM2": 1538.7,
+                    "Median_Age_Total": 34,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 33,
+                    "density": 5.968,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA6504740B90E591288BE3840140F1ACAA6504740B3D3658F30BB38407731F0C37D524740B3D3658F30BB38407731F0C37D524740B90E591288BE3840140F1ACAA6504740B90E591288BE3840"
                 },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [
-                                    46.644463055,
-                                    24.744263789
-                                ],
-                                [
-                                    46.644463055,
-                                    24.731209719
-                                ],
-                                [
-                                    46.658836099,
-                                    24.731209719
-                                ],
-                                [
-                                    46.658836099,
-                                    24.744263789
-                                ],
-                                [
-                                    46.644463055,
-                                    24.744263789
-                                ]
-                            ]
-                        ]
-                    },
-                    "properties": {
-                        "Main_ID": 1221401,
-                        "Grid_ID": 123334412143,
-                        "Level": 12,
-                        "Population_Count": 10993,
-                        "Male_Population": 6717,
-                        "Female_Population": 4276,
-                        "Population_Density_KM2": 4294.1,
-                        "Median_Age_Total": 33,
-                        "Median_Age_Male": 34,
-                        "Median_Age_Female": 32,
-                        "density": 16.6579
-                    }
+                    "Main_ID": 1221401,
+                    "Grid_ID": "123334412143",
+                    "Level": 12,
+                    "Population_Count": 10993,
+                    "Male_Population": 6717,
+                    "Female_Population": 4276,
+                    "Population_Density_KM2": 4294.1,
+                    "Median_Age_Total": 33,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 32,
+                    "density": 16.6579,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D524740B90E591288BE38407731F0C37D524740B3D3658F30BB3840DB53C6BD54544740B3D3658F30BB3840DB53C6BD54544740B90E591288BE38407731F0C37D524740B90E591288BE3840"
                 },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [
-                                    46.63009001,
-                                    24.757316488
-                                ],
-                                [
-                                    46.63009001,
-                                    24.744263789
-                                ],
-                                [
-                                    46.644463055,
-                                    24.744263789
-                                ],
-                                [
-                                    46.644463055,
-                                    24.757316488
-                                ],
-                                [
-                                    46.63009001,
-                                    24.757316488
-                                ]
-                            ]
-                        ]
-                    },
-                    "properties": {
-                        "Main_ID": 1253810,
-                        "Grid_ID": 123334412132,
-                        "Level": 12,
-                        "Population_Count": 5725,
-                        "Male_Population": 3356,
-                        "Female_Population": 2369,
-                        "Population_Density_KM2": 2236.3,
-                        "Median_Age_Total": 33,
-                        "Median_Age_Male": 34,
-                        "Median_Age_Female": 33,
-                        "density": 8.6744
-                    }
+                    "Main_ID": 1253810,
+                    "Grid_ID": "123334412132",
+                    "Level": 12,
+                    "Population_Count": 5725,
+                    "Male_Population": 3356,
+                    "Female_Population": 2369,
+                    "Population_Density_KM2": 2236.3,
+                    "Median_Age_Total": 33,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 33,
+                    "density": 8.6744,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA650474055884D7EDFC13840140F1ACAA6504740B90E591288BE38407731F0C37D524740B90E591288BE38407731F0C37D52474055884D7EDFC13840140F1ACAA650474055884D7EDFC13840"
                 },
                 {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Polygon",
-                        "coordinates": [
-                            [
-                                [
-                                    46.63009001,
-                                    24.770367816
-                                ],
-                                [
-                                    46.63009001,
-                                    24.757316488
-                                ],
-                                [
-                                    46.644463055,
-                                    24.757316488
-                                ],
-                                [
-                                    46.644463055,
-                                    24.770367816
-                                ],
-                                [
-                                    46.63009001,
-                                    24.770367816
-                                ]
-                            ]
-                        ]
-                    },
-                    "properties": {
-                        "Main_ID": 1254080,
-                        "Grid_ID": 123334412114,
-                        "Level": 12,
-                        "Population_Count": 2508,
-                        "Male_Population": 1523,
-                        "Female_Population": 985,
-                        "Population_Density_KM2": 979.7,
-                        "Median_Age_Total": 32,
-                        "Median_Age_Male": 33,
-                        "Median_Age_Female": 31,
-                        "density": 3.7993
-                    }
+                    "Main_ID": 1254080,
+                    "Grid_ID": "123334412114",
+                    "Level": 12,
+                    "Population_Count": 2508,
+                    "Male_Population": 1523,
+                    "Female_Population": 985,
+                    "Population_Density_KM2": 979.7,
+                    "Median_Age_Total": 32,
+                    "Median_Age_Male": 33,
+                    "Median_Age_Female": 31,
+                    "density": 3.7993,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA650474003F640D336C53840140F1ACAA650474055884D7EDFC138407731F0C37D52474055884D7EDFC138407731F0C37D52474003F640D336C53840140F1ACAA650474003F640D336C53840"
+                }
+            ]
+        }
+    },
+    "population_centers": {
+        "seed_table_name": "schema_marketplace.population_centers_v12",
+        "seed_data": {
+            "features": [
+                {
+                    "Main_ID": 1424666,
+                    "Grid_ID": "123334244342",
+                    "Level": 12,
+                    "Population_Count": 26615,
+                    "Male_Population": 15756,
+                    "Female_Population": 10859,
+                    "Population_Density_KM2": 10396.5,
+                    "Median_Age_Total": 25,
+                    "Median_Age_Male": 27,
+                    "Median_Age_Female": 21,
+                    "density": 40.3328,
+                    "calculated_latitude": 24.804294683843658,
+                    "calculated_longitude": 46.89455403002465,
+                    "population_center_rank": 1,
+                    "urban_score": 116329.22,
+                    "cluster_id": "0",
+                    "cluster_size": 3,
+                    "is_population_center": true,
+                    "selection_method": "urban_density_clustering",
+                    "city": "Riyadh",
+                    "zoom_level": "v12",
+                    "geometry": "0101000020E6100000FEBA17BF807247408674A341E6CD3840"
+                },
+                {
+                    "Main_ID": 1423614,
+                    "Grid_ID": "123334421422",
+                    "Level": 12,
+                    "Population_Count": 37212,
+                    "Male_Population": 24114,
+                    "Female_Population": 13098,
+                    "Population_Density_KM2": 14535.9,
+                    "Median_Age_Total": 29,
+                    "Median_Age_Male": 31,
+                    "Median_Age_Female": 25,
+                    "density": 56.392,
+                    "calculated_latitude": 24.725987543060814,
+                    "calculated_longitude": 46.837061851841,
+                    "population_center_rank": 2,
+                    "urban_score": 167517.72,
+                    "cluster_id": "1",
+                    "cluster_size": 42,
+                    "is_population_center": true,
+                    "selection_method": "urban_density_clustering",
+                    "city": "Riyadh",
+                    "zoom_level": "v12",
+                    "geometry": "0101000020E61000007231BFD7246B4740E5BFD251DAB93840"
+                },
+                {
+                    "Main_ID": 1334335,
+                    "Grid_ID": "123334414221",
+                    "Level": 12,
+                    "Population_Count": 65987,
+                    "Male_Population": 52256,
+                    "Female_Population": 13731,
+                    "Population_Density_KM2": 25776.2,
+                    "Median_Age_Total": 33,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 28,
+                    "density": 100,
+                    "calculated_latitude": 24.67375537804024,
+                    "calculated_longitude": 46.707704450927785,
+                    "population_center_rank": 3,
+                    "urban_score": 311820.57,
+                    "cluster_id": "2",
+                    "cluster_size": 42,
+                    "is_population_center": true,
+                    "selection_method": "urban_density_clustering",
+                    "city": "Riyadh",
+                    "zoom_level": "v12",
+                    "geometry": "0101000020E6100000F7FB370F965A4740DC2F823B7BAC3840"
+                },
+                {
+                    "Main_ID": 970693,
+                    "Grid_ID": "123334414343",
+                    "Level": 12,
+                    "Population_Count": 20961,
+                    "Male_Population": 12085,
+                    "Female_Population": 8876,
+                    "Population_Density_KM2": 8187.9,
+                    "Median_Age_Total": 29,
+                    "Median_Age_Male": 30,
+                    "Median_Age_Female": 29,
+                    "density": 31.7643,
+                    "calculated_latitude": 24.582296452280666,
+                    "calculated_longitude": 46.65021227274414,
+                    "population_center_rank": 4,
+                    "urban_score": 89661.33,
+                    "cluster_id": "3",
+                    "cluster_size": 4,
+                    "is_population_center": true,
+                    "selection_method": "urban_density_clustering",
+                    "city": "Riyadh",
+                    "zoom_level": "v12",
+                    "geometry": "0101000020E61000006C72DF273A5347404E1F5B6111953840"
+                }
+            ]
+        }
+    },
+    "household": {
+        "seed_table_name": "schema_marketplace.household_all_features_v12",
+        "seed_data": {
+            "features": [
+                {
+                    "Main_ID": 278776,
+                    "Grid_ID": "123334412123",
+                    "Level": 12,
+                    "Household_Average_Size": 3.5,
+                    "Household_Median_Size": 2,
+                    "density": 18.9394,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D52474003F640D336C538407731F0C37D52474055884D7EDFC13840DB53C6BD5454474055884D7EDFC13840DB53C6BD5454474003F640D336C538407731F0C37D52474003F640D336C53840"
+                },
+                {
+                    "Main_ID": 1040291,
+                    "Grid_ID": "123334412141",
+                    "Level": 12,
+                    "Household_Average_Size": 3.0999999046325684,
+                    "Household_Median_Size": 2,
+                    "density": 15.9091,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D52474055884D7EDFC138407731F0C37D524740B90E591288BE3840DB53C6BD54544740B90E591288BE3840DB53C6BD5454474055884D7EDFC138407731F0C37D52474055884D7EDFC13840"
+                },
+                {
+                    "Main_ID": 1174569,
+                    "Grid_ID": "123334412134",
+                    "Level": 12,
+                    "Household_Average_Size": 2.9000000953674316,
+                    "Household_Median_Size": 2,
+                    "density": 14.3939,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA6504740B90E591288BE3840140F1ACAA6504740B3D3658F30BB38407731F0C37D524740B3D3658F30BB38407731F0C37D524740B90E591288BE3840140F1ACAA6504740B90E591288BE3840"
+                },
+                {
+                    "Main_ID": 1221401,
+                    "Grid_ID": "123334412143",
+                    "Level": 12,
+                    "Household_Average_Size": 3.0999999046325684,
+                    "Household_Median_Size": 2,
+                    "density": 15.9091,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D524740B90E591288BE38407731F0C37D524740B3D3658F30BB3840DB53C6BD54544740B3D3658F30BB3840DB53C6BD54544740B90E591288BE38407731F0C37D524740B90E591288BE3840"
+                },
+                {
+                    "Main_ID": 1253810,
+                    "Grid_ID": "123334412132",
+                    "Level": 12,
+                    "Household_Average_Size": 3.0999999046325684,
+                    "Household_Median_Size": 2,
+                    "density": 15.9091,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA650474055884D7EDFC13840140F1ACAA6504740B90E591288BE38407731F0C37D524740B90E591288BE38407731F0C37D52474055884D7EDFC13840140F1ACAA650474055884D7EDFC13840"
+                },
+                {
+                    "Main_ID": 1254080,
+                    "Grid_ID": "123334412114",
+                    "Level": 12,
+                    "Household_Average_Size": 3.4000000953674316,
+                    "Household_Median_Size": 2,
+                    "density": 18.1818,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA650474003F640D336C53840140F1ACAA650474055884D7EDFC138407731F0C37D52474055884D7EDFC138407731F0C37D52474003F640D336C53840140F1ACAA650474003F640D336C53840"
+                }
+            ]
+        }
+    },
+    "housing": {
+        "seed_table_name": "schema_marketplace.housing_all_features_v12",
+        "seed_data": {
+            "features": [
+                {
+                    "Main_ID": 278776,
+                    "Grid_ID": "123334412123",
+                    "Level": 12,
+                    "Total_housings": 2610,
+                    "Residential_housings": 2286,
+                    "Non_Residential_housings": 118,
+                    "Owned_housings": 489,
+                    "Rented_housings": 1380,
+                    "Provided_housings": 401,
+                    "Other_Residential_housings": 16,
+                    "Public_Housing": 1,
+                    "Work_Camps": 0,
+                    "Commercial_housings": 117,
+                    "Other_housings": 206,
+                    "density": 8.1369,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D52474003F640D336C538407731F0C37D52474055884D7EDFC13840DB53C6BD5454474055884D7EDFC13840DB53C6BD5454474003F640D336C538407731F0C37D52474003F640D336C53840"
+                },
+                {
+                    "Main_ID": 1040291,
+                    "Grid_ID": "123334412141",
+                    "Level": 12,
+                    "Total_housings": 3011,
+                    "Residential_housings": 2416,
+                    "Non_Residential_housings": 283,
+                    "Owned_housings": 637,
+                    "Rented_housings": 1395,
+                    "Provided_housings": 364,
+                    "Other_Residential_housings": 20,
+                    "Public_Housing": 3,
+                    "Work_Camps": 1,
+                    "Commercial_housings": 279,
+                    "Other_housings": 312,
+                    "density": 9.3875,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D52474055884D7EDFC138407731F0C37D524740B90E591288BE3840DB53C6BD54544740B90E591288BE3840DB53C6BD5454474055884D7EDFC138407731F0C37D52474055884D7EDFC13840"
+                },
+                {
+                    "Main_ID": 1174569,
+                    "Grid_ID": "123334412134",
+                    "Level": 12,
+                    "Total_housings": 3746,
+                    "Residential_housings": 1370,
+                    "Non_Residential_housings": 125,
+                    "Owned_housings": 367,
+                    "Rented_housings": 741,
+                    "Provided_housings": 249,
+                    "Other_Residential_housings": 13,
+                    "Public_Housing": 1,
+                    "Work_Camps": 1,
+                    "Commercial_housings": 123,
+                    "Other_housings": 2251,
+                    "density": 11.6798,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA6504740B90E591288BE3840140F1ACAA6504740B3D3658F30BB38407731F0C37D524740B3D3658F30BB38407731F0C37D524740B90E591288BE3840140F1ACAA6504740B90E591288BE3840"
+                },
+                {
+                    "Main_ID": 1221401,
+                    "Grid_ID": "123334412143",
+                    "Level": 12,
+                    "Total_housings": 5059,
+                    "Residential_housings": 3545,
+                    "Non_Residential_housings": 740,
+                    "Owned_housings": 861,
+                    "Rented_housings": 1970,
+                    "Provided_housings": 671,
+                    "Other_Residential_housings": 43,
+                    "Public_Housing": 1,
+                    "Work_Camps": 2,
+                    "Commercial_housings": 737,
+                    "Other_housings": 774,
+                    "density": 15.7747,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D524740B90E591288BE38407731F0C37D524740B3D3658F30BB3840DB53C6BD54544740B3D3658F30BB3840DB53C6BD54544740B90E591288BE38407731F0C37D524740B90E591288BE3840"
+                },
+                {
+                    "Main_ID": 1253810,
+                    "Grid_ID": "123334412132",
+                    "Level": 12,
+                    "Total_housings": 2365,
+                    "Residential_housings": 1872,
+                    "Non_Residential_housings": 88,
+                    "Owned_housings": 487,
+                    "Rented_housings": 1049,
+                    "Provided_housings": 316,
+                    "Other_Residential_housings": 20,
+                    "Public_Housing": 1,
+                    "Work_Camps": 1,
+                    "Commercial_housings": 86,
+                    "Other_housings": 405,
+                    "density": 7.3728,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA650474055884D7EDFC13840140F1ACAA6504740B90E591288BE38407731F0C37D524740B90E591288BE38407731F0C37D52474055884D7EDFC13840140F1ACAA650474055884D7EDFC13840"
+                },
+                {
+                    "Main_ID": 1254080,
+                    "Grid_ID": "123334412114",
+                    "Level": 12,
+                    "Total_housings": 1258,
+                    "Residential_housings": 730,
+                    "Non_Residential_housings": 21,
+                    "Owned_housings": 163,
+                    "Rented_housings": 473,
+                    "Provided_housings": 91,
+                    "Other_Residential_housings": 3,
+                    "Public_Housing": 0,
+                    "Work_Camps": 0,
+                    "Commercial_housings": 21,
+                    "Other_housings": 507,
+                    "density": 3.9203,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA650474003F640D336C53840140F1ACAA650474055884D7EDFC138407731F0C37D52474055884D7EDFC138407731F0C37D52474003F640D336C53840140F1ACAA650474003F640D336C53840"
+                }
+            ]
+        }
+    },
+    "area_income": {
+        "seed_table_name": "schema_marketplace.area_income_all_features_v12",
+        "seed_data": {
+            "features": [
+                {
+                    "Main_ID": 278776,
+                    "Grid_ID": "123334412123",
+                    "Level": 12,
+                    "Population_Count": 7895,
+                    "Male_Population": 5143,
+                    "Female_Population": 2752,
+                    "Population_Density_KM2": 3084,
+                    "Median_Age_Total": 32,
+                    "Median_Age_Male": 32,
+                    "Median_Age_Female": 31,
+                    "density": 11.9632,
+                    "income": 13287.753924403407,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D52474003F640D336C538407731F0C37D52474055884D7EDFC13840DB53C6BD5454474055884D7EDFC13840DB53C6BD5454474003F640D336C538407731F0C37D52474003F640D336C53840"
+                },
+                {
+                    "Main_ID": 1040291,
+                    "Grid_ID": "123334412141",
+                    "Level": 12,
+                    "Population_Count": 7450,
+                    "Male_Population": 4608,
+                    "Female_Population": 2842,
+                    "Population_Density_KM2": 2910.2,
+                    "Median_Age_Total": 33,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 32,
+                    "density": 11.2889,
+                    "income": 12808.71269012401,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D52474055884D7EDFC138407731F0C37D524740B90E591288BE3840DB53C6BD54544740B90E591288BE3840DB53C6BD5454474055884D7EDFC138407731F0C37D52474055884D7EDFC13840"
+                },
+                {
+                    "Main_ID": 1174569,
+                    "Grid_ID": "123334412134",
+                    "Level": 12,
+                    "Population_Count": 3939,
+                    "Male_Population": 2368,
+                    "Female_Population": 1571,
+                    "Population_Density_KM2": 1538.7,
+                    "Median_Age_Total": 34,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 33,
+                    "density": 5.968,
+                    "income": 16308.42815807344,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA6504740B90E591288BE3840140F1ACAA6504740B3D3658F30BB38407731F0C37D524740B3D3658F30BB38407731F0C37D524740B90E591288BE3840140F1ACAA6504740B90E591288BE3840"
+                },
+                {
+                    "Main_ID": 1221401,
+                    "Grid_ID": "123334412143",
+                    "Level": 12,
+                    "Population_Count": 10993,
+                    "Male_Population": 6717,
+                    "Female_Population": 4276,
+                    "Population_Density_KM2": 4294.1,
+                    "Median_Age_Total": 33,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 32,
+                    "density": 16.6579,
+                    "income": 15201.436532468135,
+                    "geometry": "0103000020E610000001000000050000007731F0C37D524740B90E591288BE38407731F0C37D524740B3D3658F30BB3840DB53C6BD54544740B3D3658F30BB3840DB53C6BD54544740B90E591288BE38407731F0C37D524740B90E591288BE3840"
+                },
+                {
+                    "Main_ID": 1253810,
+                    "Grid_ID": "123334412132",
+                    "Level": 12,
+                    "Population_Count": 5725,
+                    "Male_Population": 3356,
+                    "Female_Population": 2369,
+                    "Population_Density_KM2": 2236.3,
+                    "Median_Age_Total": 33,
+                    "Median_Age_Male": 34,
+                    "Median_Age_Female": 33,
+                    "density": 8.6744,
+                    "income": 14420.814638617247,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA650474055884D7EDFC13840140F1ACAA6504740B90E591288BE38407731F0C37D524740B90E591288BE38407731F0C37D52474055884D7EDFC13840140F1ACAA650474055884D7EDFC13840"
+                },
+                {
+                    "Main_ID": 1254080,
+                    "Grid_ID": "123334412114",
+                    "Level": 12,
+                    "Population_Count": 2508,
+                    "Male_Population": 1523,
+                    "Female_Population": 985,
+                    "Population_Density_KM2": 979.7,
+                    "Median_Age_Total": 32,
+                    "Median_Age_Male": 33,
+                    "Median_Age_Female": 31,
+                    "density": 3.7993,
+                    "income": 12199.750925892424,
+                    "geometry": "0103000020E61000000100000005000000140F1ACAA650474003F640D336C53840140F1ACAA650474055884D7EDFC138407731F0C37D52474055884D7EDFC138407731F0C37D52474003F640D336C53840140F1ACAA650474003F640D336C53840"
                 }
             ]
         }

@@ -442,11 +442,11 @@ def parse_arguments():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python run_tests.py                                    # Run all tests
-  python run_tests.py -t test_fetch_dataset_llm.py      # Run specific test file
-  python run_tests.py -k test_valid_query               # Run tests matching pattern
-  python run_tests.py -t test_fetch_dataset_llm.py -k valid_query  # Combine filters
-  python run_tests.py --no-coverage                     # Run without coverage
+  python tests\integration\run_tests.py -t test_viewport -k test_viewport_population                                  # Run all tests
+  python tests\integration\run_tests.py -t test_fetch_dataset_llm.py      # Run specific test file
+  python tests\integration\run_tests.py -k test_valid_query               # Run tests matching pattern
+  python tests\integration\run_tests.py -t test_fetch_dataset_llm.py -k valid_query  # Combine filters
+  python tests\integration\run_tests.py --no-coverage                     # Run without coverage
         """
     )
     
@@ -543,13 +543,13 @@ def main():
                         "--cov-report=term-missing:skip-covered",
                         "--cov-report=html:htmlcov"
                     ])
-                    logger.info("📊 Coverage reporting enabled")
+                    logger.info("Coverage reporting enabled")
                 else:
-                    logger.info("📊 Coverage not available (install pytest-cov for coverage)")
+                    logger.info("Coverage not available (install pytest-cov for coverage)")
             except ImportError:
-                logger.info("📊 Coverage not available (install pytest-cov for coverage)")
+                logger.info("Coverage not available (install pytest-cov for coverage)")
         else:
-            logger.info("📊 Coverage reporting disabled")
+            logger.info("Coverage reporting disabled")
         
         print("\n" + "="*80)
         print("🔬 RUNNING TESTS")
