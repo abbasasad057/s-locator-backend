@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Dict, List, Optional, Any, Union
+from typing import Dict, List, Literal, Optional, Any, Union
 
 
 class LyrInfoInCtlgSave(BaseModel):
@@ -47,3 +47,13 @@ class ResPrdcerCtlg(ResUserCatalogInfo):
 
 class BooleanQuery(BaseModel):
     boolean_query: Optional[str] = ""
+
+
+class Geometry(BaseModel):
+    type: Literal["Point", "Polygon", "MultiPolygon"]
+    coordinates: Any
+
+class Feature(BaseModel):
+    type: Literal["Feature"]
+    properties: dict
+    geometry: Geometry

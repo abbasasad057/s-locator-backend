@@ -52,7 +52,7 @@ class SqlObject:
         LIMIT $6 OFFSET $7;
     """
     real_estate_full_data: str = """
-        SELECT url, price, city, latitude, longitude, category 
+        SELECT listing_id, url, price, city, latitude, longitude, category 
         FROM "schema_marketplace".saudi_real_estate
         WHERE "category" = ANY($1)
             AND latitude BETWEEN $2 AND $3

@@ -2,6 +2,7 @@ from typing import Dict, List, TypeVar, Generic, Literal, Any, Optional, Union
 
 from pydantic import BaseModel, Field
 
+from all_types.internal_types import Feature
 from all_types.request_dtypes import ReqFetchDataset
 
 T = TypeVar("T")
@@ -49,17 +50,6 @@ class ResModel(BaseModel, Generic[T]):
 class ResCostEstimate(BaseModel):
     cost: float
     api_calls: int
-
-
-class Geometry(BaseModel):
-    type: Literal["Point", "Polygon", "MultiPolygon"]
-    coordinates: Any
-
-
-class Feature(BaseModel):
-    type: Literal["Feature"]
-    properties: dict
-    geometry: Geometry
 
 
 class card_metadata(BaseModel):

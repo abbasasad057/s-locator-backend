@@ -4,7 +4,7 @@ from all_types.request_dtypes import Reqsmartreport, ReqFetchDataset
 from utils.geo_std_utils import bbox_to_polygon
 from data_fetcher import fetch_dataset
 from smart_reports.traffic import fetch_traffic_data
-from smart_reports.population import fetch_demographics, fetch_household_sizes
+from smart_reports.population import fetch_demographics, fetch_household_sizes, get_demographic_info_for_listings
 from smart_reports.healthcare_system import get_healthcare_data
 from smart_reports.complementary_businesses import get_other_businesses_data
 from smart_reports.scoring import *
@@ -75,6 +75,10 @@ async def generate_pharmacy_report(req: Reqsmartreport):
 
     req_dataset.boolean_query = "bank"
     bank = await loading_category_dataset(req_dataset)
+
+    # get all demograhics + household + income for those shops_for_rent
+    # isolate list of listing_ids from shops_for_rent
+    listing_demographic_info =  await get_demographic_info_for_listings(shops_for_rent)
 
     ## in this part For Each location (shop for rent),
     # we fetch all the details of that specific locations
@@ -265,6 +269,7 @@ async def fetch_all_criterions_data(
     restaurant: dict,
     atm: dict,
     bank: dict,
+    listing_demographic_info,
     source: str = source_shop_for_rent,
     place_name: Optional[str] = None,
     place_price: Optional[float] = None,  # or str, depending on your data
@@ -313,6 +318,7 @@ async def fetch_all_criterions_data(
     healthcare["healthcare"]["pharmacy"][
         "pharmacies_per_10k_population"
     ] = pharmacies_per_10k
+
     return {
         "source": source,
         "place name": place_name,

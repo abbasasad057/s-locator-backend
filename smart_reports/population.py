@@ -1,6 +1,7 @@
 from storage_methods import fetch_intelligence_by_viewport
 from backend_common.database import Database
 from all_types.request_dtypes import ReqIntelligenceViewport
+from all_types.internal_types import Feature
 
 async def fetch_demographics(bbox : dict , user_id : str):
     req_bbox = ReqIntelligenceViewport(   
@@ -82,3 +83,30 @@ async def fetch_household_sizes(bbox : dict):
             "Household_Average_Size": 0,
             "Household_Median_Size": 0,
         }
+
+
+async def get_demographic_info_for_listings(shop_for_rent:list[Feature]):
+    # make list of listing_id
+    listing_ids = [f['properties']['listing_id'] for f in shop_for_rent]
+    sanitized_ids = [int(i) for i in listing_ids]
+    # query real estate table and filter for those ids
+    query = """
+    SELECT
+        listing_id, url, city, price, latitude, longitude, category, direction_id,
+        total_population, avg_density, avg_median_age, avg_income,
+        percentage_age_above_20, percentage_age_above_25, percentage_age_above_30,
+        percentage_age_above_35, percentage_age_above_40, percentage_age_above_45,
+        percentage_age_above_50, demographics_analysis_date,
+        traffic_score, traffic_storefront_score, traffic_area_score,
+        traffic_screenshot_filename, traffic_analysis_date
+    FROM schema_marketplace.saudi_real_estate
+    WHERE listing_id = ANY($1::BIGINT[])
+    """
+
+    rows = await Database.fetch(query, sanitized_ids)
+    # Database.fetch should accept a list parameter that maps to $1
+    # If your Database.fetch expects positional args instead of array param,
+    # you can pass tuple(sanitized_ids) or adapt the query to use UNNEST.
+
+    # convert to dictionary with url as key
+    return {row["url"]: row for row in rows}
