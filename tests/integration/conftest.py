@@ -1,23 +1,16 @@
 # tests/integration/conftest.py
 import pytest
 import httpx
-import logging
-import time
 import os
 from datetime import datetime
-from typing import List, Dict, Any
-import firebase_admin
 from firebase_admin import auth
 from backend_common.auth import firebase_db
 from .fixtures import (
     UserSeeder,
     AuthHelper,
-    CleanupManager,
     DatabaseSeeder,
-    DatabaseCleanupManager,
 )
 import sys
-import os
 # Add project root to Python path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
 project_root = os.path.dirname(os.path.dirname(current_dir))
@@ -48,47 +41,32 @@ def api_base_url():
 
 
 @pytest.fixture(scope="function")
-def http_client(api_base_url):
+def fixture_http_client(api_base_url):
     """HTTP client for API calls"""
     return httpx.Client(base_url=api_base_url, timeout=60.0)
 
 
 @pytest.fixture(scope="function")
-def user_seeder(http_client, test_run_id):
+def fixture_user_seeder(fixture_http_client, test_run_id):
     """User seeder for creating test users"""
-    return UserSeeder(http_client, test_run_id)
+    return UserSeeder(fixture_http_client, test_run_id)
 
 
 @pytest.fixture(scope="function")
-def auth_helper(http_client):
+def fixture_auth_helper(fixture_http_client):
     """Authentication helper for login operations"""
-    return AuthHelper(http_client)
+    return AuthHelper(fixture_http_client)
 
 
 @pytest.fixture(scope="function")
-def cleanup_manager():
-    """Cleanup manager for test resources"""
-    manager = CleanupManager()
-    yield manager
-    # Automatic cleanup at end of test
-    manager.cleanup_all_registered()
-
-
-# tests/integration/conftest.py - Add database fixtures
-@pytest.fixture(scope="function")
-def database_seeder(test_run_id):
-    """Database seeder for creating test data"""
-    
-    return DatabaseSeeder(test_run_id)
-
-@pytest.fixture(scope="function")
-def database_cleanup_manager():
-    """Database cleanup manager for test data"""
-    
-    manager = DatabaseCleanupManager()
-    yield manager
-    # Synchronous cleanup at end of test
-    manager.cleanup_all_registered_tables()
+def fixture_database_seeder(test_run_id):
+    """Single fixture that seeds DB and does all cleanup after test."""
+    manager = DatabaseSeeder(test_run_id)
+    try:
+        yield manager
+    finally:
+        manager.cleanup_all_registered_firebase()
+        manager.cleanup_all_registered_tables()
 
 
 @pytest.fixture(scope="session", autouse=True)

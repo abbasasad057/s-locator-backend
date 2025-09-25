@@ -475,21 +475,30 @@ Examples:
     
     return parser.parse_args()
 
-def main():
-    """Main entry point with enhanced pytest integration"""
+def main(test_file=None, test_keyword=None):
+    """Main entry point with enhanced pytest integration
+
+    Accepts optional function parameters t_keyword and k_keyword so the
+    function can be called programmatically (e.g. from another script or
+    test harness) while still supporting the original CLI arguments.
+    """
     args = parse_arguments()
-    
+
+    # Prefer explicit function args when provided, otherwise fall back to CLI
+    test_file = test_file if test_file is not None else args.test
+    keyword = test_keyword if test_keyword is not None else args.keyword
+
     print("\n" + "="*80)
     print("🧪 INTEGRATION TEST RUNNER")
     print("="*80)
     logger.info("🚀 Starting Integration Test Runner...")
     logger.info("This will start the server in TEST_MODE and run integration tests")
     logger.info(f"Using port: {args.port}")
-    
-    if args.test:
-        logger.info(f"🎯 Running specific test: {args.test}")
-    if args.keyword:
-        logger.info(f"Filtering tests with keyword: {args.keyword}")
+
+    if test_file:
+        logger.info(f"🎯 Running specific test: {test_file}")
+    if keyword:
+        logger.info(f"Filtering tests with keyword: {keyword}")
     
     # Start server and run pytest
     manager = TestServerManager(test_port=args.port)
@@ -507,10 +516,10 @@ def main():
         # Set environment variable for pytest fixtures
         os.environ["TEST_SERVER_PORT"] = str(server_info["port"])
         
-        # Build pytest arguments based on user input
-        if args.test:
+        # Build pytest arguments based on user input (or function args)
+        if test_file:
             # If specific test file provided, run just that file
-            test_path = args.test
+            test_path = test_file
             if not test_path.startswith("tests/integration/"):
                 test_path = f"tests/integration/{test_path}"
             pytest_args = [test_path]
@@ -529,9 +538,9 @@ def main():
             "-r", "A",                      # Show all test outcomes (passed, failed, skipped, etc.)
         ])
         
-        # Add keyword filter if provided
-        if args.keyword:
-            pytest_args.extend(["-k", args.keyword])
+        # Add keyword filter if provided (from function arg or CLI)
+        if keyword:
+            pytest_args.extend(["-k", keyword])
         
         # Add coverage if available and not disabled
         if not args.no_coverage:
@@ -553,10 +562,10 @@ def main():
         
         print("\n" + "="*80)
         print("🔬 RUNNING TESTS")
-        if args.test:
-            print(f"🎯 Target: {args.test}")
-        if args.keyword:
-            print(f"🔍 Filter: {args.keyword}")
+        if test_file:
+            print(f"🎯 Target: {test_file}")
+        if keyword:
+            print(f"🔍 Filter: {keyword}")
         print("="*80)
         
         # Run the tests
@@ -574,4 +583,4 @@ def main():
     sys.exit(exit_code)
 
 if __name__ == "__main__":
-    main()
+    main(test_file="test_viewport.py", test_keyword="test_viewport_population")

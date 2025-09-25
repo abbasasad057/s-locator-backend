@@ -1,17 +1,16 @@
 # tests/integration/fixtures/database_fixtures.py
-import logging
 import json
 import os
-import asyncpg
 from datetime import datetime, timezone
 from typing import List, Dict, Any, Set
 from pathlib import Path
+import time
+from backend_common.auth import firebase_db
 from .user_fixtures import UserData
 
 # Add Firebase imports
-from firebase_admin import firestore
+from firebase_admin import auth
 import sys
-import os
 
 # Add project root to Python path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -26,16 +25,79 @@ from app_logger import get_logger
 logger = get_logger(__name__)
 
 
-class DatabaseCleanupManager:
-    """Handles synchronous cleanup of database test data"""
+class DatabaseSeeder():
+    """Handles database seeding for integration tests"""
 
-    def __init__(self):
+    def __init__(self, test_run_id: str):
+        self.firebase_cleanup_registry: Set[str] = set()
         self._connection = None
         self.created_tables: Set[str] = set()
+        self.test_run_id = test_run_id
+        self.seeded_data: Dict[str, List[str]] = (
+            {}
+        )  # table_name -> list of primary keys
+        self.db_seed_data_dir = Path(__file__).parent.parent / "db_seed_data"
+        self._connection = None
+        # Firebase client for profile seeding
+        self._firebase_client = None
+        self.seeded_firebase_profiles: List[str] = (
+            []
+        )  # Track Firebase profiles for cleanup
+        self.seeded_firebase_layer_matchings: List[str] = (
+            []
+        )  # Track Firebase layer matchings for cleanup
+        self.seeded_firebase_user_layer_matchings: List[str] = (
+            []
+        )  # Track Firebase user layer matchings for cleanup
+        self.seeded_firebase_user_layer_matchings: List[str] = (
+            []
+        )  # Track Firebase user layer matchings for cleanup
+
+    def register_user_for_cleanup(self, user_data: UserData):
+        """Register a user for cleanup"""
+        self.firebase_cleanup_registry.add(user_data.user_id)
+
+    def cleanup_all_registered_firebase(self):
+        """Clean up all registered users"""
+        if not self.firebase_cleanup_registry:
+            logger.info("No users registered for cleanup")
+            return
+
+        user_ids = list(self.firebase_cleanup_registry)
+        cleanup_count = 0
+
+        for user_id in user_ids:
+            try:
+                # Delete from Firebase Auth
+                auth.delete_user(user_id)
+                logger.info(f"🗑️ Deleted Firebase user: {user_id}")
+
+                # Delete from Firestore
+                firebase_db.get_sync_client().collection(
+                    "all_user_profiles"
+                ).document(user_id).delete()
+                firebase_db.get_sync_client().collection(
+                    "firebase_stripe_mappings"
+                ).document(user_id).delete()
+
+                cleanup_count += 1
+                time.sleep(0.1)
+
+            except Exception as e:
+                logger.warning(
+                    f"⚠️ Error cleaning up registered user {user_id}: {e}"
+                )
+
+        self.firebase_cleanup_registry.clear()
+        logger.info(
+            f"🧹 Cleaned up {cleanup_count}/{len(user_ids)} registered users"
+        )
 
     def _get_sync_connection(self):
         """Get a synchronous database connection"""
-        if self._connection is None or self._connection.closed:  # ✅ Fixed: removed ()
+        if (
+            self._connection is None or self._connection.closed
+        ):  # ✅ Fixed: removed ()
             import os
 
             database_url = os.environ.get("DATABASE_URL")
@@ -82,39 +144,16 @@ class DatabaseCleanupManager:
         logger.info(f"🧹 finished cleaning up {cleanup_count} database tables")
 
         # Close connection after cleanup
-        if self._connection and not self._connection.closed:  # ✅ Fixed: removed ()
+        if (
+            self._connection and not self._connection.closed
+        ):  # ✅ Fixed: removed ()
             self._connection.close()
-
-
-class DatabaseSeeder(DatabaseCleanupManager):
-    """Handles database seeding for integration tests"""
-
-    def __init__(self, test_run_id: str):
-        super().__init__()
-        self.test_run_id = test_run_id
-        self.seeded_data: Dict[str, List[str]] = (
-            {}
-        )  # table_name -> list of primary keys
-        self.db_seed_data_dir = Path(__file__).parent.parent / "db_seed_data"
-        self._connection = None
-        # Firebase client for profile seeding
-        self._firebase_client = None
-        self.seeded_firebase_profiles: List[str] = (
-            []
-        )  # Track Firebase profiles for cleanup
-        self.seeded_firebase_layer_matchings: List[str] = (
-            []
-        )  # Track Firebase layer matchings for cleanup
-        self.seeded_firebase_user_layer_matchings: List[str] = (
-            []
-        )  # Track Firebase user layer matchings for cleanup
-        self.seeded_firebase_user_layer_matchings: List[str] = (
-            []
-        )  # Track Firebase user layer matchings for cleanup
 
     def _get_sync_connection(self):
         """Get a synchronous database connection"""
-        if self._connection is None or self._connection.closed:  # ✅ Fixed: removed ()
+        if (
+            self._connection is None or self._connection.closed
+        ):  # ✅ Fixed: removed ()
             import os
 
             database_url = os.environ.get("DATABASE_URL")
@@ -211,12 +250,15 @@ class DatabaseSeeder(DatabaseCleanupManager):
                             f"{{{var}}}", str(value)
                         )
                 # Substitute template variables in value recursively
-                substituted_value = self._substitute_template_vars(v, substitutions)
+                substituted_value = self._substitute_template_vars(
+                    v, substitutions
+                )
                 substituted_dict[substituted_key] = substituted_value
             return substituted_dict
         elif isinstance(data, list):
             return [
-                self._substitute_template_vars(item, substitutions) for item in data
+                self._substitute_template_vars(item, substitutions)
+                for item in data
             ]
         elif isinstance(data, str):
             result = data
@@ -226,7 +268,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
         else:
             return data
 
-    def seed_db_ggl_maps_data(self, data_types: List[str] = None) -> Dict[str, Any]:
+    def seed_db_ggl_maps_data(
+        self, data_types: List[str] = None
+    ) -> Dict[str, Any]:
         """
         Seed Google Maps test data from JSON file
 
@@ -349,7 +393,10 @@ class DatabaseSeeder(DatabaseCleanupManager):
         if dataset_types is None:
             dataset_types = list(seed_dataset_data.keys())
 
-        substitutions = {"test_run_id": self.test_run_id, "user_id": user_data.user_id}
+        substitutions = {
+            "test_run_id": self.test_run_id,
+            "user_id": user_data.user_id,
+        }
 
         filenames = []
         variables = {}
@@ -407,10 +454,14 @@ class DatabaseSeeder(DatabaseCleanupManager):
             self.seeded_data[table_name] = []
         self.seeded_data[table_name].extend(filenames)
 
-        logger.info(f"✅ Seeded transformed datasets for types: {dataset_types}")
+        logger.info(
+            f"✅ Seeded transformed datasets for types: {dataset_types}"
+        )
         return variables
 
-    def seed_real_estate_data(self, property_types: List[str] = None) -> Dict[str, Any]:
+    def seed_real_estate_data(
+        self, property_types: List[str] = None
+    ) -> Dict[str, Any]:
         """
         Seed real estate test data from JSON file
 
@@ -496,7 +547,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
             self.seeded_data[table_name] = []
         self.seeded_data[table_name].extend(filenames)
 
-        logger.info(f"✅ Seeded real estate test data for types: {property_types}")
+        logger.info(
+            f"✅ Seeded real estate test data for types: {property_types}"
+        )
         return variables
 
     def seed_geospatial_data(self) -> Dict[str, Any]:
@@ -506,8 +559,6 @@ class DatabaseSeeder(DatabaseCleanupManager):
         # SELECT * FROM schema_marketplace.household_all_features_v12;
         # SELECT * FROM schema_marketplace.housing_all_features_v12;
         # SELECT * FROM schema_marketplace.area_income_all_features_v12;
-
-
 
         # Load test data from JSON
         geospatial_data = self._load_db_seed_data("geospatial_seed_data.json")
@@ -532,22 +583,24 @@ class DatabaseSeeder(DatabaseCleanupManager):
             for col in columns:
                 quoted_col = f'"{col}"'
                 if col == "geometry":
-                    column_defs.append(f'{quoted_col} geometry')
+                    column_defs.append(f"{quoted_col} geometry")
                 elif isinstance(first_feature[col], bool):
-                    column_defs.append(f'{quoted_col} BOOLEAN')
+                    column_defs.append(f"{quoted_col} BOOLEAN")
                 elif "id" in col.lower():
-                    column_defs.append(f'{quoted_col} BIGINT')
+                    column_defs.append(f"{quoted_col} BIGINT")
                 elif isinstance(first_feature[col], (int, float)):
-                    column_defs.append(f'{quoted_col} REAL')
+                    column_defs.append(f"{quoted_col} REAL")
                 else:
-                    column_defs.append(f'{quoted_col} TEXT')
+                    column_defs.append(f"{quoted_col} TEXT")
 
             create_table_query = f"""
                 CREATE TABLE IF NOT EXISTS {seed_table_name} (
                     {', '.join(column_defs)}
                 )
             """
-            logger.info(f"Creating seed table: {seed_table_name} with columns: {columns}")
+            logger.info(
+                f"Creating seed table: {seed_table_name} with columns: {columns}"
+            )
             logger.info(f"Create seed table query: {create_table_query}")
             self._execute_sync(create_table_query)
             self.created_tables.add(seed_table_name)
@@ -566,13 +619,15 @@ class DatabaseSeeder(DatabaseCleanupManager):
                     if col == "geometry":
                         placeholders.append("ST_GeomFromWKB(decode(%s, 'hex'))")
                     else:
-                        placeholders.append('%s')
+                        placeholders.append("%s")
                 insert_query = f"""
                     INSERT INTO {seed_table_name} ({', '.join(col_names)})
                     VALUES ({', '.join(placeholders)})
                 """
                 self._execute_sync(insert_query, *values)
-            logger.info(f"✅ Seeded geospatial data into table: {seed_table_name}")
+            logger.info(
+                f"✅ Seeded geospatial data into table: {seed_table_name}"
+            )
 
             logger.info(f"✅ Data seeded for {seed_table_name}")
 
@@ -599,7 +654,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
         collection_name = "all_user_profiles"
 
         # Load profile templates from JSON
-        firebase_profiles_data = self._load_db_seed_data("firebase_profiles.json")
+        firebase_profiles_data = self._load_db_seed_data(
+            "firebase_profiles.json"
+        )
 
         variables = {}
         seeded_profiles = []
@@ -637,7 +694,10 @@ class DatabaseSeeder(DatabaseCleanupManager):
                 )
 
             # For member profiles, use admin_user_data if provided
-            if profile_template.get("account_type") == "member" and admin_user_data:
+            if (
+                profile_template.get("account_type") == "member"
+                and admin_user_data
+            ):
                 substitutions["admin_id"] = admin_user_data.user_id
             elif profile_template.get("account_type") == "member":
                 substitutions["admin_id"] = f"test_admin_{self.test_run_id}"
@@ -655,7 +715,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
 
             try:
                 # Create document in Firestore
-                doc_ref = firebase_client.collection(collection_name).document(doc_id)
+                doc_ref = firebase_client.collection(collection_name).document(
+                    doc_id
+                )
                 doc_ref.set(profile_data)
 
                 # Track for cleanup
@@ -665,13 +727,17 @@ class DatabaseSeeder(DatabaseCleanupManager):
                 # Store variables for test use
                 variables[f"{profile_config}_user_id"] = doc_id
                 variables[f"{profile_config}_email"] = profile_data["email"]
-                variables[f"{profile_config}_username"] = profile_data["username"]
+                variables[f"{profile_config}_username"] = profile_data[
+                    "username"
+                ]
                 variables[f"{profile_config}_account_type"] = profile_data[
                     "account_type"
                 ]
 
                 # Extract layer IDs from prdcer_lyrs for test use (simple exact match storage)
-                prdcer_lyrs = profile_data.get("prdcer", {}).get("prdcer_lyrs", {})
+                prdcer_lyrs = profile_data.get("prdcer", {}).get(
+                    "prdcer_lyrs", {}
+                )
                 for layer_id, layer_info in prdcer_lyrs.items():
                     layer_name = layer_info.get("prdcer_layer_name", "")
                     # Store by exact layer name for specific access
@@ -683,15 +749,20 @@ class DatabaseSeeder(DatabaseCleanupManager):
                     )
                     # Remove any non-alphanumeric characters except underscores
                     safe_layer_name = "".join(
-                        c if c.isalnum() or c == "_" else "_" for c in safe_layer_name
+                        c if c.isalnum() or c == "_" else "_"
+                        for c in safe_layer_name
                     )
                     # Remove duplicate underscores
-                    safe_layer_name = "_".join(filter(None, safe_layer_name.split("_")))
+                    safe_layer_name = "_".join(
+                        filter(None, safe_layer_name.split("_"))
+                    )
 
                     if safe_layer_name:
                         variables[f"{safe_layer_name}_layer_id"] = layer_id
 
-                logger.info(f"✅ Seeded Firebase profile: {profile_config} -> {doc_id}")
+                logger.info(
+                    f"✅ Seeded Firebase profile: {profile_config} -> {doc_id}"
+                )
 
             except Exception as e:
                 logger.error(
@@ -735,7 +806,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
         for doc_id, doc_data in layer_matchings_data.items():
             try:
                 # Create document in Firestore
-                doc_ref = firebase_client.collection(collection_name).document(doc_id)
+                doc_ref = firebase_client.collection(collection_name).document(
+                    doc_id
+                )
                 doc_ref.set(doc_data)
 
                 # Track for cleanup
@@ -748,13 +821,19 @@ class DatabaseSeeder(DatabaseCleanupManager):
                 logger.info(f"✅ Seeded Firebase layer matching: {doc_id}")
 
             except Exception as e:
-                logger.error(f"❌ Failed to seed Firebase layer matching {doc_id}: {e}")
+                logger.error(
+                    f"❌ Failed to seed Firebase layer matching {doc_id}: {e}"
+                )
                 raise
 
-        logger.info(f"✅ Seeded {len(seeded_documents)} Firebase layer matchings")
+        logger.info(
+            f"✅ Seeded {len(seeded_documents)} Firebase layer matchings"
+        )
         return variables
 
-    def seed_firebase_user_layer_matchings(self, user_id: str = None) -> Dict[str, Any]:
+    def seed_firebase_user_layer_matchings(
+        self, user_id: str = None
+    ) -> Dict[str, Any]:
         """
         Seed Firebase user_layer_matchings for testing
 
@@ -769,7 +848,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
         document_id = "user_matching"
 
         # Load user layer matching templates from JSON
-        user_layer_matchings_data = self._load_db_seed_data("user_layer_matchings.json")
+        user_layer_matchings_data = self._load_db_seed_data(
+            "user_layer_matchings.json"
+        )
 
         # Apply substitutions if user_id provided
         if user_id:
@@ -784,7 +865,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
 
         try:
             # Create document in Firestore
-            doc_ref = firebase_client.collection(collection_name).document(document_id)
+            doc_ref = firebase_client.collection(collection_name).document(
+                document_id
+            )
             doc_ref.set(doc_data)
 
             # Track for cleanup
@@ -793,7 +876,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
             # Store variables for test use
             variables[f"user_layer_matching_{document_id}"] = doc_data
 
-            logger.info(f"✅ Seeded Firebase user layer matching: {document_id}")
+            logger.info(
+                f"✅ Seeded Firebase user layer matching: {document_id}"
+            )
 
         except Exception as e:
             logger.error(
@@ -811,7 +896,9 @@ class DatabaseSeeder(DatabaseCleanupManager):
         # Clean up Firebase profiles first
         if self.seeded_firebase_profiles and self._firebase_client:
             try:
-                collection_ref = self._firebase_client.collection("all_user_profiles")
+                collection_ref = self._firebase_client.collection(
+                    "all_user_profiles"
+                )
                 for doc_id in self.seeded_firebase_profiles:
                     try:
                         collection_ref.document(doc_id).delete()
@@ -829,11 +916,15 @@ class DatabaseSeeder(DatabaseCleanupManager):
         # Clean up Firebase layer matchings
         if self.seeded_firebase_layer_matchings and self._firebase_client:
             try:
-                collection_ref = self._firebase_client.collection("layer_matchings")
+                collection_ref = self._firebase_client.collection(
+                    "layer_matchings"
+                )
                 for doc_id in self.seeded_firebase_layer_matchings:
                     try:
                         collection_ref.document(doc_id).delete()
-                        logger.info(f"🗑️ Deleted Firebase layer matching: {doc_id}")
+                        logger.info(
+                            f"🗑️ Deleted Firebase layer matching: {doc_id}"
+                        )
                     except Exception as e:
                         logger.warning(
                             f"⚠️ Error deleting Firebase layer matching {doc_id}: {e}"
@@ -842,16 +933,22 @@ class DatabaseSeeder(DatabaseCleanupManager):
                 self.seeded_firebase_layer_matchings.clear()
                 logger.info("🧹 Cleaned up Firebase layer matchings")
             except Exception as e:
-                logger.warning(f"⚠️ Error during Firebase layer matchings cleanup: {e}")
+                logger.warning(
+                    f"⚠️ Error during Firebase layer matchings cleanup: {e}"
+                )
 
         # Clean up Firebase layer matchings
         if self.seeded_firebase_layer_matchings and self._firebase_client:
             try:
-                collection_ref = self._firebase_client.collection("layer_matchings")
+                collection_ref = self._firebase_client.collection(
+                    "layer_matchings"
+                )
                 for doc_id in self.seeded_firebase_layer_matchings:
                     try:
                         collection_ref.document(doc_id).delete()
-                        logger.info(f"🗑️ Deleted Firebase layer matching: {doc_id}")
+                        logger.info(
+                            f"🗑️ Deleted Firebase layer matching: {doc_id}"
+                        )
                     except Exception as e:
                         logger.warning(
                             f"⚠️ Error deleting Firebase layer matching {doc_id}: {e}"
@@ -860,16 +957,22 @@ class DatabaseSeeder(DatabaseCleanupManager):
                 self.seeded_firebase_layer_matchings.clear()
                 logger.info("🧹 Cleaned up Firebase layer matchings")
             except Exception as e:
-                logger.warning(f"⚠️ Error during Firebase layer matching cleanup: {e}")
+                logger.warning(
+                    f"⚠️ Error during Firebase layer matching cleanup: {e}"
+                )
 
         # Clean up Firebase user layer matchings
         if self.seeded_firebase_user_layer_matchings and self._firebase_client:
             try:
-                collection_ref = self._firebase_client.collection("layer_matchings")
+                collection_ref = self._firebase_client.collection(
+                    "layer_matchings"
+                )
                 for doc_id in self.seeded_firebase_user_layer_matchings:
                     try:
                         collection_ref.document(doc_id).delete()
-                        logger.info(f"🗑️ Deleted Firebase user layer matching: {doc_id}")
+                        logger.info(
+                            f"🗑️ Deleted Firebase user layer matching: {doc_id}"
+                        )
                     except Exception as e:
                         logger.warning(
                             f"⚠️ Error deleting Firebase user layer matching {doc_id}: {e}"
@@ -883,6 +986,8 @@ class DatabaseSeeder(DatabaseCleanupManager):
                 )
 
         # Close database connection
-        if self._connection and not self._connection.closed:  # ✅ Fixed: removed ()
+        if (
+            self._connection and not self._connection.closed
+        ):  # ✅ Fixed: removed ()
             self._connection.close()
             logger.info("🔌 Closed database connection")

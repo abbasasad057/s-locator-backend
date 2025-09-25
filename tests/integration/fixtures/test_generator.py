@@ -10,8 +10,7 @@ from typing import Dict, Any, List, Optional, Union
 from dataclasses import dataclass
 from .user_fixtures import UserSeeder, UserData
 from .auth_fixtures import AuthHelper
-from .cleanup_fixtures import CleanupManager
-from .database_fixtures import DatabaseSeeder, DatabaseCleanupManager
+from .database_fixtures import DatabaseSeeder
 from pathlib import Path
 import pytest
 import httpx
@@ -102,19 +101,15 @@ class ConfigTestGenerator:
 
     def __init__(
         self,
-        http_client: httpx.Client,
-        user_seeder: UserSeeder,
-        auth_helper: AuthHelper,
-        cleanup_manager: CleanupManager,
-        database_seeder: DatabaseSeeder = None,
-        database_cleanup_manager: DatabaseCleanupManager = None,
+        fixture_instance_http_client: httpx.Client,
+        fixture_instance_user_seeder: UserSeeder,
+        fixture_instance_auth_helper: AuthHelper,
+        fixture_instance_database_seeder: DatabaseSeeder,
     ):
-        self.http_client = http_client
-        self.user_seeder = user_seeder
-        self.auth_helper = auth_helper
-        self.cleanup_manager = cleanup_manager
-        self.database_seeder = database_seeder
-        self.database_cleanup_manager = database_cleanup_manager
+        self.http_client = fixture_instance_http_client
+        self.user_seeder = fixture_instance_user_seeder
+        self.auth_helper = fixture_instance_auth_helper
+        self.database_seeder = fixture_instance_database_seeder
 
     def setup_prerequisites(self, config: ConfigDrivenTest) -> RuntimeContext:
         """Set up prerequisites for a test"""
@@ -145,7 +140,7 @@ class ConfigTestGenerator:
                 user_data = self.user_seeder.seed_regular_user()
 
             context.user_data = user_data
-            self.cleanup_manager.register_user_for_cleanup(user_data)
+            self.database_seeder.register_user_for_cleanup(user_data)
 
             # Set up variables for substitution
             context.variables.update(

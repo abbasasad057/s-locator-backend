@@ -14,27 +14,53 @@ CATALOG_MANAGEMENT_TESTS = [
             requires_database_seed=True,
             geospatial_seeds=True,
             user_type="admin",
-            firebase_profile_seeds=["admin_profile_with_datasets"]
+            firebase_profile_seeds=["admin_profile_with_datasets"],
         ),
         endpoint=Endpoint(method="POST", path="/fetch_population_by_viewport"),
         input_data={
-                "message": "",
-                "request_info": {"request_id": ""},
-                "request_body": ReqIntelligenceViewport(
-                    top_lng=46.6500301,
-                    top_lat=24.760447,
-                    bottom_lng=46.632883,
-                    bottom_lat=24.7314723,
-                    zoom_level=12,
-                    user_id="${user.user_id}",
-                    population=True,
-                    income=False
-                ).model_dump()
+            "message": "",
+            "request_info": {"request_id": ""},
+            "request_body": ReqIntelligenceViewport(
+                top_lng=46.6500301,
+                top_lat=24.760447,
+                bottom_lng=46.632883,
+                bottom_lat=24.7314723,
+                zoom_level=12,
+                user_id="${user.user_id}",
+                population=True,
+                income=False,
+            ).model_dump(),
         },
-        expected_output_file="expected_responses/test_population_only_viewport.json"
+        expected_output_file="expected_responses/test_viewport_population.json",
     ),
-
-
+    ConfigDrivenTest(
+        name="test_viewport_income",
+        description="Test viewport income with various catalog items",
+        prerequisites=Prerequisites(
+            requires_user=True,
+            requires_auth=True,
+            requires_database_seed=True,
+            geospatial_seeds=True,
+            user_type="admin",
+            firebase_profile_seeds=["admin_profile_with_datasets"],
+        ),
+        endpoint=Endpoint(method="POST", path="/fetch_population_by_viewport"),
+        input_data={
+            "message": "",
+            "request_info": {"request_id": ""},
+            "request_body": ReqIntelligenceViewport(
+                top_lng=46.6500301,
+                top_lat=24.760447,
+                bottom_lng=46.632883,
+                bottom_lat=24.7314723,
+                zoom_level=12,
+                user_id="${user.user_id}",
+                population=True,
+                income=True,
+            ).model_dump(),
+        },
+        expected_output_file="expected_responses/test_viewport_income.json",
+    ),
 ]
 
 
