@@ -1,0 +1,218 @@
+{
+  "pharmacy": {
+    "business_type": "pharmacy",
+    "display_name": "Pharmacy",
+    "icon": "💊",
+    "description": "Analyze the viability of opening a pharmacy in your chosen location",
+    "metrics": {
+      "traffic": {
+        "name": "Traffic",
+        "description": "Vehicle speed and accessibility patterns",
+        "icon": "🚗",
+        "default_weight": 25,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "demographics": {
+        "name": "Demographics",
+        "description": "Population density, age groups, and income levels",
+        "icon": "👥",
+        "default_weight": 30,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "competition": {
+        "name": "Competition",
+        "description": "Existing pharmacies and market saturation",
+        "icon": "🏪",
+        "default_weight": 15,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "healthcare": {
+        "name": "Healthcare Infrastructure",
+        "description": "Nearby hospitals, clinics, and medical facilities",
+        "icon": "🏥",
+        "default_weight": 20,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "complementary": {
+        "name": "Complementary Businesses",
+        "description": "Related businesses that could drive pharmacy traffic",
+        "icon": "🤝",
+        "default_weight": 10,
+        "min_weight": 0,
+        "max_weight": 100
+      }
+    }
+  },
+  "cafe": {
+    "business_type": "cafe",
+    "display_name": "Café",
+    "icon": "☕",
+    "description": "Evaluate the potential for a successful café business",
+    "metrics": {
+      "traffic": {
+        "name": "Traffic",
+        "description": "Vehicle speed and accessibility patterns",
+        "icon": "🚗",
+        "default_weight": 25,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "demographics": {
+        "name": "Demographics",
+        "description": "Population density, age groups, and income levels",
+        "icon": "👥",
+        "default_weight": 20,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "competition": {
+        "name": "Competition",
+        "description": "Existing cafés and market saturation",
+        "icon": "🏪",
+        "default_weight": 15,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "business_density": {
+        "name": "Business Density",
+        "description": "Nearby businesses and commercial activity",
+        "icon": "🏢",
+        "default_weight": 40,
+        "min_weight": 0,
+        "max_weight": 100
+      }
+    }
+  },
+  "retail": {
+    "business_type": "retail",
+    "display_name": "Retail Store",
+    "icon": "🛍️",
+    "description": "Assess the market potential for a retail business",
+    "metrics": {
+      "traffic": {
+        "name": "Traffic",
+        "description": "Vehicle speed and accessibility patterns",
+        "icon": "🚗",
+        "default_weight": 25,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "demographics": {
+        "name": "Demographics",
+        "description": "Population density, age groups, and income levels",
+        "icon": "👥",
+        "default_weight": 30,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "competition": {
+        "name": "Competition",
+        "description": "Existing retail stores and market saturation",
+        "icon": "🏪",
+        "default_weight": 15,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "complementary": {
+        "name": "Complementary Businesses",
+        "description": "Related businesses that could drive retail traffic",
+        "icon": "🛍️",
+        "default_weight": 30,
+        "min_weight": 0,
+        "max_weight": 100
+      }
+    }
+  },
+  "restaurant": {
+    "business_type": "restaurant",
+    "display_name": "Restaurant",
+    "icon": "🍽️",
+    "description": "Analyze the dining market and competition landscape",
+    "metrics": {
+      "traffic": {
+        "name": "Traffic",
+        "description": "Vehicle speed and accessibility patterns",
+        "icon": "🚗",
+        "default_weight": 25,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "demographics": {
+        "name": "Demographics",
+        "description": "Population density, age groups, and income levels",
+        "icon": "👥",
+        "default_weight": 20,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "competition": {
+        "name": "Competition",
+        "description": "Existing restaurants and market saturation",
+        "icon": "🏪",
+        "default_weight": 15,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "business_density": {
+        "name": "Business Density",
+        "description": "Nearby businesses and commercial activity",
+        "icon": "🏢",
+        "default_weight": 40,
+        "min_weight": 0,
+        "max_weight": 100
+      }
+    }
+  },
+  "warehouse": {
+    "business_type": "warehouse",
+    "display_name": "Warehouse",
+    "icon": "🏭",
+    "description": "Evaluate optimal warehouse location for logistics and distribution",
+    "metrics": {
+      "traffic": {
+        "name": "Traffic",
+        "description": "Highway access, transportation infrastructure, and connectivity",
+        "icon": "🛣️",
+        "default_weight": 30,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "demographics": {
+        "name": "Demographics",
+        "description": "Population density and workforce availability",
+        "icon": "👥",
+        "default_weight": 15,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "competition": {
+        "name": "Competition",
+        "description": "Existing warehouses and industrial facilities",
+        "icon": "🏭",
+        "default_weight": 10,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "complementary": {
+        "name": "Complementary Infrastructure",
+        "description": "Industrial zones, utilities, and supporting facilities",
+        "icon": "⚡",
+        "default_weight": 25,
+        "min_weight": 0,
+        "max_weight": 100
+      },
+      "logistics": {
+        "name": "Logistics Network",
+        "description": "Proximity to suppliers, customers, and distribution centers",
+        "icon": "🚚",
+        "default_weight": 20,
+        "min_weight": 0,
+        "max_weight": 100
+      }
+    }
+  }
+}

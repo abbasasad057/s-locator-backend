@@ -7,7 +7,7 @@
     "options": {
       "free_redirect": "http://localhost:8050/cafe-analysis",
       "custom_redirect": {
-        "has_account": "http://localhost:8050/",
+        "has_account": "/custom-report/cafe",
         "no_account": "/plans"
       }
     }
@@ -20,7 +20,7 @@
     "options": {
       "free_redirect": "static/reports/JnaGDCKoSoWtj6NWEVW8MDMBCiA2.html",
       "custom_redirect": {
-        "has_account": "http://localhost:8050/",
+        "has_account": "/custom-report/pharmacy",
         "no_account": "/plans"
       }
     }
@@ -33,7 +33,7 @@
     "options": {
       "free_redirect": "http://localhost:8050/warehouse-analysis",
       "custom_redirect": {
-        "has_account": "http://localhost:8050/",
+        "has_account": "/custom-report/warehouse",
         "no_account": "/plans"
       }
     }

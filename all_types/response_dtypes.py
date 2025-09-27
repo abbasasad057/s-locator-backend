@@ -243,3 +243,25 @@ class ResIntelligenceData(BaseModel):
     methodology: Dict[str, Any]  # scoring method and criteria
     statistical_insights: List[Dict[str, Any]]  # statistical observations
     metadata: Dict[str, Any]  # report info like generation method and file path
+
+
+class MetricConfig(BaseModel):
+    name: str
+    description: str
+    icon: str
+    default_weight: int
+    min_weight: int = 0
+    max_weight: int = 100
+
+
+class BusinessTypeConfig(BaseModel):
+    business_type: str
+    display_name: str
+    icon: str
+    description: str
+    metrics: Dict[str, MetricConfig]
+
+
+class BusinessTypeResponse(BaseModel):
+    success: bool
+    data: BusinessTypeConfig

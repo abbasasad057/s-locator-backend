@@ -22,6 +22,7 @@ from routers.stripe_payments import stripe_router
 from routers.analysis_intelligence import analysis_router
 from routers.campaign import campaign_router
 from routers.plans import plans_router
+from routers.business_metrics import business_metrics_router
 from utils.utils import DIR_TRAFFIC_SCREENSHOTS
 from utils.utils import DIR_IMAGE
 from utils.utils import DIR_INTERACTIVE_HTML
@@ -44,6 +45,7 @@ app.include_router(stripe_router, tags=["Stripe"])
 app.include_router(analysis_router, tags=["Analysis & Intelligence"])
 app.include_router(campaign_router, prefix="", tags=["Campaign"])
 app.include_router(plans_router, prefix="", tags=["Plans"])
+app.include_router(business_metrics_router, tags=["Business Metrics"])
 def setup_report_directories():
     """
     Create all necessary directories for report generation.
@@ -142,4 +144,3 @@ async def shutdown_event():
     # Wait a moment to ensure threads are cleaned up
     await asyncio.sleep(1)
     logger.info("FastAPI shutdown completed")
-
