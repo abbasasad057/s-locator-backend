@@ -14,6 +14,7 @@ from app_logger import get_logger
 logger = get_logger(__name__)
 logger.info("Database module loaded successfully")
 
+MAX_POOL = 10
 
 class Database:
     pool: Optional[Pool] = None
@@ -26,10 +27,10 @@ class Database:
         """
         Creates a new connection pool with specified configuration.
         
-        Sets up an asyncpg connection pool with min_size=1 and max_size=10.
+        Sets up an asyncpg connection pool with min_size=1 and max_size=MAX_POOL.
         Updates the last refresh time after creation.
         """
-        cls.pool = await asyncpg.create_pool(dsn=cls.dsn, min_size=1, max_size=10)
+        cls.pool = await asyncpg.create_pool(dsn=cls.dsn, min_size=1, max_size=MAX_POOL)
         cls.last_refresh_time = time.time()
 
     @classmethod

@@ -92,13 +92,7 @@ async def get_demographic_info_for_listings(shop_for_rent:list[Feature]):
     # query real estate table and filter for those ids
     query = """
     SELECT
-        listing_id, url, city, price, latitude, longitude, category, direction_id,
-        total_population, avg_density, avg_median_age, avg_income,
-        percentage_age_above_20, percentage_age_above_25, percentage_age_above_30,
-        percentage_age_above_35, percentage_age_above_40, percentage_age_above_45,
-        percentage_age_above_50, demographics_analysis_date,
-        traffic_score, traffic_storefront_score, traffic_area_score,
-        traffic_screenshot_filename, traffic_analysis_date
+        *
     FROM schema_marketplace.saudi_real_estate
     WHERE listing_id = ANY($1::BIGINT[])
     """
@@ -109,4 +103,6 @@ async def get_demographic_info_for_listings(shop_for_rent:list[Feature]):
     # you can pass tuple(sanitized_ids) or adapt the query to use UNNEST.
 
     # convert to dictionary with url as key
+    # convert record to dict
+    rows = [dict(row) for row in rows]
     return {row["url"]: row for row in rows}

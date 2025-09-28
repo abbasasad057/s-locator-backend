@@ -4,7 +4,12 @@ from all_types.request_dtypes import Reqsmartreport, ReqFetchDataset
 from utils.geo_std_utils import bbox_to_polygon
 from data_fetcher import fetch_dataset
 from smart_reports.traffic import fetch_traffic_data
-from smart_reports.population import fetch_demographics, fetch_household_sizes, get_demographic_info_for_listings
+from backend_common.database import MAX_POOL
+from smart_reports.population import (
+    fetch_demographics,
+    fetch_household_sizes,
+    get_demographic_info_for_listings,
+)
 from smart_reports.healthcare_system import get_healthcare_data
 from smart_reports.complementary_businesses import get_other_businesses_data
 from smart_reports.scoring import *
@@ -14,21 +19,48 @@ from smart_reports.report_generation.pharmacy_report_final import (
 from typing import Dict, Any
 from utils.geo_std_utils import generate_bbox
 from utils.utils import DIR_REPORTS
+
 # Import the modular generator
-from smart_reports.html_generator.pharmacy_generator import generate_complete_html_report
+from smart_reports.html_generator.pharmacy_generator import (
+    generate_complete_html_report,
+)
 from typing import Optional
 from .report_generation.report_config import (
     source_current_location,
     source_custom_locations,
     source_shop_for_rent,
 )
-import json
-import os
+POPULATION_KEYS = [
+    "total_population",
+    "avg_density",
+    "avg_median_age",
+    "percentage_age_above_20",
+    "percentage_age_above_25",
+    "percentage_age_above_30",
+    "percentage_age_above_35",
+    "percentage_age_above_40",
+    "percentage_age_above_45",
+    "percentage_age_above_50",
+]
+
+INCOME_KEYS = ["avg_income"]
+
+HOUSEHOLD_KEYS = ["Household_Average_Size", "Household_Median_Size"]
+
+TRAFFIC_KEYS = [
+    "traffic_score",
+    "traffic_storefront_score",
+    "traffic_area_score",
+    "traffic_screenshot_filename",
+    "traffic_analysis_date",
+]
+
 
 def write_html_file(file_path: Path, content: str) -> None:
     """Write HTML content to file"""
     with open(file_path, "w", encoding="utf-8") as f:
         f.write(content)
+
 
 async def generate_pharmacy_report(req: Reqsmartreport):
     req_dataset = ReqFetchDataset(
@@ -51,34 +83,51 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     Returns:
         dict: Pharmacy report with scores and insights.
     """
+    import asyncio
+    # Load shop listings for rent first (used later)
     shops_for_rent = await loading_category_dataset(req_dataset)
-    req_dataset.boolean_query = "pharmacy"
-    pharmacies = await loading_category_dataset(req_dataset)
 
-    req_dataset.boolean_query = "hospital"
-    hospitals = await loading_category_dataset(req_dataset)
+    # We'll parallelize loading the other categories. Do NOT mutate req_dataset in-place.
+    categories = [
+        "pharmacy",
+        "hospital",
+        "dentist",
+        "grocery_store",
+        "supermarket",
+        "restaurant",
+        "atm",
+        "bank",
+    ]
 
-    req_dataset.boolean_query = "dentist"
-    dentists = await loading_category_dataset(req_dataset)
+    # Create independent ReqFetchDataset objects per category.
+    reqs = []
+    for category in categories:
+        reqs.append(req_dataset.model_copy(update={"boolean_query": category}))
 
-    req_dataset.boolean_query = "grocery_store"
-    grocery_store = await loading_category_dataset(req_dataset)
+    # Bounded concurrency to avoid overwhelming DB or upstream APIs. Tune this.
+    concurrency_limit = int(MAX_POOL // 2)  # Half of DB pool for fetching datasets
+    sem = asyncio.Semaphore(concurrency_limit)
 
-    req_dataset.boolean_query = "supermarket"
-    supermarket = await loading_category_dataset(req_dataset)
+    async def _bounded_load(rq: ReqFetchDataset):
+        async with sem:
+            return await loading_category_dataset(rq)
 
-    req_dataset.boolean_query = "restaurant"
-    restaurant = await loading_category_dataset(req_dataset)
-
-    req_dataset.boolean_query = "atm"
-    atm = await loading_category_dataset(req_dataset)
-
-    req_dataset.boolean_query = "bank"
-    bank = await loading_category_dataset(req_dataset)
+    (
+        pharmacies,
+        hospitals,
+        dentists,
+        grocery_store,
+        supermarket,
+        restaurant,
+        atm,
+        bank,
+    ) = await asyncio.gather(*( _bounded_load(r) for r in reqs ))
 
     # get all demograhics + household + income for those shops_for_rent
     # isolate list of listing_ids from shops_for_rent
-    listing_demographic_info =  await get_demographic_info_for_listings(shops_for_rent)
+    listing_demographic_info = await get_demographic_info_for_listings(
+        shops_for_rent
+    )
 
     ## in this part For Each location (shop for rent),
     # we fetch all the details of that specific locations
@@ -92,7 +141,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
         place_url = shop["properties"]["url"]
         last_segment = place_url.split("/")[-1]
         extracted_part = last_segment.rsplit("-", 1)[0]
-        shop_data = await fetch_all_criterions_data(
+        shop_data = await group_criterion_data(
             lat=lat,
             lng=lng,
             Userid=req.user_id,
@@ -107,6 +156,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
             place_name=extracted_part,
             place_price=price,
             place_url=place_url,
+            listing_demographic_info=listing_demographic_info,
         )
 
         all_shops_data.append(shop_data)
@@ -114,7 +164,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     if req.custom_locations:
         for i, coord in enumerate(req.custom_locations, start=1):
             if coord.lat != 0 and coord.lng != 0:
-                shop_data = await fetch_all_criterions_data(
+                shop_data = await group_criterion_data(
                     lat=coord.lat,
                     lng=coord.lng,
                     Userid=req.user_id,
@@ -129,12 +179,13 @@ async def generate_pharmacy_report(req: Reqsmartreport):
                     source=source_custom_locations,
                     place_name=f"Num {i} custom location",  # no URL for custom
                     place_price=None,  # no price for custom
+                    listing_demographic_info=listing_demographic_info,
                 )
                 all_shops_data.append(shop_data)
 
     if req.current_location:
         if req.current_location.lat != 0 and req.current_location.lng != 0:
-            shop_data = await fetch_all_criterions_data(
+            shop_data = await group_criterion_data(
                 lat=req.current_location.lat,
                 lng=req.current_location.lng,
                 Userid=req.user_id,
@@ -149,6 +200,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
                 source=source_current_location,
                 place_name="Your current location",
                 place_price=None,
+                listing_demographic_info=listing_demographic_info,
             )
             all_shops_data.append(shop_data)
 
@@ -257,7 +309,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     return report_data
 
 
-async def fetch_all_criterions_data(
+async def group_criterion_data(
     lat: float,
     lng: float,
     Userid: str,
@@ -279,11 +331,16 @@ async def fetch_all_criterions_data(
     Fetch all relevant criterion data for evaluating a shop location.
     Combines traffic, households, demographics, healthcare, and other businesses.
     """
+    info_for_place: dict = listing_demographic_info.get(place_url, {})
     bbox = generate_bbox(lat, lng)
     area_polygon = bbox_to_polygon(bbox=bbox)
-    traffic = await fetch_traffic_data(lat, lng)
-    households = await fetch_household_sizes(bbox)
-    demographics = await fetch_demographics(bbox, Userid)
+
+    demographics = {key: info_for_place.get(key) for key in POPULATION_KEYS}
+    income = {key: info_for_place.get(key) for key in INCOME_KEYS}
+    households = {key: info_for_place.get(key) for key in HOUSEHOLD_KEYS}
+    traffic = {key: info_for_place.get(key) for key in TRAFFIC_KEYS}
+
+
     healthcare = await get_healthcare_data(
         area_polygon, lat, lng, hospital, dentists, pharmacies
     )
