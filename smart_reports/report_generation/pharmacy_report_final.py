@@ -135,21 +135,15 @@ async def generate_md_report_from_data(
     map_png, heat_png = generate_all_maps(sites, output_dir, top_n)
     # Generate markdown report
     logging.info("📝 Generating enhanced markdown report...")
-    try:
-        report_data = generate_markdown(
-            sites, output_dir, output_filename, top_n,
-            charts, map_png, heat_png, len(sites), stats,
-            max_total , criterion_weights
-        )
-        logging.info("✅ Report generation completed successfully")
-        
-    except Exception as e:
-        logging.error(f"❌ Failed to generate report: {e}")
-        raise Exception(f"Report generation failed: {e}")
-    print(f"\n🎉 SUCCESS! Enhanced report generated:")
+    report_data = generate_markdown(
+        sites, output_dir, output_filename, top_n,
+        charts, map_png, heat_png, len(sites), stats,
+        max_total , criterion_weights
+    )
+    logging.info("✅ Report generation completed successfully")
+
     if 'metadata' in report_data and 'report_file_path' in report_data['metadata']:
         report_path = report_data['metadata']['report_file_path']
         print(f"📄 Report path: {report_path}")
-    print(f"\n💡 Open the report in any markdown viewer or browser for best experience!")
     
     return report_data
