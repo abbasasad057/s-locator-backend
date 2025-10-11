@@ -308,17 +308,19 @@ class ReqDineInSuitabilityAnalysis(ReqCityCountry, UserId):
 
 
 class EvaluationMetrics(BaseModel):
-    traffic: float = 25.0
-    demographics: float = 30.0
-    competition: float = 15.0
-    healthcare: float = 20.0
-    complementary: float = 10.0
+    traffic: float = 0.25
+    demographics: float = 0.3
+    competition: float = 0.15
+    healthcare: float = 0.2
+    complementary: float = 0.1
 
 
 class Reqsmartreport(UserId):
     city_name: str = "Riyadh"
     country_name: str = "Saudi Arabia"
     Type: str = "Pharmacy"
+    target_income_level : str = "medium"  # low, medium, high
+    target_age: int = 30
     evaluation_metrics: EvaluationMetrics = EvaluationMetrics()
     custom_locations: Optional[List[Coordinate]] = (
         None  # In case the client or user wants to analyze specific locations that don't exist in our db so he will provide the coordinates

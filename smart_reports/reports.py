@@ -1,4 +1,7 @@
 import os
+import json
+import asyncio
+from .report_generation.data_processor import calculate_statistics
 from pathlib import Path
 from all_types.request_dtypes import Reqsmartreport, ReqFetchDataset
 from utils.geo_std_utils import bbox_to_polygon
@@ -13,15 +16,15 @@ from smart_reports.population import (
 from smart_reports.healthcare_system import get_healthcare_data
 from smart_reports.complementary_businesses import get_other_businesses_data
 from smart_reports.scoring import *
-from smart_reports.report_generation.pharmacy_report_final import (
-    generate_md_report_from_data,
+from .report_generation.pharmacy_report_final import (
+    generate_report_assets_from_data,
 )
 from typing import Dict, Any
 from utils.geo_std_utils import generate_bbox
 from utils.utils import DIR_REPORTS
 
 # Import the modular generator
-from smart_reports.html_generator.pharmacy_generator import (
+from .html_generator.pharmacy_generator import (
     generate_complete_html_report,
 )
 from typing import Optional
@@ -30,6 +33,7 @@ from .report_generation.report_config import (
     source_custom_locations,
     source_shop_for_rent,
 )
+
 POPULATION_KEYS = [
     "total_population",
     "avg_density",
@@ -45,7 +49,11 @@ POPULATION_KEYS = [
 
 INCOME_KEYS = ["avg_income"]
 
-HOUSEHOLD_KEYS = ["Household_Average_Size", "Household_Median_Size"]
+HOUSEHOLD_KEYS = [
+    "avg_household_size",
+    "median_household_size",
+    "household_density_sum",
+]
 
 TRAFFIC_KEYS = [
     "traffic_score",
@@ -62,7 +70,7 @@ def write_html_file(file_path: Path, content: str) -> None:
         f.write(content)
 
 
-async def generate_pharmacy_report(req: Reqsmartreport):
+async def get_and_score_listings(req: Reqsmartreport) -> dict:
     req_dataset = ReqFetchDataset(
         user_id=req.user_id,
         city_name=req.city_name,
@@ -71,19 +79,6 @@ async def generate_pharmacy_report(req: Reqsmartreport):
         action="full data",
         full_load=True,
     )
-    """
-    Generate a pharmacy site report with multi-criteria scoring.
-
-    Loads datasets, computes scores for traffic, demographics, healthcare,
-    competition, and nearby amenities, then returns top-ranked sites.
-
-    Args:
-        req (Reqsmartreport): Request with user info and evaluation metrics.
-
-    Returns:
-        dict: Pharmacy report with scores and insights.
-    """
-    import asyncio
     # Load shop listings for rent first (used later)
     shops_for_rent = await loading_category_dataset(req_dataset)
 
@@ -105,7 +100,9 @@ async def generate_pharmacy_report(req: Reqsmartreport):
         reqs.append(req_dataset.model_copy(update={"boolean_query": category}))
 
     # Bounded concurrency to avoid overwhelming DB or upstream APIs. Tune this.
-    concurrency_limit = int(MAX_POOL // 2)  # Half of DB pool for fetching datasets
+    concurrency_limit = int(
+        MAX_POOL // 2
+    )  # Half of DB pool for fetching datasets
     sem = asyncio.Semaphore(concurrency_limit)
 
     async def _bounded_load(rq: ReqFetchDataset):
@@ -121,7 +118,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
         restaurant,
         atm,
         bank,
-    ) = await asyncio.gather(*( _bounded_load(r) for r in reqs ))
+    ) = await asyncio.gather(*(_bounded_load(r) for r in reqs))
 
     # get all demograhics + household + income for those shops_for_rent
     # isolate list of listing_ids from shops_for_rent
@@ -208,105 +205,105 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     results = {}
 
     for shop in all_shops_data:
-        source = shop.get("source")
+        # if traffic_score is None skip this shop
+        if not shop.get("traffic_score"):
+            continue
+
         lat = shop.get("lat")
         lng = shop.get("lng")
-        place_name = shop.get("place name")
-        place_price = shop.get("price")
-        url = shop.get("url")
         # Compose key
         loc_key = f"{lat},{lng}"
-        location_data = shop.get("location_data", {})
-        num_of_businesses_around = location_data.get(
-            "num of business around", 0
-        )
-        traffic_data = location_data.get("traffic", {})
-        healthcare_data = location_data.get("healthcare", {})
-        amenities_data = location_data.get("nearest_businessess", {})
-        pop_data = location_data.get("pop_data", {})
-        traffic_score_weight = req.evaluation_metrics.traffic
-        # here we score each location
 
-        traffic_score = score_traffic_for_retail(
-            average_speed=traffic_data.get("Average Vehicle Speed in km", 0),
-            ## Functional Road Class is how much of highway this street is
-            frc=traffic_data.get("Functional Road Class", ""),
-            traffic_score=traffic_score_weight,
+        traffic_score = (
+            shop.get("traffic_score", 1) * req.evaluation_metrics.traffic
         )
-
-        demographics_score = score_demographics(
-            pop_data, req.evaluation_metrics.demographics
-        )
+        demographics_score = score_demographics(shop, req)
         healthcare_score = score_healthcare_ecosystem(
-            healthcare_data, req.evaluation_metrics.healthcare
+            shop, req.evaluation_metrics.healthcare
         )
         competitive_score = score_competitive(
-            healthcare_data, req.evaluation_metrics.competition
+            shop, req.evaluation_metrics.competition
         )
         complementary_score = score_complementary_businesses(
-            amenities_data, req.evaluation_metrics.complementary
+            shop, req.evaluation_metrics.complementary
+        )
+
+        total_score = (
+            traffic_score
+            + demographics_score
+            + healthcare_score
+            + competitive_score
+            + complementary_score
         )
 
         results[loc_key] = {
-            "source": source,
-            "place name": place_name,
-            "lat": lat,
-            "lng": lng,
-            "price": place_price,
-            "url": url,
-            "scores": {
-                "overall_score": (
-                    traffic_score["overall_score"]
-                    + demographics_score["overall_score"]
-                    + healthcare_score["overall_score"]
-                    + competitive_score["overall_score"]
-                    + complementary_score["overall_score"]
-                ),
+            **shop,
+            "id": loc_key,
+            "total_score": total_score,
+            "weighted_scores": {
                 "traffic": traffic_score,
                 "demographics": demographics_score,
                 "competition": competitive_score,
                 "healthcare": healthcare_score,
                 "complementary": complementary_score,
             },
-            "data": {
-                "nearby Businesses within 500 meters": num_of_businesses_around,
-                **(traffic_data or {}),
-                **(pop_data or {}),
-                "competing_pharmacies": healthcare_data.get("pharmacy", {}).get(
-                    "num_of_pharmacies", 0
-                ),
-                "pharmacies_per_10k_population": healthcare_data.get(
-                    "pharmacy", {}
-                ).get("pharmacies_per_10k_population", 0),
-                "number of hospitals around": healthcare_data.get(
-                    "num_of_hospitals", 0
-                ),
-                "number of dentists around": healthcare_data.get(
-                    "num_of_dentists", 0
-                ),
-            },
         }
 
-    # temporarely store objects in json files for debugging , results, criterion_weights, max_total
-    # debug_path = Path("results.json")
-    # with open(debug_path, "w") as f:
+    stats = calculate_statistics(results)
+    stats["total_competing_pharmacies"] = len(pharmacies)
+    list_top_n_sites = sorted(
+        results.values(), key=lambda s: s.get("total_score", 0), reverse=True
+    )[:10]
+
+    best_site = list_top_n_sites[0]
+
+    return results, stats, list_top_n_sites, best_site
+
+
+async def generate_pharmacy_report(req: Reqsmartreport):
+    """
+    Generate a pharmacy site report with multi-criteria scoring.
+
+    Loads datasets, computes scores for traffic, demographics, healthcare,
+    competition, and nearby amenities, then returns top-ranked sites.
+
+    Args:
+        req (Reqsmartreport): Request with user info and evaluation metrics.
+
+    Returns:
+        dict: Pharmacy report with scores and insights.
+    """
+    debug_path_results = Path("results.json")
+    debug_path_stats = Path("stats.json")
+    debug_path_list_top_n_sites = Path("list_top_n_sites.json")
+    debug_path_best_site = Path("best_site.json")
+
+    # results, stats, list_top_n_sites, best_site = await get_and_score_listings(
+    #     req
+    # )
+    # with open(debug_path_results, "w") as f:
     #     json.dump(results, f, indent=4)
-    # debug_path = Path("criterion_weights.json")
-    # with open(debug_path, "w") as f:
-    #     json.dump(req.evaluation_metrics.dict(), f, indent=4)
+    # with open(debug_path_stats, "w") as f:
+    #     json.dump(stats, f, indent=4)
+    # with open(debug_path_list_top_n_sites, "w") as f:
+    #     json.dump(list_top_n_sites, f, indent=4)
+    # with open(debug_path_best_site, "w") as f:
+    #     json.dump(best_site, f, indent=4)
 
-    # # read from json files
-    # with open("results.json", "r") as f:
-    #     results = json.load(f)
-    # with open("criterion_weights.json", "r") as f:
-    #     criterion_weights = json.load(f)
+    # read from json files
+    with open(debug_path_results, "r") as f:
+        results = json.load(f)
+    with open(debug_path_stats, "r") as f:
+        stats = json.load(f)
+    with open(debug_path_list_top_n_sites, "r") as f:
+        list_top_n_sites = json.load(f)
+    with open(debug_path_best_site, "r") as f:
+        best_site = json.load(f)
 
-    criterion_weights = req.evaluation_metrics.dict()
-    max_total = sum(criterion_weights.values())
-    report_data = await generate_md_report_from_data(
-        results, criterion_weights, max_total, top_n=10, output_dir=DIR_REPORTS
+    report_data = await generate_report_assets_from_data(
+        results, list_top_n_sites, req, stats, best_site, DIR_REPORTS
     )
-    return report_data
+    return results, report_data
 
 
 async def group_criterion_data(
@@ -335,15 +332,10 @@ async def group_criterion_data(
     bbox = generate_bbox(lat, lng)
     area_polygon = bbox_to_polygon(bbox=bbox)
 
-    demographics = {key: info_for_place.get(key) for key in POPULATION_KEYS}
-    income = {key: info_for_place.get(key) for key in INCOME_KEYS}
-    households = {key: info_for_place.get(key) for key in HOUSEHOLD_KEYS}
-    traffic = {key: info_for_place.get(key) for key in TRAFFIC_KEYS}
-
-
     healthcare = await get_healthcare_data(
         area_polygon, lat, lng, hospital, dentists, pharmacies
     )
+
     other_businesses = await get_other_businesses_data(
         area_polygon,
         lat,
@@ -354,41 +346,31 @@ async def group_criterion_data(
         bank_data=bank,
         atm_data=atm,
     )
-    total_population = (
-        demographics.get("total_population") if demographics else None
-    )
-    num_pharmacies = (
-        healthcare.get("healthcare", {})
-        .get("pharmacy", {})
-        .get("num_of_pharmacies")
-        if healthcare
-        else None
-    )
+
+    demographics = {key: info_for_place.get(key) for key in POPULATION_KEYS}
+
     # Calculate pharmacies per 10k population
-    pharmacies_per_10k = (
-        (num_pharmacies / total_population * 10000)
-        if total_population and total_population > 0
-        else 0
-    )
+    total_population = demographics.get("total_population")
+    if total_population and total_population > 0:
+        pharmacies_per_10k = healthcare.get("num_of_pharmacies") / (
+            total_population / 10000
+        )
+    else:
+        pharmacies_per_10k = 0
 
     # Add the new key right under num_of_pharmacies
-    healthcare["healthcare"]["pharmacy"][
-        "pharmacies_per_10k_population"
-    ] = pharmacies_per_10k
+    healthcare["pharmacies_per_10k_population"] = pharmacies_per_10k
 
     return {
         "source": source,
-        "place name": place_name,
+        "display_name": place_name,
         "lat": lat,
         "lng": lng,
         "price": place_price,
         "url": place_url,
-        "location_data": {
-            "traffic": traffic,
-            "pop_data": {**(households or {}), **(demographics or {})},
-            **(healthcare or {}),
-            **(other_businesses or {}),
-        },
+        **info_for_place,
+        **healthcare,
+        **other_businesses,
     }
 
 
@@ -407,7 +389,7 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
     """
 
     # Generate the processed report data
-    processed_report_data = await generate_pharmacy_report(req)
+    sites, processed_report_data = await generate_pharmacy_report(req)
 
     # # save all_shops_data to json file for debugging
     # debug_path = Path("processed_report_data.json")

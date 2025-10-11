@@ -1,0 +1,1 @@
+# HTML generator module for pharmacy reports

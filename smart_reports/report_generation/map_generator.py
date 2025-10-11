@@ -2,15 +2,18 @@
 Map generation utilities for pharmacy site selection analysis.
 """
 import numpy as np
+import matplotlib
+# Force matplotlib to use non-interactive backend before importing pyplot
+matplotlib.use('Agg')  # Use Anti-Grain Geometry backend (no GUI)
 import matplotlib.pyplot as plt
 from matplotlib.colors import Normalize
 from matplotlib import cm
 import contextily as ctx
 import geopandas as gpd
 from shapely.geometry import Point
-from typing import List, Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple
 import logging
-from smart_reports.report_generation.report_config import MAP_DPI, MAP_FIGSIZE
+from .report_config import MAP_DPI, MAP_FIGSIZE
 import os
 from html2image import Html2Image
 import folium
@@ -18,7 +21,7 @@ import random
 
 from utils.utils import create_report_asset_path
 
-def generate_site_map_image(site_data: Dict, output_dir: str , MAX_TOTAL) -> str:
+def generate_site_map_image(site_data: Dict) -> str:
     """
     Generate map image for a site and return the relative path for markdown
     Adjusted to match depth and visual style of first function.
@@ -78,12 +81,12 @@ def generate_site_map_image(site_data: Dict, output_dir: str , MAX_TOTAL) -> str
         popup=folium.Popup(f"""
         <div style='width: 250px'>
             <h4>🏢 {site_data['display_name']}</h4>
-            <b>Final Score:</b> {(site_data['total_score'] / MAX_TOTAL) * 100:.1f}<br>
+            <b>Final Score:</b> {site_data['total_score']:.1f}<br>
             <b>Competitors:</b> {len(competitor_markers)} pharmacies<br>
             <b>Businesses:</b> {total_businesses} total
         </div>
         """, max_width=300),
-        tooltip=f"{site_data['display_name']} - Score: {(site_data['total_score'] / MAX_TOTAL) * 100:.1f}",
+        tooltip=f"{site_data['display_name']} - Score: {site_data['total_score']:.1f}",
         icon=folium.Icon(color='red', icon='star', prefix='fa')
     ).add_to(m)
 
@@ -125,7 +128,7 @@ def generate_site_map_image(site_data: Dict, output_dir: str , MAX_TOTAL) -> str
     
     <div style="background-color: #e8f4f8; padding: 8px; margin-bottom: 8px; border-radius: 4px;">
         <b style="font-size: 14px;">📍 {site_data['display_name']}</b><br>
-        <b>Final Score:</b> {(site_data['total_score'] / MAX_TOTAL) * 100:.1f}<br>
+        <b>Final Score:</b> {site_data['total_score']:.1f}<br>
         <b>Competitors:</b> {len(competitor_markers)} pharmacies<br>
         <b>Businesses:</b> {total_businesses} total<br>
     </div>
@@ -165,7 +168,7 @@ def generate_site_map_image(site_data: Dict, output_dir: str , MAX_TOTAL) -> str
     print(f"Generated map image: {png_path}")
     return png_path, html_path
 
-def create_static_map_png(sites: List[Dict], outpath: str, top_n: int = 10, extent: Optional[Tuple] = None) -> Optional[Tuple]:
+def create_static_map_png(sites: Dict, outpath: str, top_n: int = 10, extent: Optional[Tuple] = None) -> Optional[Tuple]:
     """
     Create a static map showing candidate locations.
     
@@ -178,153 +181,148 @@ def create_static_map_png(sites: List[Dict], outpath: str, top_n: int = 10, exte
     Returns:
         Map extent tuple if successful, None otherwise
     """
-    try:
-        pad = 0.1
-        coords = [(s['lat'], s['lng']) for s in sites if s['lat'] is not None and s['lng'] is not None]
-        
-        fig, ax = plt.subplots(figsize=MAP_FIGSIZE, dpi=MAP_DPI)
+    pad = 0.1
+    fig, ax = plt.subplots(figsize=MAP_FIGSIZE, dpi=MAP_DPI)
 
-        if not coords:
-            ax.text(0.5, 0.5, 'No coordinates available to render map', 
-                   ha='center', va='center', fontsize=16)
-            ax.axis('off')
-            ax.set_title("Candidate Locations Map", fontsize=18, fontweight='bold', pad=20)
-            fig.savefig(outpath, pad_inches=pad, bbox_inches='tight')
-            plt.close(fig)
-            return None
-
-        # Create GeoDataFrame
-        valid_sites = [s for s in sites if s['lat'] is not None and s['lng'] is not None]
-        gdf = gpd.GeoDataFrame(
-            valid_sites, 
-            geometry=[Point(s['lng'], s['lat']) for s in valid_sites]
-        )
-        gdf = gdf.set_crs(epsg=4326).to_crs(epsg=3857)
-
-        # Plot all candidates
-        gdf.plot(ax=ax, color='lightblue', alpha=0.7, markersize=60, 
-                label='All Candidates', edgecolors='darkblue', linewidth=1)
-
-        # Highlight top sites
-        top_sites = sorted(valid_sites, key=lambda x: x.get('total_score', 0), reverse=True)[:top_n]
-        for i, site in enumerate(top_sites, start=1):
-            # Convert to Web Mercator
-            point_3857 = gpd.GeoSeries([Point(site['lng'], site['lat'])], crs=4326).to_crs(epsg=3857)
-            x, y = point_3857.geometry[0].coords[0]
-            
-            # Plot star marker
-            ax.scatter(x, y, s=200, color='red', marker='*', edgecolors='darkred', linewidth=2, zorder=5)
-
-            
-            # Add rank number
-            ax.text(x, y, f" {i}", fontsize=12, weight='bold', 
-                    color='white', ha='left', va='center', zorder=6)
-        # Add basemap
-        ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik, alpha=0.8)
-        
-        ax.set_axis_off()
-        ax.set_title("Top Recommended Pharmacy Locations", 
-                    fontsize=18, fontweight='bold', pad=20)
-
-        # Set extent if provided
-        if extent is None:
-            extent = ax.get_xlim()[0], ax.get_xlim()[1], ax.get_ylim()[0], ax.get_ylim()[1]
-        else:
-            ax.set_xlim(extent[0], extent[1])
-            ax.set_ylim(extent[2], extent[3])
-
-        # Add legend
-        ax.legend(loc='upper right', framealpha=0.9)
-
-        fig.savefig(outpath, pad_inches=pad, bbox_inches='tight', dpi=MAP_DPI)
+    if not sites:
+        ax.text(0.5, 0.5, 'No coordinates available to render map', 
+                ha='center', va='center', fontsize=16)
+        ax.axis('off')
+        ax.set_title("Candidate Locations Map", fontsize=18, fontweight='bold', pad=20)
+        fig.savefig(outpath, pad_inches=pad, bbox_inches='tight')
         plt.close(fig)
-        
-        logging.info(f"Successfully created map: {outpath}")
-        return extent
-
-    except Exception as e:
-        logging.error(f"Failed to create static map: {e}")
-        plt.close('all')
         return None
 
+    # Create GeoDataFrame
+    geometry = []
+    site_names = []
+    for key, values in sites.items():
+        # Create Point geometry objects instead of tuples
+        geometry.append(Point(values['lng'], values['lat']))
+        site_names.append(key)
+    
+    gdf = gpd.GeoDataFrame(
+        site_names, 
+        geometry=geometry
+    )
+    gdf = gdf.set_crs(epsg=4326).to_crs(epsg=3857)
 
-def create_demographic_heatmap_png(sites: List[Dict], outpath: str, 
-                                 demographic_key_prefix: str = 'demographics__', 
+    # Plot all candidates
+    gdf.plot(ax=ax, color='lightblue', alpha=0.7, markersize=60, 
+            label='All Candidates', edgecolors='darkblue', linewidth=1)
+
+    # Highlight top sites - convert sites dict to list for sorting
+    sites_list = []
+    for k, v in sites.items():
+        site_dict = {'name': k}
+        site_dict.update(v)
+        sites_list.append(site_dict)
+    top_sites = sorted(sites_list, key=lambda x: x.get('total_score', 0), reverse=True)[:top_n]
+    for i, site in enumerate(top_sites, start=1):
+        # Convert to Web Mercator
+        point_3857 = gpd.GeoSeries([Point(site['lng'], site['lat'])], crs=4326).to_crs(epsg=3857)
+        x, y = point_3857.geometry[0].coords[0]
+        
+        # Plot star marker
+        ax.scatter(x, y, s=200, color='red', marker='*', edgecolors='darkred', linewidth=2, zorder=5)
+
+        
+        # Add rank number
+        ax.text(x, y, f" {i}", fontsize=12, weight='bold', 
+                color='white', ha='left', va='center', zorder=6)
+    # Add basemap
+    ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik, alpha=0.8)
+    
+    ax.set_axis_off()
+    ax.set_title("Top Recommended Pharmacy Locations", 
+                fontsize=18, fontweight='bold', pad=20)
+
+    # Set extent if provided
+    if extent is None:
+        extent = ax.get_xlim()[0], ax.get_xlim()[1], ax.get_ylim()[0], ax.get_ylim()[1]
+    else:
+        ax.set_xlim(extent[0], extent[1])
+        ax.set_ylim(extent[2], extent[3])
+
+    # Add legend
+    ax.legend(loc='upper right', framealpha=0.9)
+
+    fig.savefig(outpath, pad_inches=pad, bbox_inches='tight', dpi=MAP_DPI)
+    plt.close(fig)
+    plt.close('all')  # Ensure all figures are closed
+    
+    logging.info(f"Successfully created map: {outpath}")
+    return extent
+
+
+
+def create_demographic_heatmap_png(sites: Dict, outpath: str, 
                                  extent: Optional[Tuple] = None):
     """
-    Create a demographic heatmap showing population density or related metrics.
+    Create a demographic heatmap showing population density using avg_density data.
     
     Args:
-        sites: List of site dictionaries
+        sites: Dictionary of site data
         outpath: Output file path
-        demographic_key_prefix: Prefix to identify demographic data keys
         extent: Map extent (xmin, xmax, ymin, ymax)
     """
-    try:
-        pad = 0.1
-        xs, ys, vals = [], [], []
 
-        # Extract demographic data
-        for site in sites:
-            if site['lat'] is None or site['lng'] is None:
-                continue
-                
-            # Find demographic values
-            demo_val = None
-            for key, value in site['details'].items():
-                if demographic_key_prefix in key and 'density' in key.lower():
-                    if not np.isnan(value):
-                        demo_val = value
-                        break
+    pad = 0.1
+    xs, ys, vals = [], [], []
+
+    # Extract demographic data using avg_density
+    for site_name, site in sites.items():
+        if site['lat'] is None or site['lng'] is None:
+            continue
             
-            if demo_val is not None:
-                xs.append(site['lng'])
-                ys.append(site['lat'])
-                vals.append(demo_val)
+        # Get avg_density
+        demo_val = site.get('avg_density')
+        
+        if demo_val is not None and not np.isnan(demo_val):
+            xs.append(site['lng'])
+            ys.append(site['lat'])
+            vals.append(demo_val)
 
-        if not vals:
-            # No demographic data found, create empty map
-            fig, ax = plt.subplots(figsize=MAP_FIGSIZE, dpi=MAP_DPI)
-            ax.text(0.5, 0.5, 'No demographic data available for heatmap', 
-                   ha='center', va='center', fontsize=16)
-            ax.axis('off')
-            ax.set_title("Demographic Heatmap", fontsize=18, fontweight='bold', pad=20)
-            fig.savefig(outpath, pad_inches=pad, bbox_inches='tight')
-            plt.close(fig)
-            return
-
-        # Create GeoDataFrame
-        gdf = gpd.GeoDataFrame(
-            {'value': vals}, 
-            geometry=[Point(lon, lat) for lon, lat in zip(xs, ys)], 
-            crs=4326
-        ).to_crs(epsg=3857)
-
-        # Normalize values
-        norm = Normalize(vmin=np.nanmin(vals), vmax=np.nanmax(vals))
-
+    if not vals:
+        # No demographic data found, create empty map
         fig, ax = plt.subplots(figsize=MAP_FIGSIZE, dpi=MAP_DPI)
-        
-        # Plot heatmap
-        gdf.plot(ax=ax, column='value', cmap='YlOrRd', markersize=120, 
-                alpha=0.8, legend=True, norm=norm, edgecolors='black', linewidth=0.5)
-
-        # Add basemap
-        ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik, alpha=0.6)
-        
-        ax.set_title("Demographic Density Heatmap", fontsize=18, fontweight='bold', pad=20)
-        ax.set_axis_off()
-
-        # Set extent if provided
-        if extent is not None:
-            ax.set_xlim(extent[0], extent[1])
-            ax.set_ylim(extent[2], extent[3])
-
-        fig.savefig(outpath, pad_inches=pad, bbox_inches='tight', dpi=MAP_DPI)
+        ax.text(0.5, 0.5, 'No demographic data available for heatmap', 
+                ha='center', va='center', fontsize=16)
+        ax.axis('off')
+        ax.set_title("Demographic Heatmap", fontsize=18, fontweight='bold', pad=20)
+        fig.savefig(outpath, pad_inches=pad, bbox_inches='tight')
         plt.close(fig)
-        
-        logging.info(f"Successfully created demographic heatmap: {outpath}")
+        return
 
-    except Exception as e:
-        logging.error(f"Failed to create demographic heatmap: {e}")
-        plt.close('all')
+    # Create GeoDataFrame
+    gdf = gpd.GeoDataFrame(
+        {'value': vals}, 
+        geometry=[Point(lon, lat) for lon, lat in zip(xs, ys)], 
+        crs=4326
+    ).to_crs(epsg=3857)
+
+    # Normalize values
+    norm = Normalize(vmin=np.nanmin(vals), vmax=np.nanmax(vals))
+
+    fig, ax = plt.subplots(figsize=MAP_FIGSIZE, dpi=MAP_DPI)
+    
+    # Plot heatmap
+    gdf.plot(ax=ax, column='value', cmap='YlOrRd', markersize=120, 
+            alpha=0.8, legend=True, norm=norm, edgecolors='black', linewidth=0.5)
+
+    # Add basemap
+    ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik, alpha=0.6)
+    
+    ax.set_title("Demographic Density Heatmap", fontsize=18, fontweight='bold', pad=20)
+    ax.set_axis_off()
+
+    # Set extent if provided
+    if extent is not None:
+        ax.set_xlim(extent[0], extent[1])
+        ax.set_ylim(extent[2], extent[3])
+
+    fig.savefig(outpath, pad_inches=pad, bbox_inches='tight', dpi=MAP_DPI)
+    plt.close(fig)
+    plt.close('all')  # Ensure all figures are closed
+    
+    logging.info(f"Successfully created demographic heatmap: {outpath}")

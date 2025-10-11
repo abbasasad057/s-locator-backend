@@ -35,38 +35,30 @@ def generate_complete_html_report(
     Raises:
         DataValidationError: If data validation fails
     """
-    try:
-        # Validate data before processing
-        format_type = validate_inputs(processed_report_data)
-        logger.info(f"Generating HTML report for format type: {format_type}")
+    # Validate data before processing
+    format_type = validate_inputs(processed_report_data)
+    logger.info(f"Generating HTML report for format type: {format_type}")
 
-        html_content = f"""
-        <!DOCTYPE html>
-        <html lang="en">
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="en">
 
-        <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Riyadh Pharmacy Site Analysis Report</title>
-        <style>
-            {get_pharmacy_report_css()}
-        </style>
-        </head>
-        <body>
-            <div class="report-container">
-                {generate_executive_summary_section(req, processed_report_data)}
-                {generate_methodology_and_analysis_section(processed_report_data)}
-                {generate_visual_analysis_section(processed_report_data)}
-            </div>
-        </body>
-        </html>"""
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riyadh Pharmacy Site Analysis Report</title>
+    <style>
+        {get_pharmacy_report_css()}
+    </style>
+    </head>
+    <body>
+        <div class="report-container">
+            {generate_executive_summary_section(req, processed_report_data)}
+            {generate_methodology_and_analysis_section(processed_report_data)}
+            {generate_visual_analysis_section(processed_report_data)}
+        </div>
+    </body>
+    </html>"""
 
-        logger.info("HTML report generation completed successfully")
-        return html_content
-
-    except DataValidationError as e:
-        logger.error(f"Data validation failed: {str(e)}")
-        raise
-    except Exception as e:
-        logger.error(f"HTML generation failed: {str(e)}")
-        raise
+    logger.info("HTML report generation completed successfully")
+    return html_content 

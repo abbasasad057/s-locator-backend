@@ -1,46 +1,52 @@
 """
 Report generation utilities for pharmacy site selection analysis.
 """
+
 import os
 import math
 from typing import List, Dict, Optional, Any
-
+from all_types.request_dtypes import Reqsmartreport
 from utils.utils import DIR_IMAGE, DIR_REPORTS
-from .map_generator import generate_site_map_image   
+from .map_generator import generate_site_map_image
 from typing import Dict, List, Any, Optional
 from .report_config import source_current_location, source_custom_locations
-from .data_processor import normalize_score_to_100
-from .report_object import generate_detailed_insights_dict, generate_insights_dict, generate_rankings_dict, generate_rankings_dict_with_current_comparison
+from .report_object import (
+    generate_detailed_insights_dict,
+    generate_insights_dict,
+    generate_rankings_dict,
+    generate_rankings_dict_with_current_comparison,
+)
 
+MAX_TOTAL = 100
 def generate_detailed_insights(site: Dict) -> str:
     insights = []
     insights.append("## 📊 Detailed Analysis\n")
 
     # 🚗 Traffic Performance
-    avg_speed = site.get("average speed in km")
-    if avg_speed is not None:
-        if 20 <= avg_speed <= 30:
+    traffic_score = site.get("traffic_score")
+    if traffic_score is not None:
+        if 20 <= traffic_score <= 30:
             traffic_status = "✅ Optimal traffic — moderate traffic flow ensures both convenience and visibility."
-        elif avg_speed < 20:
-            traffic_status = "⚠️ Heavy congestion — low traffic speed may reduce accessibility but can increase local visibility."
+        elif traffic_score < 20:
+            traffic_status = "⚠️ Heavy congestion — low traffic may reduce accessibility but can increase local visibility."
         else:
             traffic_status = "ℹ️ Light traffic — smooth access but potentially less exposure to passersby."
-        
+
         insights.append(
             f"### 🚗 Traffic Performance\n"
-            f"Current: {avg_speed:.1f} km/h | Target: 20–30 km/h  \n"
+            f"Current: {traffic_score:.1f} km/h | Target: 20–30 km/h  \n"
             f"Assessment: {traffic_status}\n\n"
         )
 
     # 🏪 Business Environment
-    nearby_businesses = site.get("nearby Businesses within 500 meters", 0)
+    nearby_businesses = site.get("num_of_businesses_around", 0)
     if nearby_businesses > 20:
         bus_status = "✅ Strong ecosystem —  complementary businesses support customer flow."
     elif nearby_businesses >= 10:
         bus_status = "⚠️ Moderate ecosystem — some opportunities exist, but growth potential remains."
     else:
         bus_status = "❌ Weak ecosystem — limited complementary activity may reduce visibility."
-    
+
     insights.append(
         f"### 🏪 Business Environment\n"
         f"{nearby_businesses} businesses within 500m  \n"
@@ -48,8 +54,8 @@ def generate_detailed_insights(site: Dict) -> str:
     )
 
     # 👥 Demographics Match (Age above 35)
-    age_above_35 = site.get("Age above 35")
-    avg_income = site.get("Average Income")
+    age_above_35 = site.get("percentage_age_above_35")
+    avg_income = site.get("avg_income")
     if age_above_35 is not None:
         if age_above_35 >= 40:
             age_status = "✅ Strong alignment — high share of population above 35, consistent with core demand segment."
@@ -57,12 +63,12 @@ def generate_detailed_insights(site: Dict) -> str:
             age_status = "⚠️ Partial alignment — balanced age structure with moderate fit."
         else:
             age_status = "❌ Weak alignment — younger population may reduce pharmacy demand."
-        
+
         insights.append(
             f"### 👥 Demographics Match\n"
             f"Population Aged 35 and Above: {age_above_35:.1f}% of local population with average \n"
             f"Assessment: {age_status}  \n"
-            f"Average Icome: {avg_income} SAR\n\n"
+            f"Average Income: {avg_income} SAR\n\n"
         )
 
     # ☕ Competitive Position
@@ -74,11 +80,11 @@ def generate_detailed_insights(site: Dict) -> str:
             market_status = "🟠 Moderately competitive\nStrategy: Focus on service quality and location advantage."
         else:
             market_status = "🟢 Underserved market\nStrategy: Strong opportunity for entry and growth."
-        
+
         insights.append(
             f"### ☕ Competitive Position\n"
             f"Pharmacies per 10k population: {pharm_per_10k:.1f}  \n"
-            f"Competeing Pharmacies in the area: {site['competing_pharmacies']}  \n"
+            f"Competing Pharmacies in the area: {site['num_of_pharmacies']}  \n"
             f"{market_status}\n\n"
         )
     hospitals = site.get("num_of_hospitals", 0)
@@ -89,7 +95,7 @@ def generate_detailed_insights(site: Dict) -> str:
         health_status = "⚠️ Moderate healthcare presence — demand is supported but with limited spillover."
     else:
         health_status = "❌ Weak healthcare presence — fewer facilities may reduce referral opportunities."
-    
+
     insights.append(
         f"### 🏥 Healthcare Environment\n"
         f"Hospitals nearby: {hospitals}  \n"
@@ -99,26 +105,29 @@ def generate_detailed_insights(site: Dict) -> str:
 
     return "".join(insights)
 
-def generate_insights(sites: List[Dict],  MAX_TOTAL : float , CRITERION_WEIGHTS : Dict[str , float]) -> str:
+
+def generate_insights(
+    sites: List[Dict], best_site: Dict
+) -> str:
     """Generate key investment insights based on analysis (Markdown only)."""
     if not sites:
         return "No data available for insights generation."
-    
-    best_site = max(sites, key=lambda s: s.get('total_score', 0))
     insights = []
 
     # Prime opportunity - convert to 100 scale for display
-    best_score_100 = (best_site['total_score'] / MAX_TOTAL) * 100
+    best_score_100 = best_site["total_score"] 
     insights.append(
         f"- **Prime Opportunity:** {best_site['display_name']} emerges as the clear "
         f"market leader with exceptional potential scoring {best_score_100:.1f}/100 points.\n"
     )
 
-    total_competitors = best_site["competing_pharmacies"]
+    total_competitors = len(best_site["nearby_pharmacy"])
     avg_competitors = total_competitors / len(sites) if sites else 0
 
     if avg_competitors > 5:
-        market_status = "Highly saturated market requires strong differentiation strategy"
+        market_status = (
+            "Highly saturated market requires strong differentiation strategy"
+        )
     elif avg_competitors > 2:
         market_status = "Moderately competitive market with room for growth"
     else:
@@ -129,20 +138,19 @@ def generate_insights(sites: List[Dict],  MAX_TOTAL : float , CRITERION_WEIGHTS 
     )
 
     # Traffic advantage - normalize to 100 scale
-    best_traffic_weighted = best_site.get('scores', {}).get('traffic_score', 0)
-    best_traffic_100 = normalize_score_to_100(best_traffic_weighted, CRITERION_WEIGHTS['traffic'])
-    speed_info = ""
-    speed_value = best_site.get("average speed in km")
-    speed_info = f" with {speed_value:.1f} km/h average speeds"
-           
+    best_traffic_weighted = best_site.get("weighted_scores", {}).get("traffic", 0)
+    best_traffic_100 = best_traffic_weighted
+    traffic_info = ""
+    traffic_score = best_site.get("traffic_score")
+    traffic_info = f" with {traffic_score:.1f} km/h average speeds"
 
     insights.append(
-        f"- **Traffic Advantage:** Accessibility scoring {best_traffic_100:.1f}/100 points{speed_info} "
+        f"- **Traffic Advantage:** Accessibility scoring {best_traffic_100:.1f}/100 points{traffic_info} "
         "supporting consistent customer flow.\n"
     )
 
     # Business ecosystem
-    nearby_businesses = best_site.get("nearby Businesses within 500 meters" , 0)
+    nearby_businesses = best_site.get("num_of_businesses_around", 0)
 
     insights.append(
         f"- **Business Ecosystem:** {nearby_businesses} nearby complementary businesses ensure "
@@ -150,14 +158,15 @@ def generate_insights(sites: List[Dict],  MAX_TOTAL : float , CRITERION_WEIGHTS 
     )
 
     # Demographic alignment - normalize to 100 scale
-    demo_weighted = best_site.get('scores', {}).get('demographics_score', 0)
-    demo_100 = normalize_score_to_100(demo_weighted, CRITERION_WEIGHTS['demographics'])
+    demo_weighted = best_site.get("weighted_scores", {}).get("demographics", 0)
+    demo_100 = demo_weighted
     age_alignment = ""
-    for key, value in best_site.get('details', {}).items():
-        if 'age' in key.lower() and not math.isnan(value):
-            deviation = abs(value - 50)
-            age_alignment = f" with {deviation:.1f}% deviation from ideal customer profile"
-            break
+    age_above_35 = best_site.get("percentage_age_above_35")
+    if age_above_35 is not None and not math.isnan(age_above_35):
+        deviation = abs(age_above_35 - 35)
+        age_alignment = (
+            f" with {deviation:.1f}% deviation from ideal customer profile"
+        )
 
     insights.append(
         f"- **Demographic Alignment:** Scoring {demo_100:.1f}/100 points{age_alignment}, "
@@ -167,7 +176,9 @@ def generate_insights(sites: List[Dict],  MAX_TOTAL : float , CRITERION_WEIGHTS 
     return "".join(insights)
 
 
-def generate_enhanced_table(sites: List[Dict],  MAX_TOTAL : float , CRITERION_WEIGHTS : Dict[str , float]) -> str:
+def generate_enhanced_table(
+    sites: List[Dict], CRITERION_WEIGHTS: Dict[str, float]
+) -> str:
     """Generate enhanced Markdown table with requested columns - scores normalized to 100."""
 
     if not sites:
@@ -182,31 +193,19 @@ def generate_enhanced_table(sites: List[Dict],  MAX_TOTAL : float , CRITERION_WE
 
     rows = []
     for i, site in enumerate(sites, start=1):
-        price_display = f"{site.get('price', 0):,}" if site.get('price') else "N/A"
-        
+        price_display = (
+            f"{site.get('price', 0):,}" if site.get("price") else "N/A"
+        )
+
         # Convert all scores to 100 scale for display
-        final_score_100 = (site['total_score'] / MAX_TOTAL) * 100
-        traffic_100 = normalize_score_to_100(
-            site.get('scores', {}).get('traffic_score', 0), 
-            CRITERION_WEIGHTS['traffic']
-        )
-        demographics_100 = normalize_score_to_100(
-            site.get('scores', {}).get('demographics_score', 0), 
-            CRITERION_WEIGHTS['demographics']
-        )
-        competitive_100 = normalize_score_to_100(
-            site.get('scores', {}).get('competition_score', 0), 
-            CRITERION_WEIGHTS['competition']
-        )
-        healthcare_100 = normalize_score_to_100(
-            site.get('scores', {}).get('healthcare_score', 0), 
-            CRITERION_WEIGHTS['healthcare']
-        )
-        complementary_100 = normalize_score_to_100(
-            site.get('scores', {}).get('complementary_score', 0), 
-            CRITERION_WEIGHTS['complementary']
-        )
+        final_score_100 = site["total_score"]
+        traffic_100 = site.get("weighted_scores", {}).get("traffic", 0)
+        demographics_100 = site.get("weighted_scores", {}).get("demographics", 0)
+        competitive_100 = site.get("weighted_scores", {}).get("competition", 0)
+        healthcare_100 = site.get("weighted_scores", {}).get("healthcare", 0)
+        complementary_100 = site.get("weighted_scores", {}).get("complementary", 0)
         
+
         rows.append(
             f"| {site['rank']} | {site['display_name']} | {price_display} | {final_score_100:.1f} | "
             f"{traffic_100:.1f} | {demographics_100:.1f} | {competitive_100:.1f} | "
@@ -215,143 +214,208 @@ def generate_enhanced_table(sites: List[Dict],  MAX_TOTAL : float , CRITERION_WE
         )
     return header + "".join(rows) + "\n"
 
+
 def write_detailed_analysis(
-    md, sites, MAX_TOTAL, CRITERION_WEIGHTS, maps_dir, md_path, section_title: str, category: str = "Shop For Rent"
+    md,
+    sites,
+    CRITERION_WEIGHTS,
+    maps_dir,
+    md_path,
+    section_title: str,
+    category: str = "Shop For Rent",
 ) -> List[Dict[str, Any]]:
     """Write detailed site analysis for a given set of sites and return structured data."""
-    
+
     if not sites:
         return []
 
     md.write(f"## {section_title}\n\n")
-    
+
     detailed_analysis = []
     for i, s in enumerate(sites, start=1):
-        final_score_100 = (s['total_score'] / MAX_TOTAL) * 100
-        md.write(f"### {i}. {s['display_name']} (Score: {final_score_100:.1f}/100)\n\n")
-        
+        final_score_100 = s["total_score"]
+        md.write(
+            f"### {i}. {s['display_name']} (Score: {final_score_100:.1f}/100)\n\n"
+        )
+
         coords_text = (
             f"**Location:** {s['lat']:.6f}, {s['lng']:.6f}"
-            if (s['lat'] is not None and s['lng'] is not None)
+            if (s["lat"] is not None and s["lng"] is not None)
             else f"**Location:** {s.get('raw_place') or 'N/A'}"
         )
-        price_text = f"**Rent Price:** {s.get('price', 0):,} SAR" if s.get('price') else "**Rent Price:** Not specified"
-        
+        price_text = (
+            f"**Rent Price:** {s.get('price', 0):,} SAR"
+            if s.get("price")
+            else "**Rent Price:** Not specified"
+        )
+
         md.write(f"{coords_text} | {price_text} | Category: {category} \n\n")
-        analysis_space = "Analysis Preformed for locations with 2km from all sides"
+        analysis_space = (
+            "Analysis Preformed for locations with 2km from all sides"
+        )
         md.write(f"{analysis_space}\n\n")
         # Generate insights
         md.write(generate_detailed_insights(s))
         md.write(f"**[🗺️ View location]({s['url']})**\n\n")
-        
+
         # Maps
-        map_image, html_map = generate_site_map_image(s, maps_dir, MAX_TOTAL)
+        map_image, html_map = generate_site_map_image(s)
         # Make paths relative to markdown directory
-        map_image_rel = os.path.relpath(map_image, os.path.dirname(md_path)).replace("\\", "/") if map_image else None
-        html_map_rel = os.path.relpath(html_map, os.path.dirname(md_path)).replace("\\", "/") if html_map else None
+        map_image_rel = (
+            os.path.relpath(map_image, os.path.dirname(md_path)).replace(
+                "\\", "/"
+            )
+            if map_image
+            else None
+        )
+        html_map_rel = (
+            os.path.relpath(html_map, os.path.dirname(md_path)).replace(
+                "\\", "/"
+            )
+            if html_map
+            else None
+        )
         if map_image_rel:
             md.write(f"![Site Map]({map_image_rel})\n\n")
         if html_map_rel:
             md.write(f"[Open interactive map]({html_map_rel})\n\n")
-        
+
         # Scoring breakdown
-        md.write('| Criterion | Sub-factor | Raw Score | Weighted Points |\n')
-        md.write('|-----------|------------|-----------|----------------|\n')
+        md.write("| Criterion | Key Metrics | Raw Score | Weighted Points |\n")
+        md.write("|-----------|-------------|-----------|----------------|\n")
 
         scoring_breakdown = []
-        for c in CRITERION_WEIGHTS.keys():
-            dkeys = [k for k in s['details'].keys() if k.startswith(f"{c}__") and not k.endswith('_weighted')]
-            if dkeys and any(not math.isnan(s['details'].get(k, float('nan'))) for k in dkeys):
-                sub_weight = CRITERION_WEIGHTS[c] / max(1, len(dkeys))
-                crit_total = 0.0
-                for dk in dkeys:
-                    raw = s['details'].get(dk, float('nan'))
-                    weighted = (raw / 100.0) * sub_weight if not math.isnan(raw) else float('nan')
-                    crit_total += 0.0 if math.isnan(weighted) else weighted
-                    sub_name = dk.replace(f"{c}__", '').replace('_', ' ')
-                    raw_display = f'{raw:.1f}' if not math.isnan(raw) else 'N/A'
-                    weighted_display = f'{weighted:.2f}' if not math.isnan(weighted) else 'N/A'
-                    md.write(f"| {c.capitalize()} | {sub_name} | {raw_display} | {weighted_display} |\n")
-                    
-                    scoring_breakdown.append({
-                        "criterion": c.capitalize(),
-                        "sub_factor": sub_name,
-                        "raw_score": raw if not math.isnan(raw) else None,
-                        "weighted_points": weighted if not math.isnan(weighted) else None
-                    })
-                
-                md.write(f"| **{c.capitalize()} Total** | | | **{crit_total:.2f}** |\n")
-                scoring_breakdown.append({
-                    "criterion": f"{c.capitalize()} Total",
-                    "sub_factor": "",
-                    "raw_score": None,
-                    "weighted_points": crit_total
-                })
-            else:
-                overall = s.get('scores', {}).get(f'{c}_score', 0.0)
-                md.write(f"| {c.capitalize()} | No detailed data | N/A | **{overall:.2f}** |\n")
-                scoring_breakdown.append({
-                    "criterion": c.capitalize(),
-                    "sub_factor": "No detailed data",
-                    "raw_score": None,
-                    "weighted_points": overall
-                })
-        md.write("\n")
         
-        detailed_analysis.append({
-            "rank": i,
-            "site_name": s['display_name'],
-            "final_score": round(final_score_100, 1),
-            "analysis_space" : analysis_space,
-            "location": {
-                "latitude": s['lat'] if s['lat'] is not None else None,
-                "longitude": s['lng'] if s['lng'] is not None else None,
-                "raw_place": s.get('raw_place')
-            },
-            "price_sar": s.get('price', 0) if s.get('price') else None,
-            "category": category,
-            "url": s.get("url"),
-            "maps": {
-                "static_map_url": map_image_rel,
-                "interactive_map_url": html_map_rel
-            },
-            "detailed_insights": generate_detailed_insights_dict(s),
-            "scoring_breakdown": scoring_breakdown
-        })
-    
+        # Traffic scoring
+        if "traffic" in CRITERION_WEIGHTS:
+            traffic_raw = s.get("traffic_score", 0.0)
+            weighted_points = s.get("weighted_scores", {}).get("traffic", 0.0)
+            md.write(f"| Traffic | Average Speed | {traffic_raw:.1f} km/h | {weighted_points:.2f} |\n")
+            scoring_breakdown.append({
+                "criterion": "Traffic",
+                "sub_factor": "Average Speed",
+                "raw_score": traffic_raw,
+                "weighted_points": weighted_points,
+            })
+        
+        # Demographics scoring
+        if "demographics" in CRITERION_WEIGHTS:
+            age_raw = s.get("percentage_age_above_35", 0.0)
+            weighted_points = s.get("weighted_scores", {}).get("demographics", 0.0)
+            md.write(f"| Demographics | Age 35+ (%) | {age_raw:.1f}% | {weighted_points:.2f} |\n")
+            scoring_breakdown.append({
+                "criterion": "Demographics", 
+                "sub_factor": "Age 35+ (%)",
+                "raw_score": age_raw,
+                "weighted_points": weighted_points,
+            })
+        
+        # Competition scoring
+        if "competition" in CRITERION_WEIGHTS:
+            comp_raw = s.get("num_of_pharmacies", 0)
+            weighted_points = s.get("weighted_scores", {}).get("competition", 0.0)
+            md.write(f"| Competition | Nearby Pharmacies | {comp_raw} | {weighted_points:.2f} |\n")
+            scoring_breakdown.append({
+                "criterion": "Competition",
+                "sub_factor": "Nearby Pharmacies", 
+                "raw_score": comp_raw,
+                "weighted_points": weighted_points,
+            })
+        
+        # Healthcare scoring
+        if "healthcare" in CRITERION_WEIGHTS:
+            health_raw = s.get("num_of_hospitals", 0) + s.get("num_of_dentists", 0)
+            weighted_points = s.get("weighted_scores", {}).get("healthcare", 0.0)
+            md.write(f"| Healthcare | Hospitals + Dentists | {health_raw} | {weighted_points:.2f} |\n")
+            scoring_breakdown.append({
+                "criterion": "Healthcare",
+                "sub_factor": "Hospitals + Dentists",
+                "raw_score": health_raw,
+                "weighted_points": weighted_points,
+            })
+        
+        # Complementary businesses scoring
+        if "complementary" in CRITERION_WEIGHTS:
+            comp_raw = s.get("num_of_businesses_around", 0)
+            weighted_points = s.get("weighted_scores", {}).get("complementary", 0.0)
+            md.write(f"| Complementary | Nearby Businesses | {comp_raw} | {weighted_points:.2f} |\n")
+            scoring_breakdown.append({
+                "criterion": "Complementary",
+                "sub_factor": "Nearby Businesses",
+                "raw_score": comp_raw,
+                "weighted_points": weighted_points,
+            })
+        md.write("\n")
+
+        detailed_analysis.append(
+            {
+                "rank": i,
+                "site_name": s["display_name"],
+                "final_score": round(final_score_100, 1),
+                "analysis_space": analysis_space,
+                "location": {
+                    "latitude": s["lat"] if s["lat"] is not None else None,
+                    "longitude": s["lng"] if s["lng"] is not None else None,
+                    "raw_place": s.get("raw_place"),
+                },
+                "price_sar": s.get("price", 0) if s.get("price") else None,
+                "category": category,
+                "url": s.get("url"),
+                "maps": {
+                    "static_map_url": map_image_rel,
+                    "interactive_map_url": html_map_rel,
+                },
+                "detailed_insights": generate_detailed_insights_dict(s),
+                "scoring_breakdown": scoring_breakdown,
+            }
+        )
+
     return detailed_analysis
 
-def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
-                      charts: Dict[str, str], map_png: Optional[str], heat_png: Optional[str],
-                      num_of_sites: int, stats: Dict , MAX_TOTAL : float , CRITERION_WEIGHTS : Dict[str ,float]) -> Dict[str, Any]:
+
+def generate_markdown(
+    sites: List[Dict],
+    outdir: str,
+    out_md: str,
+    top_n: int,
+    charts: Dict[str, str],
+    map_png: Optional[str],
+    heat_png: Optional[str],
+    req: Reqsmartreport,
+    sites_sorted,
+    stats: Dict[str, Any],
+    best_site: Dict[str, Any],
+    list_top_n_sites: List[Dict[str, Any]],
+) -> Dict[str, Any]:
     """Generate comprehensive markdown report with enhanced design and features AND return structured dictionary And the path of the report.md."""
-    sites_sorted = sorted(sites, key=lambda s: s.get('total_score', 0), reverse=True)
-
-    for i, site in enumerate(sites_sorted, start=1):
-        site['rank'] = i
-
-# 2️⃣ Pick top N sites overall
-    top_sites = sites_sorted[:top_n]
-
-# 3️⃣ Separate by source
-    custom_locations = [site for site in sites_sorted if site.get("source") == source_custom_locations]
-    current_location = [site for site in sites_sorted if site.get("source") == source_current_location]
-
-    best = top_sites[0] if top_sites else None
     
+    num_of_sites = len(sites)
+
+    # 3️⃣ Separate by source
+    custom_locations = [
+        site
+        for site in sites_sorted
+        if site.get("source") == source_custom_locations
+    ]
+    current_location = [
+        site
+        for site in sites_sorted
+        if site.get("source") == source_current_location
+    ]
+
     # Save markdown file in markdown directory (directories assumed to be already created)
     md_path = os.path.join(DIR_REPORTS, out_md).replace("\\", "/")
-    
+
     report_data = {}
     # Configure maps directory using config constant
     maps_dir = os.path.join(outdir, DIR_IMAGE)
-    
-    with open(md_path, 'w', encoding='utf-8') as md:
+
+    with open(md_path, "w", encoding="utf-8") as md:
 
         # Hero section
         report_data["title"] = "🏥 Pharmacy Expansion Analysis — Riyadh"
         md.write(f"# {report_data['title']}\n\n")
-        
+
         report_data["description"] = (
             f"This Comprehensive analysis evaluates {num_of_sites} pharmacy locations accorss Riyadh "
             "using advanced location intelligence methodologies. Each locations is systematically socred using "
@@ -359,255 +423,335 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             "traffic, demographics, competition, healthcare proximity, and complementary businesses."
         )
         md.write(f"{report_data['description']}\n\n")
-        
+
         # Summary metrics
         summary_metrics_title = "📊 Summary Metrics"
         md.write(f"## {summary_metrics_title}\n\n")
-        
-        total_locations_label = "Total Locations"
-        md.write(f"- **{total_locations_label}:** {num_of_sites}\n")
-        
-        # Convert average score to 100 scale for display
-        avg_score_100 = (stats['average_score'] / MAX_TOTAL) * 100
+
+        md.write(f"- **{"Total Locations"}:** {num_of_sites}\n")
+
+        avg_score_100 = stats["average_score"]
         md.write(f"- **Average Score:** {avg_score_100:.1f}/100\n")
-        md.write(f"- **Average Rent Price:** {stats['average_price']:,.0f} SAR\n")
-        md.write(f"- **Competing Pharmacies:** {stats['total_competing_pharmacies']}\n\n")
-        
+        md.write(
+            f"- **Average Rent Price:** {stats['average_price']:,.0f} SAR\n"
+        )
+        md.write(
+            f"- **Competing Pharmacies:** {stats['total_competing_pharmacies']}\n\n"
+        )
+
         report_data["summary_metrics"] = {
             "total_locations": num_of_sites,
             "average_score": round(avg_score_100, 1),
-            "average_price_sar": round(stats['average_price'], 0),
-            "competing_pharmacies": stats['total_competing_pharmacies']
+            "average_price_sar": round(stats["average_price"], 0),
+            "competing_pharmacies": stats["total_competing_pharmacies"],
         }
-        
+
         # Executive Summary
         exec_summary_title = "Executive Summary"
         md.write(f"## 📋 {exec_summary_title}\n\n")
-        
+
         executive_summary = {}
-        if best:
-            price = best.get('price')
-            price_str = f"{price:,}" if price is not None else "N/A"
-            best_score_100 = (best['total_score'] / MAX_TOTAL) * 100
-            top_rec_text = (
-                f"**Top recommendation:** **{best['display_name']}** with an overall score of "
-                f"{best_score_100:.1f}/100 points, rent priced at {price_str} SAR.\n\n"
-            )
-            md.write(top_rec_text)
-            
-            executive_summary["top_recommendation"] = {
-                "site_name": best['display_name'],
-                "score": round(best_score_100, 1),
-                "price_sar": best.get('price', 0)
-            }
-        
+
+        price = best_site.get("price")
+        price_str = f"{price:,}" if price is not None else "N/A"
+        top_rec_text = (
+            f"**Top recommendation:** **{best_site['display_name']}** with an overall score of "
+            f"{best_site["total_score"]:.1f}/100 points, rent priced at {price_str} SAR.\n\n"
+        )
+        md.write(top_rec_text)
+
+        executive_summary["top_recommendation"] = {
+            "site_name": best_site["display_name"],
+            "score": round(best_site["total_score"], 1),
+            "price_sar": best_site.get("price", 0),
+        }
+
         description_text = (
             f"This analysis evaluates {num_of_sites} candidate pharmacy locations. "
             "Evaluation criteria include traffic, demographics, competition, healthcare proximity, "
             "and complementary business ecosystem.\n\n"
         )
         md.write(description_text)
-        
+
         executive_summary["description"] = description_text.strip()
         executive_summary["total_sites_evaluated"] = num_of_sites
         executive_summary["evaluation_criteria"] = [
-            "traffic", "demographics", "competition", 
-            "healthcare proximity", "complementary business ecosystem"
+            "traffic",
+            "demographics",
+            "competition",
+            "healthcare proximity",
+            "complementary business ecosystem",
         ]
-        
+
         report_data["executive_summary"] = executive_summary
-        
+
         # Key Investment Insights
         insights_title = "💡 Key Investment Insights"
         md.write(f"## {insights_title}\n\n")
-        insights_md = generate_insights(sites, MAX_TOTAL, CRITERION_WEIGHTS)
+        insights_md = generate_insights(sites, best_site)
         md.write(insights_md)
         md.write("\n")
-        
-        report_data["key_investment_insights"] = generate_insights_dict(sites,  MAX_TOTAL, CRITERION_WEIGHTS)
+
+        report_data["key_investment_insights"] = generate_insights_dict(
+            sites, best_site
+        )
         # Enhanced Top Sites Table
         rankings_title = f"🏆 Top {top_n} Investment Opportunities"
-        
+
         if current_location:
-            
-    # Use the new function and pass top_sites as baseline
-            md.write(f"## Current Location Scores \n\n")
-            table_current_md = generate_enhanced_table(current_location,MAX_TOTAL, CRITERION_WEIGHTS)
+
+            # Use the new function and pass top_sites as baseline
+            md.write("## Current Location Scores \n\n")
+            table_current_md = generate_enhanced_table(
+                current_location, req
+            )
             md.write(table_current_md)
             md.write("\n\n\n")
-            md.write(f"### 🏠 {rankings_title} compared  with Current Location Evaluation\n\n")
+            md.write(
+                f"### 🏠 {rankings_title} compared  with Current Location Evaluation\n\n"
+            )
             md.write("\n\n\n")
             table_md = generate_table_with_current_comparison(
-                top_sites,
-                current_location,
-                MAX_TOTAL,
-                CRITERION_WEIGHTS
-
+                top_sites, current_location, CRITERION_WEIGHTS
             )
             md.write(table_md)
-            
-            report_data["current_location"] = generate_rankings_dict(current_location, MAX_TOTAL, CRITERION_WEIGHTS)
-            report_data["rankings"] = generate_rankings_dict_with_current_comparison(top_sites ,current_location , MAX_TOTAL, CRITERION_WEIGHTS)
+
+            report_data["current_location"] = generate_rankings_dict(
+                current_location, CRITERION_WEIGHTS
+            )
+            report_data["rankings"] = (
+                generate_rankings_dict_with_current_comparison(
+                    top_sites, current_location, CRITERION_WEIGHTS
+                )
+            )
             md.write("\n\n")
             md.write("\n\n")
-        else :
+        else:
             md.write(f"## {rankings_title}\n\n")
-            table_md = generate_enhanced_table(top_sites,MAX_TOTAL, CRITERION_WEIGHTS)
+            table_md = generate_enhanced_table(
+                top_sites,CRITERION_WEIGHTS
+            )
             md.write(table_md)
             md.write("\n\n")
             md.write("\n\n")
-            report_data["rankings"] = generate_rankings_dict(top_sites ,MAX_TOTAL, CRITERION_WEIGHTS)
+            report_data["rankings"] = generate_rankings_dict(
+                top_sites, CRITERION_WEIGHTS
+            )
 
         if custom_locations:
             md.write("### 📍 Custom Location Analysis\n\n")
-            table_md = generate_enhanced_table(custom_locations, MAX_TOTAL, CRITERION_WEIGHTS)
+            table_md = generate_enhanced_table(
+                custom_locations, CRITERION_WEIGHTS
+            )
             md.write(table_md)
             md.write("\n\n")
             md.write("\n\n")
-            report_data["custom_locations"] = generate_rankings_dict(custom_locations , MAX_TOTAL , CRITERION_WEIGHTS)
-            
+            report_data["custom_locations"] = generate_rankings_dict(
+                custom_locations, CRITERION_WEIGHTS
+            )
+
         # Detailed Site Analysis
         # Function call usage:
         if current_location:
-            detailed_analysis, current_detailed_analysis = write_detailed_analysis_with_current(
-                md, top_sites, current_location, MAX_TOTAL, CRITERION_WEIGHTS, maps_dir, md_path, "🔍 Detailed Site Analysis vs Current Location"
+            detailed_analysis, current_detailed_analysis = (
+                write_detailed_analysis_with_current(
+                    md,
+                    top_sites,
+                    current_location,
+                    CRITERION_WEIGHTS,
+                    maps_dir,
+                    md_path,
+                    "🔍 Detailed Site Analysis vs Current Location",
+                )
             )
             report_data["detailed_analysis"] = detailed_analysis
             report_data["current_detailed_analysis"] = current_detailed_analysis
         else:
             report_data["detailed_analysis"] = write_detailed_analysis(
-                md, top_sites, MAX_TOTAL, CRITERION_WEIGHTS, maps_dir, md_path, "🔍 Detailed Site Analysis"
+                md,
+                top_sites,
+                CRITERION_WEIGHTS,
+                maps_dir,
+                md_path,
+                "🔍 Detailed Site Analysis",
             )
         # Detailed Site Analysis for top N
         # report_data["detailed_analysis"] = write_detailed_analysis(
         #     md, top_sites, MAX_TOTAL, CRITERION_WEIGHTS, maps_dir, md_path, "🔍 Detailed Site Analysis"
         # )
 
-
-        if custom_locations :
+        if custom_locations:
             report_data["custom_detailed_analysis"] = write_detailed_analysis(
-                md, custom_locations, MAX_TOTAL, CRITERION_WEIGHTS, maps_dir, md_path, "🔍 Detailed Custom Locations"
+                md,
+                custom_locations,
+                CRITERION_WEIGHTS,
+                maps_dir,
+                md_path,
+                "🔍 Detailed Custom Locations",
             )
 
         # if current_location:
         #     report_data["current_detailed_analysis"] = write_detailed_analysis(
         #         md, current_location, MAX_TOTAL, CRITERION_WEIGHTS, maps_dir, md_path, "🔍 Detailed Current Locations"
         #     )
-            
 
         # Charts & Visualizations
         charts_title = "📊 Charts & Visualizations"
         md.write(f"## {charts_title}\n\n")
-        
-        visual_analysis = {
-            "charts": [],
-            "maps": [],
-            "interactive_maps": []
-        }
-        
-        if charts.get('top_stacked') and os.path.exists(charts['top_stacked']):
+
+        visual_analysis = {"charts": [], "maps": [], "interactive_maps": []}
+
+        if charts.get("top_stacked") and os.path.exists(charts["top_stacked"]):
             # rel = relpath_for_md(charts['top_stacked'], md_path)
-            path = charts.get('top_stacked')
+            path = charts.get("top_stacked")
             if path:
                 # Make path relative to markdown directory
-                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
-                md.write(f"**Comparative Analysis:**\n\n![Top Candidates Comparison]({chart_path})\n\n\n")
+                chart_path = os.path.relpath(
+                    path, os.path.dirname(md_path)
+                ).replace("\\", "/")
+                md.write(
+                    f"**Comparative Analysis:**\n\n![Top Candidates Comparison]({chart_path})\n\n\n"
+                )
                 md.write(f"**Path : {chart_path}\n\n")
-                visual_analysis["charts"].append({
-                    "title": "Top Candidates Comparison",
-                    "type": "comparative_analysis",
-                    "url": chart_path
-                })
+                visual_analysis["charts"].append(
+                    {
+                        "title": "Top Candidates Comparison",
+                        "type": "comparative_analysis",
+                        "url": chart_path,
+                    }
+                )
 
-        if charts.get('traffic') and os.path.exists(charts['traffic']):
-            path = charts.get('traffic')
+        if charts.get("traffic") and os.path.exists(charts["traffic"]):
+            path = charts.get("traffic")
             if path:
                 # Make path relative to markdown directory
-                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
-                md.write(f"**Traffic Analysis:**\n\n![Traffic Flow Analysis]({chart_path})\n\n\n")
+                chart_path = os.path.relpath(
+                    path, os.path.dirname(md_path)
+                ).replace("\\", "/")
+                md.write(
+                    f"**Traffic Analysis:**\n\n![Traffic Flow Analysis]({chart_path})\n\n\n"
+                )
                 md.write(f"**Path : {chart_path}\n\n")
-                visual_analysis["charts"].append({
-                    "title": "Traffic Flow Analysis",
-                    "type": "traffic_analysis",
-                    "url": chart_path
-                })
+                visual_analysis["charts"].append(
+                    {
+                        "title": "Traffic Flow Analysis",
+                        "type": "traffic_analysis",
+                        "url": chart_path,
+                    }
+                )
 
-        if charts.get('best_breakdown') and os.path.exists(charts['best_breakdown']):
-            path = charts.get('best_breakdown')
+        if charts.get("best_breakdown") and os.path.exists(
+            charts["best_breakdown"]
+        ):
+            path = charts.get("best_breakdown")
             if path:
                 # Make path relative to markdown directory
-                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
-                md.write(f"**Best Site Breakdown:**\n\n![Best Site Breakdown]({chart_path})\n\n\n")
+                chart_path = os.path.relpath(
+                    path, os.path.dirname(md_path)
+                ).replace("\\", "/")
+                md.write(
+                    f"**Best Site Breakdown:**\n\n![Best Site Breakdown]({chart_path})\n\n\n"
+                )
                 md.write(f"**Path : {chart_path}\n\n")
-                visual_analysis["charts"].append({
-                    "title": "Best Site Breakdown",
-                    "type": "site_breakdown",
-                    "url": chart_path
-                })
-        if charts.get('price_vs_score') and os.path.exists(charts['price_vs_score']):
-            path = charts.get('price_vs_score')
+                visual_analysis["charts"].append(
+                    {
+                        "title": "Best Site Breakdown",
+                        "type": "site_breakdown",
+                        "url": chart_path,
+                    }
+                )
+        if charts.get("price_vs_score") and os.path.exists(
+            charts["price_vs_score"]
+        ):
+            path = charts.get("price_vs_score")
             if path:
                 # Make path relative to markdown directory
-                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
-                md.write(f"**Price VS Final Score :**\n\n![Price VS Score]({chart_path})\n\n\n")
+                chart_path = os.path.relpath(
+                    path, os.path.dirname(md_path)
+                ).replace("\\", "/")
+                md.write(
+                    f"**Price VS Final Score :**\n\n![Price VS Score]({chart_path})\n\n\n"
+                )
                 md.write(f"**Path : {chart_path}\n\n")
-                visual_analysis["charts"].append({
-                    "title": "Best Site Breakdown",
-                    "type": "site_breakdown",
-                    "url": chart_path
-                })
-        if charts.get('healthcare_competition') and os.path.exists(charts['healthcare_competition']):
-            path = charts.get('healthcare_competition')
+                visual_analysis["charts"].append(
+                    {
+                        "title": "Best Site Breakdown",
+                        "type": "site_breakdown",
+                        "url": chart_path,
+                    }
+                )
+        if charts.get("healthcare_competition") and os.path.exists(
+            charts["healthcare_competition"]
+        ):
+            path = charts.get("healthcare_competition")
             if path:
                 # Make path relative to markdown directory
-                chart_path = os.path.relpath(path, os.path.dirname(md_path)).replace('\\', '/')
-                md.write(f"**Healthcare vs pharmacies competition :**\n\n![healthcare_competition]({chart_path})\n\n\n")
+                chart_path = os.path.relpath(
+                    path, os.path.dirname(md_path)
+                ).replace("\\", "/")
+                md.write(
+                    f"**Healthcare vs pharmacies competition :**\n\n![healthcare_competition]({chart_path})\n\n\n"
+                )
                 md.write(f"**Path : {chart_path}\n\n")
-                visual_analysis["charts"].append({
-                    "title": "Healthcare vs Pharmacy Competition",
-                     "type": "healthcare_competition",
-                    "url": chart_path
-                })
+                visual_analysis["charts"].append(
+                    {
+                        "title": "Healthcare vs Pharmacy Competition",
+                        "type": "healthcare_competition",
+                        "url": chart_path,
+                    }
+                )
         # Maps
         maps_title = "🗺️ Geographic Analysis"
         md.write(f"## {maps_title}\n\n")
-        
+
         if map_png:
             # Make path relative to markdown directory
-            map_path = os.path.relpath(map_png, os.path.dirname(md_path)).replace('\\', '/')
+            map_path = os.path.relpath(
+                map_png, os.path.dirname(md_path)
+            ).replace("\\", "/")
             md.write("**Location Overview:**\n\n")
             md.write(f"![Candidates Map]({map_path})\n\n\n")
             md.write(f"**Path : {map_path}\n\n")
-            visual_analysis["maps"].append({
-                "title": "Location Overview",
-                "type": "candidates_map",
-                "url": map_path
-            })
+            visual_analysis["maps"].append(
+                {
+                    "title": "Location Overview",
+                    "type": "candidates_map",
+                    "url": map_path,
+                }
+            )
         else:
             md.write("**Location Overview:** *Map not available*\n\n")
 
         if heat_png:
             # Make path relative to markdown directory
-            heat_path = os.path.relpath(heat_png, os.path.dirname(md_path)).replace('\\', '/')
+            heat_path = os.path.relpath(
+                heat_png, os.path.dirname(md_path)
+            ).replace("\\", "/")
             md.write("**Demographic Distribution:**\n\n")
             md.write(f"![Demographic Heatmap]({heat_path})\n\n\n")
             md.write(f"**Path : {heat_path}\n\n")
-            visual_analysis["maps"].append({
-                "title": "Demographic Distribution", 
-                "type": "demographic_heatmap",
-                "url": heat_path
-            })
+            visual_analysis["maps"].append(
+                {
+                    "title": "Demographic Distribution",
+                    "type": "demographic_heatmap",
+                    "url": heat_path,
+                }
+            )
         else:
-            md.write("**Demographic Distribution:** *Heatmap not available*\n\n")
-        
+            md.write(
+                "**Demographic Distribution:** *Heatmap not available*\n\n"
+            )
+
         # Collect interactive maps from detailed analysis
         for site_data in report_data["detailed_analysis"]:
             if site_data["maps"]["interactive_map_url"]:
-                visual_analysis["interactive_maps"].append({
-                    "site_name": site_data["site_name"],
-                    "url": site_data["maps"]["interactive_map_url"]
-                })
-        
+                visual_analysis["interactive_maps"].append(
+                    {
+                        "site_name": site_data["site_name"],
+                        "url": site_data["maps"]["interactive_map_url"],
+                    }
+                )
+
         report_data["visual_analysis"] = visual_analysis
 
         # Methodology
@@ -622,7 +766,7 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
 
         methodology = {
             "overview": "Comprehensive, data-driven approach that integrates multiple data sources and applies weighted scoring to identify optimal locations.",
-            "criteria": {}
+            "criteria": {},
         }
 
         # Traffic Analysis (25%)
@@ -634,13 +778,13 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             "**Rationale:** Lower traffic speeds indicate better accessibility and parking availability.\n\n"
         )
         md.write(traffic_method)
-        
+
         methodology["criteria"]["traffic"] = {
             "weight_percentage": 25,
             "data_source": "Traffic API data TOMTOM",
             "method": "Real-time traffic flow analysis within 500m radius",
             "scoring": "Perfect score (100) for speeds ≤40 km/h; penalty of 5 points per 40 km/h above target",
-            "rationale": "Lower traffic speeds indicate better accessibility and parking availability."
+            "rationale": "Lower traffic speeds indicate better accessibility and parking availability.",
         }
 
         # Demographics (30%)
@@ -652,13 +796,13 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             "**Rationale:** Target demographic alignment ensures market-product fit.\n\n"
         )
         md.write(demo_method)
-        
+
         methodology["criteria"]["demographics"] = {
             "weight_percentage": 30,
             "data_source": "Demographic GeoJSON overlay",
             "method": "Spatial join analysis for age and income matching",
             "scoring": "Perfect score at target age Above 35; penalty of 5 points per year deviation",
-            "rationale": "Target demographic alignment ensures market-product fit."
+            "rationale": "Target demographic alignment ensures market-product fit.",
         }
 
         # Competition (15%)
@@ -670,13 +814,13 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             "**Rationale:** Balanced competition validates demand while avoiding oversaturation.\n\n"
         )
         md.write(comp_method)
-        
+
         methodology["criteria"]["competition"] = {
             "weight_percentage": 15,
             "data_source": "POI analysis of Pharmacies shops",
             "method": "Competitive mapping within analysis radius",
             "scoring": "Perfect score for nearest pharmacy is above 500m in living area; penalty of 10 points per excess competitor",
-            "rationale": "Balanced competition validates demand while avoiding oversaturation."
+            "rationale": "Balanced competition validates demand while avoiding oversaturation.",
         }
 
         # Healthcare Ecosystem (20%)
@@ -688,13 +832,13 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             "**Rationale:** A strong healthcare environment increases site attractiveness and convenience for residents.\n\n"
         )
         md.write(health_method)
-        
+
         methodology["criteria"]["healthcare"] = {
             "weight_percentage": 20,
             "data_source": "POI analysis of hospitals and dental clinics",
             "method": "Scoring based on proximity to nearby hospitals and dentists (≤1500m preferred)",
             "scoring": "Average of proximity scores; closer and more accessible healthcare improves score",
-            "rationale": "A strong healthcare environment increases site attractiveness and convenience for residents."
+            "rationale": "A strong healthcare environment increases site attractiveness and convenience for residents.",
         }
 
         # Complementary Businesses (10%)
@@ -706,13 +850,13 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             "**Rationale:** Access to everyday amenities supports sustained foot traffic and customer satisfaction.\n\n"
         )
         md.write(comp_bus_method)
-        
+
         methodology["criteria"]["complementary"] = {
             "weight_percentage": 10,
             "data_source": "POI analysis of grocery stores, supermarkets, restaurants, ATMs, and banks",
             "method": "Proximity-based scoring within 1000m; closer businesses improve accessibility",
             "scoring": "Average score across all complementary business types",
-            "rationale": "Access to everyday amenities supports sustained foot traffic and customer satisfaction."
+            "rationale": "Access to everyday amenities supports sustained foot traffic and customer satisfaction.",
         }
 
         # Final Score Calculation
@@ -728,80 +872,88 @@ def generate_markdown(sites: List[Dict], outdir: str, out_md: str, top_n: int,
             "- 🔴 <60 → Requires careful consideration\n\n"
         )
         md.write(formula_text)
-        
+
         methodology["final_calculation"] = {
             "formula": "Final Score = (Traffic × 0.25) + (Demographics × 0.30) + (Competition × 0.15) + (Healthcare × 0.20) + (Complementary × 0.10)",
             "range": "0–100 scale where 100 = optimal conditions across all criteria",
             "interpretation": {
                 "excellent": "≥80 → Excellent potential",
-                "good": "60–79 → Good potential", 
-                "caution": "<60 → Requires careful consideration"
-            }
+                "good": "60–79 → Good potential",
+                "caution": "<60 → Requires careful consideration",
+            },
         }
-        
+
         report_data["methodology"] = methodology
 
         # Key Statistical Insights
         stats_insights_title = "📈 Key Statistical Insights"
         md.write(f"## {stats_insights_title}\n\n")
-        
+
         statistical_insights = []
-        
-        insight1 = f"💰 **Price vs Performance:** Among the {stats['total_sites']} analysed properties, price showed a weak-to-moderate correlation with suitability, suggesting inefficiencies in the rental market and hidden value opportunities."
+
+        insight1 = f"💰 **Price vs Performance:** Among the {len(sites)} analysed properties, price showed a weak-to-moderate correlation with suitability, suggesting inefficiencies in the rental market and hidden value opportunities."
         md.write(f"- {insight1}\n")
-        statistical_insights.append({
-            "category": "Price vs Performance",
-            "description": f"Among the {stats['total_sites']} analysed properties, price showed a weak-to-moderate correlation with suitability, suggesting inefficiencies in the rental market and hidden value opportunities.",
-            "total_sites": stats['total_sites']
-        })
-        
+        statistical_insights.append(
+            {
+                "category": "Price vs Performance",
+                "description": f"Among the {len(sites)} analysed properties, price showed a weak-to-moderate correlation with suitability, suggesting inefficiencies in the rental market and hidden value opportunities.",
+                "total_sites": len(sites),
+            }
+        )
+
         insight2 = "🏪 **Business Ecosystem Impact:** Locations with more than 15 nearby businesses consistently achieved higher performance scores, highlighting the critical role of commercial density."
         md.write(f"- {insight2}\n")
-        statistical_insights.append({
-            "category": "Business Ecosystem Impact",
-            "description": "Locations with more than 15 nearby businesses consistently achieved higher performance scores, highlighting the critical role of commercial density.",
-            "threshold": 15
-        })
-        
+        statistical_insights.append(
+            {
+                "category": "Business Ecosystem Impact",
+                "description": "Locations with more than 15 nearby businesses consistently achieved higher performance scores, highlighting the critical role of commercial density.",
+                "threshold": 15,
+            }
+        )
+
         insight3 = "🚗 **Traffic Flow Optimisation:** Optimal site performance was observed where average traffic speeds range between 20–35 km/h, balancing accessibility with manageable congestion."
         md.write(f"- {insight3}\n")
-        statistical_insights.append({
-            "category": "Traffic Flow Optimisation",
-            "description": "Optimal site performance was observed where average traffic speeds range between 20–35 km/h, balancing accessibility with manageable congestion.",
-            "optimal_speed_range": "20-35 km/h"
-        })
-        
+        statistical_insights.append(
+            {
+                "category": "Traffic Flow Optimisation",
+                "description": "Optimal site performance was observed where average traffic speeds range between 20–35 km/h, balancing accessibility with manageable congestion.",
+                "optimal_speed_range": "20-35 km/h",
+            }
+        )
+
         insight4 = "👥 **Demographic Alignment:** Variance from the target median age of 35 strongly influenced demographic scores, validating age-based targeting across diverse districts."
         md.write(f"- {insight4}\n\n")
-        statistical_insights.append({
-            "category": "Demographic Alignment",
-            "description": "Variance from the target median age of 35 strongly influenced demographic scores, validating age-based targeting across diverse districts.",
-            "target_age": 35
-        })
-        
+        statistical_insights.append(
+            {
+                "category": "Demographic Alignment",
+                "description": "Variance from the target median age of 35 strongly influenced demographic scores, validating age-based targeting across diverse districts.",
+                "target_age": 35,
+            }
+        )
+
         report_data["statistical_insights"] = statistical_insights
 
         # Footer
         md.write("---\n")
-        footer_text = f"*Report generated using advanced geospatial analysis and machine learning algorithms.*  \n*Analysis covered {stats['total_sites']} candidate locations with comprehensive multi-criteria scoring.*\n\n"
+        footer_text = f"""*Report generated using advanced geospatial analysis and machine learning algorithms.*  
+        \n*Analysis covered {len(sites)} candidate locations with comprehensive multi-criteria scoring.*\n\n"""
         md.write(footer_text)
-        
+
         report_data["metadata"] = {
             "generation_method": "Advanced geospatial analysis and machine learning algorithms",
-            "total_sites_analyzed": stats['total_sites'],
-            "report_file_path": md_path
+            "total_sites_analyzed": len(sites),
+            "report_file_path": md_path,
         }
 
     print(f"✅ Enhanced report generated: {md_path}")
     # Return the structured report data
-    return report_data 
+    return report_data
 
 
 def generate_table_with_current_comparison(
     top_sites: List[Dict],
     current_location: List[Dict],  # usually just 1 dict
-    MAX_TOTAL: float,
-    CRITERION_WEIGHTS: Dict[str, float]
+    CRITERION_WEIGHTS: Dict[str, float],
 ) -> str:
     """
     Generate Markdown table for top_sites with comparisons to current_location.
@@ -812,7 +964,7 @@ def generate_table_with_current_comparison(
         return "_No top sites available._\n"
     if not current_location:
         # fallback: no comparison
-        return generate_enhanced_table(top_sites, MAX_TOTAL, CRITERION_WEIGHTS)
+        return generate_enhanced_table(top_sites, CRITERION_WEIGHTS)
 
     current = current_location[0]  # baseline
     header = (
@@ -828,7 +980,7 @@ def generate_table_with_current_comparison(
     def compare(top_val, curr_val):
         if curr_val == 0:
             return f"{top_val:.1f} ({curr_val:.0f}, N/A)"
-        diff_pct = abs(top_val - curr_val) 
+        diff_pct = abs(top_val - curr_val)
         if top_val > curr_val:
             result = f"{top_val:.0f} (⬆️{diff_pct:.0f})"
         elif top_val < curr_val:
@@ -836,24 +988,25 @@ def generate_table_with_current_comparison(
         else:
             result = f"{top_val:.0f} (0 ⬇️⬆️)"
         return f"&lrm;{result}"
+
     for site in top_sites:
-        price_display = f"{site.get('price', 0):,}" if site.get('price') else "N/A"
+        price_display = (
+            f"{site.get('price', 0):,}" if site.get("price") else "N/A"
+        )
 
-        # Top site scores normalized to 100
-        final_score = (site['total_score'] / MAX_TOTAL) * 100
-        traffic = normalize_score_to_100(site.get('scores', {}).get('traffic_score', 0), CRITERION_WEIGHTS['traffic'])
-        demographics = normalize_score_to_100(site.get('scores', {}).get('demographics_score', 0), CRITERION_WEIGHTS['demographics'])
-        competition = normalize_score_to_100(site.get('scores', {}).get('competition_score', 0), CRITERION_WEIGHTS['competition'])
-        healthcare = normalize_score_to_100(site.get('scores', {}).get('healthcare_score', 0), CRITERION_WEIGHTS['healthcare'])
-        complementary = normalize_score_to_100(site.get('scores', {}).get('complementary_score', 0), CRITERION_WEIGHTS['complementary'])
+        final_score = site["total_score"]
+        traffic = site.get("weighted_scores", {}).get("traffic", 0)
+        demographics = site.get("weighted_scores", {}).get("demographics", 0)
+        competition = site.get("weighted_scores", {}).get("competition", 0)
+        healthcare = site.get("weighted_scores", {}).get("healthcare", 0)
+        complementary = site.get("weighted_scores", {}).get("complementary", 0)
 
-        # Current location normalized scores
-        curr_final = (current['total_score'] / MAX_TOTAL) * 100
-        curr_traffic = normalize_score_to_100(current.get('scores', {}).get('traffic_score', 0), CRITERION_WEIGHTS['traffic'])
-        curr_demo = normalize_score_to_100(current.get('scores', {}).get('demographics_score', 0), CRITERION_WEIGHTS['demographics'])
-        curr_comp = normalize_score_to_100(current.get('scores', {}).get('competition_score', 0), CRITERION_WEIGHTS['competition'])
-        curr_health = normalize_score_to_100(current.get('scores', {}).get('healthcare_score', 0), CRITERION_WEIGHTS['healthcare'])
-        curr_complement = normalize_score_to_100(current.get('scores', {}).get('complementary_score', 0), CRITERION_WEIGHTS['complementary'])
+        curr_final = current["total_score"]
+        curr_traffic = current.get("weighted_scores", {}).get("traffic", 0)
+        curr_demo = current.get("weighted_scores", {}).get("demographics", 0)
+        curr_comp = current.get("weighted_scores", {}).get("competition", 0)
+        curr_health = current.get("weighted_scores", {}).get("healthcare", 0)
+        curr_complement = current.get("weighted_scores", {}).get("complementary", 0)
 
         # Format each score with comparison
         final_display = compare(final_score, curr_final)
@@ -873,238 +1026,354 @@ def generate_table_with_current_comparison(
 
 
 def write_detailed_analysis_with_current(
-    md, sites, current_location, MAX_TOTAL, CRITERION_WEIGHTS, maps_dir, md_path, section_title: str, category: str = "Shop For Rent"
+    md,
+    sites,
+    current_location,
+    CRITERION_WEIGHTS,
+    maps_dir,
+    md_path,
+    section_title: str,
+    category: str = "Shop For Rent",
 ) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     """Write detailed site analysis comparing top locations with current location and return structured data."""
-    
+
     if not sites:
         return [], []
 
     md.write(f"## {section_title}\n\n")
-    
+
     detailed_analysis = []
     current_detailed_analysis = []
-    
+
     for i, s in enumerate(sites, start=1):
-        final_score_100 = (s['total_score'] / MAX_TOTAL) * 100
+        final_score_100 = s["total_score"]
         current_final_score_100 = None
         current_s = None
-        
+
         if current_location and len(current_location) > 0:
             current_s = current_location[0]  # Assuming single current location
-            current_final_score_100 = (current_s['total_score'] / MAX_TOTAL) * 100
-        
+            current_final_score_100 = current_s["total_score"]
+
         # Write headers for both locations
         if current_s:
-            md.write(f"### {i}. {s['display_name']} vs Current Location Comparison (Scores: {final_score_100:.1f}/100 vs {current_final_score_100:.1f}/100)\n\n")
+            md.write(
+                f"### {i}. {s['display_name']} vs Current Location Comparison (Scores: {final_score_100:.1f}/100 vs {current_final_score_100:.1f}/100)\n\n"
+            )
         else:
-            md.write(f"### {i}. {s['display_name']} (Score: {final_score_100:.1f}/100)\n\n")
-        
+            md.write(
+                f"### {i}. {s['display_name']} (Score: {final_score_100:.1f}/100)\n\n"
+            )
+
         # Location info for top site
         coords_text = (
             f"**Location:** {s['lat']:.6f}, {s['lng']:.6f}"
-            if (s['lat'] is not None and s['lng'] is not None)
+            if (s["lat"] is not None and s["lng"] is not None)
             else f"**Location:** {s.get('raw_place') or 'N/A'}"
         )
-        price_text = f"**Rent Price:** {s.get('price', 0):,} SAR" if s.get('price') else "**Rent Price:** Not specified"
-        
-        md.write(f"**Top Location:** {coords_text} | {price_text} | Category: {category}\n\n")
-        
+        price_text = (
+            f"**Rent Price:** {s.get('price', 0):,} SAR"
+            if s.get("price")
+            else "**Rent Price:** Not specified"
+        )
+
+        md.write(
+            f"**Top Location:** {coords_text} | {price_text} | Category: {category}\n\n"
+        )
+
         # Current location info if exists
         if current_s:
             current_coords_text = (
                 f"**Location:** {current_s['lat']:.6f}, {current_s['lng']:.6f}"
-                if (current_s['lat'] is not None and current_s['lng'] is not None)
+                if (
+                    current_s["lat"] is not None
+                    and current_s["lng"] is not None
+                )
                 else f"**Location:** {current_s.get('raw_place') or 'N/A'}"
             )
-            current_price_text = f"**Rent Price:** {current_s.get('price', 0):,} SAR" if current_s.get('price') else "**Rent Price:** Not specified"
-            md.write(f"**Current Location:** {current_coords_text} | {current_price_text} | Category: {category}\n\n")
-        
-        analysis_space = "Analysis Preformed for locations with 2km from all sides"
+            current_price_text = (
+                f"**Rent Price:** {current_s.get('price', 0):,} SAR"
+                if current_s.get("price")
+                else "**Rent Price:** Not specified"
+            )
+            md.write(
+                f"**Current Location:** {current_coords_text} | {current_price_text} | Category: {category}\n\n"
+            )
+
+        analysis_space = (
+            "Analysis Preformed for locations with 2km from all sides"
+        )
         md.write(f"{analysis_space}\n\n")
-        
+
         # Generate insights for top location
         md.write("#### Top Location Analysis\n")
         md.write(generate_detailed_insights(s))
         md.write(f"**[🗺️ View location]({s['url']})**\n\n")
-        
+
         # Generate insights for current location if exists
-        map_image, html_map = generate_site_map_image(s, maps_dir, MAX_TOTAL)
-        # Make paths relative to markdown directory  
-        map_image_rel = os.path.relpath(map_image, os.path.dirname(md_path)).replace("\\", "/") if map_image else None
-        html_map_rel = os.path.relpath(html_map, os.path.dirname(md_path)).replace("\\", "/") if html_map else None
+        map_image, html_map = generate_site_map_image(s)
+        # Make paths relative to markdown directory
+        map_image_rel = (
+            os.path.relpath(map_image, os.path.dirname(md_path)).replace(
+                "\\", "/"
+            )
+            if map_image
+            else None
+        )
+        html_map_rel = (
+            os.path.relpath(html_map, os.path.dirname(md_path)).replace(
+                "\\", "/"
+            )
+            if html_map
+            else None
+        )
         if map_image_rel:
             md.write(f"![Top Location Map]({map_image_rel})\n\n")
         if html_map_rel:
-            md.write(f"[Open interactive map - Top Location]({html_map_rel})\n\n")
+            md.write(
+                f"[Open interactive map - Top Location]({html_map_rel})\n\n"
+            )
         if current_s:
             md.write("#### Current Location Analysis\n")
             md.write(generate_detailed_insights(current_s))
             md.write(f"**[🗺️ View location]({current_s['url']})**\n\n")
-        
+
         # Maps for top location
- 
-        
+
         # Maps for current location if exists
         current_map_image_rel = None
         current_html_map_rel = None
         if current_s:
-            current_map_image, current_html_map = generate_site_map_image(current_s, maps_dir, MAX_TOTAL)
+            current_map_image, current_html_map = generate_site_map_image(
+                current_s
+            )
             # Make paths relative to markdown directory
-            current_map_image_rel = os.path.relpath(current_map_image, os.path.dirname(md_path)).replace("\\", "/") if current_map_image else None
-            current_html_map_rel = os.path.relpath(current_html_map, os.path.dirname(md_path)).replace("\\", "/") if current_html_map else None
+            current_map_image_rel = (
+                os.path.relpath(
+                    current_map_image, os.path.dirname(md_path)
+                ).replace("\\", "/")
+                if current_map_image
+                else None
+            )
+            current_html_map_rel = (
+                os.path.relpath(
+                    current_html_map, os.path.dirname(md_path)
+                ).replace("\\", "/")
+                if current_html_map
+                else None
+            )
             if current_map_image_rel:
-                md.write(f"![Current Location Map]({current_map_image_rel})\n\n")
+                md.write(
+                    f"![Current Location Map]({current_map_image_rel})\n\n"
+                )
             if current_html_map_rel:
-                md.write(f"[Open interactive map - Current Location]({current_html_map_rel})\n\n")
-        
+                md.write(
+                    f"[Open interactive map - Current Location]({current_html_map_rel})\n\n"
+                )
+
         # Scoring breakdown table - extended format
         if current_s:
-            md.write('| Criterion | Sub-factor | Raw Score |  Weighted Score | Current Raw Score | Current Weighted Score |\n')
-            md.write('|-----------|------------|---------------|---------------------|-------------------|------------------------|\n')
+            md.write(
+                "| Criterion | Key Metrics | Raw Score | Weighted Score | Current Raw Score | Current Weighted Score |\n"
+            )
+            md.write(
+                "|-----------|-------------|-----------|----------------|-------------------|------------------------|\n"
+            )
         else:
-            md.write('| Criterion | Sub-factor | Raw Score | Weighted Points |\n')
-            md.write('|-----------|------------|-----------|----------------|\n')
+            md.write(
+                "| Criterion | Key Metrics | Raw Score | Weighted Points |\n"
+            )
+            md.write(
+                "|-----------|-------------|-----------|----------------|\n"
+            )
 
         scoring_breakdown = []
         current_scoring_breakdown = []
-        
-        for c in CRITERION_WEIGHTS.keys():
-            dkeys = [k for k in s['details'].keys() if k.startswith(f"{c}__") and not k.endswith('_weighted')]
-            current_dkeys = []
-            if current_s:
-                current_dkeys = [k for k in current_s['details'].keys() if k.startswith(f"{c}__") and not k.endswith('_weighted')]
+
+        # Traffic scoring
+        if "traffic" in CRITERION_WEIGHTS:
+            traffic_raw = s.get("traffic_score", 0.0)
+            weighted_points = s.get("weighted_scores", {}).get("traffic", 0.0)
             
-            if dkeys and any(not math.isnan(s['details'].get(k, float('nan'))) for k in dkeys):
-                sub_weight = CRITERION_WEIGHTS[c] / max(1, len(dkeys))
-                crit_total = 0.0
-                current_crit_total = 0.0
-                
-                for dk in dkeys:
-                    raw = s['details'].get(dk, float('nan'))
-                    weighted = (raw / 100.0) * sub_weight if not math.isnan(raw) else float('nan')
-                    crit_total += 0.0 if math.isnan(weighted) else weighted
-                    
-                    current_raw = float('nan')
-                    current_weighted = float('nan')
-                    if current_s and dk in current_dkeys:
-                        current_raw = current_s['details'].get(dk, float('nan'))
-                        current_weighted = (current_raw / 100.0) * sub_weight if not math.isnan(current_raw) else float('nan')
-                        current_crit_total += 0.0 if math.isnan(current_weighted) else current_weighted
-                    
-                    sub_name = dk.replace(f"{c}__", '').replace('_', ' ')
-                    raw_display = f'{raw:.1f}' if not math.isnan(raw) else 'N/A'
-                    weighted_display = f'{weighted:.2f}' if not math.isnan(weighted) else 'N/A'
-                    
-                    if current_s:
-                        current_raw_display = f'{current_raw:.1f}' if not math.isnan(current_raw) else 'N/A'
-                        current_weighted_display = f'{current_weighted:.2f}' if not math.isnan(current_weighted) else 'N/A'
-                        md.write(f"| {c.capitalize()} | {sub_name} | {raw_display} | {weighted_display} | {current_raw_display} | {current_weighted_display} |\n")
-                    else:
-                        md.write(f"| {c.capitalize()} | {sub_name} | {raw_display} | {weighted_display} |\n")
-                    
-                    scoring_breakdown.append({
-                        "criterion": c.capitalize(),
-                        "sub_factor": sub_name,
-                        "raw_score": raw if not math.isnan(raw) else None,
-                        "weighted_points": weighted if not math.isnan(weighted) else None
-                    })
-                    
-                    if current_s:
-                        current_scoring_breakdown.append({
-                            "criterion": c.capitalize(),
-                            "sub_factor": sub_name,
-                            "raw_score": current_raw if not math.isnan(current_raw) else None,
-                            "weighted_points": current_weighted if not math.isnan(current_weighted) else None
-                        })
-                
-                if current_s:
-                    md.write(f"| **{c.capitalize()} Total** | | **{crit_total:.2f}** | | **{current_crit_total:.2f}** | |\n")
-                else:
-                    md.write(f"| **{c.capitalize()} Total** | | | **{crit_total:.2f}** |\n")
-                    
-                scoring_breakdown.append({
-                    "criterion": f"{c.capitalize()} Total",
-                    "sub_factor": "",
-                    "raw_score": None,
-                    "weighted_points": crit_total
+            if current_s:
+                current_traffic_raw = current_s.get("traffic_score", 0.0)
+                current_weighted_points = current_s.get("weighted_scores", {}).get("traffic", 0.0)
+                md.write(f"| Traffic | Average Speed | {traffic_raw:.1f} km/h | {weighted_points:.2f} | {current_traffic_raw:.1f} km/h | {current_weighted_points:.2f} |\n")
+                current_scoring_breakdown.append({
+                    "criterion": "Traffic",
+                    "sub_factor": "Average Speed",
+                    "raw_score": current_traffic_raw,
+                    "weighted_points": current_weighted_points,
                 })
-                
-                if current_s:
-                    current_scoring_breakdown.append({
-                        "criterion": f"{c.capitalize()} Total",
-                        "sub_factor": "",
-                        "raw_score": None,
-                        "weighted_points": current_crit_total
-                    })
             else:
-                overall = s.get('scores', {}).get(f'{c}_score', 0.0)
-                current_overall = 0.0
-                if current_s:
-                    current_overall = current_s.get('scores', {}).get(f'{c}_score', 0.0)
-                    md.write(f"| {c.capitalize()} | No detailed data | N/A | **{overall:.2f}** | N/A | **{current_overall:.2f}** |\n")
-                else:
-                    md.write(f"| {c.capitalize()} | No detailed data | N/A | **{overall:.2f}** |\n")
-                    
-                scoring_breakdown.append({
-                    "criterion": c.capitalize(),
-                    "sub_factor": "No detailed data",
-                    "raw_score": None,
-                    "weighted_points": overall
+                md.write(f"| Traffic | Average Speed | {traffic_raw:.1f} km/h | {weighted_points:.2f} |\n")
+            
+            scoring_breakdown.append({
+                "criterion": "Traffic",
+                "sub_factor": "Average Speed",
+                "raw_score": traffic_raw,
+                "weighted_points": weighted_points,
+            })
+        
+        # Demographics scoring
+        if "demographics" in CRITERION_WEIGHTS:
+            age_raw = s.get("percentage_age_above_35", 0.0)
+            weighted_points = s.get("weighted_scores", {}).get("demographics", 0.0)
+            
+            if current_s:
+                current_age_raw = current_s.get("percentage_age_above_35", 0.0)
+                current_weighted_points = current_s.get("weighted_scores", {}).get("demographics", 0.0)
+                md.write(f"| Demographics | Age 35+ (%) | {age_raw:.1f}% | {weighted_points:.2f} | {current_age_raw:.1f}% | {current_weighted_points:.2f} |\n")
+                current_scoring_breakdown.append({
+                    "criterion": "Demographics",
+                    "sub_factor": "Age 35+ (%)",
+                    "raw_score": current_age_raw,
+                    "weighted_points": current_weighted_points,
                 })
-                
-                if current_s:
-                    current_scoring_breakdown.append({
-                        "criterion": c.capitalize(),
-                        "sub_factor": "No detailed data",
-                        "raw_score": None,
-                        "weighted_points": current_overall
-                    })
+            else:
+                md.write(f"| Demographics | Age 35+ (%) | {age_raw:.1f}% | {weighted_points:.2f} |\n")
+            
+            scoring_breakdown.append({
+                "criterion": "Demographics", 
+                "sub_factor": "Age 35+ (%)",
+                "raw_score": age_raw,
+                "weighted_points": weighted_points,
+            })
+        
+        # Competition scoring
+        if "competition" in CRITERION_WEIGHTS:
+            comp_raw = s.get("num_of_pharmacies", 0)
+            weighted_points = s.get("weighted_scores", {}).get("competition", 0.0)
+            
+            if current_s:
+                current_comp_raw = current_s.get("num_of_pharmacies", 0)
+                current_weighted_points = current_s.get("weighted_scores", {}).get("competition", 0.0)
+                md.write(f"| Competition | Nearby Pharmacies | {comp_raw} | {weighted_points:.2f} | {current_comp_raw} | {current_weighted_points:.2f} |\n")
+                current_scoring_breakdown.append({
+                    "criterion": "Competition",
+                    "sub_factor": "Nearby Pharmacies",
+                    "raw_score": current_comp_raw,
+                    "weighted_points": current_weighted_points,
+                })
+            else:
+                md.write(f"| Competition | Nearby Pharmacies | {comp_raw} | {weighted_points:.2f} |\n")
+            
+            scoring_breakdown.append({
+                "criterion": "Competition",
+                "sub_factor": "Nearby Pharmacies", 
+                "raw_score": comp_raw,
+                "weighted_points": weighted_points,
+            })
+        
+        # Healthcare scoring
+        if "healthcare" in CRITERION_WEIGHTS:
+            health_raw = s.get("num_of_hospitals", 0) + s.get("num_of_dentists", 0)
+            weighted_points = s.get("weighted_scores", {}).get("healthcare", 0.0)
+            
+            if current_s:
+                current_health_raw = current_s.get("num_of_hospitals", 0) + current_s.get("num_of_dentists", 0)
+                current_weighted_points = current_s.get("weighted_scores", {}).get("healthcare", 0.0)
+                md.write(f"| Healthcare | Hospitals + Dentists | {health_raw} | {weighted_points:.2f} | {current_health_raw} | {current_weighted_points:.2f} |\n")
+                current_scoring_breakdown.append({
+                    "criterion": "Healthcare",
+                    "sub_factor": "Hospitals + Dentists",
+                    "raw_score": current_health_raw,
+                    "weighted_points": current_weighted_points,
+                })
+            else:
+                md.write(f"| Healthcare | Hospitals + Dentists | {health_raw} | {weighted_points:.2f} |\n")
+            
+            scoring_breakdown.append({
+                "criterion": "Healthcare",
+                "sub_factor": "Hospitals + Dentists",
+                "raw_score": health_raw,
+                "weighted_points": weighted_points,
+            })
+        
+        # Complementary businesses scoring
+        if "complementary" in CRITERION_WEIGHTS:
+            comp_raw = s.get("num_of_businesses_around", 0)
+            weighted_points = s.get("weighted_scores", {}).get("complementary", 0.0)
+            
+            if current_s:
+                current_comp_raw = current_s.get("num_of_businesses_around", 0)
+                current_weighted_points = current_s.get("weighted_scores", {}).get("complementary", 0.0)
+                md.write(f"| Complementary | Nearby Businesses | {comp_raw} | {weighted_points:.2f} | {current_comp_raw} | {current_weighted_points:.2f} |\n")
+                current_scoring_breakdown.append({
+                    "criterion": "Complementary",
+                    "sub_factor": "Nearby Businesses",
+                    "raw_score": current_comp_raw,
+                    "weighted_points": current_weighted_points,
+                })
+            else:
+                md.write(f"| Complementary | Nearby Businesses | {comp_raw} | {weighted_points:.2f} |\n")
+            
+            scoring_breakdown.append({
+                "criterion": "Complementary",
+                "sub_factor": "Nearby Businesses",
+                "raw_score": comp_raw,
+                "weighted_points": weighted_points,
+            })
         md.write("\n")
-        
-        detailed_analysis.append({
-            "rank": i,
-            "site_name": s['display_name'],
-            "final_score": round(final_score_100, 1),
-            "analysis_space": analysis_space,
-            "location": {
-                "latitude": s['lat'] if s['lat'] is not None else None,
-                "longitude": s['lng'] if s['lng'] is not None else None,
-                "raw_place": s.get('raw_place')
-            },
-            "price_sar": s.get('price', 0) if s.get('price') else None,
-            "category": category,
-            "url": s.get("url"),
-            "maps": {
-                "static_map_url": map_image_rel,
-                "interactive_map_url": html_map_rel
-            },
-            "detailed_insights": generate_detailed_insights_dict(s),
-            "scoring_breakdown": scoring_breakdown
-        })
-        
-        if current_s:
-            current_detailed_analysis.append({
+
+        detailed_analysis.append(
+            {
                 "rank": i,
-                "site_name": current_s['display_name'],
-                "final_score": round(current_final_score_100, 1),
+                "site_name": s["display_name"],
+                "final_score": round(final_score_100, 1),
                 "analysis_space": analysis_space,
                 "location": {
-                    "latitude": current_s['lat'] if current_s['lat'] is not None else None,
-                    "longitude": current_s['lng'] if current_s['lng'] is not None else None,
-                    "raw_place": current_s.get('raw_place')
+                    "latitude": s["lat"] if s["lat"] is not None else None,
+                    "longitude": s["lng"] if s["lng"] is not None else None,
+                    "raw_place": s.get("raw_place"),
                 },
-                "price_sar": current_s.get('price', 0) if current_s.get('price') else None,
+                "price_sar": s.get("price", 0) if s.get("price") else None,
                 "category": category,
-                "url": current_s.get("url"),
+                "url": s.get("url"),
                 "maps": {
-                    "static_map_url": current_map_image_rel,
-                    "interactive_map_url": current_html_map_rel
+                    "static_map_url": map_image_rel,
+                    "interactive_map_url": html_map_rel,
                 },
-                "detailed_insights": generate_detailed_insights_dict(current_s),
-                "scoring_breakdown": current_scoring_breakdown
-            })
-    
+                "detailed_insights": generate_detailed_insights_dict(s),
+                "scoring_breakdown": scoring_breakdown,
+            }
+        )
+
+        if current_s:
+            current_detailed_analysis.append(
+                {
+                    "rank": i,
+                    "site_name": current_s["display_name"],
+                    "final_score": round(current_final_score_100, 1),
+                    "analysis_space": analysis_space,
+                    "location": {
+                        "latitude": (
+                            current_s["lat"]
+                            if current_s["lat"] is not None
+                            else None
+                        ),
+                        "longitude": (
+                            current_s["lng"]
+                            if current_s["lng"] is not None
+                            else None
+                        ),
+                        "raw_place": current_s.get("raw_place"),
+                    },
+                    "price_sar": (
+                        current_s.get("price", 0)
+                        if current_s.get("price")
+                        else None
+                    ),
+                    "category": category,
+                    "url": current_s.get("url"),
+                    "maps": {
+                        "static_map_url": current_map_image_rel,
+                        "interactive_map_url": current_html_map_rel,
+                    },
+                    "detailed_insights": generate_detailed_insights_dict(
+                        current_s
+                    ),
+                    "scoring_breakdown": current_scoring_breakdown,
+                }
+            )
+
     return detailed_analysis, current_detailed_analysis
-
-

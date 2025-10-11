@@ -23,44 +23,40 @@ def validate_response_data(data: Dict[str, Any]) -> Tuple[bool, str, str]:
         Tuple[bool, str, str]: (is_valid, format_type, error_message)
         format_type: "comparison" | "direct" | "invalid"
     """
-    try:
-        # Check if data has required structure
-        if not isinstance(data, dict):
-            return False, "invalid", "Data must be a dictionary"
-        rankings = data.get("rankings", [])
+    # Check if data has required structure
+    if not isinstance(data, dict):
+        return False, "invalid", "Data must be a dictionary"
+    rankings = data.get("rankings", [])
 
-        if not rankings:
-            data_section = data.get("data", {})
-            if data_section:
-                rankings = data_section.get("rankings", [])
+    if not rankings:
+        data_section = data.get("data", {})
+        if data_section:
+            rankings = data_section.get("rankings", [])
 
-        if not rankings:
-            return False, "invalid", "Missing or empty 'rankings' array"
+    if not rankings:
+        return False, "invalid", "Missing or empty 'rankings' array"
 
-        if not isinstance(rankings, list):
-            return False, "invalid", "'rankings' must be an array"
+    if not isinstance(rankings, list):
+        return False, "invalid", "'rankings' must be an array"
 
-        # Analyze first ranking to determine format type
-        first_ranking = rankings[0]
-        format_type = _determine_format_type(first_ranking)
+    # Analyze first ranking to determine format type
+    first_ranking = rankings[0]
+    format_type = _determine_format_type(first_ranking)
 
-        # Validate based on format type
-        if format_type == "comparison":
-            is_valid, error = _validate_comparison_format(rankings)
-        elif format_type == "direct":
-            is_valid, error = _validate_direct_format(rankings)
-        else:
-            return False, "invalid", "Unable to determine data format type"
+    # Validate based on format type
+    if format_type == "comparison":
+        is_valid, error = _validate_comparison_format(rankings)
+    elif format_type == "direct":
+        is_valid, error = _validate_direct_format(rankings)
+    else:
+        return False, "invalid", "Unable to determine data format type"
 
-        if not is_valid:
-            return False, format_type, error
+    if not is_valid:
+wwwwwww        return False, format_type, error
 
-        logger.info(f"Data validation successful. Format type: {format_type}")
-        return True, format_type, ""
+    logger.info(f"Data validation successful. Format type: {format_type}")
+    return True, format_type, ""
 
-    except Exception as e:
-        logger.error(f"Data validation failed with exception: {str(e)}")
-        return False, "invalid", f"Validation error: {str(e)}"
 
 
 def _determine_format_type(ranking: Dict[str, Any]) -> str:

@@ -1,218 +1,115 @@
+import all_types.request_dtypes as Reqsmartreport
 
-def score_traffic_for_retail(average_speed : float, frc : str,traffic_score):
+def score_demographics(shop: dict, req:Reqsmartreport) -> dict:
     """
-    Scores traffic conditions for retail based on average vehicle speed and functional road class (FRC).
-    
-    Returns a dict with weighted overall score and details of sub-scores.
-    """
-    # Ensure average_speed is a float
-    try:
-        average_speed = float(average_speed)
-    except (ValueError, TypeError):
-        average_speed = 50.0  # Default value if conversion fails
-    
-   #highway evaluation
-    frc_weights = {
-        "FRC" : {
-        "FRC0": 0.0,  
-        "FRC1": 0.0,
-        "FRC2": 0.3,
-        "FRC3": 0.6,
-        "FRC4": 1,  
-        "FRC5": 1,
-        "FRC6": 0.9,
-        "FRC7": 0.7,
-        "FRC8" : 0.6
-        }
-        }
-     # Speed normalization: in retail, moderate speed (~40–60 km/h) is ideal
-    if average_speed < 20:
-        speed_score = 0.6
-    elif 20 <= average_speed <= 30 :
-        speed_score = 1.0
-    elif 30 < average_speed <= 50:
-        speed_score = 0.8
-    elif 50 < average_speed <= 70:
-        speed_score = 0.7
-    else:
-        speed_score = 0.3  # highway speeds
-
-    frc_score = frc_weights.get("FRC").get(frc , 0.5)
-
-    combined_score = 0.5 * speed_score + 0.5 * frc_score
-    # overall_score = traffic_score * combined_score
-
-    return {
-        "overall_score": (combined_score * traffic_score) ,
-        "details": {
-            "Average Viechle Speed": speed_score * 100,
-            "highway score": frc_score * 100,
-        }
-    }
-
-def score_demographics(pop_data: dict, weight_score: float) -> dict:
-    """
-    Scores demographics by combining:
-    - Residential density (avg_density)
-    - Age 35+ (%)
-    - Income (avg_income)
-    - Household size (median or average size)
-    
     Returns dict with weighted overall score and detailed scores.
     """
-    # Ensure pop_data is not None
-    if not pop_data:
-        return {
-            "overall_score": 0.0,
-            "details": {
-                " Residential density within 3km driving radius": 0.0,
-                "Age distribution above 35": 0.0,
-                "Income levels": 0.0,
-                "Household composition": 0.0
-            }
-        }
+    tgt_income_string = req.target_income_level
+    tgt_age = req.target_age
+    weight_score = req.evaluation_metrics.demographics
 
-    MAX_DENSITY = 6000    # people per sq km (adjust as max observed)
-    MAX_INCOME = 11000     # SAR monthly (approximate upper bound)
-    MAX_HOUSEHOLD_SIZE = 4 # large families in area
-    
-    # Ensure all values are floats to prevent type comparison errors
-    def safe_float(value, default=0.0):
-        try:
-            return float(value) if value is not None else default
-        except (ValueError, TypeError):
-            return default
-    
-    avg_density = safe_float(pop_data.get("avg_density", 0))
-    percentage_age_above_35 = safe_float(pop_data.get("percentage_age_above_35", 0))
-    avg_income = safe_float(pop_data.get("avg_income", 0))
-    
-    density_score = min(avg_density / MAX_DENSITY, 1.0)
-    age_score = min(percentage_age_above_35 / 60, 1.0)
-    income_score = min(avg_income / MAX_INCOME, 1.0)
-    
-    household_size = safe_float(pop_data.get("Household_Median_Size", pop_data.get("Household_Average_Size", 1)))
-    household_score = min(household_size / MAX_HOUSEHOLD_SIZE, 1.0)
+    income_score = shop.get(f"income_score_{tgt_income_string}", 0)
+    avg_median_age = shop.get("avg_median_age", 0)
+    housing_score = shop.get("housing_score", 0)
+    household_score = shop.get("household_score", 0)
 
-    average_score = (density_score + age_score + income_score + household_score) / 4
+    deviation = abs(avg_median_age - tgt_age) / tgt_age
+    age_score = max(0, 1 - deviation)*100
 
-    return {
-        "overall_score": (average_score  * weight_score) ,
-        "details": {
-            " Residential density within 3km driving radius": (density_score * 100),
-            "Age distribution above 35": age_score * 100,
-            "Income levels": income_score * 100,
-            "Household composition": household_score * 100
-        }
-    }
+    average_score = (
+        age_score + income_score + household_score + housing_score
+    ) / 4
 
-def score_competitive(healthcare_data, weight_score):
+    return average_score * weight_score
+
+
+def score_competitive(shop, weight_score):
     # Ensure healthcare_data has the expected structure
-    if not healthcare_data or 'pharmacy' not in healthcare_data:
-        return {
-            "overall_score": 0.0,
-            "details": {
-                "Distance to nearest pharmacy": 0.0,
-                "Market saturation": 0.0,
-                "competeing pharmacies around": 0
-            }
-        }
-    
-    nearby_pharmacies = healthcare_data['pharmacy'].get('nearby_pharmacy', [])
-    
+    if not shop or "pharmacy" not in shop:
+        return 0
+
+    nearby_pharmacies = shop.get("nearby_pharmacy", [])
+
     # Ensure pharmacies_per_10k is a float
-    try:
-        pharmacies_per_10k = float(healthcare_data['pharmacy'].get('pharmacies_per_10k_population', 0)) / 100
-    except (ValueError, TypeError):
-        pharmacies_per_10k = 0.0
+    pharmacies_per_10k = shop.get("pharmacies_per_10k_population")
 
     if nearby_pharmacies:
-        # Ensure distance values are floats
-        try:
-            nearest_distance = min(float(p['est_driving_distance_meters']) for p in nearby_pharmacies)
-        except (ValueError, TypeError):
-            nearest_distance = 3000
+        closest_pharmacy_distance = min(
+            float(p["est_driving_distance_meters"]) for p in nearby_pharmacies
+        )
     else:
-        nearest_distance = 3000  # large distance, underserved
-    # Normalize distance score: farther is better, capped at 5 km
-    distance_score = min(nearest_distance / 1000, 1.0)
+        closest_pharmacy_distance = 3000  # large distance, underserved
+    
+    # calculate distance score between 0 and 100
+    # 1.0 score if further than 5km
+    # 0 score if closer than 0.5km
+    MIN_DISTANCE = 500  # 0.5km in meters
+    MAX_DISTANCE = 5000  # 5km in meters
 
-    # Normalize saturation: assume 0 to 20 pharmacies per 10k population
-    saturation_score = max(0, (1 - pharmacies_per_10k)) if pharmacies_per_10k > 0 else 0
+    if closest_pharmacy_distance <= MIN_DISTANCE:
+        distance_score = 0.0
+    elif closest_pharmacy_distance >= MAX_DISTANCE:
+        distance_score = 1.0
+    else:
+        distance_score = (closest_pharmacy_distance - MIN_DISTANCE) / (MAX_DISTANCE - MIN_DISTANCE)
 
-    # Average of the two criteria (0..1)
-    average_score = (distance_score + saturation_score) / 2
+    distance_score = distance_score * 100.0
 
-    return {
-        "overall_score": (average_score * weight_score) ,
-        "details": {
-            "Distance to nearest pharmacy": distance_score * 100,
-            "Market saturation": saturation_score * 100,
-            "competeing pharmacies around" : healthcare_data.get("pharmacy", {}).get("num_of_pharmacies", 0)
-        }
-    }
+    # saturation score internally on 0.0..1.0
+    # max (1.0) when pharmacies_per_10k == 0, min (0.0) when >= 5
+    SAT_THRESHOLD = 5.0
+    if pharmacies_per_10k <= 0:
+        saturation_score = 1.0
+    elif pharmacies_per_10k >= SAT_THRESHOLD:
+        saturation_score = 0.0
+    else:
+        saturation_score = 1.0 - (pharmacies_per_10k / SAT_THRESHOLD)
+    saturation_score = max(0.0, min(1.0, saturation_score))
+    saturation_score = saturation_score * 100.0
+
+    average_score = (distance_score + saturation_score) / 2.0
 
 
-def score_healthcare_ecosystem(healthcare_data, weight_score):
+    return average_score * weight_score
+
+
+def score_healthcare_ecosystem(shop, weight_score):
     # Ensure healthcare_data is not None
-    if not healthcare_data:
-        return {
-            "overall_score": 0.0,
-            "details": {
-                "Proximity to hospitals": 0.0,
-                " Proximity to dentists": 0.0
-            }
-        }
-    
-    def score_proximity(places):
-        if not places:
-            return 0.0
-        max_distance = 1500  # meters
-        
-        # Ensure distance values are floats
-        try:
-            within_3km = [p for p in places if float(p['est_driving_distance_meters']) <= max_distance]
-        except (ValueError, TypeError):
-            return 0.0
-            
-        if not within_3km:
-            return 0.0
+    if not shop:
+        return 0
 
-        try:
-            avg_distance = sum(float(p['est_driving_distance_meters']) for p in within_3km) / len(within_3km)
-            avg_distance_score = 1 - min(1, avg_distance / max_distance)
-        except (ValueError, TypeError):
-            return 0.0
-        count_score = min(len(within_3km), 5) / 5
-        return avg_distance_score * count_score
+    PROXIMITY_MAX_DISTANCE = 1500  # 1.5km in meters
+    MAX_COUNT_FOR_FULL_SCORE = 3  # 3 or more places gives max score
 
-    hospitals_score = score_proximity(healthcare_data.get('nearby_hospital', []))
-    dentists_score = score_proximity(healthcare_data.get('nearby_dentist', []))
+    # Score hospitals
+    hospitals = shop.get("nearby_hospital", [])
+    hospitals_within_range = [
+        h for h in hospitals 
+        if float(h["est_driving_distance_meters"]) <= PROXIMITY_MAX_DISTANCE
+    ]
+    hospitals_count = len(hospitals_within_range)
+    hospitals_score = min(100.0, (hospitals_count / MAX_COUNT_FOR_FULL_SCORE) * 100.0)
 
+    # Score dentists
+    dentists = shop.get("nearby_dentist", [])
+    dentists_within_range = [
+        d for d in dentists 
+        if float(d["est_driving_distance_meters"]) <= PROXIMITY_MAX_DISTANCE
+    ]
+    dentists_count = len(dentists_within_range)
+    dentists_score = min(100.0, (dentists_count / MAX_COUNT_FOR_FULL_SCORE) * 100.0)
+
+    # Average of both scores
     average_score = (hospitals_score + dentists_score) / 2
-    return {
-        "overall_score": (average_score * weight_score) ,
-        "details": {
-            "Proximity to hospitals": hospitals_score * 100,
-            " Proximity to dentists": dentists_score * 100
-        }
-    }
-
-
-def score_complementary_businesses(amenities_data, weight_score):
-    # Ensure amenities_data is not None
-    if not amenities_data:
-        return {
-            "overall_score": 0.0,
-            "details": {
-                "grocery_store": 0.0,
-                "supermarkets": 0.0,
-                "restaurants": 0.0,
-                "ATMs": 0.0,
-                "Banks": 0.0
-            }
-        }
     
+    return (average_score * weight_score)
+
+
+def score_complementary_businesses(shop, weight_score):
+    # Ensure amenities_data is not None
+    if not shop:
+        return 0
+
     MAX_DISTANCE = 1000  # meters, max cutoff for proximity scoring
 
     def proximity_score(places):
@@ -220,28 +117,42 @@ def score_complementary_businesses(amenities_data, weight_score):
             return 0.0
         # Score for each place: 1 - (distance / MAX_DISTANCE), clipped to [0,1]
         try:
-            scores = [max(0, 1 - (float(p['est_distance_meters']) / (MAX_DISTANCE * 2))) for p in places]
+            scores = [
+                max(
+                    0,
+                    1 - (float(p["est_distance_meters"]) / (MAX_DISTANCE * 2)),
+                )
+                for p in places
+            ]
             # Average score for all places of this type
             return min(1, (sum(scores) / len(scores)) + (len(places) * 0.05))
         except (ValueError, TypeError):
             return 0.0
 
-    grocery_score = proximity_score(amenities_data.get('grocery_store', {}).get('nearby_grocery_store', []))
-    supermarket_score = proximity_score(amenities_data.get('supermarket', {}).get('nearby_supermarket', []))
-    restaurant_score = proximity_score(amenities_data.get('restaurant', {}).get('nearby_restaurant', []))
-    atm_score = proximity_score(amenities_data.get('atm', {}).get('nearby_atm', []))
-    bank_score = proximity_score(amenities_data.get('bank', {}).get('nearby_bank', []))
+    grocery_score = proximity_score(
+        shop.get("nearby_grocery_store", [])
+    )
+    supermarket_score = proximity_score(
+        shop.get("nearby_supermarket", [])
+    )
+    restaurant_score = proximity_score(
+        shop.get("nearby_restaurant", [])
+    )
+    atm_score = proximity_score(
+        shop.get("nearby_atm", [])
+    )
+    bank_score = proximity_score(
+        shop.get("nearby_bank", [])
+    )
 
     # Equal weight average of all five types
-    average_score = (grocery_score + supermarket_score + restaurant_score + atm_score + bank_score) / 5
+    average_score = (
+        grocery_score
+        + supermarket_score
+        + restaurant_score
+        + atm_score
+        + bank_score
+    ) / 5
+    average_score = average_score * 100
 
-    return {
-        "overall_score": (average_score * weight_score) ,
-        "details": {
-            "grocery_store": grocery_score * 100,
-            "supermarkets": supermarket_score * 100,
-            "restaurants": restaurant_score * 100,
-            "ATMs": atm_score * 100,
-            "Banks": bank_score * 100
-        }
-    }
+    return average_score * weight_score

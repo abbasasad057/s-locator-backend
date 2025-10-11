@@ -56,10 +56,10 @@ async def get_other_businesses_data(area_polygon : dict , lat : float, lng : flo
         results = process_category_data(area_polygon , lat , lng , typ=category, category_data=data)
         num_of_businesses_around += len(results[key])
         results[key] = top_n_closest(results, key, 5)
-        amenities[category] = {**results}
+        amenities.update(results)
 
     return {
-        "num of business around" : num_of_businesses_around,
-        "nearest_businessess": amenities
+        "num_of_businesses_around" : num_of_businesses_around,
+        **amenities
    
     }
