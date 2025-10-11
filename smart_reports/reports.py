@@ -7,7 +7,7 @@ from pathlib import Path
 from all_types.request_dtypes import Reqsmartreport, ReqFetchDataset
 from utils.geo_std_utils import bbox_to_polygon
 from data_fetcher import fetch_dataset
-from .report_generation.report_generator import generate_all_maps, generate_all_charts
+from .report_generation.pharmacy_report_final import generate_all_maps, generate_all_charts
 from smart_reports.traffic import fetch_traffic_data
 from backend_common.database import MAX_POOL
 from smart_reports.population import (
@@ -18,9 +18,6 @@ from smart_reports.population import (
 from smart_reports.healthcare_system import get_healthcare_data
 from smart_reports.complementary_businesses import get_other_businesses_data
 from smart_reports.scoring import *
-from .report_generation.pharmacy_report_final import (
-    generate_report_assets_from_data,
-)
 from typing import Dict, Any
 from utils.geo_std_utils import generate_bbox
 from utils.utils import DIR_REPORTS
