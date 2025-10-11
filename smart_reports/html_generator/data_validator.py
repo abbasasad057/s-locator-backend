@@ -52,7 +52,7 @@ def validate_response_data(data: Dict[str, Any]) -> Tuple[bool, str, str]:
         return False, "invalid", "Unable to determine data format type"
 
     if not is_valid:
-wwwwwww        return False, format_type, error
+        return False, format_type, error
 
     logger.info(f"Data validation successful. Format type: {format_type}")
     return True, format_type, ""
