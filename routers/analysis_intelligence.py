@@ -129,7 +129,7 @@ async def ep_dine_in_suitability_analysis(
 
 @analysis_router.post(
     CONF.smart_pharmacy_report,   # <-- add a new path constant in CONF
-    response_model=ResModel[ResIntelligenceData],   # assuming your function returns a file path (string)
+    response_model=ResModel[dict[str, Any]],   # assuming your function returns a file path (string)
     dependencies=[Depends(JWTBearer())],
 )
 async def ep_pharmacy_site_selection(
