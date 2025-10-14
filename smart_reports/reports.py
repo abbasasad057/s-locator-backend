@@ -87,9 +87,45 @@ def write_html_file(file_path: Path, content: str) -> None:
         f.write(content)
 
 
-def score_shops(all_shops_data, req):
+def score_external_location(all_shops_data, req, single_item=False) -> dict:
     # in this part we process all candidates locations data
     results = {}
+    if single_item:
+        all_shops_data = [all_shops_data]
+
+    for shop in all_shops_data:
+        lat = shop.get("lat")
+        lng = shop.get("lng")
+        loc_key = f"{lat},{lng}"
+        results[loc_key] = {
+            **shop,
+            "id": loc_key,
+            "total_score": int(50),
+            "weighted_scores": {
+                "traffic": 12.5,
+                "demographics": 12.5,
+                "competition": 12.5,
+                "healthcare": 12.5,
+                "complementary": 12.5,
+            },
+            "raw_scores": {
+                "traffic": int(50),
+                "demographics": int(50),
+                "competition": int(50),
+                "healthcare": int(50),
+                "complementary": int(50),
+            },
+        }
+
+    if single_item:
+        results = list(results.values())[0]
+    return results
+
+def score_shops(all_shops_data, req, single_item=False) -> dict:
+    # in this part we process all candidates locations data
+    results = {}
+    if single_item:
+        all_shops_data = [all_shops_data]
 
     for shop in all_shops_data:
         # if traffic_score is None skip this shop
@@ -117,7 +153,7 @@ def score_shops(all_shops_data, req):
         results[loc_key] = {
             **shop,
             "id": loc_key,
-            "total_score": total_score,
+            "total_score": int(total_score),
             "weighted_scores": {
                 "traffic": traffic_score * req.evaluation_metrics.traffic,
                 "demographics": demographics_score
@@ -253,10 +289,10 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
                 all_shops_data.append(shop_data)
                 custom_loc.append(shop_data)
 
-    current_loc = []
+    current_loc = None
     if req.current_location:
         if req.current_location.lat != 0 and req.current_location.lng != 0:
-            shop_data = await group_criterion_data(
+            current_loc = await group_criterion_data(
                 lat=req.current_location.lat,
                 lng=req.current_location.lng,
                 Userid=req.user_id,
@@ -273,25 +309,27 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
                 place_price=None,
                 listing_demographic_info=listing_demographic_info,
             )
-            all_shops_data.append(shop_data)
-            current_loc.append(shop_data)
+            all_shops_data.append(current_loc)
 
     results = score_shops(all_shops_data, req)
-    custom_results = score_shops(custom_loc, req)
-    current_results = score_shops(current_loc, req)
+    custom_sites = score_external_location(custom_loc, req)
+    current_site = score_external_location(current_loc, req, single_item=True)
 
     stats = calculate_statistics(results)
     stats["total_competing_pharmacies"] = len(pharmacies)
     list_top_n_sites = sorted(
         results.values(), key=lambda s: s.get("total_score", 0), reverse=True
     )[:10]
+    custom_results = sorted(
+        custom_sites.values(), key=lambda s: s.get("total_score", 0), reverse=True
+    )[:10]
 
     # compare top n locations and custom locations with current location
     for site in list_top_n_sites:
-        compare_info = compare_values(site, current_loc)
+        compare_info = compare_values(site, current_site)
         site.update(compare_info)
     for site in custom_results:
-        compare_info = compare_values(site, current_loc)
+        compare_info = compare_values(site, current_site)
         site.update(compare_info)
 
     best_site = list_top_n_sites[0]
@@ -302,7 +340,7 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
         list_top_n_sites,
         best_site,
         custom_results,
-        current_results,
+        current_site,
     )
 
 

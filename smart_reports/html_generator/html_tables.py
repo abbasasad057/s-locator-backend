@@ -103,66 +103,41 @@ def generate_rankings_table(list_top_n_sites: List[Dict[str, Any]]) -> str:
     return table_rows
 
 
-def generate_current_location_table(current_results: Dict[str, Any]) -> str:
+def generate_current_location_table(site: Dict[str, Any]) -> str:
     """Generate Current Location Scores table if current location data exists"""
-    current_location = current_results["current_location"]
-
-    if not current_location:
-        return ""
 
     table_rows = ""
-    for location_data in current_location:
-        display_name = location_data["display_name"]
-        price = location_data["price"]
-        rank = location_data["rank"]
+    display_name = site["display_name"]
+    price = site["price"]
+    rank = 0
 
-        # Handle None price values
-        if price is None:
-            price = 0
+    # Handle None price values
+    if price is None:
+        price = 0
 
-        # Use direct score values from JSON (no comparison objects for current/custom locations)
-        total_score = f"{location_data['total_score']}"
-        traffic_score = f"{location_data['traffic_score']}"
-        demographics_score = f"{location_data['demographics_score']}"
-        competition_score = f"{location_data['competition_score']}"
-        healthcare_score = f"{location_data['healthcare_ecosystem_score']}"
-        complementary_score = (
-            f"{location_data['complementary_businesses_score']}"
-        )
-        total_score = f"{round(location_data['total_score'], 1)}"
-        traffic_score = f"{round(location_data['traffic_score'], 1)}"
-        demographics_score = f"{round(location_data['demographics_score'], 1)}"
-        competition_score = f"{round(location_data['competition_score'], 1)}"
-        healthcare_score = (
-            f"{round(location_data['healthcare_ecosystem_score'], 1)}"
-        )
-        complementary_score = (
-            f"{round(location_data['complementary_businesses_score'], 1)}"
-        )
+    # Use direct score values from JSON (no comparison objects for current/custom locations)
+    total_score = f"{site['total_score']}"
+    traffic_score = f"{site['raw_scores']['traffic']}"
+    demographics_score = f"{site['raw_scores']['demographics']}"
+    competition_score = f"{site['raw_scores']['competition']}"
+    healthcare_score = f"{site['raw_scores']['healthcare']}"
+    complementary_score = f"{site['raw_scores']['complementary']}"
 
-        # Generate Google Maps URL if coordinates are available
-        listing_url = location_data["url"]
+    # Format price display
+    price_display = site["price"]
 
-
-        # Format price display
-        price_display = (
-            "N/A"
-            if price == 0 and location_data["price"] is None
-            else f"{price}"
-        )
-
-        table_rows += f"""
-      <tr>
-        <td><a href="{listing_url}" target="_blank" class="rank-badge">#{rank}</a></td>
-        <td><a href="{listing_url}" target="_blank">{display_name}</a></td>
-        <td>{price_display}</td>
-        <td><strong>{total_score}</strong></td>
-        <td>{traffic_score}</td>
-        <td>{demographics_score}</td>
-        <td>{competition_score}</td>
-        <td>{healthcare_score}</td>
-        <td>{complementary_score}</td>
-      </tr>"""
+    table_rows += f"""
+  <tr>
+    <td><a href="" target="_blank" class="rank-badge">#{rank}</a></td>
+    <td><a href="" target="_blank">{display_name}</a></td>
+    <td>{price_display}</td>
+    <td><strong>{total_score}</strong></td>
+    <td>{traffic_score}</td>
+    <td>{demographics_score}</td>
+    <td>{competition_score}</td>
+    <td>{healthcare_score}</td>
+    <td>{complementary_score}</td>
+  </tr>"""
 
     return f"""
   <h2 class="section-title">📍 Current Location Scores</h2>
@@ -189,43 +164,25 @@ def generate_current_location_table(current_results: Dict[str, Any]) -> str:
 
 def generate_custom_locations_table(custom_results: Dict[str, Any]) -> str:
     """Generate Custom Location Analysis table if custom locations data exists"""
-    custom_locations = custom_results["custom_locations"]
-
-    if not custom_locations:
-        return ""
-
     table_rows = ""
-    for location_data in custom_locations:
-        display_name = location_data["display_name"]
-        price = location_data["price"]
-        rank = location_data["rank"]
-
-        # Handle None price values
-        if price is None:
-            price = 0
+    for site in custom_results:
+        display_name = site["display_name"]
+        price = site["price"]
 
         # Use direct score values from JSON (no comparison objects for current/custom locations)
-        total_score = f"{location_data['total_score']}"
-        traffic_score = f"{location_data['traffic_score']}"
-        demographics_score = f"{location_data['demographics_score']}"
-        competition_score = f"{location_data['competition_score']}"
-        healthcare_score = f"{location_data['healthcare_ecosystem_score']}"
-        complementary_score = (
-            f"{location_data['complementary_businesses_score']}"
-        )
+        total_score = f"{site['total_score']}"
+        traffic_score = f"{site['raw_scores']['traffic']}"
+        demographics_score = f"{site['raw_scores']['demographics']}"
+        competition_score = f"{site['raw_scores']['competition']}"
+        healthcare_score = f"{site['raw_scores']['healthcare']}"
+        complementary_score = f"{site['raw_scores']['complementary']}"
 
-        # Format price display
-        price_display = (
-            "N/A"
-            if price == 0 and location_data["price"] is None
-            else f"{price}"
-        )
 
         table_rows += f"""
       <tr>
-        <td><span class="rank-badge">#{rank}</span></td>
+        <td><span class="rank-badge">#</span></td>
         <td><code>{display_name}</code></td>
-        <td>{price_display}</td>
+        <td>{price}</td>
         <td><strong>{total_score}</strong></td>
         <td>{traffic_score}</td>
         <td>{demographics_score}</td>

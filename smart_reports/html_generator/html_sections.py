@@ -83,7 +83,7 @@ def generate_executive_summary_section(
           🏆 TOP RECOMMENDATION
         </h2>
         <h3 style="font-size: 1.8em; margin-bottom: 10px">Property #1: {best_site['display_name']}</h3>
-        <div class="score-display">{best_site['total_score']}</div>
+        <div class="score-display">{best_site['total_score']}/100</div>
         <p style="margin-bottom: 20px">
           <strong>Investment Price:</strong> {best_site['price']} SAR
         </p>

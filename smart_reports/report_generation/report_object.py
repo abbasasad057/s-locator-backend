@@ -8,7 +8,7 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
     insights = {}
 
     # Traffic Performance
-    traffic_score = site.get("traffic_score")
+    traffic_score = site["traffic_score"]
     if traffic_score is not None:
         if 20 <= traffic_score <= 30:
             traffic_status = "Optimal traffic — moderate traffic flow ensures both convenience and visibility."
@@ -28,7 +28,7 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
         }
 
     # Business Environment
-    nearby_businesses = site.get("num_of_businesses_around", 0)
+    nearby_businesses = site["num_of_businesses_around"]
     if nearby_businesses > 20:
         bus_status = (
             "Strong ecosystem — complementary businesses support customer flow."
@@ -48,8 +48,8 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
     }
 
     # Demographics Match
-    age_above_35 = site.get("percentage_age_above_35")
-    avg_income = site.get("avg_income")
+    age_above_35 = site["percentage_age_above_35"]
+    avg_income = site["avg_income"]
     if age_above_35 is not None:
         if age_above_35 >= 40:
             age_status = "Strong alignment — high share of population above 35, consistent with core demand segment."
@@ -71,7 +71,7 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
         }
 
     # Competitive Position
-    pharm_per_10k = site.get("pharmacies_per_10k_population")
+    pharm_per_10k = site["pharmacies_per_10k_population"]
     if pharm_per_10k is not None:
         if pharm_per_10k > 8:
             market_status = "Saturated market - Differentiation is essential to compete effectively."
@@ -87,12 +87,12 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
 
         insights["competitive_position"] = {
             "pharmacies_per_10k_population": round(pharm_per_10k, 1),
-            "total_competing_pharmacies": site.get("num_of_pharmacies", 0),
+            "total_competing_pharmacies": site["num_of_pharmacies"],
             "market_status": market_status,
             "market_level": market_level,
         }
-    hospitals = site.get("num_of_hospitals", 0)
-    dentists = site.get("num_of_dentists", 0)
+    hospitals = site["num_of_hospitals"]
+    dentists = site["num_of_dentists"]
 
     if hospitals + dentists > 10:
         health_status = "✅ Strong healthcare hub — high concentration of facilities ensures steady demand."
@@ -277,15 +277,15 @@ def generate_rankings_dict(
     for i, site in enumerate(sites, start=1):
         # Convert all scores to 100 scale for display
         total_score_100 = (site["total_score"] / MAX_TOTAL) * 100
-        traffic_100 = site.get("weighted_scores", {}).get("traffic", 0)
-        demographics_100 = site.get("weighted_scores", {}).get(
-            "demographics", 0
-        )
-        competitive_100 = site.get("weighted_scores", {}).get("competition", 0)
-        healthcare_100 = site.get("weighted_scores", {}).get("healthcare", 0)
-        complementary_100 = site.get("weighted_scores", {}).get(
-            "complementary", 0
-        )
+        traffic_100 = site["weighted_scores"]["traffic"]
+        demographics_100 = site["weighted_scores"][
+            "demographics"
+        ]
+        competitive_100 = site["weighted_scores"]["competition"]
+        healthcare_100 = site["weighted_scores"]["healthcare"]
+        complementary_100 = site["weighted_scores"][
+            "complementary"
+        ]
 
         rankings.append(
             {
@@ -302,7 +302,7 @@ def generate_rankings_dict(
                 "rank": site["rank"],
                 "display_name": site["display_name"],
                 "price": (
-                    site.get("price", 0) if site.get("price") else None
+                    site["price"] if site["price"] else None
                 ),
                 "total_score": round(total_score_100, 1),
                 "traffic_score": round(traffic_100, 1),
@@ -330,8 +330,8 @@ def compare_values(site, current_site):
         }
     
     # Total score comparison
-    site_score = site.get("total_score", 0)
-    current_score = current_site.get("total_score", 0)
+    site_score = site["total_score"]
+    current_score = current_site["total_score"]
     diff_pct = abs(site_score - current_score)
     
     if site_score > current_score:
@@ -342,32 +342,32 @@ def compare_values(site, current_site):
         comparison_type = "same"
 
     # Sub-score comparisons
-    site_weighted = site.get("weighted_scores", {})
-    current_weighted = current_site.get("weighted_scores", {})
+    site_weighted = site["weighted_scores"]
+    current_weighted = current_site["weighted_scores"]
     
     # Traffic score comparison
-    traffic_site = site_weighted.get("traffic", 0)
-    traffic_current = current_weighted.get("traffic", 0)
+    traffic_site = site_weighted["traffic"]
+    traffic_current = current_weighted["traffic"]
     traffic_diff = abs(traffic_site - traffic_current)
     
     # Demographics score comparison
-    demo_site = site_weighted.get("demographics", 0)
-    demo_current = current_weighted.get("demographics", 0)
+    demo_site = site_weighted["demographics"]
+    demo_current = current_weighted["demographics"]
     demo_diff = abs(demo_site - demo_current)
     
     # Competition score comparison
-    comp_site = site_weighted.get("competition", 0)
-    comp_current = current_weighted.get("competition", 0)
+    comp_site = site_weighted["competition"]
+    comp_current = current_weighted["competition"]
     comp_diff = abs(comp_site - comp_current)
     
     # Healthcare ecosystem score comparison
-    health_site = site_weighted.get("healthcare", 0)
-    health_current = current_weighted.get("healthcare", 0)
+    health_site = site_weighted["healthcare"]
+    health_current = current_weighted["healthcare"]
     health_diff = abs(health_site - health_current)
     
     # Complementary businesses score comparison
-    complement_site = site_weighted.get("complementary", 0)
-    complement_current = current_weighted.get("complementary", 0)
+    complement_site = site_weighted["complementary"]
+    complement_current = current_weighted["complementary"]
     complement_diff = abs(complement_site - complement_current)
 
     return {
@@ -409,21 +409,21 @@ def generate_rankings_dict_with_current_comparison(
     for i, site in enumerate(top_sites, start=1):
         # Top site scores normalized to 100
         total_score = (site["total_score"] / MAX_TOTAL) * 100
-        traffic = site.get("weighted_scores", {}).get("traffic", 0)
-        demographics = site.get("weighted_scores", {}).get("demographics", 0)
-        competition = site.get("weighted_scores", {}).get("competition", 0)
-        healthcare = site.get("weighted_scores", {}).get("healthcare", 0)
-        complementary = site.get("weighted_scores", {}).get("complementary", 0)
+        traffic = site["weighted_scores"]["traffic"]
+        demographics = site["weighted_scores"]["demographics"]
+        competition = site["weighted_scores"]["competition"]
+        healthcare = site["weighted_scores"]["healthcare"]
+        complementary = site["weighted_scores"]["complementary"]
 
         # Current location normalized scores
         curr_final = (current["total_score"] / MAX_TOTAL) * 100
-        curr_traffic = current.get("weighted_scores", {}).get("traffic", 0)
-        curr_demo = current.get("weighted_scores", {}).get("demographics", 0)
-        curr_comp = current.get("weighted_scores", {}).get("competition", 0)
-        curr_health = current.get("weighted_scores", {}).get("healthcare", 0)
-        curr_complement = current.get("weighted_scores", {}).get(
-            "complementary", 0
-        )
+        curr_traffic = current["weighted_scores"]["traffic"]
+        curr_demo = current["weighted_scores"]["demographics"]
+        curr_comp = current["weighted_scores"]["competition"]
+        curr_health = current["weighted_scores"]["healthcare"]
+        curr_complement = current["weighted_scores"][
+            "complementary"
+        ]
 
         # Generate comparison data for each metric
         final_comparison = compare_values(total_score, curr_final)
@@ -440,7 +440,7 @@ def generate_rankings_dict_with_current_comparison(
                 "rank": site["rank"],
                 "display_name": site["display_name"],
                 "price": (
-                    site.get("price", 0) if site.get("price") else None
+                    site["price"] if site["price"] else None
                 ),
                 "total_score_comparison": (
                     final_comparison if final_comparison else {}

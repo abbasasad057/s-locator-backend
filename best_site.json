@@ -386,7 +386,7 @@
         }
     ],
     "id": "24.782751083374023,46.68308639526367",
-    "total_score": 72.12746868133544,
+    "total_score": 72,
     "weighted_scores": {
         "traffic": 17.795000076293945,
         "demographics": 24.907468605041505,
@@ -401,11 +401,11 @@
         "healthcare": 100,
         "complementary": 94
     },
-    "percentage_difference": null,
-    "comparison_type": "N/A",
-    "traffic_score_improvement": null,
-    "demographics_score_improvement": null,
-    "competition_score_improvement": null,
-    "healthcare_ecosystem_score_improvement": null,
-    "complementary_businesses_score_improvement": null
+    "percentage_difference": 22,
+    "comparison_type": "improvement",
+    "traffic_score_improvement": 5.3,
+    "demographics_score_improvement": 12.4,
+    "competition_score_improvement": 12.5,
+    "healthcare_ecosystem_score_improvement": 7.5,
+    "complementary_businesses_score_improvement": 3.1
 }
