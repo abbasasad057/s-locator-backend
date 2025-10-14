@@ -14,8 +14,7 @@ from all_types.request_dtypes import (
 )
 from all_types.response_dtypes import (
     ResModel,
-    ResSrcDistination,
-    ResIntelligenceData
+    ResSrcDistination
 )
 from backend_common.request_processor import request_handling
 from backend_common.auth import JWTBearer
@@ -139,7 +138,7 @@ async def ep_pharmacy_site_selection(
     response = await request_handling(
         req.request_body,
         Reqsmartreport,         # request schema
-        ResModel[ResIntelligenceData],          # response schema, path string wrapped
+        ResModel[dict[str, Any]],          # response schema, path string wrapped
         #generate_pharmacy_report,  # your core analysis function
         generate_html_pharmacy_report,
         wrap_output=True,

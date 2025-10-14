@@ -517,7 +517,7 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
         req (Reqsmartreport): User request containing pharmacy analysis parameters
 
     Returns:
-        Dict[str, Any]: Structured report data matching ResIntelligenceData format
+        Dict[str, Any]
     """
 
     # Generate the processed report data
@@ -556,7 +556,6 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
     html_file_path = Path(DIR_REPORTS) / f"{req.user_id}.html"
     write_html_file(html_file_path, html_content)
 
-    # Return structured data matching ResIntelligenceData format
     return {
         "html_file_path": html_file_path,
     }
