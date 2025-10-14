@@ -52,6 +52,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
         traffic_score_display = _get_display_text_with_icon(
             traffic_improvement,
             traffic_score_value,
+            
         )
         demographics_score_display = _get_display_text_with_icon(
             demographics_improvement,

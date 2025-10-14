@@ -6,38 +6,30 @@ Contains all table generation functions for pharmacy reports
 from typing import Dict, Any, List
 
 
-def _get_display_text_with_icon(
-    comparison_data: Dict[str, Any], fallback_value: Any = None
-) -> str:
+def _get_display_text_with_icon(improv_over_current, site_score) -> str:
     """
     Extract display text with appropriate styled indicator based on comparison type.
     Raises:
         ValueError if no valid comparison data is found.
     """
     # First, try to use comparison data if available
-    if comparison_data and isinstance(comparison_data, dict):
-        value = comparison_data["value"]
-        comparison_type = comparison_data["comparison_type"]
-        percentage_difference = comparison_data["percentage_difference"]
-
-        # If we have a value, use it with styling
-        if value is not None:
-            if comparison_type == "improvement":
-                return f'<span style="display: ruby;">{value}<span style="color: #22c55e; display: block; font-weight: 400;">(<span style="font-weight: 900;">↑</span> {percentage_difference})</span></span>'
-            elif comparison_type == "disadvantage":
-                return f'<span style="display: ruby;">{value}<span style="color: #ef4444; display: block; font-weight: 400;">(<span style="font-weight: 900;">↓</span> {percentage_difference})</span></span>'
-            elif comparison_type == "same":
-                return f'<span style="display: ruby;">{value}<span style="color: #6b7280; display: block; font-weight: 400;">(<span style="font-weight: 900;">≈</span> {percentage_difference})</span></span>'
-            else:
-                # For other types or no comparison type, just return the value
-                return str(value)
+    if improv_over_current:
+        if improv_over_current > 0:
+            return f'<span style="display: ruby;">{site_score}<span style="color: #22c55e; display: block; font-weight: 400;">(<span style="font-weight: 900;">↑</span> {improv_over_current})</span></span>'
+        elif improv_over_current < 0:
+            return f'<span style="display: ruby;">{site_score}<span style="color: #ef4444; display: block; font-weight: 400;">(<span style="font-weight: 900;">↓</span> {improv_over_current})</span></span>'
+        elif improv_over_current == 0:
+            return f'<span style="display: ruby;">{site_score}<span style="color: #6b7280; display: block; font-weight: 400;">(<span style="font-weight: 900;">≈</span> {improv_over_current})</span></span>'
+        else:
+            # For other types or no comparison type, just return the value
+            return str(site_score)
 
     # If no comparison data, use fallback value
-    if fallback_value is not None:
+    if site_score is not None:
         # Format numeric fallback values nicely
-        if isinstance(fallback_value, (int, float)):
-            return str(round(fallback_value, 1))
-        return str(fallback_value)
+        if isinstance(site_score, (int, float)):
+            return str(round(site_score, 1))
+        return str(site_score)
 
     # If no valid comparison data, raise an error
     raise ValueError("No valid comparison data found")
@@ -176,7 +168,6 @@ def generate_custom_locations_table(custom_results: Dict[str, Any]) -> str:
         competition_score = f"{site['raw_scores']['competition']}"
         healthcare_score = f"{site['raw_scores']['healthcare']}"
         complementary_score = f"{site['raw_scores']['complementary']}"
-
 
         table_rows += f"""
       <tr>
