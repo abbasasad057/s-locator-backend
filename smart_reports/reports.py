@@ -347,26 +347,26 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     debug_path_custom_sites = Path("custom_sites.json")
     debug_path_current_site = Path("current_site.json")
 
-    (
-        sites,
-        stats,
-        list_top_n_sites,
-        best_site,
-        custom_sites,
-        current_site,
-    ) = await get_and_score_listings(req)
-    with open(debug_path_sites, "w") as f:
-        json.dump(sites, f, indent=4)
-    with open(debug_path_stats, "w") as f:
-        json.dump(stats, f, indent=4)
-    with open(debug_path_list_top_n_sites, "w") as f:
-        json.dump(list_top_n_sites, f, indent=4)
-    with open(debug_path_best_site, "w") as f:
-        json.dump(best_site, f, indent=4)
-    with open(debug_path_custom_sites, "w") as f:
-        json.dump(custom_sites, f, indent=4)
-    with open(debug_path_current_site, "w") as f:
-        json.dump(current_site, f, indent=4)
+    # (
+    #     sites,
+    #     stats,
+    #     list_top_n_sites,
+    #     best_site,
+    #     custom_sites,
+    #     current_site,
+    # ) = await get_and_score_listings(req)
+    # with open(debug_path_sites, "w") as f:
+    #     json.dump(sites, f, indent=4)
+    # with open(debug_path_stats, "w") as f:
+    #     json.dump(stats, f, indent=4)
+    # with open(debug_path_list_top_n_sites, "w") as f:
+    #     json.dump(list_top_n_sites, f, indent=4)
+    # with open(debug_path_best_site, "w") as f:
+    #     json.dump(best_site, f, indent=4)
+    # with open(debug_path_custom_sites, "w") as f:
+    #     json.dump(custom_sites, f, indent=4)
+    # with open(debug_path_current_site, "w") as f:
+    #     json.dump(current_site, f, indent=4)
 
     # read from json files
     with open(debug_path_sites, "r") as f:

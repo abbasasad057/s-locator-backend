@@ -87,7 +87,7 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
 
         insights["competitive_position"] = {
             "pharmacies_per_10k_population": round(pharm_per_10k, 1),
-            "competing_pharmacies": site.get("num_of_pharmacies", 0),
+            "total_competing_pharmacies": site.get("num_of_pharmacies", 0),
             "market_status": market_status,
             "market_level": market_level,
         }

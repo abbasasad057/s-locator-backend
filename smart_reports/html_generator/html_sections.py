@@ -32,29 +32,13 @@ def generate_executive_summary_section(
     """Generate Executive Summary Section with rankings and top recommendations"""
     # Extract data
     city_name = req.city_name
-    title = report_text.get("title", "")
-    description = report_text.get("description", "")
+    title = report_text["title"]
+    description = report_text["description"]
 
     total_locations = len(sites)
-    average_score = stats.get("average_score", 0)
-    average_price_sar = stats.get("average_price_sar", 0)
-    competing_pharmacies = stats.get("competing_pharmacies", 0)
-
-    # best_site = executive_summary.get("top_recommendation", {})
-    # total_sites_evaluated = executive_summary.get("total_sites_evaluated", 0)
-
-    # Extract data from key investment insights for top recommendation details
-    # traffic_advantage = next((insight for insight in key_investment_insights if insight.get('category') == 'Traffic Advantage'), {})
-    # business_ecosystem = next((insight for insight in key_investment_insights if insight.get('category') == 'Business Ecosystem'), {})
-    # demographic_alignment = next((insight for insight in key_investment_insights if insight.get('category') == 'Demographic Alignment'), {})
-    # market_dynamics = next((insight for insight in key_investment_insights if insight.get('category') == 'Market Dynamics'), {})
-
-    # Extract score data for display
-    # traffic_score = traffic_advantage.get('traffic_score', 0)
-    # avg_speed = traffic_advantage.get('average_speed_kmh', 0)
-    # nearby_businesses = business_ecosystem.get('nearby_businesses_count', 0)
-    # demographics_score = demographic_alignment.get('demographics_score', 0)
-    # total_competitors = market_dynamics.get('total_competitors', 0)
+    average_score = stats["average_score"]
+    average_price = stats["average_price"]
+    total_competing_pharmacies = stats["total_competing_pharmacies"]
 
     return f"""
     <div class="page">
@@ -85,11 +69,11 @@ def generate_executive_summary_section(
           <div class="metric-label">Average Performance Score</div>
         </div>
         <div class="metric-card">
-          <div class="metric-value">{average_price_sar:,.0f} SAR</div>
+          <div class="metric-value">{average_price} SAR</div>
           <div class="metric-label">Average Price</div>
         </div>
         <div class="metric-card">
-          <div class="metric-value">{competing_pharmacies}</div>
+          <div class="metric-value">{total_competing_pharmacies}</div>
           <div class="metric-label">Competing Pharmacies</div>
         </div>
       </div>
@@ -98,10 +82,10 @@ def generate_executive_summary_section(
         <h2 style="margin-bottom: 20px; border: none; color: white">
           🏆 TOP RECOMMENDATION
         </h2>
-        <h3 style="font-size: 1.8em; margin-bottom: 10px">Property #1: {best_site.get('display_name', 'Top Property')}</h3>
-        <div class="score-display">{best_site.get('score', 0)}/100</div>
+        <h3 style="font-size: 1.8em; margin-bottom: 10px">Property #1: {best_site['display_name']}</h3>
+        <div class="score-display">{best_site['total_score']}/100</div>
         <p style="margin-bottom: 20px">
-          <strong>Investment Price:</strong> {best_site.get('price', 0):,.0f} SAR
+          <strong>Investment Price:</strong> {best_site['price']} SAR
         </p>
         <div style="
               display: grid;

@@ -67,7 +67,7 @@ def _determine_format_type(site: Dict[str, Any]) -> str:
     ]
 
     has_comparison = any(
-        site.get(field) is not None and isinstance(site.get(field), dict)
+        site[field] is not None and isinstance(site[field], dict)
         for field in comparison_fields
     )
 
@@ -81,7 +81,7 @@ def _determine_format_type(site: Dict[str, Any]) -> str:
         "complementary_businesses_score",
     ]
 
-    has_direct = any(site.get(field) is not None for field in direct_fields)
+    has_direct = any(site[field] is not None for field in direct_fields)
 
     if has_comparison:
         return "comparison"
@@ -106,7 +106,7 @@ def _validate_comparison_format(list_top_n_sites: List[Dict[str, Any]]) -> Tuple
     for i, ranking in enumerate(list_top_n_sites):
         # Check comparison objects
         for field in required_comparison_fields:
-            comparison_obj = ranking.get(field, {})
+            comparison_obj = ranking[field]
             if not isinstance(comparison_obj, dict):
                 return False, f"Ranking {i+1}: {field} must be an object"
 
@@ -118,7 +118,7 @@ def _validate_comparison_format(list_top_n_sites: List[Dict[str, Any]]) -> Tuple
 
                 # Validate comparison_type values
                 valid_types = ["improvement", "disadvantage", "same", "difference"]
-                if comparison_obj.get("comparison_type") not in valid_types:
+                if comparison_obj["comparison_type"] not in valid_types:
                     return False, f"Ranking {i+1}: {field} has invalid comparison_type"
 
     return True, ""
@@ -139,7 +139,7 @@ def _validate_direct_format(list_top_n_sites: List[Dict[str, Any]]) -> Tuple[boo
     for i, site in enumerate(list_top_n_sites):
         # Check direct score fields
         for field in required_direct_fields:
-            value = site.get(field)
+            value = site[field]
 
             if not isinstance(value, (int, float)):
                 return (

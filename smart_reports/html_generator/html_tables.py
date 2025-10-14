@@ -52,11 +52,7 @@ def generate_rankings_table(list_top_n_sites: List[Dict[str, Any]]) -> str:
 
         # Extract data with proper field mapping - ONLY use data that exists in JSON
         display_name = site["display_name"]  # Use site_name from JSON
-        price = site["price"]  # Use price_sar from JSON
-        # # Handle None price values
-        # if price is None:
-        #     price = 0
-
+        price = site["price"]
         # Extract scores from comparison objects (if they exist) in JSON using display_text with icons
         # Provide fallback to direct score values if comparison data is missing
         total_score = _get_display_text_with_icon(
@@ -89,7 +85,7 @@ def generate_rankings_table(list_top_n_sites: List[Dict[str, Any]]) -> str:
 
         # Format price display
         price_display = (
-            "N/A" if price == 0 and site["price"] is None else f"{price:,.0f}"
+            "N/A" if price == 0 and site["price"] is None else f"{price}"
         )
 
         table_rows += f"""
@@ -152,7 +148,7 @@ def generate_current_location_table(current_results: Dict[str, Any]) -> str:
         price_display = (
             "N/A"
             if price == 0 and location_data["price"] is None
-            else f"{price:,.0f}"
+            else f"{price}"
         )
 
         table_rows += f"""
@@ -222,7 +218,7 @@ def generate_custom_locations_table(custom_results: Dict[str, Any]) -> str:
         price_display = (
             "N/A"
             if price == 0 and location_data["price"] is None
-            else f"{price:,.0f}"
+            else f"{price}"
         )
 
         table_rows += f"""

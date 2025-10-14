@@ -16,40 +16,38 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
         site_name = site['display_name']
         total_score = site['total_score']
         total_score_display = f"{round(total_score, 1)}"
-        price_sar_raw = site['price']
-        price_sar = price_sar_raw
-        price_display = str(int(price_sar)) + " SAR"
+        price_display = str(int(site['price'])) + " SAR"
         category = site['category']
         listing_url = site['url']
 
         # Extract data directly from site structure based on available JSON keys
         # Traffic data - using available traffic_score instead of nested structure
-        current_speed = site.get('traffic_score', 0)  # Using traffic_score as proxy for speed data
+        current_speed = site['traffic_score']  # Using traffic_score as proxy for speed data
         current_speed_display = f"{round(current_speed, 1)}"
         
         # Business environment - using num_of_businesses_around
-        nearby_businesses = site.get('num_of_businesses_around', 0)
+        nearby_businesses = site['num_of_businesses_around']
         nearby_businesses_display = str(nearby_businesses)
         
         # Demographics - using available demographic fields
-        population_age_35_plus = site.get('percentage_age_above_35', 0)
+        population_age_35_plus = site['percentage_age_above_35']
         population_age_35_plus_display = f"{round(population_age_35_plus, 1)}"
-        average_income = site.get('avg_income', 0)
+        average_income = site['avg_income']
         average_income_display = f"{round(average_income, 2)} SAR"
         
         # Competition - using num_of_pharmacies
-        competing_pharmacies = site.get('num_of_pharmacies', 0)
-        competing_pharmacies_display = str(competing_pharmacies)
+        total_competing_pharmacies = site['num_of_pharmacies']
+        competing_pharmacies_display = str(total_competing_pharmacies)
 
         # Use actual scores from the site data instead of looking for rankings
-        traffic_score_value = site.get('traffic_score', 0)
-        demographics_score_value = site.get('raw_scores', {}).get('demographics', 0)  # Using raw_scores.demographics
-        competition_score_value = site.get('raw_scores', {}).get('competition', 0)   # Using raw_scores.competition
+        traffic_score_value = site['traffic_score']
+        demographics_score_value = site['raw_scores']['demographics']  # Using raw_scores.demographics
+        competition_score_value = site['raw_scores']['competition']   # Using raw_scores.competition
 
         # Get improvement values from the site data
-        traffic_improvement = site.get('traffic_score_improvement')
-        demographics_improvement = site.get('demographics_score_improvement') 
-        competition_improvement = site.get('competition_score_improvement')
+        traffic_improvement = site['traffic_score_improvement']
+        demographics_improvement = site['demographics_score_improvement']
+        competition_improvement = site['competition_score_improvement']
 
         traffic_score_display = _get_display_text_with_icon(
             traffic_improvement,
@@ -129,7 +127,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
             </div>
             <div>
               <strong>☕ Competitive Position:</strong><br />
-              <small>{competing_pharmacies_display} pharmacies in area ({round(site.get('pharmacies_per_10k_population', 0), 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
+              <small>{competing_pharmacies_display} pharmacies in area ({round(site['pharmacies_per_10k_population'], 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
             </div>
           </div>
         </div>

@@ -520,7 +520,7 @@ def generate_markdown(
         avg_score_100 = stats["average_score"]
         md.write(f"- **Average Score:** {avg_score_100}/100\n")
         md.write(
-            f"- **Average Rent Price:** {stats['average_price']:,.0f} SAR\n"
+            f"- **Average Rent Price:** {stats['average_price']} SAR\n"
         )
         md.write(
             f"- **Competing Pharmacies:** {stats['total_competing_pharmacies']}\n\n"
