@@ -117,7 +117,7 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
     # Prime opportunity
     best_site["total_category"] = "Prime Opportunity"
     best_site["total_description"] = (
-        f"{best_site['display_name']} emerges as the clear market leader with exceptional potential scoring {best_site['total_score']}/100 points."
+        f"{best_site['display_name']} emerges as the clear market leader with exceptional potential scoring {best_site['total_score']} points."
     )
 
 
@@ -149,7 +149,7 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
 
     best_site["market_category"] = "Market Dynamics"
     best_site["market_description"] = (
-        f"{market_status} scoring {competition_score}/100 points with {total_competitors} total competing pharmacies."
+        f"{market_status} scoring {competition_score} points with {total_competitors} total competing pharmacies."
     )
     best_site["market_level"] = market_level
     best_site["market_color"] = market_color
@@ -176,7 +176,7 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
 
     best_site["traffic_category"] = "Traffic Advantage"
     best_site["traffic_description"] = (
-        f"{traffic_status} scoring {traffic_score}/100 points."
+        f"{traffic_status} scoring {traffic_score} points."
     )
     best_site["traffic_level"] = traffic_level
     best_site["traffic_color"] = traffic_color
@@ -203,7 +203,7 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
 
     best_site["business_category"] = "Business Ecosystem"
     best_site["business_description"] = (
-        f"{business_status} scoring {business_score}/100 points with {num_businesses} nearby complementary businesses."
+        f"{business_status} scoring {business_score} points with {num_businesses} nearby complementary businesses."
     )
     best_site["business_level"] = business_level
     best_site["business_color"] = business_color
@@ -229,7 +229,7 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
 
     best_site["demographics_category"] = "Demographic Alignment"
     best_site["demographics_description"] = (
-        f"{demographics_status} scoring {demographics_score}/100 points."
+        f"{demographics_status} scoring {demographics_score} points."
     )
     best_site["demographics_level"] = demographics_level
     best_site["demographics_color"] = demographics_color
@@ -259,7 +259,7 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
 
     best_site["healthcare_category"] = "Healthcare Environment"
     best_site["healthcare_description"] = (
-        f"{healthcare_status} scoring {healthcare_score}/100 points with {healthcare_facilities} nearby medical facilities ({num_hospitals} hospitals, {num_dentists} dental clinics)."
+        f"{healthcare_status} scoring {healthcare_score} points with {healthcare_facilities} nearby medical facilities ({num_hospitals} hospitals, {num_dentists} dental clinics)."
     )
     best_site["healthcare_level"] = healthcare_level
     best_site["healthcare_color"] = healthcare_color

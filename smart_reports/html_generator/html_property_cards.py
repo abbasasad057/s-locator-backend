@@ -68,7 +68,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
       <div class="property-card">
         <div class="property-header">
           <div class="property-title">#{i} {site_name}</div>
-          <div class="score-badge">{total_score_display}/100</div>
+          <div class="score-badge">{total_score_display}</div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px">

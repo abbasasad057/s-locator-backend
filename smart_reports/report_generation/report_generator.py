@@ -118,7 +118,7 @@ def generate_insights(sites: List[Dict], best_site: Dict) -> str:
     best_score_100 = best_site["total_score"]
     insights.append(
         f"- **Prime Opportunity:** {best_site['display_name']} emerges as the clear "
-        f"market leader with exceptional potential scoring {best_score_100}/100 points.\n"
+        f"market leader with exceptional potential scoring {best_score_100} points.\n"
     )
 
     total_competitors = len(best_site["nearby_pharmacy"])
@@ -147,7 +147,7 @@ def generate_insights(sites: List[Dict], best_site: Dict) -> str:
     traffic_info = f" with {traffic_score} km/h average speeds"
 
     insights.append(
-        f"- **Traffic Advantage:** Accessibility scoring {best_traffic_100}/100 points{traffic_info} "
+        f"- **Traffic Advantage:** Accessibility scoring {best_traffic_100} points{traffic_info} "
         "supporting consistent customer flow.\n"
     )
 
@@ -171,7 +171,7 @@ def generate_insights(sites: List[Dict], best_site: Dict) -> str:
         )
 
     insights.append(
-        f"- **Demographic Alignment:** Scoring {demo_100}/100 points{age_alignment}, "
+        f"- **Demographic Alignment:** Scoring {demo_100} points{age_alignment}, "
         "indicating strong market fit.\n"
     )
 
@@ -240,7 +240,7 @@ def write_detailed_analysis(
     for i, s in enumerate(sites, start=1):
         total_score_100 = s["total_score"]
         md.write(
-            f"### {i}. {s['display_name']} (Score: {total_score_100}/100)\n\n"
+            f"### {i}. {s['display_name']} (Score: {total_score_100})\n\n"
         )
 
         coords_text = (
@@ -518,7 +518,7 @@ def generate_markdown(
         md.write(f"- **{"Total Locations"}:** {num_of_sites}\n")
 
         avg_score_100 = stats["average_score"]
-        md.write(f"- **Average Score:** {avg_score_100}/100\n")
+        md.write(f"- **Average Score:** {avg_score_100}\n")
         md.write(
             f"- **Average Rent Price:** {stats['average_price']} SAR\n"
         )
@@ -534,7 +534,7 @@ def generate_markdown(
         price_str = f"{price:,}" if price is not None else "N/A"
         top_rec_text = (
             f"**Top recommendation:** **{best_site['display_name']}** with an overall score of "
-            f"{best_site["total_score"]}/100 points, rent priced at {price_str} SAR.\n\n"
+            f"{best_site["total_score"]} points, rent priced at {price_str} SAR.\n\n"
         )
         md.write(top_rec_text)
 
@@ -1059,11 +1059,11 @@ def write_detailed_analysis_with_current(
         # Write headers for both locations
         if current_s:
             md.write(
-                f"### {i}. {s['display_name']} vs Current Location Comparison (Scores: {total_score_100}/100 vs {current_total_score_100}/100)\n\n"
+                f"### {i}. {s['display_name']} vs Current Location Comparison (Scores: {total_score_100} vs {current_total_score_100})\n\n"
             )
         else:
             md.write(
-                f"### {i}. {s['display_name']} (Score: {total_score_100}/100)\n\n"
+                f"### {i}. {s['display_name']} (Score: {total_score_100})\n\n"
             )
 
         # Location info for top site
