@@ -7,81 +7,81 @@ from typing import Dict, Any, List
 from .html_tables import _get_display_text_with_icon
 
 
-def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str:
+def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
     """Generate property cards HTML"""
     # Interactive maps mapping removed - not used in current implementation
-    detailed_analysis = processed_report_data.get("detailed_analysis", [])
-    print(f"DEBUG: _generate_methodology_and_analysis_section called with {len(detailed_analysis)} items")
+    print(f"DEBUG: _generate_methodology_and_analysis_section called with {len(list_top_n_sites)} items")
     property_cards_html = ""
-    for i, property_data in enumerate(detailed_analysis, 1):
-        site_name = property_data.get('site_name', 'Property')
-        final_score = property_data.get('final_score', 0)
-        final_score_display = f"{round(final_score, 1)}"
-        price_sar_raw = property_data.get('price_sar', 0)
+    for i, site in enumerate(list_top_n_sites, 1):
+        site_name = site['display_name']
+        total_score = site['total_score']
+        total_score_display = f"{round(total_score, 1)}"
+        price_sar_raw = site['price']
         price_sar = price_sar_raw
         price_display = str(int(price_sar)) + " SAR"
-        category = property_data.get('category', 'Pharmacy')
-        google_maps_url = property_data.get('google_maps_url', '#')
+        category = site['category']
+        listing_url = site['url']
 
-        location = property_data.get('location', {})
-        latitude = location.get('latitude', 0)
-        longitude = location.get('longitude', 0)
-        latitude_display = f"{float(latitude):.6f}"
-        longitude_display = f"{float(longitude):.6f}"
-
-        detailed_insights = property_data.get('detailed_insights', {})
-        traffic_performance = detailed_insights.get('traffic_performance', {})
-        business_environment = detailed_insights.get('business_environment', {})
-        demographics_match = detailed_insights.get('demographics_match', {})
-        competitive_position = detailed_insights.get('competitive_position', {})
-
-        current_speed = traffic_performance.get('current_speed_kmh', 0)
+        # Extract data directly from site structure based on available JSON keys
+        # Traffic data - using available traffic_score instead of nested structure
+        current_speed = site.get('traffic_score', 0)  # Using traffic_score as proxy for speed data
         current_speed_display = f"{round(current_speed, 1)}"
-        nearby_businesses = business_environment.get('nearby_businesses_500m', 0)
+        
+        # Business environment - using num_of_businesses_around
+        nearby_businesses = site.get('num_of_businesses_around', 0)
         nearby_businesses_display = str(nearby_businesses)
-        population_age_35_plus = demographics_match.get('population_age_35_plus_percent', 0)
+        
+        # Demographics - using available demographic fields
+        population_age_35_plus = site.get('percentage_age_above_35', 0)
         population_age_35_plus_display = f"{round(population_age_35_plus, 1)}"
-        average_income = demographics_match.get('average_income_sar', 0)
+        average_income = site.get('avg_income', 0)
         average_income_display = f"{round(average_income, 2)} SAR"
-        competing_pharmacies = competitive_position.get('competing_pharmacies', 0)
+        
+        # Competition - using num_of_pharmacies
+        competing_pharmacies = site.get('num_of_pharmacies', 0)
         competing_pharmacies_display = str(competing_pharmacies)
 
-        rankings = processed_report_data.get('rankings', []) if processed_report_data else []
-        matching_ranking = {}
-        if rankings:
-            matching_ranking = next((prop for prop in rankings if prop.get('site_name') == site_name), {})
+        # Use actual scores from the site data instead of looking for rankings
+        traffic_score_value = site.get('traffic_score', 0)
+        demographics_score_value = site.get('raw_scores', {}).get('demographics', 0)  # Using raw_scores.demographics
+        competition_score_value = site.get('raw_scores', {}).get('competition', 0)   # Using raw_scores.competition
+
+        # Get improvement values from the site data
+        traffic_improvement = site.get('traffic_score_improvement')
+        demographics_improvement = site.get('demographics_score_improvement') 
+        competition_improvement = site.get('competition_score_improvement')
 
         traffic_score_display = _get_display_text_with_icon(
-            matching_ranking.get("traffic_score_comparison", {}),
-            matching_ranking.get("traffic_score"),
+            traffic_improvement,
+            traffic_score_value,
         )
         demographics_score_display = _get_display_text_with_icon(
-            matching_ranking.get("demographics_score_comparison", {}),
-            matching_ranking.get("demographics_score"),
+            demographics_improvement,
+            demographics_score_value,
         )
         competition_score_display = _get_display_text_with_icon(
-            matching_ranking.get("competition_score_comparison", {}),
-            matching_ranking.get("competition_score"),
+            competition_improvement,
+            competition_score_value,
         )
 
-        maps_path = f"assets/interactive_html/site_{latitude},{longitude}_map.html"
+        maps_path = f"assets/interactive_html/site_{site['lat']},{site['lng']}_map.html"
 
         property_cards_html += f"""
       <div class="property-card">
         <div class="property-header">
           <div class="property-title">#{i} {site_name}</div>
-          <div class="score-badge">{final_score_display}/100</div>
+          <div class="score-badge">{total_score_display}/100</div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px">
           <div>
             <h4 style="color: #2c3e50; margin-bottom: 10px">📍 Property Details</h4>
             <p><strong>Price:</strong> {price_display}</p>
-            <p><strong>Coordinates:</strong> {latitude_display}, {longitude_display}</p>
+            <p><strong>Coordinates:</strong> {site['lat']}, {site['lng']}</p>
             <p><strong>Category:</strong> {category}</p>
             <p>
               <strong>Listing:</strong>
-              <a href="{google_maps_url}" target="_blank" style="color: #3498db">View Property</a>
+              <a href="{listing_url}" target="_blank" style="color: #3498db">View Property</a>
             </p>
           </div>
 
@@ -129,7 +129,7 @@ def generate_property_cards(processed_report_data: Dict[str, Any] = None) -> str
             </div>
             <div>
               <strong>☕ Competitive Position:</strong><br />
-              <small>{competing_pharmacies_display} pharmacies in area (2 per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
+              <small>{competing_pharmacies_display} pharmacies in area ({round(site.get('pharmacies_per_10k_population', 0), 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
             </div>
           </div>
         </div>

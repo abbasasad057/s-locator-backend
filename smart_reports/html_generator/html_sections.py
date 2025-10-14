@@ -5,43 +5,56 @@ Contains main section generation functions for pharmacy reports
 
 from typing import Dict, Any, List
 from datetime import datetime
+
 # Import functional modules
-from .html_tables import generate_rankings_table, generate_current_location_table, generate_custom_locations_table
+from .html_tables import (
+    generate_rankings_table,
+    generate_current_location_table,
+    generate_custom_locations_table,
+)
 from .html_property_cards import generate_property_cards
-from .html_charts_visuals import generate_chart_grid, generate_investment_insights_list
+from .html_charts_visuals import (
+    generate_chart_grid,
+    generate_investment_insights_list,
+)
 
 
-def generate_executive_summary_section(req, processed_report_data: Dict[str, Any]) -> str:
+def generate_executive_summary_section(
+    req,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_results,
+    current_results,
+    report_text,
+) -> str:
     """Generate Executive Summary Section with rankings and top recommendations"""
     # Extract data
     city_name = req.city_name
-    title = processed_report_data.get("title", f"{city_name} Pharmacy Site Analysis Report")
-    description = processed_report_data.get("description", "Comprehensive Location Intelligence & Investment Recommendations")
-    summary_metrics = processed_report_data.get("summary_metrics", {})
-    executive_summary = processed_report_data.get("executive_summary", {})
-    rankings = processed_report_data.get("rankings", [])
-    key_investment_insights = processed_report_data.get("key_investment_insights", [])
+    title = report_text.get("title", "")
+    description = report_text.get("description", "")
 
-    total_locations = summary_metrics.get("total_locations", 0)
-    average_score = summary_metrics.get("average_score", 0)
-    average_price_sar = summary_metrics.get("average_price_sar", 0)
-    competing_pharmacies = summary_metrics.get("competing_pharmacies", 0)
+    total_locations = len(sites)
+    average_score = stats.get("average_score", 0)
+    average_price_sar = stats.get("average_price_sar", 0)
+    competing_pharmacies = stats.get("competing_pharmacies", 0)
 
-    top_recommendation = executive_summary.get("top_recommendation", {})
-    total_sites_evaluated = executive_summary.get("total_sites_evaluated", 0)
+    # best_site = executive_summary.get("top_recommendation", {})
+    # total_sites_evaluated = executive_summary.get("total_sites_evaluated", 0)
 
     # Extract data from key investment insights for top recommendation details
-    traffic_advantage = next((insight for insight in key_investment_insights if insight.get('category') == 'Traffic Advantage'), {})
-    business_ecosystem = next((insight for insight in key_investment_insights if insight.get('category') == 'Business Ecosystem'), {})
-    demographic_alignment = next((insight for insight in key_investment_insights if insight.get('category') == 'Demographic Alignment'), {})
-    market_dynamics = next((insight for insight in key_investment_insights if insight.get('category') == 'Market Dynamics'), {})
+    # traffic_advantage = next((insight for insight in key_investment_insights if insight.get('category') == 'Traffic Advantage'), {})
+    # business_ecosystem = next((insight for insight in key_investment_insights if insight.get('category') == 'Business Ecosystem'), {})
+    # demographic_alignment = next((insight for insight in key_investment_insights if insight.get('category') == 'Demographic Alignment'), {})
+    # market_dynamics = next((insight for insight in key_investment_insights if insight.get('category') == 'Market Dynamics'), {})
 
     # Extract score data for display
-    traffic_score = traffic_advantage.get('traffic_score', 0)
-    avg_speed = traffic_advantage.get('average_speed_kmh', 0)
-    nearby_businesses = business_ecosystem.get('nearby_businesses_count', 0)
-    demographics_score = demographic_alignment.get('demographics_score', 0)
-    total_competitors = market_dynamics.get('total_competitors', 0)
+    # traffic_score = traffic_advantage.get('traffic_score', 0)
+    # avg_speed = traffic_advantage.get('average_speed_kmh', 0)
+    # nearby_businesses = business_ecosystem.get('nearby_businesses_count', 0)
+    # demographics_score = demographic_alignment.get('demographics_score', 0)
+    # total_competitors = market_dynamics.get('total_competitors', 0)
 
     return f"""
     <div class="page">
@@ -58,7 +71,7 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
           📊 Executive Summary
         </h2>
         <p style="margin-bottom: 0">
-          This comprehensive analysis evaluates {total_sites_evaluated} pharmacy locations across {city_name} using advanced location intelligence methodologies. Our assessment integrates multiple data sources including traffic flow analysis, demographic profiling, healthcare ecosystem mapping, competitive landscape evaluation, and complementary business assessment. Each location is systematically scored using our proprietary weighted methodology, considering market opportunity, accessibility, and business environment factors to provide data-driven investment recommendations.
+          This comprehensive analysis evaluates {total_locations} pharmacy locations across {city_name} using advanced location intelligence methodologies. Our assessment integrates multiple data sources including traffic flow analysis, demographic profiling, healthcare ecosystem mapping, competitive landscape evaluation, and complementary business assessment. Each location is systematically scored using our proprietary weighted methodology, considering market opportunity, accessibility, and business environment factors to provide data-driven investment recommendations.
         </p>
       </div>
 
@@ -68,7 +81,7 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
           <div class="metric-label">Total Properties Analyzed</div>
         </div>
         <div class="metric-card">
-          <div class="metric-value">{average_score:.1f}</div>
+          <div class="metric-value">{average_score}</div>
           <div class="metric-label">Average Performance Score</div>
         </div>
         <div class="metric-card">
@@ -85,42 +98,62 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
         <h2 style="margin-bottom: 20px; border: none; color: white">
           🏆 TOP RECOMMENDATION
         </h2>
-        <h3 style="font-size: 1.8em; margin-bottom: 10px">Property #1: {top_recommendation.get('site_name', 'Top Property')}</h3>
-        <div class="score-display">{top_recommendation.get('score', 0):.1f}/100</div>
+        <h3 style="font-size: 1.8em; margin-bottom: 10px">Property #1: {best_site.get('display_name', 'Top Property')}</h3>
+        <div class="score-display">{best_site.get('score', 0)}/100</div>
         <p style="margin-bottom: 20px">
-          <strong>Investment Price:</strong> {top_recommendation.get('price_sar', 0):,.0f} SAR
+          <strong>Investment Price:</strong> {best_site.get('price', 0):,.0f} SAR
         </p>
         <div style="
               display: grid;
-              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
               gap: 20px;
               margin-top: 20px;
             ">
-          <div>
-            <strong>🚗 Traffic Advantage:</strong><br />
-            {traffic_score:.1f}/100 points<br />
-            <small>Average Speed: {avg_speed:.1f} km/h | ℹ️ Optimal accessibility</small>
+          <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <strong>🚗 Traffic Advantage:</strong>
+            <span style="color: {best_site['traffic_color']}; font-weight: bold;">
+              {best_site['traffic_icon']}
+            </span><br />
+            {best_site["raw_scores"]['traffic']}s<br />
+            <small style="color: #ecf0f1;">{best_site["traffic_description"]}</small>
           </div>
-          <div>
-            <strong>🏪 Business Ecosystem:</strong><br />
-            {nearby_businesses} nearby businesses<br />
-            <small>✅ Strong commercial environment</small>
+          <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <strong>🏪 Business Ecosystem:</strong>
+            <span style="color: {best_site['business_color']}; font-weight: bold;">
+              {best_site['business_icon']}
+            </span><br />
+            {best_site["raw_scores"]["complementary"]}s<br />
+            <small style="color: #ecf0f1;">{best_site["business_description"]}</small>
           </div>
-          <div>
-            <strong>👥 Demographics:</strong><br />
-            {demographics_score:.1f}/100 points<br />
-            <small>Strong market alignment</small>
+          <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <strong>👥 Demographics:</strong>
+            <span style="color: {best_site['demographics_color']}; font-weight: bold;">
+              {best_site['demographics_icon']}
+            </span><br />
+            {best_site["raw_scores"]["demographics"]}s<br />
+            <small style="color: #ecf0f1;">{best_site["demographics_description"]}</small>
           </div>
-          <div>
-            <strong>🏥 Competition:</strong><br />
-            {total_competitors} competing pharmacies<br />
-            <small>Emerging market opportunity</small>
+          <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <strong>🏥 Market Competition:</strong>
+            <span style="color: {best_site['market_color']}; font-weight: bold;">
+              {best_site['market_icon']}
+            </span><br />
+            {best_site["raw_scores"]["competition"]}s<br />
+            <small style="color: #ecf0f1;">{best_site["market_description"]}</small>
+          </div>
+          <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
+            <strong>🏥 Healthcare Environment:</strong>
+            <span style="color: {best_site['healthcare_color']}; font-weight: bold;">
+              {best_site['healthcare_icon']}
+            </span><br />
+            {best_site["raw_scores"]["healthcare"]}s<br />
+            <small style="color: #ecf0f1;">{best_site["healthcare_description"]}</small>
           </div>
         </div>
       </div>
 
-      {generate_current_location_table(processed_report_data)}
-      {generate_custom_locations_table(processed_report_data)}
+      {generate_current_location_table(current_results) if current_results else ""}
+      {generate_custom_locations_table(custom_results) if custom_results else ""}
 
       <h2 class="section-title">📈 Top 10 Rankings</h2>
 
@@ -139,17 +172,29 @@ def generate_executive_summary_section(req, processed_report_data: Dict[str, Any
           </tr>
         </thead>
         <tbody>
-          {generate_rankings_table(rankings[:10])}
+          {generate_rankings_table(list_top_n_sites)}
         </tbody>
       </table>
     </div>"""
 
-def generate_methodology_and_analysis_section(processed_report_data: Dict[str, Any]) -> str:
+
+def generate_methodology_and_analysis_section(
+    req,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_results,
+    current_results,
+    report_text,
+) -> str:
     """Generate Methodology and Detailed Property Analysis Section"""
-    # Generate property cards
-    property_cards_html = generate_property_cards(processed_report_data)
+    # Generate property cards using available data
+    property_cards_html = generate_property_cards(list_top_n_sites)
     print(f"DEBUG: Property cards HTML length: {len(property_cards_html)}")
-    print(f"DEBUG: First 500 chars of property cards: {property_cards_html[:500]}")
+    print(
+        f"DEBUG: First 500 chars of property cards: {property_cards_html[:500]}"
+    )
 
     return f"""
     <div class="page page-break">
@@ -286,7 +331,17 @@ def generate_methodology_and_analysis_section(processed_report_data: Dict[str, A
       {property_cards_html}
     </div>"""
 
-def generate_visual_analysis_section(processed_report_data: Dict[str, Any]) -> str:
+
+def generate_visual_analysis_section(
+    req,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_results,
+    current_results,
+    report_text
+) -> str:
     """Generate Visual Analysis Section with maps, charts, and investment insights"""
     candidates_map = "assets/image/candidates_map.png"
     return f"""
@@ -331,7 +386,7 @@ def generate_visual_analysis_section(processed_report_data: Dict[str, Any]) -> s
           ">
         <h2 style="color: #2c3e50; margin-bottom: 20px">📈 Statistical Analysis</h2>
         <div style="display: flex; flex-direction:column; gap: 24px; margin: 20px 0;">
-          {generate_chart_grid(processed_report_data)}
+          {generate_chart_grid(stats)}
         </div>
       </div>
 
@@ -390,14 +445,14 @@ def generate_visual_analysis_section(processed_report_data: Dict[str, Any]) -> s
       <div class="insights" style="margin-top: 30px;">
         <h3 style="margin-bottom: 15px;">💡 Key Investment Insights</h3>
         <ul style="margin-left: 20px; margin-top: 15px; line-height: 1.6;">
-          {generate_investment_insights_list(processed_report_data)}
+          {generate_investment_insights_list(best_site)}
         </ul>
       </div>
       
       <div class="footer">
         Report generated using advanced geospatial analysis and machine
         learning algorithms
-        <br />Analysis covered {processed_report_data.get('summary_metrics', {}).get('total_locations', 0)}
+        <br />Analysis covered {len(sites)}
         candidate locations with comprehensive multi-criteria scoring
       </div>
     </div>"""

@@ -6,7 +6,7 @@ def score_demographics(shop: dict, req:Reqsmartreport) -> dict:
     """
     tgt_income_string = req.target_income_level
     tgt_age = req.target_age
-    weight_score = req.evaluation_metrics.demographics
+    
 
     income_score = shop.get(f"income_score_{tgt_income_string}", 0)
     avg_median_age = shop.get("avg_median_age", 0)
@@ -20,10 +20,10 @@ def score_demographics(shop: dict, req:Reqsmartreport) -> dict:
         age_score + income_score + household_score + housing_score
     ) / 4
 
-    return average_score * weight_score
+    return average_score
 
 
-def score_competitive(shop, weight_score):
+def score_competitive(shop):
     # Ensure healthcare_data has the expected structure
     if not shop or "pharmacy" not in shop:
         return 0
@@ -70,10 +70,10 @@ def score_competitive(shop, weight_score):
     average_score = (distance_score + saturation_score) / 2.0
 
 
-    return average_score * weight_score
+    return average_score
 
 
-def score_healthcare_ecosystem(shop, weight_score):
+def score_healthcare_ecosystem(shop):
     # Ensure healthcare_data is not None
     if not shop:
         return 0
@@ -102,10 +102,10 @@ def score_healthcare_ecosystem(shop, weight_score):
     # Average of both scores
     average_score = (hospitals_score + dentists_score) / 2
     
-    return (average_score * weight_score)
+    return average_score 
 
 
-def score_complementary_businesses(shop, weight_score):
+def score_complementary_businesses(shop):
     # Ensure amenities_data is not None
     if not shop:
         return 0
@@ -155,4 +155,4 @@ def score_complementary_businesses(shop, weight_score):
     ) / 5
     average_score = average_score * 100
 
-    return average_score * weight_score
+    return average_score

@@ -21,154 +21,156 @@ import random
 
 from utils.utils import create_report_asset_path
 
-def generate_site_map_image(site_data: Dict) -> str:
+def generate_all_site_map_image(sites: list[Dict]) -> str:
     """
     Generate map image for a site and return the relative path for markdown
     Adjusted to match depth and visual style of first function.
     """
-    # Create map centered on site
-    m = folium.Map(
-        location=[site_data['lat'], site_data['lng']],
-        zoom_start=16,
-        tiles='OpenStreetMap'
-    )
+    for site_data in sites:
+        # Create map centered on site
+        m = folium.Map(
+            location=[site_data['lat'], site_data['lng']],
+            zoom_start=16,
+            tiles='OpenStreetMap'
+        )
 
-    # Generate sample businesses around the site
-    businesses = []
-    business_types = [
-    (['pharmacy']*3, 'brown'),
-    (['hospital']*8, 'orange'),
-    (['dentist']*2, 'blue'),
-    (['supermarket']*4, 'gray'),
-    (['bank']*6, 'purple')
-                            ]
+        # Generate sample businesses around the site
+        businesses = []
+        business_types = [
+        (['pharmacy']*3, 'brown'),
+        (['hospital']*8, 'orange'),
+        (['dentist']*2, 'blue'),
+        (['supermarket']*4, 'gray'),
+        (['bank']*6, 'purple')
+                                ]
 
-    competitor_markers = []
+        competitor_markers = []
 
-    # Generate businesses with random positions
-    total_businesses = 0
-    for keywords, color in business_types:
-        count = 5  # default count for example
-        for i in range(count):
-            dlat = random.uniform(-0.002, 0.002)
-            dlng = random.uniform(-0.002, 0.002)
-            poi_name = f"{keywords[0].title()} {i+1}"
-            poi_categories = keywords
+        # Generate businesses with random positions
+        total_businesses = 0
+        for keywords, color in business_types:
+            count = 5  # default count for example
+            for i in range(count):
+                dlat = random.uniform(-0.002, 0.002)
+                dlng = random.uniform(-0.002, 0.002)
+                poi_name = f"{keywords[0].title()} {i+1}"
+                poi_categories = keywords
 
-            if color == 'brown':
-                competitor_markers.append({'name': poi_name})
+                if color == 'brown':
+                    competitor_markers.append({'name': poi_name})
 
-            total_businesses += 1
+                total_businesses += 1
 
-            folium.CircleMarker(
-                location=[site_data['lat'] + dlat, site_data['lng'] + dlng],
-                radius=12 if color == 'brown' else 8,
-                popup=folium.Popup(f"""
-                <b>{poi_name}</b><br>
-                Category: {', '.join(poi_categories)}<br>
-                Distance: {random.randint(50,300)}m
-                """, max_width=200),
-                tooltip=poi_name,
-                color=color,
-                fill=True,
-                opacity=0.8,
-                weight=2 if color == 'brown' else 1
-            ).add_to(m)
+                folium.CircleMarker(
+                    location=[site_data['lat'] + dlat, site_data['lng'] + dlng],
+                    radius=12 if color == 'brown' else 8,
+                    popup=folium.Popup(f"""
+                    <b>{poi_name}</b><br>
+                    Category: {', '.join(poi_categories)}<br>
+                    Distance: {random.randint(50,300)}m
+                    """, max_width=200),
+                    tooltip=poi_name,
+                    color=color,
+                    fill=True,
+                    opacity=0.8,
+                    weight=2 if color == 'brown' else 1
+                ).add_to(m)
 
-    # Property marker (red star)
-    folium.Marker(
-        [site_data['lat'], site_data['lng']],
-        popup=folium.Popup(f"""
-        <div style='width: 250px'>
-            <h4>🏢 {site_data['display_name']}</h4>
-            <b>Final Score:</b> {site_data['total_score']:.1f}<br>
-            <b>Competitors:</b> {len(competitor_markers)} pharmacies<br>
-            <b>Businesses:</b> {total_businesses} total
+        # Property marker (red star)
+        folium.Marker(
+            [site_data['lat'], site_data['lng']],
+            popup=folium.Popup(f"""
+            <div style='width: 250px'>
+                <h4>🏢 {site_data['display_name']}</h4>
+                <b>Final Score:</b> {site_data['total_score']}<br>
+                <b>Competitors:</b> {len(competitor_markers)} pharmacies<br>
+                <b>Businesses:</b> {total_businesses} total
+            </div>
+            """, max_width=300),
+            tooltip=f"{site_data['display_name']} - Score: {site_data['total_score']}",
+            icon=folium.Icon(color='red', icon='star', prefix='fa')
+        ).add_to(m)
+
+        # Analysis radius circle
+        folium.Circle(
+            [site_data['lat'], site_data['lng']],
+            radius=1000,
+            color='red',
+            weight=2,
+            fill=True,
+            fillColor='red',
+            fillOpacity=0.1,
+            opacity=0.6,
+            popup="Analysis radius: 300m"
+        ).add_to(m)
+
+        # Traffic line (example coordinates)
+        # Title
+        title_html = '''
+        <div style="position: fixed; 
+                    top: 20px; left: 50%; transform: translateX(-50%);
+                    background-color: rgba(233, 30, 99, 0.9); 
+                    color: white;
+                    padding: 10px 20px; border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    z-index: 9999;">
+            <h3 style="margin: 0; color: white;">📍 Site Location Map</h3>
         </div>
-        """, max_width=300),
-        tooltip=f"{site_data['display_name']} - Score: {site_data['total_score']:.1f}",
-        icon=folium.Icon(color='red', icon='star', prefix='fa')
-    ).add_to(m)
+        '''
+        m.get_root().html.add_child(folium.Element(title_html))
 
-    # Analysis radius circle
-    folium.Circle(
-        [site_data['lat'], site_data['lng']],
-        radius=1000,
-        color='red',
-        weight=2,
-        fill=True,
-        fillColor='red',
-        fillOpacity=0.1,
-        opacity=0.6,
-        popup="Analysis radius: 300m"
-    ).add_to(m)
+        # Legend
+        legend_html = f'''
+        <div style="position: fixed; 
+                    top: 80px; left: 50px; width: 250px; height: auto; 
+                    background-color: white; border:2px solid grey; z-index:9999; 
+                    font-size:12px; padding: 10px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        
+        <div style="background-color: #e8f4f8; padding: 8px; margin-bottom: 8px; border-radius: 4px;">
+            <b style="font-size: 14px;">📍 {site_data['display_name']}</b><br>
+            <b>Final Score:</b> {site_data['total_score']}<br>
+            <b>Competitors:</b> {len(competitor_markers)} pharmacies<br>
+            <b>Businesses:</b> {total_businesses} total<br>
+        </div>
+        
+        <b>Legend:</b><br>
+        ⭐ <span style="color: red;"><b>Red Star</b></span> = Property<br>
+        🟤 <span style="color: brown;"><b>Brown</b></span> = Pharmacies<br>
+        🟠 <span style="color: orange;"><b>Orange</b></span> = Restaurants<br>
+        🟣 <span style="color: purple;"><b>Purple</b></span> = Shopping<br>
+        🔵 <span style="color: blue;"><b>Blue</b></span> = Hotels<br>
+        🔘 <span style="color: gray;"><b>Gray</b></span> = Banks<br>
+        🔴 <span style="color: red;"><b>Dark Red</b></span> = Traffic<br>
+        </div>
+        '''
+        m.get_root().html.add_child(folium.Element(legend_html))
 
-    # Traffic line (example coordinates)
-    # Title
-    title_html = '''
-    <div style="position: fixed; 
-                top: 20px; left: 50%; transform: translateX(-50%);
-                background-color: rgba(233, 30, 99, 0.9); 
-                color: white;
-                padding: 10px 20px; border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-                z-index: 9999;">
-        <h3 style="margin: 0; color: white;">📍 Site Location Map</h3>
-    </div>
-    '''
-    m.get_root().html.add_child(folium.Element(title_html))
+        # Save HTML
+        site_rank = site_data.get("id", 1)
+        html_filename = f"site_{site_rank}_map.html"
+        # Save interactive maps in interactive_maps directory
+        html_path = create_report_asset_path(html_filename, "html")
+        m.save(html_path)
 
-    # Legend
-    legend_html = f'''
-    <div style="position: fixed; 
-                top: 80px; left: 50px; width: 250px; height: auto; 
-                background-color: white; border:2px solid grey; z-index:9999; 
-                font-size:12px; padding: 10px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-    
-    <div style="background-color: #e8f4f8; padding: 8px; margin-bottom: 8px; border-radius: 4px;">
-        <b style="font-size: 14px;">📍 {site_data['display_name']}</b><br>
-        <b>Final Score:</b> {site_data['total_score']:.1f}<br>
-        <b>Competitors:</b> {len(competitor_markers)} pharmacies<br>
-        <b>Businesses:</b> {total_businesses} total<br>
-    </div>
-    
-    <b>Legend:</b><br>
-    ⭐ <span style="color: red;"><b>Red Star</b></span> = Property<br>
-    🟤 <span style="color: brown;"><b>Brown</b></span> = Pharmacies<br>
-    🟠 <span style="color: orange;"><b>Orange</b></span> = Restaurants<br>
-    🟣 <span style="color: purple;"><b>Purple</b></span> = Shopping<br>
-    🔵 <span style="color: blue;"><b>Blue</b></span> = Hotels<br>
-    🔘 <span style="color: gray;"><b>Gray</b></span> = Banks<br>
-    🔴 <span style="color: red;"><b>Dark Red</b></span> = Traffic<br>
-    </div>
-    '''
-    m.get_root().html.add_child(folium.Element(legend_html))
+        # Save PNG in image directory
+        png_filename = f"site_{site_rank}_map.png"
+        hti = Html2Image(size=(1200, 800))
+        with open(html_path, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        hti.screenshot(html_str=html_content, save_as=png_filename)
 
-    # Save HTML
-    site_rank = site_data.get("id", 1)
-    html_filename = f"site_{site_rank}_map.html"
-    # Save interactive maps in interactive_maps directory
-    html_path = create_report_asset_path(html_filename, "html")
-    m.save(html_path)
+        png_path = create_report_asset_path(png_filename, "image")
 
-    # Save PNG in image directory
-    png_filename = f"site_{site_rank}_map.png"
-    hti = Html2Image(size=(1200, 800))
-    with open(html_path, 'r', encoding='utf-8') as f:
-        html_content = f.read()
-    hti.screenshot(html_str=html_content, save_as=png_filename)
+        import shutil
+        if os.path.exists(png_filename):
+            shutil.move(png_filename, png_path)
 
-    png_path = create_report_asset_path(png_filename, "image")
+        print(f"Generated map image: {png_path}")
 
-    import shutil
-    if os.path.exists(png_filename):
-        shutil.move(png_filename, png_path)
-
-    print(f"Generated map image: {png_path}")
     return png_path, html_path
 
-def create_static_map_png(sites: Dict, outpath: str, top_n: int = 10, extent: Optional[Tuple] = None) -> Optional[Tuple]:
+def create_static_map_png(sites: Dict, outpath: str, list_top_n_sites: list, extent: Optional[Tuple] = None) -> Optional[Tuple]:
     """
     Create a static map showing candidate locations.
     
@@ -217,8 +219,8 @@ def create_static_map_png(sites: Dict, outpath: str, top_n: int = 10, extent: Op
         site_dict = {'name': k}
         site_dict.update(v)
         sites_list.append(site_dict)
-    top_sites = sorted(sites_list, key=lambda x: x.get('total_score', 0), reverse=True)[:top_n]
-    for i, site in enumerate(top_sites, start=1):
+        
+    for i, site in enumerate(list_top_n_sites, start=1):
         # Convert to Web Mercator
         point_3857 = gpd.GeoSeries([Point(site['lng'], site['lat'])], crs=4326).to_crs(epsg=3857)
         x, y = point_3857.geometry[0].coords[0]

@@ -22,12 +22,6 @@ def to_num(x: Any) -> float:
 
 def calculate_statistics(sites: List[Dict]) -> Dict[str, float]:
     """Calculate aggregate statistics for all sites."""
-    if not sites:
-        return {
-            "average_score": 0.0,
-            "average_price": 0.0,
-        }
-
     scores = []
     prices = []
 
@@ -37,8 +31,8 @@ def calculate_statistics(sites: List[Dict]) -> Dict[str, float]:
 
 
     return {
-        "average_score": sum(scores) / len(scores),
-        "average_price": sum(prices) / len(prices)
+        "average_score": int(sum(scores) / len(scores)),
+        "average_price": int(sum(prices) / len(prices))
     }
 
 

@@ -4,10 +4,23 @@ import asyncio
 import logging
 from .report_generation.data_processor import calculate_statistics
 from pathlib import Path
+from smart_reports.report_generation.map_generator import (
+    generate_all_site_map_image,
+    create_static_map_png,
+    create_demographic_heatmap_png,
+)
 from all_types.request_dtypes import Reqsmartreport, ReqFetchDataset
 from utils.geo_std_utils import bbox_to_polygon
 from data_fetcher import fetch_dataset
-from .report_generation.pharmacy_report_final import generate_all_maps, generate_all_charts
+from .report_generation.pharmacy_report_final import (
+    generate_all_maps,
+    generate_all_charts,
+)
+from utils.utils import create_report_asset_path
+from smart_reports.report_generation.report_object import (
+    compare_values,
+    generate_best_site_insights,
+)
 from smart_reports.traffic import fetch_traffic_data
 from backend_common.database import MAX_POOL
 from smart_reports.population import (
@@ -17,7 +30,12 @@ from smart_reports.population import (
 )
 from smart_reports.healthcare_system import get_healthcare_data
 from smart_reports.complementary_businesses import get_other_businesses_data
-from smart_reports.scoring import *
+from smart_reports.scoring import (
+    score_demographics,
+    score_competitive,
+    score_healthcare_ecosystem,
+    score_complementary_businesses,
+)
 from typing import Dict, Any
 from utils.geo_std_utils import generate_bbox
 from utils.utils import DIR_REPORTS
@@ -82,27 +100,18 @@ def score_shops(all_shops_data, req):
         lng = shop.get("lng")
         # Compose key
         loc_key = f"{lat},{lng}"
-
-        traffic_score = (
-            shop.get("traffic_score", 1) * req.evaluation_metrics.traffic
-        )
+        traffic_score = shop.get("traffic_score", 0)
         demographics_score = score_demographics(shop, req)
-        healthcare_score = score_healthcare_ecosystem(
-            shop, req.evaluation_metrics.healthcare
-        )
-        competitive_score = score_competitive(
-            shop, req.evaluation_metrics.competition
-        )
-        complementary_score = score_complementary_businesses(
-            shop, req.evaluation_metrics.complementary
-        )
+        healthcare_score = score_healthcare_ecosystem(shop)
+        competitive_score = score_competitive(shop)
+        complementary_score = score_complementary_businesses(shop)
 
         total_score = (
-            traffic_score
-            + demographics_score
-            + healthcare_score
-            + competitive_score
-            + complementary_score
+            traffic_score * req.evaluation_metrics.traffic
+            + demographics_score * req.evaluation_metrics.demographics
+            + healthcare_score * req.evaluation_metrics.healthcare
+            + competitive_score * req.evaluation_metrics.competition
+            + complementary_score * req.evaluation_metrics.complementary
         )
 
         results[loc_key] = {
@@ -110,13 +119,26 @@ def score_shops(all_shops_data, req):
             "id": loc_key,
             "total_score": total_score,
             "weighted_scores": {
-                "traffic": traffic_score,
-                "demographics": demographics_score,
-                "competition": competitive_score,
-                "healthcare": healthcare_score,
-                "complementary": complementary_score,
+                "traffic": traffic_score * req.evaluation_metrics.traffic,
+                "demographics": demographics_score
+                * req.evaluation_metrics.demographics,
+                "competition": competitive_score
+                * req.evaluation_metrics.competition,
+                "healthcare": healthcare_score
+                * req.evaluation_metrics.healthcare,
+                "complementary": complementary_score
+                * req.evaluation_metrics.complementary,
+            },
+            "raw_scores": {
+                "traffic": int(traffic_score),
+                "demographics": int(demographics_score),
+                "competition": int(competitive_score),
+                "healthcare": int(healthcare_score),
+                "complementary": int(complementary_score),
             },
         }
+
+    return results
 
 
 async def get_and_score_listings(req: Reqsmartreport) -> dict:
@@ -206,7 +228,7 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
         )
 
         all_shops_data.append(shop_data)
-    # --- Step 2: process custom_locations (if any) 
+    # --- Step 2: process custom_locations (if any)
     custom_loc = []
     if req.custom_locations:
         for i, coord in enumerate(req.custom_locations, start=1):
@@ -254,7 +276,6 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
             all_shops_data.append(shop_data)
             current_loc.append(shop_data)
 
-
     results = score_shops(all_shops_data, req)
     custom_results = score_shops(custom_loc, req)
     current_results = score_shops(current_loc, req)
@@ -265,9 +286,45 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
         results.values(), key=lambda s: s.get("total_score", 0), reverse=True
     )[:10]
 
+    # compare top n locations and custom locations with current location
+    for site in list_top_n_sites:
+        compare_info = compare_values(site, current_loc)
+        site.update(compare_info)
+    for site in custom_results:
+        compare_info = compare_values(site, current_loc)
+        site.update(compare_info)
+
     best_site = list_top_n_sites[0]
 
-    return results, stats, list_top_n_sites, best_site, custom_results, current_results
+    return (
+        results,
+        stats,
+        list_top_n_sites,
+        best_site,
+        custom_results,
+        current_results,
+    )
+
+
+def make_report_text_sections(
+    req,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_sites,
+    current_site,
+):
+    report_text = {}
+    report_text["title"] = "🏥 Pharmacy Expansion Analysis — Riyadh"
+    report_text["description"] = (
+        f"This Comprehensive analysis evaluates {len(sites)} pharmacy locations accorss Riyadh "
+        "using advanced location intelligence methodologies. Each locations is systematically socred using "
+        "our propiertary, wieghted methodolgy considering "
+        "traffic, demographics, competition, healthcare proximity, and complementary businesses."
+    )
+
+    return report_text
 
 
 async def generate_pharmacy_report(req: Reqsmartreport):
@@ -283,59 +340,63 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     Returns:
         dict: Pharmacy report with scores and insights.
     """
-    debug_path_results = Path("results.json")
+    debug_path_sites = Path("sites.json")
     debug_path_stats = Path("stats.json")
     debug_path_list_top_n_sites = Path("list_top_n_sites.json")
     debug_path_best_site = Path("best_site.json")
-    debug_path_custom_results = Path("custom_results.json")
-    debug_path_current_results = Path("current_results.json")
+    debug_path_custom_sites = Path("custom_sites.json")
+    debug_path_current_site = Path("current_site.json")
 
-    (results, 
-    stats, 
-    list_top_n_sites, 
-    best_site, 
-    custom_results, 
-    current_results) = await get_and_score_listings(
-        req
-    )
-    with open(debug_path_results, "w") as f:
-        json.dump(results, f, indent=4)
+    (
+        sites,
+        stats,
+        list_top_n_sites,
+        best_site,
+        custom_sites,
+        current_site,
+    ) = await get_and_score_listings(req)
+    with open(debug_path_sites, "w") as f:
+        json.dump(sites, f, indent=4)
     with open(debug_path_stats, "w") as f:
         json.dump(stats, f, indent=4)
     with open(debug_path_list_top_n_sites, "w") as f:
         json.dump(list_top_n_sites, f, indent=4)
     with open(debug_path_best_site, "w") as f:
         json.dump(best_site, f, indent=4)
-    with open(debug_path_custom_results, "w") as f:
-        json.dump(custom_results, f, indent=4)
-    with open(debug_path_current_results, "w") as f:
-        json.dump(current_results, f, indent=4)
+    with open(debug_path_custom_sites, "w") as f:
+        json.dump(custom_sites, f, indent=4)
+    with open(debug_path_current_site, "w") as f:
+        json.dump(current_site, f, indent=4)
 
     # read from json files
-    with open(debug_path_results, "r") as f:
-        results = json.load(f)
+    with open(debug_path_sites, "r") as f:
+        sites = json.load(f)
     with open(debug_path_stats, "r") as f:
         stats = json.load(f)
     with open(debug_path_list_top_n_sites, "r") as f:
         list_top_n_sites = json.load(f)
     with open(debug_path_best_site, "r") as f:
         best_site = json.load(f)
-    with open(debug_path_custom_results, "r") as f:
-        custom_results = json.load(f)
-    with open(debug_path_current_results, "r") as f:
-        current_results = json.load(f)
-
-    # Calculate statistics for the sites
-    logging.info("📊 Calculating statistics...")
-
-    charts = generate_all_charts(list_top_n_sites)
+    with open(debug_path_custom_sites, "r") as f:
+        custom_sites = json.load(f)
+    with open(debug_path_current_site, "r") as f:
+        current_site = json.load(f)
 
     # Generate maps
     logging.info("🗺️  Generating maps...")
-    map_png, heat_png = generate_all_maps(sites, output_dir, top_n)
+    charts = generate_all_charts(list_top_n_sites)
+    map_png = create_report_asset_path("candidates_map.png", "image")
+    heat_png = create_report_asset_path("demographics_heatmap.png", "image")
 
-    # Generate markdown report
-    # logging.info("📝 Generating enhanced markdown report...")
+    # Generate candidates map
+    extent = None
+
+    extent = create_static_map_png(sites, map_png, list_top_n_sites)
+    logging.info("✅ Generated candidates map")
+    # Generate demographic heatmap
+    # create_demographic_heatmap_png(list_top_n_sites, heat_png, extent=extent)
+    logging.info("✅ Generated demographic heatmap")
+    map_image, html_map = generate_all_site_map_image(list_top_n_sites)
     # report_data = generate_markdown(
     #     sites,
     #     output_dir,
@@ -349,11 +410,32 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     #     stats,
     #     best_site,
     #     list_top_n_sites,
-    #     best_site
+    #     best_site,
     # )
-    logging.info("✅ Report generation completed successfully")
-    return results, stats, list_top_n_sites, best_site, custom_results, current_results
 
+    # Generate text content to be embedded in report
+    report_text = make_report_text_sections(
+        req,
+        sites,
+        stats,
+        list_top_n_sites,
+        best_site,
+        custom_sites,
+        current_site,
+    )
+
+    generate_best_site_insights(best_site)
+
+    logging.info("✅ Report generation completed successfully")
+    return (
+        sites,
+        stats,
+        list_top_n_sites,
+        best_site,
+        custom_sites,
+        current_site,
+        report_text,
+    )
 
 
 async def group_criterion_data(
@@ -439,7 +521,15 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
     """
 
     # Generate the processed report data
-    sites, processed_report_data = await generate_pharmacy_report(req)
+    (
+        sites,
+        stats,
+        list_top_n_sites,
+        best_site,
+        custom_results,
+        current_results,
+        report_text,
+    ) = await generate_pharmacy_report(req)
 
     # # save all_shops_data to json file for debugging
     # debug_path = Path("processed_report_data.json")
@@ -452,38 +542,23 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
     #     processed_report_data = json.load(f)
 
     # Generate the HTML report file
-    html_content = generate_complete_html_report(req, processed_report_data)
+    html_content = generate_complete_html_report(
+        req,
+        sites,
+        stats,
+        list_top_n_sites,
+        best_site,
+        custom_results,
+        current_results,
+        report_text,
+    )
 
     html_file_path = Path(DIR_REPORTS) / f"{req.user_id}.html"
     write_html_file(html_file_path, html_content)
 
     # Return structured data matching ResIntelligenceData format
     return {
-        "title": processed_report_data.get(
-            "title", f"{req.city_name} Pharmacy Site Analysis Report"
-        ),
-        "description": processed_report_data.get(
-            "description",
-            "Comprehensive Location Intelligence & Investment Recommendations",
-        ),
-        "summary_metrics": processed_report_data.get("summary_metrics", {}),
-        "executive_summary": processed_report_data.get("executive_summary", {}),
-        "key_investment_insights": processed_report_data.get(
-            "key_investment_insights", []
-        ),
-        "rankings": processed_report_data.get("rankings", []),
-        "detailed_analysis": processed_report_data.get("detailed_analysis", []),
-        "visual_analysis": processed_report_data.get("visual_analysis", {}),
-        "methodology": processed_report_data.get("methodology", {}),
-        "statistical_insights": processed_report_data.get(
-            "statistical_insights", []
-        ),
-        "metadata": {
-            **processed_report_data.get("metadata", {}),
-            "html_file_path": html_file_path,
-            "generation_method": "HTML Report Generator",
-            "report_type": "pharmacy_site_selection",
-        },
+        "html_file_path": html_file_path,
     }
 
 

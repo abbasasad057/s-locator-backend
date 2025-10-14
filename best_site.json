@@ -390,8 +390,22 @@
     "weighted_scores": {
         "traffic": 17.795000076293945,
         "demographics": 24.907468605041505,
-        "competition": 0,
+        "competition": 0.0,
         "healthcare": 20.0,
         "complementary": 9.425000000000002
-    }
+    },
+    "raw_scores": {
+        "traffic": 71,
+        "demographics": 83,
+        "competition": 0,
+        "healthcare": 100,
+        "complementary": 94
+    },
+    "percentage_difference": null,
+    "comparison_type": "N/A",
+    "traffic_score_improvement": null,
+    "demographics_score_improvement": null,
+    "competition_score_improvement": null,
+    "healthcare_ecosystem_score_improvement": null,
+    "complementary_businesses_score_improvement": null
 }

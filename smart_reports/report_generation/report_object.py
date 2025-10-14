@@ -110,105 +110,182 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
     return insights
 
 
-def generate_insights_dict(
-    sites: List[Dict], best_site: Dict, CRITERION_WEIGHTS: Dict[str, float]
-) -> List[Dict[str, Any]]:
+def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
     """Generate key investment insights as structured data."""
-    if not sites:
-        return []
-
-    insights = []
+    # insights = []
 
     # Prime opportunity
-    best_score_100 = (best_site["total_score"] / MAX_TOTAL) * 100
-    insights.append(
-        {
-            "category": "Prime Opportunity",
-            "description": f"{best_site['display_name']} emerges as the clear market leader with exceptional potential scoring {best_score_100:.1f}/100 points.",
-            "site_name": best_site["display_name"],
-            "score": round(best_score_100, 1),
-        }
+    best_site["total_category"] = "Prime Opportunity"
+    best_site["total_description"] = (
+        f"{best_site['display_name']} emerges as the clear market leader with exceptional potential scoring {best_site['total_score']}/100 points."
     )
 
-    # Market dynamics
-    total_competitors = best_site["num_of_pharmacies"]
-    avg_competitors = total_competitors / len(sites) if sites else 0
 
-    if avg_competitors > 5:
-        market_status = (
-            "Highly saturated market requires strong differentiation strategy"
-        )
-        market_level = "saturated"
-    elif avg_competitors > 2:
+    # Market dynamics
+    competition_score = best_site["raw_scores"]['competition']
+    total_competitors = best_site["num_of_pharmacies"]
+    
+    # For competition, higher score means less competition (better for business)
+    if competition_score >= 75:
+        market_status = "Emerging market with minimal competition"
+        market_level = "emerging"
+    elif competition_score >= 50:
         market_status = "Moderately competitive market with room for growth"
         market_level = "competitive"
     else:
-        market_status = "Emerging market with minimal competition"
-        market_level = "emerging"
+        market_status = "Highly saturated market requires strong differentiation strategy"
+        market_level = "saturated"
 
-    insights.append(
-        {
-            "category": "Market Dynamics",
-            "description": f"{market_status} with {total_competitors} total competing pharmacies.",
-            "market_level": market_level,
-            "total_competitors": total_competitors,
-            "avg_competitors": round(avg_competitors, 1),
-        }
+    # Market color and icon logic (for market competition, emerging is good)
+    if market_level == "emerging":
+        market_color = "#2ecc71"
+        market_icon = "🟢 Emerging"
+    elif market_level == "competitive":
+        market_color = "#f39c12"
+        market_icon = "🟡 Competitive"
+    else:  # saturated
+        market_color = "#e74c3c"
+        market_icon = "🔴 Saturated"
+
+    best_site["market_category"] = "Market Dynamics"
+    best_site["market_description"] = (
+        f"{market_status} scoring {competition_score}/100 points with {total_competitors} total competing pharmacies."
     )
+    best_site["market_level"] = market_level
+    best_site["market_color"] = market_color
+    best_site["market_icon"] = market_icon
+
 
     # Traffic advantage
-    best_traffic_weighted = best_site.get("weighted_scores", {}).get("traffic", 0)
-    best_traffic_100 = best_traffic_weighted
-    traffic_score = best_site.get("traffic_score")
+    traffic_score = best_site["raw_scores"]['traffic']
+    if traffic_score >= 75:
+        traffic_status = "Excellent accessibility with optimal traffic flow"
+        traffic_level = "excellent"
+        traffic_color = "#2ecc71"
+        traffic_icon = "🟢 Excellent"
+    elif traffic_score >= 50:
+        traffic_status = "Good accessibility with moderate traffic conditions"
+        traffic_level = "good"
+        traffic_color = "#f39c12"
+        traffic_icon = "🟡 Good"
+    else:
+        traffic_status = "Average accessibility with some traffic challenges"
+        traffic_level = "average"
+        traffic_color = "#e74c3c"
+        traffic_icon = "🔴 Average"
 
-    insights.append(
-        {
-            "category": "Traffic Advantage",
-            "description": f"Accessibility scoring {best_traffic_100:.1f}/100 points with {traffic_score:.1f} km/h traffic supporting consistent customer flow.",
-            "traffic_score": round(best_traffic_100, 1),
-            "average_speed_kmh": round(traffic_score, 1) if traffic_score else None,
-        }
+    best_site["traffic_category"] = "Traffic Advantage"
+    best_site["traffic_description"] = (
+        f"{traffic_status} scoring {traffic_score}/100 points."
     )
+    best_site["traffic_level"] = traffic_level
+    best_site["traffic_color"] = traffic_color
+    best_site["traffic_icon"] = traffic_icon
 
     # Business ecosystem
-    nearby_businesses = best_site.get("num_of_businesses_around", 0)
-    insights.append(
-        {
-            "category": "Business Ecosystem",
-            "description": f"{nearby_businesses} nearby complementary businesses ensure consistent foot traffic and cross-selling opportunities.",
-            "nearby_businesses_count": nearby_businesses,
-        }
+    business_score = best_site["raw_scores"]['complementary']
+    num_businesses = best_site['num_of_businesses_around']
+    if business_score >= 75:
+        business_status = "Thriving commercial hub with exceptional foot traffic potential"
+        business_level = "excellent"
+        business_color = "#2ecc71"
+        business_icon = "🟢 Excellent"
+    elif business_score >= 50:
+        business_status = "Active business district with good cross-selling opportunities"
+        business_level = "good"
+        business_color = "#f39c12"
+        business_icon = "🟡 Good"
+    else:
+        business_status = "Moderate business presence with basic commercial activity"
+        business_level = "average"
+        business_color = "#e74c3c"
+        business_icon = "🔴 Average"
+
+    best_site["business_category"] = "Business Ecosystem"
+    best_site["business_description"] = (
+        f"{business_status} scoring {business_score}/100 points with {num_businesses} nearby complementary businesses."
     )
+    best_site["business_level"] = business_level
+    best_site["business_color"] = business_color
+    best_site["business_icon"] = business_icon
 
     # Demographic alignment
-    demo_weighted = best_site.get("weighted_scores", {}).get("demographics", 0)
-    demo_100 = demo_weighted
+    demographics_score = best_site["raw_scores"]['demographics']
+    if demographics_score >= 75:
+        demographics_status = "Exceptional demographic match with target customer profile"
+        demographics_level = "excellent"
+        demographics_color = "#2ecc71"
+        demographics_icon = "🟢 Excellent"
+    elif demographics_score >= 50:
+        demographics_status = "Strong demographic alignment with good market potential"
+        demographics_level = "good"
+        demographics_color = "#f39c12"
+        demographics_icon = "🟡 Good"
+    else:
+        demographics_status = "Adequate demographic fit with moderate market appeal"
+        demographics_level = "average"
+        demographics_color = "#e74c3c"
+        demographics_icon = "🔴 Average"
 
-    insights.append(
-        {
-            "category": "Demographic Alignment",
-            "description": f"Scoring {demo_100:.1f}/100 points, indicating strong market fit.",
-            "demographics_score": round(demo_100, 1),
-        }
+    best_site["demographics_category"] = "Demographic Alignment"
+    best_site["demographics_description"] = (
+        f"{demographics_status} scoring {demographics_score}/100 points."
     )
+    best_site["demographics_level"] = demographics_level
+    best_site["demographics_color"] = demographics_color
+    best_site["demographics_icon"] = demographics_icon
 
-    return insights
+    # Healthcare environment
+    healthcare_score = best_site["raw_scores"]['healthcare']
+    num_hospitals = best_site['num_of_hospitals']
+    num_dentists = best_site['num_of_dentists']
+    healthcare_facilities = num_hospitals + num_dentists
+    
+    if healthcare_score >= 75:
+        healthcare_status = "Prime healthcare hub with strong referral network"
+        healthcare_level = "excellent"
+        healthcare_color = "#2ecc71"
+        healthcare_icon = "🟢 Excellent"
+    elif healthcare_score >= 50:
+        healthcare_status = "Active medical district with good patient flow"
+        healthcare_level = "good"
+        healthcare_color = "#f39c12"
+        healthcare_icon = "🟡 Good"
+    else:
+        healthcare_status = "Basic healthcare presence with limited medical synergy"
+        healthcare_level = "average"
+        healthcare_color = "#e74c3c"
+        healthcare_icon = "🔴 Average"
+
+    best_site["healthcare_category"] = "Healthcare Environment"
+    best_site["healthcare_description"] = (
+        f"{healthcare_status} scoring {healthcare_score}/100 points with {healthcare_facilities} nearby medical facilities ({num_hospitals} hospitals, {num_dentists} dental clinics)."
+    )
+    best_site["healthcare_level"] = healthcare_level
+    best_site["healthcare_color"] = healthcare_color
+    best_site["healthcare_icon"] = healthcare_icon
+
+
 
 
 def generate_rankings_dict(
-    sites: List[Dict], CRITERION_WEIGHTS: Dict[str, float]
+    sites: List[Dict]
 ) -> List[Dict[str, Any]]:
     """Generate rankings as structured data."""
 
     rankings = []
     for i, site in enumerate(sites, start=1):
         # Convert all scores to 100 scale for display
-        final_score_100 = (site["total_score"] / MAX_TOTAL) * 100
+        total_score_100 = (site["total_score"] / MAX_TOTAL) * 100
         traffic_100 = site.get("weighted_scores", {}).get("traffic", 0)
-        demographics_100 = site.get("weighted_scores", {}).get("demographics", 0)
+        demographics_100 = site.get("weighted_scores", {}).get(
+            "demographics", 0
+        )
         competitive_100 = site.get("weighted_scores", {}).get("competition", 0)
         healthcare_100 = site.get("weighted_scores", {}).get("healthcare", 0)
-        complementary_100 = site.get("weighted_scores", {}).get("complementary", 0)
+        complementary_100 = site.get("weighted_scores", {}).get(
+            "complementary", 0
+        )
 
         rankings.append(
             {
@@ -223,11 +300,11 @@ def generate_rankings_dict(
         rankings.append(
             {
                 "rank": site["rank"],
-                "site_name": site["display_name"],
-                "price_sar": (
+                "display_name": site["display_name"],
+                "price": (
                     site.get("price", 0) if site.get("price") else None
                 ),
-                "final_score": round(final_score_100, 1),
+                "total_score": round(total_score_100, 1),
                 "traffic_score": round(traffic_100, 1),
                 "demographics_score": round(demographics_100, 1),
                 "competition_score": round(competitive_100, 1),
@@ -240,10 +317,73 @@ def generate_rankings_dict(
     return rankings
 
 
+def compare_values(site, current_site):
+    if not current_site:
+        return {
+            "percentage_difference": None,
+            "comparison_type": "N/A",
+            "traffic_score_improvement": None,
+            "demographics_score_improvement": None,
+            "competition_score_improvement": None,
+            "healthcare_ecosystem_score_improvement": None,
+            "complementary_businesses_score_improvement": None,
+        }
+    
+    # Total score comparison
+    site_score = site.get("total_score", 0)
+    current_score = current_site.get("total_score", 0)
+    diff_pct = abs(site_score - current_score)
+    
+    if site_score > current_score:
+        comparison_type = "improvement"
+    elif site_score < current_score:
+        comparison_type = "disadvantage"
+    else:
+        comparison_type = "same"
+
+    # Sub-score comparisons
+    site_weighted = site.get("weighted_scores", {})
+    current_weighted = current_site.get("weighted_scores", {})
+    
+    # Traffic score comparison
+    traffic_site = site_weighted.get("traffic", 0)
+    traffic_current = current_weighted.get("traffic", 0)
+    traffic_diff = abs(traffic_site - traffic_current)
+    
+    # Demographics score comparison
+    demo_site = site_weighted.get("demographics", 0)
+    demo_current = current_weighted.get("demographics", 0)
+    demo_diff = abs(demo_site - demo_current)
+    
+    # Competition score comparison
+    comp_site = site_weighted.get("competition", 0)
+    comp_current = current_weighted.get("competition", 0)
+    comp_diff = abs(comp_site - comp_current)
+    
+    # Healthcare ecosystem score comparison
+    health_site = site_weighted.get("healthcare", 0)
+    health_current = current_weighted.get("healthcare", 0)
+    health_diff = abs(health_site - health_current)
+    
+    # Complementary businesses score comparison
+    complement_site = site_weighted.get("complementary", 0)
+    complement_current = current_weighted.get("complementary", 0)
+    complement_diff = abs(complement_site - complement_current)
+
+    return {
+        "percentage_difference": round(diff_pct, 1),
+        "comparison_type": comparison_type,
+        "traffic_score_improvement": round(traffic_diff, 1),
+        "demographics_score_improvement": round(demo_diff, 1),
+        "competition_score_improvement": round(comp_diff, 1),
+        "healthcare_ecosystem_score_improvement": round(health_diff, 1),
+        "complementary_businesses_score_improvement": round(complement_diff, 1),
+    }
+
+
 def generate_rankings_dict_with_current_comparison(
     top_sites: List[Dict],
-    current_location: List[Dict],  # usually just 1 dict
-    CRITERION_WEIGHTS: Dict[str, float],
+    current_location: List[Dict],
 ) -> List[Dict[str, Any]]:
     """
     Generate rankings as structured data with comparisons to current_location.
@@ -260,48 +400,15 @@ def generate_rankings_dict_with_current_comparison(
         return []
     if not current_location:
         # fallback: no comparison, use original function
-        return generate_rankings_dict(top_sites, CRITERION_WEIGHTS)
+        return generate_rankings_dict(top_sites)
 
     current = current_location[0]  # baseline
     rankings = []
 
     # Helper to format comparison data
-    def compare_values(top_val, curr_val):
-        if curr_val == 0:
-            return {
-                "value": round(top_val, 1),
-                "current_value": round(curr_val, 1),
-                "percentage_difference": None,
-                "comparison_type": "N/A",
-                "display_text": f"{top_val:.1f} ({curr_val:.0f}, N/A)",
-            }
-
-        diff_pct = abs(top_val - curr_val)
-        if top_val > curr_val:
-            comparison_type = "improvement"
-            display_text = (
-                f"{top_val:.1f} ({curr_val:.0f}, {diff_pct:.1f}% improvement)"
-            )
-        elif top_val < curr_val:
-            comparison_type = "disadvantage"
-            display_text = (
-                f"{top_val:.1f} ({curr_val:.0f}, {diff_pct:.1f}% disadvantage)"
-            )
-        else:
-            comparison_type = "same"
-            display_text = f"{top_val:.1f} ({curr_val:.0f}, 0% difference)"
-
-        return {
-            "value": round(top_val, 1),
-            "current_value": round(curr_val, 1),
-            "percentage_difference": round(diff_pct, 1),
-            "comparison_type": comparison_type,
-            "display_text": display_text,
-        }
-
     for i, site in enumerate(top_sites, start=1):
         # Top site scores normalized to 100
-        final_score = (site["total_score"] / MAX_TOTAL) * 100
+        total_score = (site["total_score"] / MAX_TOTAL) * 100
         traffic = site.get("weighted_scores", {}).get("traffic", 0)
         demographics = site.get("weighted_scores", {}).get("demographics", 0)
         competition = site.get("weighted_scores", {}).get("competition", 0)
@@ -314,11 +421,12 @@ def generate_rankings_dict_with_current_comparison(
         curr_demo = current.get("weighted_scores", {}).get("demographics", 0)
         curr_comp = current.get("weighted_scores", {}).get("competition", 0)
         curr_health = current.get("weighted_scores", {}).get("healthcare", 0)
-        curr_complement = current.get("weighted_scores", {}).get("complementary", 0)
-        
+        curr_complement = current.get("weighted_scores", {}).get(
+            "complementary", 0
+        )
 
         # Generate comparison data for each metric
-        final_comparison = compare_values(final_score, curr_final)
+        final_comparison = compare_values(total_score, curr_final)
         traffic_comparison = compare_values(traffic, curr_traffic)
         demographics_comparison = compare_values(demographics, curr_demo)
         competition_comparison = compare_values(competition, curr_comp)
@@ -330,18 +438,18 @@ def generate_rankings_dict_with_current_comparison(
         rankings.append(
             {
                 "rank": site["rank"],
-                "site_name": site["display_name"],
-                "price_sar": (
+                "display_name": site["display_name"],
+                "price": (
                     site.get("price", 0) if site.get("price") else None
                 ),
-                "final_score_comparison": (
+                "total_score_comparison": (
                     final_comparison if final_comparison else {}
                 ),
-                "traffic_score_comparison": traffic_comparison,
-                "demographics_score_comparison": demographics_comparison,
-                "competition_score_comparison": competition_comparison,
-                "healthcare_ecosystem_score_comparison": healthcare_comparison,
-                "complementary_businesses_score_comparison": complementary_comparison,
+                "traffic_score_improvement": traffic_comparison,
+                "demographics_score_improvement": demographics_comparison,
+                "competition_score_improvement": competition_comparison,
+                "healthcare_ecosystem_score_improvement": healthcare_comparison,
+                "complementary_businesses_score_improvement": complementary_comparison,
                 "url": site["url"],
             }
         )

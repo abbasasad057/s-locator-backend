@@ -2,7 +2,7 @@
 Data Validation Module for Pharmacy Report Generation
 Validates response data before HTML generation to prevent N/A values
 """
-
+from all_types.request_dtypes import Reqsmartreport
 from typing import Dict, Any, List, Tuple
 import logging
 
@@ -15,7 +15,13 @@ class DataValidationError(Exception):
     pass
 
 
-def validate_response_data(data: Dict[str, Any]) -> Tuple[bool, str, str]:
+def validate_response_data(req: Reqsmartreport,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_results,
+    current_results,) -> Tuple[bool, str, str]:
     """
     Validate response data structure and determine format type.
 
@@ -24,30 +30,18 @@ def validate_response_data(data: Dict[str, Any]) -> Tuple[bool, str, str]:
         format_type: "comparison" | "direct" | "invalid"
     """
     # Check if data has required structure
-    if not isinstance(data, dict):
-        return False, "invalid", "Data must be a dictionary"
-    rankings = data.get("rankings", [])
 
-    if not rankings:
-        data_section = data.get("data", {})
-        if data_section:
-            rankings = data_section.get("rankings", [])
-
-    if not rankings:
-        return False, "invalid", "Missing or empty 'rankings' array"
-
-    if not isinstance(rankings, list):
-        return False, "invalid", "'rankings' must be an array"
+    if not list_top_n_sites:
+        return False, "invalid", "Missing or empty 'list_top_n_sites' array"
 
     # Analyze first ranking to determine format type
-    first_ranking = rankings[0]
-    format_type = _determine_format_type(first_ranking)
+    format_type = _determine_format_type(best_site)
 
     # Validate based on format type
     if format_type == "comparison":
-        is_valid, error = _validate_comparison_format(rankings)
+        is_valid, error = _validate_comparison_format(list_top_n_sites)
     elif format_type == "direct":
-        is_valid, error = _validate_direct_format(rankings)
+        is_valid, error = _validate_direct_format(list_top_n_sites)
     else:
         return False, "invalid", "Unable to determine data format type"
 
@@ -59,27 +53,27 @@ def validate_response_data(data: Dict[str, Any]) -> Tuple[bool, str, str]:
 
 
 
-def _determine_format_type(ranking: Dict[str, Any]) -> str:
+def _determine_format_type(site: Dict[str, Any]) -> str:
     """Determine if ranking uses comparison format or direct format"""
 
     # Check for comparison objects
     comparison_fields = [
-        "final_score_comparison",
-        "traffic_score_comparison",
-        "demographics_score_comparison",
-        "competition_score_comparison",
-        "healthcare_ecosystem_score_comparison",
-        "complementary_businesses_score_comparison",
+        "total_score_comparison",
+        "traffic_score_improvement",
+        "demographics_score_improvement",
+        "competition_score_improvement",
+        "healthcare_ecosystem_score_improvement",
+        "complementary_businesses_score_improvement",
     ]
 
     has_comparison = any(
-        ranking.get(field) and isinstance(ranking.get(field), dict)
+        site.get(field) is not None and isinstance(site.get(field), dict)
         for field in comparison_fields
     )
 
     # Check for direct score fields
     direct_fields = [
-        "final_score",
+        "total_score",
         "traffic_score",
         "demographics_score",
         "competition_score",
@@ -87,7 +81,7 @@ def _determine_format_type(ranking: Dict[str, Any]) -> str:
         "complementary_businesses_score",
     ]
 
-    has_direct = any(ranking.get(field) is not None for field in direct_fields)
+    has_direct = any(site.get(field) is not None for field in direct_fields)
 
     if has_comparison:
         return "comparison"
@@ -97,26 +91,19 @@ def _determine_format_type(ranking: Dict[str, Any]) -> str:
         return "invalid"
 
 
-def _validate_comparison_format(rankings: List[Dict[str, Any]]) -> Tuple[bool, str]:
+def _validate_comparison_format(list_top_n_sites: List[Dict[str, Any]]) -> Tuple[bool, str]:
     """Validate comparison format data"""
 
     required_comparison_fields = [
-        "final_score_comparison",
-        "traffic_score_comparison",
-        "demographics_score_comparison",
-        "competition_score_comparison",
-        "healthcare_ecosystem_score_comparison",
-        "complementary_businesses_score_comparison",
+        "total_score_comparison",
+        "traffic_score_improvement",
+        "demographics_score_improvement",
+        "competition_score_improvement",
+        "healthcare_ecosystem_score_improvement",
+        "complementary_businesses_score_improvement",
     ]
 
-    for i, ranking in enumerate(rankings):
-        # Check basic fields
-        if not ranking.get("site_name"):
-            return False, f"Ranking {i+1}: Missing site_name"
-
-        if not ranking.get("rank"):
-            return False, f"Ranking {i+1}: Missing rank"
-
+    for i, ranking in enumerate(list_top_n_sites):
         # Check comparison objects
         for field in required_comparison_fields:
             comparison_obj = ranking.get(field, {})
@@ -137,11 +124,11 @@ def _validate_comparison_format(rankings: List[Dict[str, Any]]) -> Tuple[bool, s
     return True, ""
 
 
-def _validate_direct_format(rankings: List[Dict[str, Any]]) -> Tuple[bool, str]:
+def _validate_direct_format(list_top_n_sites: List[Dict[str, Any]]) -> Tuple[bool, str]:
     """Validate direct format data"""
 
     required_direct_fields = [
-        "final_score",
+        "total_score",
         "traffic_score",
         "demographics_score",
         "competition_score",
@@ -149,19 +136,10 @@ def _validate_direct_format(rankings: List[Dict[str, Any]]) -> Tuple[bool, str]:
         "complementary_businesses_score",
     ]
 
-    for i, ranking in enumerate(rankings):
-        # Check basic fields
-        if not ranking.get("site_name"):
-            return False, f"Ranking {i+1}: Missing site_name"
-
-        if not ranking.get("rank"):
-            return False, f"Ranking {i+1}: Missing rank"
-
+    for i, site in enumerate(list_top_n_sites):
         # Check direct score fields
         for field in required_direct_fields:
-            value = ranking.get(field)
-            if value is None:
-                return False, f"Ranking {i+1}: Missing {field}"
+            value = site.get(field)
 
             if not isinstance(value, (int, float)):
                 return (
@@ -178,26 +156,3 @@ def _validate_direct_format(rankings: List[Dict[str, Any]]) -> Tuple[bool, str]:
     return True, ""
 
 
-def validate_inputs(response_data: Dict[str, Any]) -> str:
-    """
-    Main validation function that raises exception if data is invalid.
-
-    Args:
-        response_data: The response data to validate
-
-    Returns:
-        str: Format type ("comparison" or "direct")
-
-    Raises:
-        DataValidationError: If data is invalid
-    """
-    is_valid, format_type, error_message = validate_response_data(response_data)
-
-    if not is_valid:
-        raise DataValidationError(f"Data validation failed: {error_message}")
-
-    if format_type not in ["comparison", "direct"]:
-        raise DataValidationError(f"Invalid format type detected: {format_type}")
-
-    logger.info(f"Data validation passed. Format: {format_type}")
-    return format_type

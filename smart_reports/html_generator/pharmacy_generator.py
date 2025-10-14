@@ -5,22 +5,29 @@ Main generator for pharmacy HTML reports using modular components
 
 import logging
 from typing import Dict, Any
+from smart_reports.html_generator.data_validator import validate_response_data
 from all_types.request_dtypes import Reqsmartreport
 from pathlib import Path
+from all_types.request_dtypes import Reqsmartreport
 from .css_styles import get_pharmacy_report_css
 from .html_sections import (
     generate_executive_summary_section,
     generate_methodology_and_analysis_section,
     generate_visual_analysis_section,
 )
-from .data_validator import validate_inputs, DataValidationError
 
 logger = logging.getLogger(__name__)
 
 
 def generate_complete_html_report(
-    req,
-    processed_report_data
+    req: Reqsmartreport,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_results,
+    current_results,
+    report_text
 ):
     """
     Generate the HTML report with data validation
@@ -36,8 +43,14 @@ def generate_complete_html_report(
         DataValidationError: If data validation fails
     """
     # Validate data before processing
-    format_type = validate_inputs(processed_report_data)
-    logger.info(f"Generating HTML report for format type: {format_type}")
+    # format_type= validate_response_data(req,
+    # sites,
+    # stats,
+    # list_top_n_sites,
+    # best_site,
+    # custom_results,
+    # current_results,)
+    # logger.info(f"Generating HTML report for format type: {format_type}")
 
     html_content = f"""
     <!DOCTYPE html>
@@ -53,12 +66,34 @@ def generate_complete_html_report(
     </head>
     <body>
         <div class="report-container">
-            {generate_executive_summary_section(req, processed_report_data)}
-            {generate_methodology_and_analysis_section(processed_report_data)}
-            {generate_visual_analysis_section(processed_report_data)}
+            {generate_executive_summary_section(req,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_results,
+    current_results
+    , report_text)}
+            {generate_methodology_and_analysis_section(req,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_results,
+    current_results,
+    report_text
+    )}
+            {generate_visual_analysis_section(req,
+    sites,
+    stats,
+    list_top_n_sites,
+    best_site,
+    custom_results,
+    current_results,
+    report_text)}
         </div>
     </body>
     </html>"""
 
     logger.info("HTML report generation completed successfully")
-    return html_content 
+    return html_content

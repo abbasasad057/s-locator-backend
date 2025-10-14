@@ -391,10 +391,24 @@
         "weighted_scores": {
             "traffic": 17.795000076293945,
             "demographics": 24.907468605041505,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 9.425000000000002
-        }
+        },
+        "raw_scores": {
+            "traffic": 71,
+            "demographics": 83,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 94
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -732,10 +746,24 @@
         "weighted_scores": {
             "traffic": 19.267499923706055,
             "demographics": 24.639353275299072,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 8.0224
-        }
+        },
+        "raw_scores": {
+            "traffic": 77,
+            "demographics": 82,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 80
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -1105,10 +1133,24 @@
         "weighted_scores": {
             "traffic": 17.237499237060547,
             "demographics": 25.003791522979736,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 9.074399999999999
-        }
+        },
+        "raw_scores": {
+            "traffic": 68,
+            "demographics": 83,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 90
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -1502,10 +1544,24 @@
         "weighted_scores": {
             "traffic": 14.2524995803833,
             "demographics": 25.72880640029907,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 9.9525
-        }
+        },
+        "raw_scores": {
+            "traffic": 57,
+            "demographics": 85,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 99
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -1794,10 +1850,24 @@
         "weighted_scores": {
             "traffic": 16.327499389648438,
             "demographics": 26.6471076965332,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 6.882416666666668
-        }
+        },
+        "raw_scores": {
+            "traffic": 65,
+            "demographics": 88,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 68
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -2191,10 +2261,24 @@
         "weighted_scores": {
             "traffic": 15.03499984741211,
             "demographics": 25.48449840545654,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 9.2768
-        }
+        },
+        "raw_scores": {
+            "traffic": 60,
+            "demographics": 84,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 92
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -2500,10 +2584,24 @@
         "weighted_scores": {
             "traffic": 18.274999618530273,
             "demographics": 26.107781410217285,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 16.666666666666668,
             "complementary": 8.498516666666667
-        }
+        },
+        "raw_scores": {
+            "traffic": 73,
+            "demographics": 87,
+            "competition": 0,
+            "healthcare": 83,
+            "complementary": 84
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -2897,10 +2995,24 @@
         "weighted_scores": {
             "traffic": 13.787500381469727,
             "demographics": 25.72880640029907,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 9.9495
-        }
+        },
+        "raw_scores": {
+            "traffic": 55,
+            "demographics": 85,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 99
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -3254,10 +3366,24 @@
         "weighted_scores": {
             "traffic": 13.585000038146973,
             "demographics": 26.06246109008789,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 9.735500000000002
-        }
+        },
+        "raw_scores": {
+            "traffic": 54,
+            "demographics": 86,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 97
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     },
     {
         "source": "shop_for_rent",
@@ -3659,9 +3785,23 @@
         "weighted_scores": {
             "traffic": 14.4350004196167,
             "demographics": 25.001736640930172,
-            "competition": 0,
+            "competition": 0.0,
             "healthcare": 20.0,
             "complementary": 9.2822
-        }
+        },
+        "raw_scores": {
+            "traffic": 57,
+            "demographics": 83,
+            "competition": 0,
+            "healthcare": 100,
+            "complementary": 92
+        },
+        "percentage_difference": null,
+        "comparison_type": "N/A",
+        "traffic_score_improvement": null,
+        "demographics_score_improvement": null,
+        "competition_score_improvement": null,
+        "healthcare_ecosystem_score_improvement": null,
+        "complementary_businesses_score_improvement": null
     }
 ]

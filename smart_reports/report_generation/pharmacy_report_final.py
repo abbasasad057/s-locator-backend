@@ -23,7 +23,6 @@ from .chart_generator import (
     plot_score_vs_price,
 )
 from .map_generator import create_static_map_png, create_demographic_heatmap_png
-from .report_generator import generate_markdown
 from .report_config import FONT_FAMILY, UNICODE_MINUS, DEFAULT_OUTPUT_FILENAME
 
 # Set up matplotlib for Arabic text support
@@ -53,21 +52,9 @@ def generate_all_charts(top_n_sites: list) -> dict:
     return charts
 
 
-def generate_all_maps(sites: list, outdir: str, top_n: int) -> tuple:
+def generate_all_maps(sites: list, top_n: int) -> tuple:
     """Generate all required maps and return their file paths."""
     # Use image directory from config
-    map_png = create_report_asset_path("candidates_map.png", "image")
-    heat_png = create_report_asset_path("demographics_heatmap.png", "image")
 
-    # Generate candidates map
-    extent = None
-
-    extent = create_static_map_png(sites, map_png, top_n=top_n)
-    logging.info("✅ Generated candidates map")
-
-    # Generate demographic heatmap
-
-    create_demographic_heatmap_png(sites, heat_png, extent=extent)
-    logging.info("✅ Generated demographic heatmap")
 
     return map_png, heat_png
