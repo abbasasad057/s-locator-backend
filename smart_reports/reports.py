@@ -868,6 +868,26 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
         Dict[str, Any]
     """
 
+    # If evaluation_metrics were provided on a scale of 0-100 instead of 0-1, rescale them
+    metrics = req.evaluation_metrics
+    total_weight = (
+        metrics.traffic + 
+        metrics.demographics + 
+        metrics.competition + 
+        metrics.healthcare + 
+        metrics.complementary
+    )
+    
+    # If total is around 100 (assuming 0-100 scale), rescale to 0-1
+    if total_weight > 1:  # Threshold to detect 0-100 scale vs 0-1 scale
+        metrics.traffic /= 100.0
+        metrics.demographics /= 100.0
+        metrics.competition /= 100.0
+        metrics.healthcare /= 100.0
+        metrics.complementary /= 100.0
+
+
+
     # Generate the processed report data
     (
         sites,
