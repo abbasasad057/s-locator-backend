@@ -8,7 +8,7 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
     insights = {}
 
     # Traffic Performance
-    traffic_score = site["traffic_score"]
+    traffic_score = site["raw_scores"]["traffic"]
     if traffic_score is not None:
         if 20 <= traffic_score <= 30:
             traffic_status = "Optimal traffic — moderate traffic flow ensures both convenience and visibility."
@@ -342,42 +342,42 @@ def compare_values(site, current_site):
         comparison_type = "same"
 
     # Sub-score comparisons
-    site_weighted = site["weighted_scores"]
-    current_weighted = current_site["weighted_scores"]
-    
+    site_raw_scores = site["raw_scores"]
+    current_raw_scores = current_site["raw_scores"]
+
     # Traffic score comparison
-    traffic_site = site_weighted["traffic"]
-    traffic_current = current_weighted["traffic"]
+    traffic_site = site_raw_scores["traffic"]
+    traffic_current = current_raw_scores["traffic"]
     traffic_diff = abs(traffic_site - traffic_current)
     
     # Demographics score comparison
-    demo_site = site_weighted["demographics"]
-    demo_current = current_weighted["demographics"]
+    demo_site = site_raw_scores["demographics"]
+    demo_current = current_raw_scores["demographics"]
     demo_diff = abs(demo_site - demo_current)
     
     # Competition score comparison
-    comp_site = site_weighted["competition"]
-    comp_current = current_weighted["competition"]
+    comp_site = site_raw_scores["competition"]
+    comp_current = current_raw_scores["competition"]
     comp_diff = abs(comp_site - comp_current)
     
     # Healthcare ecosystem score comparison
-    health_site = site_weighted["healthcare"]
-    health_current = current_weighted["healthcare"]
+    health_site = site_raw_scores["healthcare"]
+    health_current = current_raw_scores["healthcare"]
     health_diff = abs(health_site - health_current)
     
     # Complementary businesses score comparison
-    complement_site = site_weighted["complementary"]
-    complement_current = current_weighted["complementary"]
+    complement_site = site_raw_scores["complementary"]
+    complement_current = current_raw_scores["complementary"]
     complement_diff = abs(complement_site - complement_current)
 
     return {
-        "percentage_difference": round(diff_pct, 1),
+        "percentage_difference": int(diff_pct),
         "comparison_type": comparison_type,
-        "traffic_score_improvement": round(traffic_diff, 1),
-        "demographics_score_improvement": round(demo_diff, 1),
-        "competition_score_improvement": round(comp_diff, 1),
-        "healthcare_ecosystem_score_improvement": round(health_diff, 1),
-        "complementary_businesses_score_improvement": round(complement_diff, 1),
+        "traffic_score_improvement": int(traffic_diff),
+        "demographics_score_improvement": int(demo_diff),
+        "competition_score_improvement": int(comp_diff),
+        "healthcare_ecosystem_score_improvement": int(health_diff),
+        "complementary_businesses_score_improvement": int(complement_diff),
     }
 
 

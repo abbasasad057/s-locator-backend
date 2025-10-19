@@ -20,7 +20,7 @@ def process_category_data(area_polygon : dict , lat : float , lng : float , typ 
             results[f"nearby_{typ}"].append({
                 "name": feature.get("properties", {}).get("name", ""),
                 "coordinates": [place_lng, place_lat],
-                'est_distance_meters': dist_data["est_driving_distance_meters"]
+                'est_distance_meters': dist_data["driving_distance_meters"]
             })
     return results
 

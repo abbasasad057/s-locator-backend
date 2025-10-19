@@ -25,7 +25,7 @@ def generate_detailed_insights(site: Dict) -> str:
     insights.append("## 📊 Detailed Analysis\n")
 
     # 🚗 Traffic Performance
-    traffic_score = site.get("traffic_score")
+    traffic_score = site["raw_scores"]["traffic"]
     if traffic_score is not None:
         if 20 <= traffic_score <= 30:
             traffic_status = "✅ Optimal traffic — moderate traffic flow ensures both convenience and visibility."
@@ -143,7 +143,7 @@ def generate_insights(sites: List[Dict], best_site: Dict) -> str:
     )
     best_traffic_100 = best_traffic_weighted
     traffic_info = ""
-    traffic_score = best_site.get("traffic_score")
+    traffic_score = best_site["raw_scores"]["traffic"]
     traffic_info = f" with {traffic_score} km/h average speeds"
 
     insights.append(
@@ -293,7 +293,7 @@ def write_detailed_analysis(
 
         # Traffic scoring
         if "traffic" in CRITERION_WEIGHTS:
-            traffic_raw = s.get("traffic_score", 0.0)
+            traffic_raw = s["raw_scores"]["traffic"]
             weighted_points = s.get("weighted_scores", {}).get("traffic", 0.0)
             md.write(
                 f"| Traffic | Average Speed | {traffic_raw} km/h | {weighted_points} |\n"
@@ -1193,11 +1193,11 @@ def write_detailed_analysis_with_current(
 
         # Traffic scoring
         if "traffic" in CRITERION_WEIGHTS:
-            traffic_raw = s.get("traffic_score", 0.0)
+            traffic_raw = s["raw_scores"]["traffic"]
             weighted_points = s.get("weighted_scores", {}).get("traffic", 0.0)
 
             if current_s:
-                current_traffic_raw = current_s.get("traffic_score", 0.0)
+                current_traffic_raw = current_s["raw_scores"]["traffic"]
                 current_weighted_points = current_s.get(
                     "weighted_scores", {}
                 ).get("traffic", 0.0)

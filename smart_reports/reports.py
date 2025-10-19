@@ -2,6 +2,10 @@ import os
 import json
 import asyncio
 import logging
+import aiohttp
+from logging_wrapper import (
+    apply_decorator_to_module
+)
 from .report_generation.data_processor import calculate_statistics
 from pathlib import Path
 from smart_reports.report_generation.map_generator import (
@@ -50,6 +54,8 @@ from .report_generation.report_config import (
     source_custom_locations,
     source_shop_for_rent,
 )
+from app_logger import get_logger
+logger = get_logger(__name__)
 
 POPULATION_KEYS = [
     "total_population",
@@ -80,6 +86,212 @@ TRAFFIC_KEYS = [
     "traffic_analysis_date",
 ]
 
+# API scoring base URL
+SCORING_API_BASE_URL = "http://46.62.227.32:8000"
+
+
+async def fetch_demographics_score(
+    lat: float, lng: float, radius: float, target_age: int
+) -> int:
+    """
+    Call the demographics scoring API.
+
+    Args:
+        lat: Latitude of location
+        lng: Longitude of location
+        radius: Search radius in meters
+        target_age: Target age for scoring
+
+    Returns:
+        Demographics score (0-100)
+    """
+    url = f"{SCORING_API_BASE_URL}/demographics/score"
+    payload = {
+        "lat": lat,
+        "lng": lng,
+        "radius": radius,
+        "target_age": target_age,
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            url, json=payload, timeout=aiohttp.ClientTimeout(total=30)
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                return int(data.get("score")) * 100
+            else:
+                logging.warning(
+                    f"Demographics API returned status {response.status}, using default score"
+                )
+                return 50
+
+
+async def fetch_competition_score(
+    lat: float,
+    lng: float,
+    radius: float,
+    competition_business_categories: list,
+    target_num_per_category: int,
+) -> int:
+    """
+    Call the competition scoring API.
+
+    Args:
+        lat: Latitude of location
+        lng: Longitude of location
+        radius: Search radius in meters
+        competition_business_categories: List of competing business categories
+        target_num_per_category: Target number of competitors per category
+
+    Returns:
+        Competition score (0-100)
+    """
+    url = f"{SCORING_API_BASE_URL}/competition/score"
+    payload = {
+        "lat": lat,
+        "lng": lng,
+        "radius": radius,
+        "competition_business_categories": competition_business_categories,
+        "target_num_per_category": target_num_per_category,
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            url, json=payload, timeout=aiohttp.ClientTimeout(total=30)
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                return int(data.get("score")) * 100
+            else:
+                logging.warning(
+                    f"Competition API returned status {response.status}, using default score"
+                )
+                return 50
+
+
+async def fetch_complementary_score(
+    lat: float,
+    lng: float,
+    radius: float,
+    complementary_business_categories: list,
+    target_num_per_category: int,
+) -> int:
+    """
+    Call the complementary businesses scoring API.
+
+    Args:
+        lat: Latitude of location
+        lng: Longitude of location
+        radius: Search radius in meters
+        complementary_business_categories: List of complementary business categories
+        target_num_per_category: Target number per category
+
+    Returns:
+        Complementary score (0-100)
+    """
+    url = f"{SCORING_API_BASE_URL}/complementary/score"
+    payload = {
+        "lat": lat,
+        "lng": lng,
+        "radius": radius,
+        "complementary_business_categories": complementary_business_categories,
+        "target_num_per_category": target_num_per_category,
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            url, json=payload, timeout=aiohttp.ClientTimeout(total=30)
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                return int(data.get("score")) * 100
+            else:
+                logging.warning(
+                    f"Complementary API returned status {response.status}, using default score"
+                )
+                return 50
+
+
+async def fetch_income_score(
+    lat: float, lng: float, radius: float, target_income_level: str
+) -> int:
+    """
+    Call the income scoring API.
+
+    Args:
+        lat: Latitude of location
+        lng: Longitude of location
+        radius: Search radius in meters
+        target_income_level: Target income level ("low", "medium", "high")
+
+    Returns:
+        Income score (0-100)
+    """
+    url = f"{SCORING_API_BASE_URL}/income/score"
+    payload = {
+        "lat": lat,
+        "lng": lng,
+        "radius": radius,
+        "target_income_level": target_income_level,
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            url, json=payload, timeout=aiohttp.ClientTimeout(total=30)
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                return int(data.get("score")) * 100
+            else:
+                logging.warning(
+                    f"Income API returned status {response.status}, using default score"
+                )
+                return 50
+
+
+async def fetch_traffic_score(
+    lat: float,
+    lng: float,
+    storefront_direction: str = "north",
+    day: str = "Monday",
+    time: str = "6PM",
+) -> int:
+    """
+    Call the traffic scoring API.
+
+    Args:
+        lat: Latitude of location
+        lng: Longitude of location
+        storefront_direction: Direction storefront faces ("north", "south", "east", "west")
+        day: Day of week
+        time: Time of day
+
+    Returns:
+        Traffic score (0-100)
+    """
+    url = f"{SCORING_API_BASE_URL}/traffic/score"
+    payload = {
+        "lat": lat,
+        "lng": lng,
+        "storefront_direction": storefront_direction,
+        "day": day,
+        "time": time,
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(
+            url, json=payload, timeout=aiohttp.ClientTimeout(total=360)
+        ) as response:
+            if response.status == 200:
+                data = await response.json()
+                return int(data.get("score"))
+            else:
+                logging.warning(
+                    f"Traffic API returned status {response.status}, using default score"
+                )
+                return 50
+
 
 def write_html_file(file_path: Path, content: str) -> None:
     """Write HTML content to file"""
@@ -87,39 +299,133 @@ def write_html_file(file_path: Path, content: str) -> None:
         f.write(content)
 
 
-def score_external_location(all_shops_data, req, single_item=False) -> dict:
-    # in this part we process all candidates locations data
+async def score_external_location(
+    all_shops_data, req, single_item=False
+) -> dict:
+    """
+    Score external locations using API calls to fetch real scores.
+
+    Args:
+        all_shops_data: List of shop data or single shop dict
+        req: Request object containing evaluation parameters
+        single_item: If True, expects single dict instead of list
+
+    Returns:
+        Dictionary of scored locations keyed by "lat,lng"
+    """
     results = {}
+
+    # Handle None or empty input
+    if not all_shops_data:
+        return {} if not single_item else None
+
     if single_item:
         all_shops_data = [all_shops_data]
+
+    # Default parameters for scoring APIs
+    radius = 1000  # 1km radius for scoring
+    competition_categories = ["pharmacy"]
+    complementary_categories = [
+        "grocery_store",
+        "supermarket",
+        "restaurant",
+        "bank",
+        "atm",
+    ]
+    target_num_per_category = 5
+
+    # Prepare all scoring tasks
+    scoring_tasks = []
+    shop_keys = []
 
     for shop in all_shops_data:
         lat = shop.get("lat")
         lng = shop.get("lng")
         loc_key = f"{lat},{lng}"
+        shop_keys.append((loc_key, shop))
+
+        # Create async tasks for parallel API calls
+        tasks = {
+            "traffic": fetch_traffic_score(lat, lng),
+            "demographics": fetch_demographics_score(
+                lat, lng, radius, req.target_age
+            ),
+            "competition": fetch_competition_score(
+                lat,
+                lng,
+                radius,
+                competition_categories,
+                target_num_per_category,
+            ),
+            "healthcare": fetch_income_score(
+                lat, lng, radius, req.target_income_level
+            ),
+            "complementary": fetch_complementary_score(
+                lat,
+                lng,
+                radius,
+                complementary_categories,
+                target_num_per_category,
+            ),
+        }
+        scoring_tasks.append(tasks)
+
+    # Execute all scoring API calls in parallel
+    for (loc_key, shop), tasks in zip(shop_keys, scoring_tasks):
+        # Gather scores for this location
+        scores = await asyncio.gather(
+            tasks["traffic"],
+            tasks["demographics"],
+            tasks["competition"],
+            tasks["healthcare"],
+            tasks["complementary"],
+            return_exceptions=True,
+        )
+
+        # Handle any exceptions and set default scores
+        traffic_score = scores[0]
+        demographics_score = scores[1]
+        competition_score = scores[2]
+        healthcare_score = scores[3]
+        complementary_score = scores[4]
+
+        # Calculate total score with weights
+        total_score = (
+            traffic_score * req.evaluation_metrics.traffic
+            + demographics_score * req.evaluation_metrics.demographics
+            + competition_score * req.evaluation_metrics.competition
+            + healthcare_score * req.evaluation_metrics.healthcare
+            + complementary_score * req.evaluation_metrics.complementary
+        )
+
         results[loc_key] = {
             **shop,
             "id": loc_key,
-            "total_score": int(50),
+            "total_score": int(total_score),
             "weighted_scores": {
-                "traffic": 12.5,
-                "demographics": 12.5,
-                "competition": 12.5,
-                "healthcare": 12.5,
-                "complementary": 12.5,
+                "traffic": traffic_score * req.evaluation_metrics.traffic,
+                "demographics": demographics_score
+                * req.evaluation_metrics.demographics,
+                "competition": competition_score
+                * req.evaluation_metrics.competition,
+                "healthcare": healthcare_score
+                * req.evaluation_metrics.healthcare,
+                "complementary": complementary_score
+                * req.evaluation_metrics.complementary,
             },
             "raw_scores": {
-                "traffic": int(50),
-                "demographics": int(50),
-                "competition": int(50),
-                "healthcare": int(50),
-                "complementary": int(50),
+                "traffic": int(traffic_score),
+                "demographics": int(demographics_score),
+                "competition": int(competition_score),
+                "healthcare": int(healthcare_score),
+                "complementary": int(complementary_score),
             },
         }
 
     if single_item:
-        results = list(results.values())[0]
+        results = list(results.values())[0] if results else None
     return results
+
 
 def score_shops(all_shops_data, req, single_item=False) -> dict:
     # in this part we process all candidates locations data
@@ -136,7 +442,7 @@ def score_shops(all_shops_data, req, single_item=False) -> dict:
         lng = shop.get("lng")
         # Compose key
         loc_key = f"{lat},{lng}"
-        traffic_score = shop.get("traffic_score", 0)
+        traffic_score = shop.get("traffic_score")
         demographics_score = score_demographics(shop, req)
         healthcare_score = score_healthcare_ecosystem(shop)
         competitive_score = score_competitive(shop)
@@ -312,8 +618,10 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
             all_shops_data.append(current_loc)
 
     results = score_shops(all_shops_data, req)
-    custom_sites = score_external_location(custom_loc, req)
-    current_site = score_external_location(current_loc, req, single_item=True)
+    custom_sites = await score_external_location(custom_loc, req)
+    current_site = await score_external_location(
+        current_loc, req, single_item=True
+    )
 
     stats = calculate_statistics(results)
     stats["total_competing_pharmacies"] = len(pharmacies)
@@ -321,7 +629,9 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
         results.values(), key=lambda s: s.get("total_score", 0), reverse=True
     )[:10]
     custom_results = sorted(
-        custom_sites.values(), key=lambda s: s.get("total_score", 0), reverse=True
+        custom_sites.values(),
+        key=lambda s: s.get("total_score", 0),
+        reverse=True,
     )[:10]
 
     # compare top n locations and custom locations with current location
@@ -385,26 +695,26 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     debug_path_custom_sites = Path("custom_sites.json")
     debug_path_current_site = Path("current_site.json")
 
-    # (
-    #     sites,
-    #     stats,
-    #     list_top_n_sites,
-    #     best_site,
-    #     custom_sites,
-    #     current_site,
-    # ) = await get_and_score_listings(req)
-    # with open(debug_path_sites, "w") as f:
-    #     json.dump(sites, f, indent=4)
-    # with open(debug_path_stats, "w") as f:
-    #     json.dump(stats, f, indent=4)
-    # with open(debug_path_list_top_n_sites, "w") as f:
-    #     json.dump(list_top_n_sites, f, indent=4)
-    # with open(debug_path_best_site, "w") as f:
-    #     json.dump(best_site, f, indent=4)
-    # with open(debug_path_custom_sites, "w") as f:
-    #     json.dump(custom_sites, f, indent=4)
-    # with open(debug_path_current_site, "w") as f:
-    #     json.dump(current_site, f, indent=4)
+    (
+        sites,
+        stats,
+        list_top_n_sites,
+        best_site,
+        custom_sites,
+        current_site,
+    ) = await get_and_score_listings(req)
+    with open(debug_path_sites, "w") as f:
+        json.dump(sites, f, indent=4)
+    with open(debug_path_stats, "w") as f:
+        json.dump(stats, f, indent=4)
+    with open(debug_path_list_top_n_sites, "w") as f:
+        json.dump(list_top_n_sites, f, indent=4)
+    with open(debug_path_best_site, "w") as f:
+        json.dump(best_site, f, indent=4)
+    with open(debug_path_custom_sites, "w") as f:
+        json.dump(custom_sites, f, indent=4)
+    with open(debug_path_current_site, "w") as f:
+        json.dump(current_site, f, indent=4)
 
     # read from json files
     with open(debug_path_sites, "r") as f:
@@ -604,3 +914,7 @@ async def loading_category_dataset(req: ReqFetchDataset):
     data = await fetch_dataset(req)
     features = data.get("features", [])
     return features
+
+
+# Apply the decorator to all functions in this module
+apply_decorator_to_module(logger)(__name__)

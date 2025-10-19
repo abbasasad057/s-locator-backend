@@ -1,211 +1,357 @@
 {
     "source": "current",
     "display_name": "Your current location",
-    "lat": 24.6858979,
-    "lng": 46.8144611,
+    "lat": 24.6852693,
+    "lng": 46.6904275,
     "price": null,
     "url": null,
     "num_of_pharmacies": 8,
     "nearby_pharmacy": [
         {
-            "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
+            "name": "Medical Origin Pharmacy - MCO",
             "coordinates": [
-                46.813925,
-                24.683895999999997
+                46.6900203,
+                24.685120899999998
             ],
-            "est_driving_distance_meters": 228
+            "driving_distance_meters": 44
         },
         {
-            "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u062c\u0631\u064a\u0646\u0632 Greens Corners Pharmacy",
+            "name": "Smart Apple Pharmacy",
             "coordinates": [
-                46.812156099999996,
-                24.6877018
+                46.6889524,
+                24.685581
             ],
-            "est_driving_distance_meters": 307
+            "driving_distance_meters": 153
         },
         {
-            "name": "Innova pharmacy | \u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0646\u0648\u0641\u0627",
+            "name": "Dorat Lemon Pharmacy t3 smch",
             "coordinates": [
-                46.8156639,
-                24.6812217
+                46.687062499999996,
+                24.6810625
             ],
-            "est_driving_distance_meters": 532
+            "driving_distance_meters": 577
         },
         {
-            "name": "Zahrat Al Rawdah Pharmacy 52 \u0635\u064a\u062f\u0644\u064a\u0629 \u0632\u0647\u0631\u0629 \u0627\u0644\u0631\u0648\u0636\u0629",
+            "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
             "coordinates": [
-                46.8210833,
-                24.6844167
+                46.689578,
+                24.690471
             ],
-            "est_driving_distance_meters": 689
+            "driving_distance_meters": 582
         },
         {
-            "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u062a\u0627\u062c \u0627\u0644\u062f\u0648\u0627\u0621 9",
+            "name": "Al-Dawaa",
             "coordinates": [
-                46.8213182,
-                24.6846489
+                46.688820899999996,
+                24.6905607
             ],
-            "est_driving_distance_meters": 707
+            "driving_distance_meters": 608
         }
     ],
-    "num_of_hospitals": 0,
-    "num_of_dentists": 0,
-    "nearby_hospital": [],
-    "nearby_dentist": [],
+    "num_of_hospitals": 8,
+    "num_of_dentists": 4,
+    "nearby_hospital": [
+        {
+            "name": "SMC Tower 3",
+            "coordinates": [
+                46.687198099999996,
+                24.680924299999997
+            ],
+            "driving_distance_meters": 581
+        },
+        {
+            "name": "\u0645\u0633\u062a\u0634\u0641\u064a\u0627\u062a SMC \u0637\u0631\u064a\u0642 \u0627\u0644\u0645\u0644\u0643 \u0641\u0647\u062f | SMC Hospitals King Fahd Road",
+            "coordinates": [
+                46.687266199999996,
+                24.6804579
+            ],
+            "driving_distance_meters": 621
+        },
+        {
+            "name": "SMC Tower 1",
+            "coordinates": [
+                46.6874049,
+                24.6800066
+            ],
+            "driving_distance_meters": 658
+        },
+        {
+            "name": "\u0645\u0633\u062a\u0634\u0641\u064a\u0627\u062a SMC \u0627\u0644\u0639\u064a\u0627\u062f\u0627\u062a | SMC Hospitals OPD",
+            "coordinates": [
+                46.6873693,
+                24.6798641
+            ],
+            "driving_distance_meters": 673
+        },
+        {
+            "name": "Out-Patient Clinics Specialized Medical Center Hospital",
+            "coordinates": [
+                46.6866948,
+                24.6794105
+            ],
+            "driving_distance_meters": 750
+        }
+    ],
+    "nearby_dentist": [
+        {
+            "name": "dentist adham",
+            "coordinates": [
+                46.686229,
+                24.6876307
+            ],
+            "driving_distance_meters": 498
+        },
+        {
+            "name": "Dr Nasir Alhamlan \u062f.\u0646\u0627\u0635\u0631 \u0627\u0644\u0647\u0645\u0644\u0627\u0646",
+            "coordinates": [
+                46.6874392,
+                24.679837499999998
+            ],
+            "driving_distance_meters": 673
+        },
+        {
+            "name": "\u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0625\u064a\u0645\u0627\u0646 \u0641\u0637\u0627\u0646\u064a",
+            "coordinates": [
+                46.695286599999996,
+                24.6810272
+            ],
+            "driving_distance_meters": 680
+        },
+        {
+            "name": "\u062f\u0643\u062a\u0648\u0631 \u0633\u0644\u0637\u0627\u0646 \u0643\u0631\u064a\u0631\u064a, \u0637\u0628\u064a\u0628 \u0623\u0633\u0646\u0627\u0646 \u0639\u0627\u0645 | Dr. Sultan Korairi, General Dentist",
+            "coordinates": [
+                46.6956366,
+                24.6934173
+            ],
+            "driving_distance_meters": 1045
+        }
+    ],
     "pharmacies_per_10k_population": 0,
-    "num_of_businesses_around": 33,
+    "num_of_businesses_around": 37,
     "nearby_grocery_store": [
         {
-            "name": "\u0623\u0633\u0648\u0627\u0642 \u0644\u0642\u0645\u0629",
+            "name": "Kingdom Dates",
             "coordinates": [
-                46.8141221,
-                24.683274899999997
+                46.6911001,
+                24.6825585
             ],
-            "est_distance_meters": 292
+            "est_distance_meters": 307
         },
         {
-            "name": "\u4e2d\u56fd\u8d85\u5e02 \u6613\u8d2d\u8d85\u5e02",
+            "name": "\u062a\u0645\u0648\u0631 \u0627\u0644\u0645\u0645\u0644\u0643\u0629",
             "coordinates": [
-                46.8171028,
-                24.6826443
+                46.691222200000006,
+                24.6824914
             ],
-            "est_distance_meters": 448
+            "est_distance_meters": 318
         },
         {
-            "name": "Panda Supermarket",
+            "name": "\u0645\u064a\u062f",
             "coordinates": [
-                46.8149478,
-                24.6818195
+                46.6881317,
+                24.6903106
             ],
-            "est_distance_meters": 454
+            "est_distance_meters": 604
         },
         {
-            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u0628\u062a\u0633\u0627\u0645",
+            "name": "NIBRAS MARKET",
             "coordinates": [
-                46.8072314,
-                24.6878784
+                46.6913194,
+                24.691567
             ],
-            "est_distance_meters": 763
+            "est_distance_meters": 703
         },
         {
-            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0633\u0644\u0629 \u0627\u0631\u064a\u0627\u0641 \u0627\u0644\u0641\u064a\u062d\u0627\u0621 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
+            "name": "Meed Stores",
             "coordinates": [
-                46.8088504,
-                24.680645400000003
+                46.699306899999996,
+                24.6875485
             ],
-            "est_distance_meters": 812
+            "est_distance_meters": 933
         }
     ],
     "nearby_supermarket": [
         {
-            "name": "\u0623\u0633\u0648\u0627\u0642 \u0644\u0642\u0645\u0629",
+            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0641\u0627\u0637\u0645\u0647",
             "coordinates": [
-                46.8141221,
-                24.683274899999997
+                46.6899552,
+                24.6847797
             ],
-            "est_distance_meters": 292
+            "est_distance_meters": 72
         },
         {
-            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u063a\u0630\u064a\u0629 \u0627\u0644\u0634\u0631\u0642",
+            "name": "Four shopping market",
             "coordinates": [
-                46.817831899999995,
-                24.686103199999998
+                46.6876379,
+                24.688118799999998
             ],
-            "est_distance_meters": 341
+            "est_distance_meters": 423
         },
         {
-            "name": "\u4e2d\u56fd\u8d85\u5e02 \u6613\u8d2d\u8d85\u5e02",
+            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u0644\u0634\u064a\u0628\u0627\u0646\u064a",
             "coordinates": [
-                46.8171028,
-                24.6826443
+                46.693579,
+                24.681278199999998
             ],
-            "est_distance_meters": 448
+            "est_distance_meters": 545
         },
         {
-            "name": "Panda Supermarket",
+            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0633\u0644\u0629 \u0627\u0644\u0639\u0644\u064a\u0627",
             "coordinates": [
-                46.8149478,
-                24.6818195
+                46.693160999999996,
+                24.6802217
             ],
-            "est_distance_meters": 454
+            "est_distance_meters": 623
         },
         {
-            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0646\u0648\u0631\u0647 \u0645\u0634\u0639\u0644 \u0628\u0646 \u0641\u0647\u062f",
+            "name": "Joy Mart",
             "coordinates": [
-                46.8101122,
-                24.6893222
+                46.6933612,
+                24.6802878
             ],
-            "est_distance_meters": 581
+            "est_distance_meters": 626
         }
     ],
     "nearby_restaurant": [
         {
-            "name": "\u0645\u0637\u0639\u0645 \u0639\u064a\u0646 \u0627\u0644\u062e\u0628\u064a\u0631 \u0644\u0644\u0648\u062c\u0628\u0627\u062a \u0627\u0644\u0633\u0631\u064a\u0639\u0629",
+            "name": "Fraser Suites Riyadh",
             "coordinates": [
-                46.8180439,
-                24.6825275
+                46.691822599999995,
+                24.679361
             ],
-            "est_distance_meters": 520
+            "est_distance_meters": 669
         },
         {
-            "name": "Coffee Address | \u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0642\u0647\u0648\u0629",
+            "name": "MAMO Michelangelo",
             "coordinates": [
-                46.8104728,
-                24.6921656
+                46.6849989,
+                24.6897082
             ],
-            "est_distance_meters": 803
+            "est_distance_meters": 737
         },
         {
-            "name": "AlBaik",
+            "name": "Entrec\u00f4te Caf\u00e9 de Paris",
             "coordinates": [
-                46.8101697,
-                24.6926764
+                46.684837099999996,
+                24.6900396
             ],
-            "est_distance_meters": 867
+            "est_distance_meters": 774
+        },
+        {
+            "name": "Holiday Inn Meydan",
+            "coordinates": [
+                46.691501599999995,
+                24.6782811
+            ],
+            "est_distance_meters": 781
+        },
+        {
+            "name": "La Petite Maison (LPM) Riyadh",
+            "coordinates": [
+                46.6841285,
+                24.6907541
+            ],
+            "est_distance_meters": 880
         }
     ],
     "nearby_atm": [
         {
+            "name": "Riyad Bank ATM",
+            "coordinates": [
+                46.68981,
+                24.684179999999998
+            ],
+            "est_distance_meters": 135
+        },
+        {
             "name": "Alinma ATM",
             "coordinates": [
-                46.808641699999995,
-                24.6936742
+                46.689298,
+                24.6861808
             ],
-            "est_distance_meters": 1043
-        }
-    ],
-    "nearby_bank": [
+            "est_distance_meters": 152
+        },
         {
-            "name": "Alinma Bank | \u0645\u0635\u0631\u0641 \u0627\u0644\u0625\u0646\u0645\u0627\u0621",
+            "name": "SNB AlAhli ATM",
             "coordinates": [
-                46.806017,
-                24.691572999999998
+                46.6883337,
+                24.6903218
             ],
-            "est_distance_meters": 1060
+            "est_distance_meters": 598
+        },
+        {
+            "name": "SNB AlAhli ATM",
+            "coordinates": [
+                46.6914375,
+                24.691187499999998
+            ],
+            "est_distance_meters": 663
         },
         {
             "name": "SNB AlAhli",
             "coordinates": [
-                46.8080625,
-                24.6944375
+                46.691519,
+                24.6911733
             ],
-            "est_distance_meters": 1146
+            "est_distance_meters": 663
         }
     ],
-    "id": "24.6858979,46.8144611",
-    "total_score": 50,
+    "nearby_bank": [
+        {
+            "name": "Riyad Bank",
+            "coordinates": [
+                46.689610599999995,
+                24.684047699999997
+            ],
+            "est_distance_meters": 158
+        },
+        {
+            "name": "The Saudi Investment Bank ATM",
+            "coordinates": [
+                46.693183,
+                24.6802
+            ],
+            "est_distance_meters": 626
+        },
+        {
+            "name": "SNB AlAhli",
+            "coordinates": [
+                46.691519,
+                24.6911733
+            ],
+            "est_distance_meters": 663
+        },
+        {
+            "name": "Bank Albilad | \u0628\u0646\u0643 \u0627\u0644\u0628\u0644\u0627\u062f",
+            "coordinates": [
+                46.6886875,
+                24.6766875
+            ],
+            "est_distance_meters": 966
+        },
+        {
+            "name": "Al Bilad Bank",
+            "coordinates": [
+                46.687896099999996,
+                24.676837499999998
+            ],
+            "est_distance_meters": 968
+        }
+    ],
+    "id": "24.6852693,46.6904275",
+    "total_score": 34,
     "weighted_scores": {
-        "traffic": 12.5,
-        "demographics": 12.5,
-        "competition": 12.5,
-        "healthcare": 12.5,
-        "complementary": 12.5
+        "traffic": 9.5,
+        "demographics": 0.0,
+        "competition": 15.0,
+        "healthcare": 10.0,
+        "complementary": 0.0
     },
     "raw_scores": {
-        "traffic": 50,
-        "demographics": 50,
-        "competition": 50,
+        "traffic": 38,
+        "demographics": 0,
+        "competition": 100,
         "healthcare": 50,
-        "complementary": 50
+        "complementary": 0
     }
 }

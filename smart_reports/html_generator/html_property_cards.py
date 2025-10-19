@@ -22,7 +22,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
 
         # Extract data directly from site structure based on available JSON keys
         # Traffic data - using available traffic_score instead of nested structure
-        current_speed = site['traffic_score']  # Using traffic_score as proxy for speed data
+        current_speed = site["raw_scores"]["traffic"] # Using traffic_score as proxy for speed data
         current_speed_display = f"{round(current_speed, 1)}"
         
         # Business environment - using num_of_businesses_around
@@ -40,7 +40,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
         competing_pharmacies_display = str(total_competing_pharmacies)
 
         # Use actual scores from the site data instead of looking for rankings
-        traffic_score_value = site['traffic_score']
+        traffic_score_value = site["raw_scores"]["traffic"]
         demographics_score_value = site['raw_scores']['demographics']  # Using raw_scores.demographics
         competition_score_value = site['raw_scores']['competition']   # Using raw_scores.competition
 
@@ -89,7 +89,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
             <div class="score-breakdown">
               <div class="score-item">
                 <div class="value">{traffic_score_display}</div>
-                <div class="label">Traffic<br />({current_speed_display} km/h)</div>
+                <div class="label"></div>
               </div>
               <div class="score-item">
                 <div class="value">{nearby_businesses_display}</div>

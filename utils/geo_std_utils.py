@@ -192,4 +192,4 @@ def calculate_distance_point(
     origin = (origin_lat, origin_lng)  # Latitude, Longitude of the origin
     destination = (dest_lat, dest_lng)
     distance = geodesic(origin, destination).meters
-    return {"est_driving_distance_meters": int(distance)}
+    return {"driving_distance_meters": int(distance)}

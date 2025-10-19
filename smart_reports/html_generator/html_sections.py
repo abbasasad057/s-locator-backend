@@ -189,7 +189,7 @@ def generate_methodology_and_analysis_section(
           📋 How This Analysis Was Conducted
         </h3>
           <p style="margin-bottom: 20px; font-size: 1.1em">
-              This analysis streamlines the process of site selection for pharmacies and cafes by leveraging advanced data aggregation and scoring methodologies. Instead of relying solely on manual searches and local intuition, we utilize real estate listings, demographic data, traffic patterns, and proximity to key amenities to objectively evaluate each location. The result is a focused shortlist of optimal sites, tailored to your business objectives and target audience, enabling confident investment and expansion decisions.
+              This analysis leverages advanced data aggregation and scoring methodologies. We utilize real estate listings, demographic data, traffic patterns, and proximity to key amenities to objectively evaluate each location. The result is a shortlist of optimal sites, tailored to your business objectives and target audience, enabling confident investment and expansion decisions.
           </p>
           <div style="background: #e8f4fd; padding: 16px; border-radius: 8px; margin-bottom: 18px; font-size: 1em;">
               <strong>Summary:</strong> Locations are assessed using five key criteria: traffic, demographics, competition, healthcare ecosystem, and complementary businesses. Each criterion is scored and weighted to reflect its impact on business success. Detailed explanations are available in the sections below.

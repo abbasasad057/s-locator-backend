@@ -31,8 +31,8 @@ def process_category_data(
                 {
                     "name": feature.get("properties", {}).get("name", ""),
                     "coordinates": [place_lng, place_lat],
-                    "est_driving_distance_meters": dist_data[
-                        "est_driving_distance_meters"
+                    "driving_distance_meters": dist_data[
+                        "driving_distance_meters"
                     ],
                 }
             )
@@ -68,7 +68,7 @@ async def get_healthcare_data(
     def top_n_closest(category_results, key, n=5):
         items = category_results.get(key, [])
         items_sorted = sorted(
-            items, key=lambda x: x["est_driving_distance_meters"]
+            items, key=lambda x: x["driving_distance_meters"]
         )
         return items_sorted[:n]
 

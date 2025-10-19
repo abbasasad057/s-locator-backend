@@ -35,7 +35,7 @@ def score_competitive(shop):
 
     if nearby_pharmacies:
         closest_pharmacy_distance = min(
-            float(p["est_driving_distance_meters"]) for p in nearby_pharmacies
+            float(p["driving_distance_meters"]) for p in nearby_pharmacies
         )
     else:
         closest_pharmacy_distance = 3000  # large distance, underserved
@@ -64,7 +64,7 @@ def score_competitive(shop):
         saturation_score = 0.0
     else:
         saturation_score = 1.0 - (pharmacies_per_10k / SAT_THRESHOLD)
-    saturation_score = max(0.0, min(1.0, saturation_score))
+
     saturation_score = saturation_score * 100.0
 
     average_score = (distance_score + saturation_score) / 2.0
@@ -78,26 +78,26 @@ def score_healthcare_ecosystem(shop):
     if not shop:
         return 0
 
-    PROXIMITY_MAX_DISTANCE = 1500  # 1.5km in meters
-    MAX_COUNT_FOR_FULL_SCORE = 3  # 3 or more places gives max score
+    PROXIMITY_MAX_DISTANCE = 1000  # 1km in meters
+    MAX_COUNT_FOR_FULL_SCORE = 2  # 2 or more places gives max score
 
     # Score hospitals
     hospitals = shop.get("nearby_hospital", [])
     hospitals_within_range = [
         h for h in hospitals 
-        if float(h["est_driving_distance_meters"]) <= PROXIMITY_MAX_DISTANCE
+        if float(h["driving_distance_meters"]) <= PROXIMITY_MAX_DISTANCE
     ]
     hospitals_count = len(hospitals_within_range)
-    hospitals_score = min(100.0, (hospitals_count / MAX_COUNT_FOR_FULL_SCORE) * 100.0)
+    hospitals_score = (hospitals_count / MAX_COUNT_FOR_FULL_SCORE) * 100
 
     # Score dentists
     dentists = shop.get("nearby_dentist", [])
     dentists_within_range = [
         d for d in dentists 
-        if float(d["est_driving_distance_meters"]) <= PROXIMITY_MAX_DISTANCE
+        if float(d["driving_distance_meters"]) <= PROXIMITY_MAX_DISTANCE
     ]
     dentists_count = len(dentists_within_range)
-    dentists_score = min(100.0, (dentists_count / MAX_COUNT_FOR_FULL_SCORE) * 100.0)
+    dentists_score = (dentists_count / MAX_COUNT_FOR_FULL_SCORE) * 100
 
     # Average of both scores
     average_score = (hospitals_score + dentists_score) / 2
