@@ -57,7 +57,7 @@ def score_competitive(shop):
 
     # saturation score internally on 0.0..1.0
     # max (1.0) when pharmacies_per_10k == 0, min (0.0) when >= 5
-    SAT_THRESHOLD = 5.0
+    SAT_THRESHOLD = 3.0
     if pharmacies_per_10k <= 0:
         saturation_score = 1.0
     elif pharmacies_per_10k >= SAT_THRESHOLD:
