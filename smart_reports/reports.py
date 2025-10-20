@@ -3,9 +3,7 @@ import json
 import asyncio
 import logging
 import aiohttp
-from logging_wrapper import (
-    apply_decorator_to_module
-)
+from logging_wrapper import apply_decorator_to_module
 from .report_generation.data_processor import calculate_statistics
 from pathlib import Path
 from smart_reports.report_generation.map_generator import (
@@ -55,6 +53,7 @@ from .report_generation.report_config import (
     source_shop_for_rent,
 )
 from app_logger import get_logger
+
 logger = get_logger(__name__)
 
 POPULATION_KEYS = [
@@ -91,7 +90,7 @@ SCORING_API_BASE_URL = "http://46.62.227.32:8000"
 
 
 async def fetch_demographics_score(
-    lat: float, lng: float, radius: float, target_age: int
+    lat: float, lng: float, radius: float, target_age: int, req: Reqsmartreport
 ) -> int:
     """
     Call the demographics scoring API.
@@ -119,12 +118,18 @@ async def fetch_demographics_score(
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                return int(data.get("score")) * 100
+                demo_score = int(data.get("score"))
             else:
                 logging.warning(
                     f"Demographics API returned status {response.status}, using default score"
                 )
-                return 50
+                demo_score = 50
+
+    income_score = await fetch_income_score(
+        lat, lng, radius, req.target_income_level
+    )
+
+    return demo_score + income_score / 2
 
 
 async def fetch_competition_score(
@@ -162,12 +167,14 @@ async def fetch_competition_score(
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                return int(data.get("score")) * 100
+                competition_score = int(data.get("score"))
             else:
                 logging.warning(
                     f"Competition API returned status {response.status}, using default score"
                 )
-                return 50
+                competition_score = 50
+
+    return competition_score
 
 
 async def fetch_complementary_score(
@@ -205,12 +212,14 @@ async def fetch_complementary_score(
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                return int(data.get("score")) * 100
+                complimentary_score = int(data.get("score")) 
             else:
                 logging.warning(
                     f"Complementary API returned status {response.status}, using default score"
                 )
-                return 50
+                complimentary_score = 50
+
+    return complimentary_score
 
 
 async def fetch_income_score(
@@ -242,12 +251,14 @@ async def fetch_income_score(
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                return int(data.get("score")) * 100
+                income_score = int(data.get("score"))
             else:
                 logging.warning(
                     f"Income API returned status {response.status}, using default score"
                 )
-                return 50
+                income_score = 50
+
+    return income_score
 
 
 async def fetch_traffic_score(
@@ -285,12 +296,14 @@ async def fetch_traffic_score(
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                return int(data.get("score"))
+                traffic_score = int(data.get("score"))
             else:
                 logging.warning(
                     f"Traffic API returned status {response.status}, using default score"
                 )
-                return 50
+                traffic_score = 50
+
+    return traffic_score
 
 
 def write_html_file(file_path: Path, content: str) -> None:
@@ -348,7 +361,7 @@ async def score_external_location(
         tasks = {
             "traffic": fetch_traffic_score(lat, lng),
             "demographics": fetch_demographics_score(
-                lat, lng, radius, req.target_age
+                lat, lng, radius, req.target_age, req
             ),
             "competition": fetch_competition_score(
                 lat,
@@ -357,8 +370,12 @@ async def score_external_location(
                 competition_categories,
                 target_num_per_category,
             ),
-            "healthcare": fetch_income_score(
-                lat, lng, radius, req.target_income_level
+            "healthcare": fetch_complementary_score(
+                lat,
+                lng,
+                radius,
+                ["dental_clinic", "dentist", "doctor", "hospital"],
+                target_num_per_category,
             ),
             "complementary": fetch_complementary_score(
                 lat,
@@ -871,13 +888,13 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
     # If evaluation_metrics were provided on a scale of 0-100 instead of 0-1, rescale them
     metrics = req.evaluation_metrics
     total_weight = (
-        metrics.traffic + 
-        metrics.demographics + 
-        metrics.competition + 
-        metrics.healthcare + 
-        metrics.complementary
+        metrics.traffic
+        + metrics.demographics
+        + metrics.competition
+        + metrics.healthcare
+        + metrics.complementary
     )
-    
+
     # If total is around 100 (assuming 0-100 scale), rescale to 0-1
     if total_weight > 1:  # Threshold to detect 0-100 scale vs 0-1 scale
         metrics.traffic /= 100.0
@@ -885,8 +902,6 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
         metrics.competition /= 100.0
         metrics.healthcare /= 100.0
         metrics.complementary /= 100.0
-
-
 
     # Generate the processed report data
     (

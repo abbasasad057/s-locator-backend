@@ -131,11 +131,6 @@ class LogAnalyzer:
                 for i, (func_name, stats) in enumerate(results[:10], 1):
                     file.write(f"{i:2d}. {func_name}: {stats['total_time_median']:.4f}s median ({stats['execution_count']} calls)\n")
                 
-                file.write("\nTOP 10 FASTEST FUNCTIONS (by median execution time):\n")
-                file.write("-" * 60 + "\n")
-                for i, (func_name, stats) in enumerate(results[-10:][::-1], 1):
-                    file.write(f"{i:2d}. {func_name}: {stats['total_time_median']:.4f}s median ({stats['execution_count']} calls)\n")
-                
                 file.write("\nFUNCTIONS WITH MOST EXECUTIONS:\n")
                 file.write("-" * 60 + "\n")
                 execution_sorted = sorted(results, key=lambda x: x[1]['execution_count'], reverse=True)

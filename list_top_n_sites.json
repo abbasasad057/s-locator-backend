@@ -1,393 +1,6 @@
 [
     {
         "source": "shop_for_rent",
-        "display_name": "\u0634\u0627\u0631\u0639-\u0637\u0631\u064a\u0642-\u0627\u0644\u0645\u0644\u0643-\u0641\u0647\u062f-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u0635\u062d\u0627\u0641\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
-        "lat": 24.79140281677246,
-        "lng": 46.632503509521484,
-        "price": 200000,
-        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0645\u0627\u0644-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u0635\u062d\u0627\u0641\u0629/\u0634\u0627\u0631\u0639-\u0637\u0631\u064a\u0642-\u0627\u0644\u0645\u0644\u0643-\u0641\u0647\u062f-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u0635\u062d\u0627\u0641\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6357781",
-        "listing_id": 6357781,
-        "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
-        "latitude": 24.79140281677246,
-        "longitude": 46.632503509521484,
-        "category": "shop_for_rent",
-        "direction_id": "4",
-        "total_population": 95564,
-        "avg_density": 6221.6298828125,
-        "avg_median_age": 30.170000076293945,
-        "avg_income": 11690.330078125,
-        "percentage_age_above_20": 50.0,
-        "percentage_age_above_25": 50.0,
-        "percentage_age_above_30": 50.0,
-        "percentage_age_above_35": 37.92499923706055,
-        "percentage_age_above_40": 25.424999237060547,
-        "percentage_age_above_45": 12.925000190734863,
-        "percentage_age_above_50": 0.42500001192092896,
-        "demographics_analysis_date": "2025-10-15 02:05:32",
-        "income_category": "medium",
-        "low_income_score": 21.16322898864746,
-        "medium_income_score": 84.85608673095703,
-        "high_income_score": 78.8367691040039,
-        "total_housings": 35338,
-        "residential_housings": 28072,
-        "non_residential_housings": 2041,
-        "owned_housings": 6953,
-        "rented_housings": 17541,
-        "provided_housings": 3329,
-        "other_residential_housings": 249,
-        "public_housing": 50,
-        "work_camps": 8,
-        "commercial_housings": 1983,
-        "other_housings": 5225,
-        "housing_density_sum": 110.19000244140625,
-        "housing_analysis_date": "2025-10-15 07:11:11",
-        "housing_score": 59.2947883605957,
-        "total_households": 6,
-        "avg_household_size": 3.4000000953674316,
-        "median_household_size": 2.0,
-        "household_density_sum": 109.08999633789062,
-        "household_analysis_date": "2025-10-15 07:08:50",
-        "household_score": 87.58199310302734,
-        "traffic_score": 80.86000061035156,
-        "traffic_storefront_score": 70.0,
-        "traffic_area_score": 82.06999969482422,
-        "traffic_screenshot_filename": "traffic_24.791402_46.632505_Monday_6-00PM_pinned_frontscore=70_areascore=82.png",
-        "traffic_analysis_date": "2025-10-15 04:54:54",
-        "num_of_pharmacies": 9,
-        "nearby_pharmacy": [
-            {
-                "name": "Zahrat Al Rawdah Pharmacy 18",
-                "coordinates": [
-                    46.6307914,
-                    24.792645699999998
-                ],
-                "driving_distance_meters": 221
-            },
-            {
-                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
-                "coordinates": [
-                    46.632546,
-                    24.789189999999998
-                ],
-                "driving_distance_meters": 245
-            },
-            {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0628\u064a\u062a \u0627\u0644\u062f\u0648\u0627\u0621",
-                "coordinates": [
-                    46.6296726,
-                    24.7930139
-                ],
-                "driving_distance_meters": 337
-            },
-            {
-                "name": "zahra 44",
-                "coordinates": [
-                    46.634274,
-                    24.787786800000003
-                ],
-                "driving_distance_meters": 438
-            },
-            {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
-                "coordinates": [
-                    46.6284731,
-                    24.797210600000003
-                ],
-                "driving_distance_meters": 761
-            }
-        ],
-        "num_of_hospitals": 7,
-        "num_of_dentists": 5,
-        "nearby_hospital": [
-            {
-                "name": "Smart Lab",
-                "coordinates": [
-                    46.633229,
-                    24.7904511
-                ],
-                "driving_distance_meters": 128
-            },
-            {
-                "name": "\u0645\u062c\u0645\u0639 \u0627\u0644\u0639\u0627\u0644\u0645\u064a \u0627\u0644\u0637\u0628\u064a",
-                "coordinates": [
-                    46.6297062,
-                    24.7930024
-                ],
-                "driving_distance_meters": 333
-            },
-            {
-                "name": "\u0645\u0631\u0643\u0632 \u0627\u0644\u0631\u0639\u0627\u064a\u0629 \u0627\u0644\u0635\u062d\u064a\u0629 \u0627\u0644\u0623\u0648\u0644\u064a\u0629 (\u0627\u0644\u0635\u062d\u0627\u0641\u0629)",
-                "coordinates": [
-                    46.63937,
-                    24.79359
-                ],
-                "driving_distance_meters": 735
-            },
-            {
-                "name": "\u0645\u062c\u0645\u0639 \u0648\u0642\u0627\u064a\u0629 \u0627\u0644\u0637\u0628\u064a \u0628\u0627\u0644\u0631\u064a\u0627\u0636",
-                "coordinates": [
-                    46.628746299999996,
-                    24.7837838
-                ],
-                "driving_distance_meters": 925
-            },
-            {
-                "name": "\u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u0631\u0643\u0632 \u0627\u0644\u0627\u0633\u062a\u0634\u0627\u0631\u064a \u0627\u0644\u0635\u062d\u0627\u0641\u0647",
-                "coordinates": [
-                    46.6365355,
-                    24.783896
-                ],
-                "driving_distance_meters": 926
-            }
-        ],
-        "nearby_dentist": [
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0647 \u062f\u0643\u062a\u0648\u0631\u0647 \u0633\u0627\u0631\u0647 \u0639\u0644\u064a \u062f\u064a\u0646\u0627\u0631 \u0644\u0637\u0628 \u0648\u062a\u062c\u0645\u064a\u0644 \u0627\u0644\u0623\u0633\u0646\u0627\u0646",
-                "coordinates": [
-                    46.6348802,
-                    24.7869504
-                ],
-                "driving_distance_meters": 548
-            },
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0629 \u062f\u0643\u062a\u0648\u0631\u0629 \u0625\u064a\u0645\u0627\u0646 \u0627\u0628\u0631\u0627\u0647\u064a\u0645 \u0644\u0637\u0628 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
-                "coordinates": [
-                    46.6350188,
-                    24.7868417
-                ],
-                "driving_distance_meters": 565
-            },
-            {
-                "name": "2Care Medical Center",
-                "coordinates": [
-                    46.638212499999995,
-                    24.796448899999998
-                ],
-                "driving_distance_meters": 803
-            },
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0629 \u062f. \u0625\u0628\u0631\u0627\u0647\u064a\u0645 \u0635\u0644\u0627\u062d",
-                "coordinates": [
-                    46.628831299999995,
-                    24.783858499999997
-                ],
-                "driving_distance_meters": 914
-            },
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0628\u0648\u0631\u062f \u0627\u0644\u0633\u0639\u0648\u062f\u064a \u0648\u0634\u0647\u0627\u062f\u0629 \u0627\u0644\u0627\u062e\u062a\u0635\u0627\u0635 \u0641\u064a \u0627\u0644\u0645\u0633\u0648\u0627\u0643",
-                "coordinates": [
-                    46.6269438,
-                    24.8001525
-                ],
-                "driving_distance_meters": 1120
-            }
-        ],
-        "pharmacies_per_10k_population": 0.9417772382905697,
-        "num_of_businesses_around": 32,
-        "nearby_grocery_store": [
-            {
-                "name": "Meed",
-                "coordinates": [
-                    46.634033200000005,
-                    24.788409599999998
-                ],
-                "est_distance_meters": 365
-            },
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u0644\u0642\u0628\u064a\u0633\u064a",
-                "coordinates": [
-                    46.6295727,
-                    24.788328900000003
-                ],
-                "est_distance_meters": 451
-            },
-            {
-                "name": "\u0628\u0642\u0627\u0644\u0629 \u062e\u064a\u0631 \u0627\u0644\u0641\u064a\u0648\u0645 \u0644\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0645\u0635\u0631\u064a\u0629 \u0641\u0631\u0639 \u0627\u0644\u0645\u0644\u0642\u0627",
-                "coordinates": [
-                    46.627302199999995,
-                    24.792711699999998
-                ],
-                "est_distance_meters": 545
-            },
-            {
-                "name": "Sadhan Supermarkets",
-                "coordinates": [
-                    46.6339538,
-                    24.785480099999997
-                ],
-                "est_distance_meters": 672
-            },
-            {
-                "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0632\u0647\u0631\u0629 \u0627\u0644\u0645\u062f\u0647\u0634 \u0627\u0644\u0635\u062d\u0627\u0641\u0629",
-                "coordinates": [
-                    46.639924699999995,
-                    24.7885003
-                ],
-                "est_distance_meters": 816
-            }
-        ],
-        "nearby_supermarket": [
-            {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u062b\u0645\u0627\u0631 \u0627\u0644\u062d\u064a\u0627\u0644\u0629",
-                "coordinates": [
-                    46.6291775,
-                    24.793526099999998
-                ],
-                "est_distance_meters": 410
-            },
-            {
-                "name": "GBG OSP MC",
-                "coordinates": [
-                    46.6276067,
-                    24.7888789
-                ],
-                "est_distance_meters": 568
-            },
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
-                "coordinates": [
-                    46.6276107,
-                    24.788826000000004
-                ],
-                "est_distance_meters": 571
-            },
-            {
-                "name": "Sadhan Supermarkets",
-                "coordinates": [
-                    46.6339538,
-                    24.785480099999997
-                ],
-                "est_distance_meters": 672
-            },
-            {
-                "name": "Al Sadhan Hypermarket",
-                "coordinates": [
-                    46.6338143,
-                    24.785433599999998
-                ],
-                "est_distance_meters": 674
-            }
-        ],
-        "nearby_restaurant": [
-            {
-                "name": "\u0623\u0646\u0648\u0627\u0631 \u0627\u0644\u0644\u0624\u0644\u0624\u0629",
-                "coordinates": [
-                    46.6336222,
-                    24.7890031
-                ],
-                "est_distance_meters": 288
-            },
-            {
-                "name": "Al Afrah Restaurant",
-                "coordinates": [
-                    46.6332652,
-                    24.795941
-                ],
-                "est_distance_meters": 508
-            },
-            {
-                "name": "Al Romansiah",
-                "coordinates": [
-                    46.635300199999996,
-                    24.7836905
-                ],
-                "est_distance_meters": 899
-            }
-        ],
-        "nearby_atm": [
-            {
-                "name": "Al Rajhi ATM",
-                "coordinates": [
-                    46.6291024,
-                    24.793433699999998
-                ],
-                "est_distance_meters": 410
-            },
-            {
-                "name": "SNB AlAhli ATM",
-                "coordinates": [
-                    46.628577299999996,
-                    24.7970039
-                ],
-                "est_distance_meters": 736
-            },
-            {
-                "name": "Al Rajhi ATM",
-                "coordinates": [
-                    46.6366739,
-                    24.783278499999998
-                ],
-                "est_distance_meters": 993
-            }
-        ],
-        "nearby_bank": [
-            {
-                "name": "Riyad Bank",
-                "coordinates": [
-                    46.6309645,
-                    24.792413099999997
-                ],
-                "est_distance_meters": 191
-            },
-            {
-                "name": "\u0628\u0646\u0643 \u0627\u0644\u062c\u0632\u064a\u0631\u0629 - \u0645\u0628\u0646\u0649 \u0627\u0644\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0625\u0642\u0644\u064a\u0645\u064a\u0629",
-                "coordinates": [
-                    46.6343933,
-                    24.794718699999997
-                ],
-                "est_distance_meters": 414
-            },
-            {
-                "name": "Bank atm \u0633\u062d\u0628 \u0627\u064a\u062f\u0627\u0639",
-                "coordinates": [
-                    46.6256833,
-                    24.792081699999997
-                ],
-                "est_distance_meters": 693
-            },
-            {
-                "name": "NCB Bank",
-                "coordinates": [
-                    46.6286014,
-                    24.7970088
-                ],
-                "est_distance_meters": 735
-            },
-            {
-                "name": "Alistithmar Capital",
-                "coordinates": [
-                    46.6353753,
-                    24.783130500000002
-                ],
-                "est_distance_meters": 961
-            }
-        ],
-        "id": "24.79140281677246,46.632503509521484",
-        "total_score": 67,
-        "weighted_scores": {
-            "traffic": 20.21500015258789,
-            "demographics": 18.473258590698244,
-            "competition": 0.0,
-            "healthcare": 20.0,
-            "complementary": 9.074399999999999
-        },
-        "raw_scores": {
-            "traffic": 80,
-            "demographics": 61,
-            "competition": 0,
-            "healthcare": 100,
-            "complementary": 90
-        },
-        "percentage_difference": 33,
-        "comparison_type": "improvement",
-        "traffic_score_improvement": 42,
-        "demographics_score_improvement": 61,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
-        "complementary_businesses_score_improvement": 90
-    },
-    {
-        "source": "shop_for_rent",
         "display_name": "\u0634\u0627\u0631\u0639-\u0627\u0628\u064a-\u0635\u0627\u062f\u0642-\u0627\u0644\u0645\u062f\u0646\u064a-\u062d\u064a-\u0627\u0644\u0646\u0641\u0644-\u0627\u0644\u0631\u064a\u0627\u0636",
         "lat": 24.782751083374023,
         "lng": 46.68308639526367,
@@ -774,27 +387,27 @@
             }
         ],
         "id": "24.782751083374023,46.68308639526367",
-        "total_score": 64,
+        "total_score": 94,
         "weighted_scores": {
             "traffic": 17.190000534057617,
             "demographics": 17.630541706085207,
             "competition": 0.0,
-            "healthcare": 20.0,
+            "healthcare": 50.0,
             "complementary": 9.425000000000002
         },
         "raw_scores": {
             "traffic": 68,
             "demographics": 58,
             "competition": 0,
-            "healthcare": 100,
+            "healthcare": 250,
             "complementary": 94
         },
-        "percentage_difference": 30,
+        "percentage_difference": 68,
         "comparison_type": "improvement",
-        "traffic_score_improvement": 30,
-        "demographics_score_improvement": 58,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
+        "traffic_score_improvement": 13,
+        "demographics_score_improvement": 14,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
         "complementary_businesses_score_improvement": 94
     },
     {
@@ -1185,657 +798,415 @@
             }
         ],
         "id": "24.766056060791016,46.71347427368164",
-        "total_score": 63,
+        "total_score": 93,
         "weighted_scores": {
             "traffic": 14.1875,
             "demographics": 19.169660663604734,
             "competition": 0.0,
-            "healthcare": 20.0,
+            "healthcare": 50.0,
             "complementary": 9.9525
         },
         "raw_scores": {
             "traffic": 56,
             "demographics": 63,
             "competition": 0,
-            "healthcare": 100,
+            "healthcare": 250,
             "complementary": 99
         },
-        "percentage_difference": 29,
+        "percentage_difference": 67,
         "comparison_type": "improvement",
-        "traffic_score_improvement": 18,
-        "demographics_score_improvement": 63,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
+        "traffic_score_improvement": 1,
+        "demographics_score_improvement": 19,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
         "complementary_businesses_score_improvement": 99
     },
     {
         "source": "shop_for_rent",
-        "display_name": "\u0634\u0627\u0631\u0639-\u0639\u0628\u062f\u0627\u0644\u0631\u062d\u0645\u0646-\u0627\u0644\u0646\u0627\u0635\u0631-\u062d\u064a-\u0627\u0644\u0645\u0644\u0643-\u0641\u064a\u0635\u0644-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
-        "lat": 24.75739860534668,
-        "lng": 46.78935623168945,
-        "price": 32000,
-        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0631\u0642-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u0645\u0644\u0643-\u0641\u064a\u0635\u0644/\u0634\u0627\u0631\u0639-\u0639\u0628\u062f\u0627\u0644\u0631\u062d\u0645\u0646-\u0627\u0644\u0646\u0627\u0635\u0631-\u062d\u064a-\u0627\u0644\u0645\u0644\u0643-\u0641\u064a\u0635\u0644-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6335961",
-        "listing_id": 6335961,
+        "display_name": "\u0634\u0627\u0631\u0639-\u0637\u0631\u064a\u0642-\u0627\u0644\u0645\u0644\u0643-\u0641\u0647\u062f-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u0635\u062d\u0627\u0641\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
+        "lat": 24.79140281677246,
+        "lng": 46.632503509521484,
+        "price": 200000,
+        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0645\u0627\u0644-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u0635\u062d\u0627\u0641\u0629/\u0634\u0627\u0631\u0639-\u0637\u0631\u064a\u0642-\u0627\u0644\u0645\u0644\u0643-\u0641\u0647\u062f-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u0635\u062d\u0627\u0641\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6357781",
+        "listing_id": 6357781,
         "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
-        "latitude": 24.75739860534668,
-        "longitude": 46.78935623168945,
+        "latitude": 24.79140281677246,
+        "longitude": 46.632503509521484,
         "category": "shop_for_rent",
-        "direction_id": "3",
-        "total_population": 81989,
-        "avg_density": 8006.75,
-        "avg_median_age": 29.25,
-        "avg_income": 11102.6201171875,
+        "direction_id": "4",
+        "total_population": 95564,
+        "avg_density": 6221.6298828125,
+        "avg_median_age": 30.170000076293945,
+        "avg_income": 11690.330078125,
         "percentage_age_above_20": 50.0,
         "percentage_age_above_25": 50.0,
-        "percentage_age_above_30": 48.125,
-        "percentage_age_above_35": 35.625,
-        "percentage_age_above_40": 23.125,
-        "percentage_age_above_45": 10.625,
-        "percentage_age_above_50": 0.0,
-        "demographics_analysis_date": "2025-10-15 02:06:27",
+        "percentage_age_above_30": 50.0,
+        "percentage_age_above_35": 37.92499923706055,
+        "percentage_age_above_40": 25.424999237060547,
+        "percentage_age_above_45": 12.925000190734863,
+        "percentage_age_above_50": 0.42500001192092896,
+        "demographics_analysis_date": "2025-10-15 02:05:32",
         "income_category": "medium",
-        "low_income_score": 25.126602172851562,
-        "medium_income_score": 91.3838119506836,
-        "high_income_score": 74.87339782714844,
-        "total_housings": 27821,
-        "residential_housings": 22407,
-        "non_residential_housings": 1293,
-        "owned_housings": 6283,
-        "rented_housings": 13447,
-        "provided_housings": 2472,
-        "other_residential_housings": 205,
-        "public_housing": 25,
+        "low_income_score": 21.16322898864746,
+        "medium_income_score": 84.85608673095703,
+        "high_income_score": 78.8367691040039,
+        "total_housings": 35338,
+        "residential_housings": 28072,
+        "non_residential_housings": 2041,
+        "owned_housings": 6953,
+        "rented_housings": 17541,
+        "provided_housings": 3329,
+        "other_residential_housings": 249,
+        "public_housing": 50,
         "work_camps": 8,
-        "commercial_housings": 1260,
-        "other_housings": 4121,
-        "housing_density_sum": 86.75,
-        "housing_analysis_date": "2025-10-15 07:11:47",
-        "housing_score": 80.09774017333984,
-        "total_households": 4,
-        "avg_household_size": 3.680000066757202,
-        "median_household_size": 2.75,
-        "household_density_sum": 81.05999755859375,
-        "household_analysis_date": "2025-10-15 07:09:26",
-        "household_score": 77.8080062866211,
-        "traffic_score": 65.02999877929688,
+        "commercial_housings": 1983,
+        "other_housings": 5225,
+        "housing_density_sum": 110.19000244140625,
+        "housing_analysis_date": "2025-10-15 07:11:11",
+        "housing_score": 59.2947883605957,
+        "total_households": 6,
+        "avg_household_size": 3.4000000953674316,
+        "median_household_size": 2.0,
+        "household_density_sum": 109.08999633789062,
+        "household_analysis_date": "2025-10-15 07:08:50",
+        "household_score": 87.58199310302734,
+        "traffic_score": 80.86000061035156,
         "traffic_storefront_score": 70.0,
-        "traffic_area_score": 64.4800033569336,
-        "traffic_screenshot_filename": "traffic_24.757399_46.789358_Monday_6-00PM_pinned_frontscore=70_areascore=64.png",
-        "traffic_analysis_date": "2025-10-15 06:11:24",
-        "num_of_pharmacies": 8,
+        "traffic_area_score": 82.06999969482422,
+        "traffic_screenshot_filename": "traffic_24.791402_46.632505_Monday_6-00PM_pinned_frontscore=70_areascore=82.png",
+        "traffic_analysis_date": "2025-10-15 04:54:54",
+        "num_of_pharmacies": 9,
         "nearby_pharmacy": [
             {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u062f\u0648\u0627\u0621 \u0627\u0644\u0633\u0644\u0627\u0645\u0647",
+                "name": "Zahrat Al Rawdah Pharmacy 18",
                 "coordinates": [
-                    46.7891706,
-                    24.7563921
+                    46.6307914,
+                    24.792645699999998
                 ],
-                "driving_distance_meters": 113
-            },
-            {
-                "name": "\u0631\u0648\u0639\u0629 \u0627\u0644\u0648\u062a\u062f",
-                "coordinates": [
-                    46.7857561,
-                    24.754279699999998
-                ],
-                "driving_distance_meters": 501
+                "driving_distance_meters": 221
             },
             {
                 "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
                 "coordinates": [
-                    46.794101999999995,
-                    24.758755999999998
+                    46.632546,
+                    24.789189999999998
                 ],
-                "driving_distance_meters": 503
+                "driving_distance_meters": 245
             },
             {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0635\u062d\u0629 \u0632\u064a\u0646\u0629 \u0627\u0644\u0645\u062a\u0637\u0648\u0631\u0629 (6) \u0641\u0631\u0639 \u0627\u0644\u062e\u0644\u064a\u062c",
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0628\u064a\u062a \u0627\u0644\u062f\u0648\u0627\u0621",
                 "coordinates": [
-                    46.7867646,
-                    24.765097299999997
+                    46.6296726,
+                    24.7930139
                 ],
-                "driving_distance_meters": 892
+                "driving_distance_meters": 337
             },
             {
-                "name": "United Pharmacy - \u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0645\u062a\u062d\u062f\u0629",
+                "name": "zahra 44",
                 "coordinates": [
-                    46.788196899999996,
-                    24.765820599999998
+                    46.634274,
+                    24.787786800000003
                 ],
-                "driving_distance_meters": 940
+                "driving_distance_meters": 438
+            },
+            {
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
+                "coordinates": [
+                    46.6284731,
+                    24.797210600000003
+                ],
+                "driving_distance_meters": 761
             }
         ],
-        "num_of_hospitals": 4,
-        "num_of_dentists": 4,
+        "num_of_hospitals": 7,
+        "num_of_dentists": 5,
         "nearby_hospital": [
             {
-                "name": "\u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0634\u0631\u0642 \u0627\u0644\u0637\u0628\u064a \u0648\u0645\u0631\u0643\u0632 \u0644\u0641\u062d\u0635 \u0627\u0644\u0639\u0645\u0627\u0644\u0629",
+                "name": "Smart Lab",
                 "coordinates": [
-                    46.794608499999995,
-                    24.7597953
+                    46.633229,
+                    24.7904511
                 ],
-                "driving_distance_meters": 593
+                "driving_distance_meters": 128
             },
             {
-                "name": "\u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0623\u0633\u0646\u0627\u0646 \u0628\u0634\u0631\u0642 \u0627\u0644\u0631\u064a\u0627\u0636|Dental Hospital east",
+                "name": "\u0645\u062c\u0645\u0639 \u0627\u0644\u0639\u0627\u0644\u0645\u064a \u0627\u0644\u0637\u0628\u064a",
                 "coordinates": [
-                    46.7825059,
-                    24.752542400000003
+                    46.6297062,
+                    24.7930024
                 ],
-                "driving_distance_meters": 877
+                "driving_distance_meters": 333
             },
             {
-                "name": "\u0645\u062c\u0645\u0639 \u062f\u064a\u0627\u0631 \u0627\u0644\u0631\u0639\u0627\u064a\u0629 \u0627\u0644\u0637\u0628\u064a",
+                "name": "\u0645\u0631\u0643\u0632 \u0627\u0644\u0631\u0639\u0627\u064a\u0629 \u0627\u0644\u0635\u062d\u064a\u0629 \u0627\u0644\u0623\u0648\u0644\u064a\u0629 (\u0627\u0644\u0635\u062d\u0627\u0641\u0629)",
                 "coordinates": [
-                    46.788168999999996,
-                    24.7660227
+                    46.63937,
+                    24.79359
                 ],
-                "driving_distance_meters": 962
+                "driving_distance_meters": 735
             },
             {
-                "name": "Raya Medical Center Complex",
+                "name": "\u0645\u062c\u0645\u0639 \u0648\u0642\u0627\u064a\u0629 \u0627\u0644\u0637\u0628\u064a \u0628\u0627\u0644\u0631\u064a\u0627\u0636",
                 "coordinates": [
-                    46.7803884,
-                    24.7616324
+                    46.628746299999996,
+                    24.7837838
                 ],
-                "driving_distance_meters": 1021
+                "driving_distance_meters": 925
+            },
+            {
+                "name": "\u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u0631\u0643\u0632 \u0627\u0644\u0627\u0633\u062a\u0634\u0627\u0631\u064a \u0627\u0644\u0635\u062d\u0627\u0641\u0647",
+                "coordinates": [
+                    46.6365355,
+                    24.783896
+                ],
+                "driving_distance_meters": 926
             }
         ],
         "nearby_dentist": [
             {
-                "name": "\u0645\u062c\u0645\u0639 \u0627\u0644\u0632\u0645\u0631\u062f \u0627\u0644\u0639\u0627\u0644\u064a \u0627\u0644\u0637\u0628\u064a",
+                "name": "\u0639\u064a\u0627\u062f\u0647 \u062f\u0643\u062a\u0648\u0631\u0647 \u0633\u0627\u0631\u0647 \u0639\u0644\u064a \u062f\u064a\u0646\u0627\u0631 \u0644\u0637\u0628 \u0648\u062a\u062c\u0645\u064a\u0644 \u0627\u0644\u0623\u0633\u0646\u0627\u0646",
                 "coordinates": [
-                    46.792993,
-                    24.7534384
+                    46.6348802,
+                    24.7869504
                 ],
-                "driving_distance_meters": 572
+                "driving_distance_meters": 548
             },
             {
-                "name": "doctor mohammed nahedh 2 \u0639\u064a\u0627\u062f\u0629 \u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0645\u062d\u0645\u062f",
+                "name": "\u0639\u064a\u0627\u062f\u0629 \u062f\u0643\u062a\u0648\u0631\u0629 \u0625\u064a\u0645\u0627\u0646 \u0627\u0628\u0631\u0627\u0647\u064a\u0645 \u0644\u0637\u0628 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
                 "coordinates": [
-                    46.784621699999995,
-                    24.765943999999998
+                    46.6350188,
+                    24.7868417
                 ],
-                "driving_distance_meters": 1060
+                "driving_distance_meters": 565
             },
             {
-                "name": "\u0645\u062c\u0645\u0639 \u0631\u0648\u0627\u0641\u062f \u0627\u0644\u0643\u0631\u0627\u0645\u0629 \u0627\u0644\u0637\u0628\u064a ( 2 )",
+                "name": "2Care Medical Center",
                 "coordinates": [
-                    46.784621699999995,
-                    24.765943999999998
+                    46.638212499999995,
+                    24.796448899999998
                 ],
-                "driving_distance_meters": 1060
+                "driving_distance_meters": 803
             },
             {
-                "name": "\u0645\u0633\u062a\u0648\u0635\u0641 \u0628\u0631\u064a\u0642 \u0627\u0644\u0627\u0628\u062a\u0633\u0627\u0645\u0647 \u0644\u0637\u0628 \u0648\u062a\u0642\u0648\u064a\u0645 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
+                "name": "\u0639\u064a\u0627\u062f\u0629 \u062f. \u0625\u0628\u0631\u0627\u0647\u064a\u0645 \u0635\u0644\u0627\u062d",
                 "coordinates": [
-                    46.7847047,
-                    24.7660251
-                ],
-                "driving_distance_meters": 1065
-            }
-        ],
-        "pharmacies_per_10k_population": 0.9757406481357255,
-        "num_of_businesses_around": 13,
-        "nearby_grocery_store": [
-            {
-                "name": "\u0631\u0648\u0645 \u0644\u0644\u0623\u063a\u0630\u064a\u0629",
-                "coordinates": [
-                    46.788936799999995,
-                    24.7555886
-                ],
-                "est_distance_meters": 204
-            },
-            {
-                "name": "Panda Supermarket",
-                "coordinates": [
-                    46.7918641,
-                    24.7552117
-                ],
-                "est_distance_meters": 350
-            },
-            {
-                "name": "\u0645\u062d\u0644 \u062e\u0636\u0631\u0648\u0627\u062a \u0648\u0641\u0648\u0627\u0643\u0629",
-                "coordinates": [
-                    46.785568999999995,
-                    24.7643152
-                ],
-                "est_distance_meters": 856
-            },
-            {
-                "name": "\u062e\u0632\u0627\u0646\u0629 \u0627\u0644\u062a\u0648\u0641\u064a\u0631 \u0644\u0643\u0644 \u0634\u064a\u0621",
-                "coordinates": [
-                    46.7842067,
-                    24.764022300000004
-                ],
-                "est_distance_meters": 899
-            }
-        ],
-        "nearby_supermarket": [
-            {
-                "name": "\u0631\u0648\u0645 \u0644\u0644\u0623\u063a\u0630\u064a\u0629",
-                "coordinates": [
-                    46.788936799999995,
-                    24.7555886
-                ],
-                "est_distance_meters": 204
-            },
-            {
-                "name": "\u0631\u0643\u0646 \u0627\u0644\u0639\u062b\u064a\u0645",
-                "coordinates": [
-                    46.791957,
-                    24.758160999999998
-                ],
-                "est_distance_meters": 276
-            },
-            {
-                "name": "Panda Supermarket",
-                "coordinates": [
-                    46.7918641,
-                    24.7552117
-                ],
-                "est_distance_meters": 350
-            },
-            {
-                "name": "\u0645\u062d\u0644 \u062e\u0636\u0631\u0648\u0627\u062a \u0648\u0641\u0648\u0627\u0643\u0629",
-                "coordinates": [
-                    46.785568999999995,
-                    24.7643152
-                ],
-                "est_distance_meters": 856
-            },
-            {
-                "name": "\u062e\u0632\u0627\u0646\u0629 \u0627\u0644\u062a\u0648\u0641\u064a\u0631 \u0644\u0643\u0644 \u0634\u064a\u0621",
-                "coordinates": [
-                    46.7842067,
-                    24.764022300000004
-                ],
-                "est_distance_meters": 899
-            }
-        ],
-        "nearby_restaurant": [],
-        "nearby_atm": [
-            {
-                "name": "Al Rajhi ATM",
-                "coordinates": [
-                    46.7871231,
-                    24.7652637
-                ],
-                "est_distance_meters": 900
-            }
-        ],
-        "nearby_bank": [
-            {
-                "name": "\u0627\u0631\u062a \u0641\u062c\u0646 \u0644\u0644\u062f\u0639\u0627\u064a\u0629 \u0648\u0627\u0644\u0627\u0639\u0644\u0627\u0646 Advertising",
-                "coordinates": [
-                    46.788883899999995,
-                    24.7563463
-                ],
-                "est_distance_meters": 125
-            },
-            {
-                "name": "Riyad Bank",
-                "coordinates": [
-                    46.789545499999996,
-                    24.7559324
-                ],
-                "est_distance_meters": 163
-            },
-            {
-                "name": "\u0645\u0635\u0631\u0641 \u0627\u0644\u0631\u0627\u062c\u062d\u064a",
-                "coordinates": [
-                    46.7953024,
-                    24.7503797
-                ],
-                "est_distance_meters": 982
-            }
-        ],
-        "id": "24.75739860534668,46.78935623168945",
-        "total_score": 62,
-        "weighted_scores": {
-            "traffic": 16.25749969482422,
-            "demographics": 19.15543098449707,
-            "competition": 0.0,
-            "healthcare": 20.0,
-            "complementary": 6.882416666666668
-        },
-        "raw_scores": {
-            "traffic": 65,
-            "demographics": 63,
-            "competition": 0,
-            "healthcare": 100,
-            "complementary": 68
-        },
-        "percentage_difference": 28,
-        "comparison_type": "improvement",
-        "traffic_score_improvement": 27,
-        "demographics_score_improvement": 63,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
-        "complementary_businesses_score_improvement": 68
-    },
-    {
-        "source": "shop_for_rent",
-        "display_name": "\u0634\u0627\u0631\u0639-\u0633\u0639\u0648\u062f-\u0628\u0646-\u0639\u0628\u062f\u0627\u0644\u0639\u0632\u064a\u0632-\u0628\u0646-\u0645\u062d\u0645\u062f-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u0645\u0631\u0633\u0644\u0627\u062a-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
-        "lat": 24.7563419342041,
-        "lng": 46.684635162353516,
-        "price": 120000,
-        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0645\u0627\u0644-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u0645\u0631\u0633\u0644\u0627\u062a/\u0634\u0627\u0631\u0639-\u0633\u0639\u0648\u062f-\u0628\u0646-\u0639\u0628\u062f\u0627\u0644\u0639\u0632\u064a\u0632-\u0628\u0646-\u0645\u062d\u0645\u062f-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u0645\u0631\u0633\u0644\u0627\u062a-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6298707",
-        "listing_id": 6298707,
-        "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
-        "latitude": 24.7563419342041,
-        "longitude": 46.684635162353516,
-        "category": "shop_for_rent",
-        "direction_id": "4",
-        "total_population": 69967,
-        "avg_density": 6832.72998046875,
-        "avg_median_age": 32.25,
-        "avg_income": 11130.9404296875,
-        "percentage_age_above_20": 50.0,
-        "percentage_age_above_25": 50.0,
-        "percentage_age_above_30": 50.0,
-        "percentage_age_above_35": 43.125,
-        "percentage_age_above_40": 30.625,
-        "percentage_age_above_45": 18.125,
-        "percentage_age_above_50": 5.625,
-        "demographics_analysis_date": "2025-10-08 02:02:16",
-        "income_category": "medium",
-        "low_income_score": 24.935617446899414,
-        "medium_income_score": 91.06925964355469,
-        "high_income_score": 75.06438446044922,
-        "total_housings": 26396,
-        "residential_housings": 21900,
-        "non_residential_housings": 1877,
-        "owned_housings": 4536,
-        "rented_housings": 14415,
-        "provided_housings": 2757,
-        "other_residential_housings": 192,
-        "public_housing": 14,
-        "work_camps": 9,
-        "commercial_housings": 1854,
-        "other_housings": 2619,
-        "housing_density_sum": 82.30999755859375,
-        "housing_analysis_date": "2025-10-08 06:53:57",
-        "housing_score": 77.54358673095703,
-        "total_households": 4,
-        "avg_household_size": 3.119999885559082,
-        "median_household_size": 2.25,
-        "household_density_sum": 64.38999938964844,
-        "household_analysis_date": "2025-10-08 06:51:39",
-        "household_score": 78.49425506591797,
-        "traffic_score": 73.0999984741211,
-        "traffic_storefront_score": 100.0,
-        "traffic_area_score": 70.12000274658203,
-        "traffic_screenshot_filename": "traffic_24.756342_46.684637_Monday_6-00PM_pinned_frontscore=100_areascore=70.png",
-        "traffic_analysis_date": "2025-10-08 02:49:44",
-        "num_of_pharmacies": 6,
-        "nearby_pharmacy": [
-            {
-                "name": "Al Badri Pharmacy",
-                "coordinates": [
-                    46.685547400000004,
-                    24.757619
-                ],
-                "driving_distance_meters": 168
-            },
-            {
-                "name": "\u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0628\u062f\u0631\u064a \u0627\u0644\u0637\u0628\u064a Al Badri Polyclinic",
-                "coordinates": [
-                    46.6857992,
-                    24.7577735
-                ],
-                "driving_distance_meters": 197
-            },
-            {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0645\u062c\u062a\u0645\u0639 \u0627\u0644\u0631\u0627\u0626\u062f\u0629 135",
-                "coordinates": [
-                    46.6801118,
-                    24.7650319
-                ],
-                "driving_distance_meters": 1065
-            },
-            {
-                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
-                "coordinates": [
-                    46.675829,
-                    24.761905
-                ],
-                "driving_distance_meters": 1083
-            },
-            {
-                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
-                "coordinates": [
-                    46.679365,
-                    24.747586
-                ],
-                "driving_distance_meters": 1106
-            }
-        ],
-        "num_of_hospitals": 6,
-        "num_of_dentists": 2,
-        "nearby_hospital": [
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0623\u062f\u064a\u0644 \u0627\u0644\u0645\u0635\u064a\u0641",
-                "coordinates": [
-                    46.6834542,
-                    24.7568108
-                ],
-                "driving_distance_meters": 130
-            },
-            {
-                "name": "\u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0628\u062f\u0631\u064a \u0627\u0644\u0637\u0628\u064a Al Badri Polyclinic",
-                "coordinates": [
-                    46.6857992,
-                    24.7577735
-                ],
-                "driving_distance_meters": 197
-            },
-            {
-                "name": "AL AJAJI MEDICAL COMPLEX",
-                "coordinates": [
-                    46.685539,
-                    24.7594139
-                ],
-                "driving_distance_meters": 352
-            },
-            {
-                "name": "\u0645\u0631\u0643\u0632 \u062f \u0627\u0644\u0644\u0647\u0628\u064a \u0644\u063a\u0633\u064a\u0644 \u0627\u0644\u0643\u0644\u0649",
-                "coordinates": [
-                    46.6793662,
-                    24.7496349
+                    46.628831299999995,
+                    24.783858499999997
                 ],
                 "driving_distance_meters": 914
             },
             {
-                "name": "Beauty Station clinics",
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0628\u0648\u0631\u062f \u0627\u0644\u0633\u0639\u0648\u062f\u064a \u0648\u0634\u0647\u0627\u062f\u0629 \u0627\u0644\u0627\u062e\u062a\u0635\u0627\u0635 \u0641\u064a \u0627\u0644\u0645\u0633\u0648\u0627\u0643",
                 "coordinates": [
-                    46.6800193,
-                    24.7481287
+                    46.6269438,
+                    24.8001525
                 ],
-                "driving_distance_meters": 1022
+                "driving_distance_meters": 1120
             }
         ],
-        "nearby_dentist": [
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0623\u062f\u064a\u0644 \u0627\u0644\u0645\u0635\u064a\u0641",
-                "coordinates": [
-                    46.6834542,
-                    24.7568108
-                ],
-                "driving_distance_meters": 130
-            },
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0629 \u0627\u0633\u0646\u0627\u0646 \u0627\u0644\u062f\u0643\u062a\u0648\u0631\u0629 \u0646\u0648\u0631\u0647\u0627\u0646 \u0639\u0632\u062a \u0644\u0637\u0628 \u0648\u062a\u062c\u0645\u064a\u0644 \u0648\u062a\u0631\u0643\u064a\u0628\u0627\u062a \u0627\u0644\u0627\u0633\u0646\u0627\u0646/ \u0627\u0628\u062a\u0633\u0627\u0645\u0629 \u0627\u0644\u0645\u0634\u0627\u0647\u064a\u0631",
-                "coordinates": [
-                    46.6757874,
-                    24.75605
-                ],
-                "driving_distance_meters": 895
-            }
-        ],
-        "pharmacies_per_10k_population": 0.8575471293609845,
-        "num_of_businesses_around": 16,
+        "pharmacies_per_10k_population": 0.9417772382905697,
+        "num_of_businesses_around": 32,
         "nearby_grocery_store": [
             {
-                "name": "Aljazera Hypermarket",
+                "name": "Meed",
                 "coordinates": [
-                    46.683812499999995,
-                    24.755937499999998
+                    46.634033200000005,
+                    24.788409599999998
                 ],
-                "est_distance_meters": 94
+                "est_distance_meters": 365
             },
             {
-                "name": "\u0637\u0627\u062d\u0648\u0646\u0629 \u062f\u0642\u064a\u0642",
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u0644\u0642\u0628\u064a\u0633\u064a",
                 "coordinates": [
-                    46.6863691,
-                    24.758979699999998
+                    46.6295727,
+                    24.788328900000003
                 ],
-                "est_distance_meters": 340
+                "est_distance_meters": 451
             },
             {
-                "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0645\u062b\u0645\u0631\u0629 \u0641\u0631\u0639 \u0627\u0644\u0645\u0635\u064a\u0641",
+                "name": "\u0628\u0642\u0627\u0644\u0629 \u062e\u064a\u0631 \u0627\u0644\u0641\u064a\u0648\u0645 \u0644\u0644\u0645\u0646\u062a\u062c\u0627\u062a \u0627\u0644\u0645\u0635\u0631\u064a\u0629 \u0641\u0631\u0639 \u0627\u0644\u0645\u0644\u0642\u0627",
                 "coordinates": [
-                    46.692685499999996,
-                    24.760550799999997
+                    46.627302199999995,
+                    24.792711699999998
                 ],
-                "est_distance_meters": 938
+                "est_distance_meters": 545
+            },
+            {
+                "name": "Sadhan Supermarkets",
+                "coordinates": [
+                    46.6339538,
+                    24.785480099999997
+                ],
+                "est_distance_meters": 672
+            },
+            {
+                "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0632\u0647\u0631\u0629 \u0627\u0644\u0645\u062f\u0647\u0634 \u0627\u0644\u0635\u062d\u0627\u0641\u0629",
+                "coordinates": [
+                    46.639924699999995,
+                    24.7885003
+                ],
+                "est_distance_meters": 816
             }
         ],
         "nearby_supermarket": [
             {
-                "name": "Aljazera Hypermarket",
+                "name": "\u0627\u0633\u0648\u0627\u0642 \u062b\u0645\u0627\u0631 \u0627\u0644\u062d\u064a\u0627\u0644\u0629",
                 "coordinates": [
-                    46.683812499999995,
-                    24.755937499999998
+                    46.6291775,
+                    24.793526099999998
                 ],
-                "est_distance_meters": 94
+                "est_distance_meters": 410
             },
             {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0639\u0631\u0628\u0629 \u0627\u0644\u0642\u0648\u0627\u0641\u0644 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
+                "name": "GBG OSP MC",
                 "coordinates": [
-                    46.6853103,
-                    24.760998299999997
+                    46.6276067,
+                    24.7888789
                 ],
-                "est_distance_meters": 520
+                "est_distance_meters": 568
             },
             {
-                "name": "Alhadaf Super Market",
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
                 "coordinates": [
-                    46.690790299999996,
-                    24.7597845
+                    46.6276107,
+                    24.788826000000004
                 ],
-                "est_distance_meters": 730
+                "est_distance_meters": 571
             },
             {
-                "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0645\u062b\u0645\u0631\u0629 \u0641\u0631\u0639 \u0627\u0644\u0645\u0635\u064a\u0641",
+                "name": "Sadhan Supermarkets",
                 "coordinates": [
-                    46.692685499999996,
-                    24.760550799999997
+                    46.6339538,
+                    24.785480099999997
                 ],
-                "est_distance_meters": 938
+                "est_distance_meters": 672
             },
             {
-                "name": "Meed Stores",
+                "name": "Al Sadhan Hypermarket",
                 "coordinates": [
-                    46.6792818,
-                    24.7491274
+                    46.6338143,
+                    24.785433599999998
                 ],
-                "est_distance_meters": 965
+                "est_distance_meters": 674
             }
         ],
         "nearby_restaurant": [
             {
-                "name": "Al Romansiah",
+                "name": "\u0623\u0646\u0648\u0627\u0631 \u0627\u0644\u0644\u0624\u0644\u0624\u0629",
                 "coordinates": [
-                    46.675681,
-                    24.756439
+                    46.6336222,
+                    24.7890031
                 ],
-                "est_distance_meters": 905
+                "est_distance_meters": 288
             },
             {
-                "name": "Falafel Adnan Corner",
+                "name": "Al Afrah Restaurant",
                 "coordinates": [
-                    46.68114,
-                    24.7641417
+                    46.6332652,
+                    24.795941
                 ],
-                "est_distance_meters": 933
+                "est_distance_meters": 508
+            },
+            {
+                "name": "Al Romansiah",
+                "coordinates": [
+                    46.635300199999996,
+                    24.7836905
+                ],
+                "est_distance_meters": 899
             }
         ],
         "nearby_atm": [
             {
-                "name": "Riyad Bank ATM",
+                "name": "Al Rajhi ATM",
                 "coordinates": [
-                    46.690799999999996,
-                    24.7581
+                    46.6291024,
+                    24.793433699999998
                 ],
-                "est_distance_meters": 653
+                "est_distance_meters": 410
             },
             {
-                "name": "NCB ATM",
+                "name": "SNB AlAhli ATM",
                 "coordinates": [
-                    46.6838264,
-                    24.7628706
+                    46.628577299999996,
+                    24.7970039
                 ],
-                "est_distance_meters": 727
+                "est_distance_meters": 736
             },
             {
                 "name": "Al Rajhi ATM",
                 "coordinates": [
-                    46.6850505,
-                    24.747542799999998
+                    46.6366739,
+                    24.783278499999998
                 ],
-                "est_distance_meters": 975
-            },
-            {
-                "name": "anb ATM \u0635\u0631\u0627\u0641 \u0627\u0644\u0628\u0646\u0643 \u0627\u0644\u0639\u0631\u0628\u064a \u0627\u0644\u0648\u0637\u0646\u064a - Mohammed Bin Abbas Building",
-                "coordinates": [
-                    46.6784241,
-                    24.7636009
-                ],
-                "est_distance_meters": 1020
+                "est_distance_meters": 993
             }
         ],
         "nearby_bank": [
             {
-                "name": "National Commercial Bank",
+                "name": "Riyad Bank",
                 "coordinates": [
-                    46.683900400000006,
-                    24.7568901
+                    46.6309645,
+                    24.792413099999997
                 ],
-                "est_distance_meters": 95
+                "est_distance_meters": 191
             },
             {
-                "name": "Bank Albilad",
+                "name": "\u0628\u0646\u0643 \u0627\u0644\u062c\u0632\u064a\u0631\u0629 - \u0645\u0628\u0646\u0649 \u0627\u0644\u0625\u062f\u0627\u0631\u0629 \u0627\u0644\u0625\u0642\u0644\u064a\u0645\u064a\u0629",
                 "coordinates": [
-                    46.6835218,
-                    24.7531617
+                    46.6343933,
+                    24.794718699999997
                 ],
-                "est_distance_meters": 369
+                "est_distance_meters": 414
+            },
+            {
+                "name": "Bank atm \u0633\u062d\u0628 \u0627\u064a\u062f\u0627\u0639",
+                "coordinates": [
+                    46.6256833,
+                    24.792081699999997
+                ],
+                "est_distance_meters": 693
+            },
+            {
+                "name": "NCB Bank",
+                "coordinates": [
+                    46.6286014,
+                    24.7970088
+                ],
+                "est_distance_meters": 735
+            },
+            {
+                "name": "Alistithmar Capital",
+                "coordinates": [
+                    46.6353753,
+                    24.783130500000002
+                ],
+                "est_distance_meters": 961
             }
         ],
-        "id": "24.7563419342041,46.684635162353516",
-        "total_score": 62,
+        "id": "24.79140281677246,46.632503509521484",
+        "total_score": 92,
         "weighted_scores": {
-            "traffic": 18.274999618530273,
-            "demographics": 18.640338134765624,
+            "traffic": 20.21500015258789,
+            "demographics": 18.473258590698244,
             "competition": 0.0,
-            "healthcare": 16.666666666666668,
-            "complementary": 8.498516666666667
+            "healthcare": 45.0,
+            "complementary": 9.074399999999999
         },
         "raw_scores": {
-            "traffic": 73,
-            "demographics": 62,
+            "traffic": 80,
+            "demographics": 61,
             "competition": 0,
-            "healthcare": 83,
-            "complementary": 84
+            "healthcare": 225,
+            "complementary": 90
         },
-        "percentage_difference": 28,
+        "percentage_difference": 66,
         "comparison_type": "improvement",
-        "traffic_score_improvement": 35,
-        "demographics_score_improvement": 62,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 33,
-        "complementary_businesses_score_improvement": 84
+        "traffic_score_improvement": 25,
+        "demographics_score_improvement": 17,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 225,
+        "complementary_businesses_score_improvement": 90
     },
     {
         "source": "shop_for_rent",
@@ -2225,446 +1596,27 @@
             }
         ],
         "id": "24.75478744506836,46.6765022277832",
-        "total_score": 62,
+        "total_score": 92,
         "weighted_scores": {
             "traffic": 15.4399995803833,
             "demographics": 18.118581390380857,
             "competition": 0.0,
-            "healthcare": 20.0,
+            "healthcare": 50.0,
             "complementary": 9.2768
         },
         "raw_scores": {
             "traffic": 61,
             "demographics": 60,
             "competition": 0,
-            "healthcare": 100,
+            "healthcare": 250,
             "complementary": 92
         },
-        "percentage_difference": 28,
+        "percentage_difference": 66,
         "comparison_type": "improvement",
-        "traffic_score_improvement": 23,
-        "demographics_score_improvement": 60,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
-        "complementary_businesses_score_improvement": 92
-    },
-    {
-        "source": "shop_for_rent",
-        "display_name": "\u0634\u0627\u0631\u0639-\u0633\u0639\u0648\u062f-\u0628\u0646-\u0639\u0628\u062f\u0627\u0644\u0639\u0632\u064a\u0632-\u0628\u0646-\u0645\u062d\u0645\u062f-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u0646\u0632\u0647\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
-        "lat": 24.765239715576172,
-        "lng": 46.70573425292969,
-        "price": 100000,
-        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0645\u0627\u0644-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u0646\u0632\u0647\u0629/\u0634\u0627\u0631\u0639-\u0633\u0639\u0648\u062f-\u0628\u0646-\u0639\u0628\u062f\u0627\u0644\u0639\u0632\u064a\u0632-\u0628\u0646-\u0645\u062d\u0645\u062f-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u0646\u0632\u0647\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6396731",
-        "listing_id": 6396731,
-        "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
-        "latitude": 24.765239715576172,
-        "longitude": 46.70573425292969,
-        "category": "shop_for_rent",
-        "direction_id": "4",
-        "total_population": 96835,
-        "avg_density": 6304.3701171875,
-        "avg_median_age": 31.329999923706055,
-        "avg_income": 11725.41015625,
-        "percentage_age_above_20": 50.0,
-        "percentage_age_above_25": 50.0,
-        "percentage_age_above_30": 50.0,
-        "percentage_age_above_35": 40.82500076293945,
-        "percentage_age_above_40": 28.325000762939453,
-        "percentage_age_above_45": 15.824999809265137,
-        "percentage_age_above_50": 3.325000047683716,
-        "demographics_analysis_date": "2025-10-08 02:04:48",
-        "income_category": "medium",
-        "low_income_score": 20.92665672302246,
-        "medium_income_score": 84.4664535522461,
-        "high_income_score": 79.0733413696289,
-        "total_housings": 38073,
-        "residential_housings": 31608,
-        "non_residential_housings": 2431,
-        "owned_housings": 6840,
-        "rented_housings": 20491,
-        "provided_housings": 4018,
-        "other_residential_housings": 259,
-        "public_housing": 38,
-        "work_camps": 10,
-        "commercial_housings": 2383,
-        "other_housings": 4034,
-        "housing_density_sum": 118.72000122070312,
-        "housing_analysis_date": "2025-10-08 06:55:47",
-        "housing_score": 56.45149612426758,
-        "total_households": 6,
-        "avg_household_size": 3.0299999713897705,
-        "median_household_size": 2.0,
-        "household_density_sum": 92.41999816894531,
-        "household_analysis_date": "2025-10-08 06:53:28",
-        "household_score": 94.96954345703125,
-        "traffic_score": 57.7400016784668,
-        "traffic_storefront_score": 70.0,
-        "traffic_area_score": 56.380001068115234,
-        "traffic_screenshot_filename": "traffic_24.76524_46.705735_Monday_6-00PM_pinned_frontscore=70_areascore=56.png",
-        "traffic_analysis_date": "2025-10-08 06:35:17",
-        "num_of_pharmacies": 6,
-        "nearby_pharmacy": [
-            {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
-                "coordinates": [
-                    46.70298,
-                    24.762888
-                ],
-                "driving_distance_meters": 381
-            },
-            {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
-                "coordinates": [
-                    46.713252,
-                    24.766403
-                ],
-                "driving_distance_meters": 771
-            },
-            {
-                "name": "Lemon Pharmacy | \u0635\u064a\u062f\u0644\u064a\u0629 \u0644\u064a\u0645\u0648\u0646",
-                "coordinates": [
-                    46.713158199999995,
-                    24.7673034
-                ],
-                "driving_distance_meters": 784
-            },
-            {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0633\u0641\u0633\u0631",
-                "coordinates": [
-                    46.712714,
-                    24.769529499999997
-                ],
-                "driving_distance_meters": 850
-            },
-            {
-                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
-                "coordinates": [
-                    46.71156250000001,
-                    24.7718125
-                ],
-                "driving_distance_meters": 936
-            }
-        ],
-        "num_of_hospitals": 7,
-        "num_of_dentists": 7,
-        "nearby_hospital": [
-            {
-                "name": "\u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0639\u0627\u0641\u064a\u0629 \u0627\u0644\u062d\u062f\u064a\u062b \u0627\u0644\u0637\u0628\u064a",
-                "coordinates": [
-                    46.7008978,
-                    24.7632794
-                ],
-                "driving_distance_meters": 535
-            },
-            {
-                "name": "\u0645\u062c\u0645\u0639 \u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0627\u062d\u0645\u062f \u0627\u0628\u0627\u0646\u0645\u064a \u0627\u0644\u0637\u0628\u064a",
-                "coordinates": [
-                    46.7107799,
-                    24.767352799999998
-                ],
-                "driving_distance_meters": 561
-            },
-            {
-                "name": "Al Nozha Medical Center",
-                "coordinates": [
-                    46.7126029,
-                    24.766949
-                ],
-                "driving_distance_meters": 720
-            },
-            {
-                "name": "Pearl Dental and Derma Clinics",
-                "coordinates": [
-                    46.71159,
-                    24.771781
-                ],
-                "driving_distance_meters": 935
-            },
-            {
-                "name": "BEAUTY WAYS MEDICAL CENTER",
-                "coordinates": [
-                    46.7091967,
-                    24.7737516
-                ],
-                "driving_distance_meters": 1005
-            }
-        ],
-        "nearby_dentist": [
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0644\u0627\u064a\u062f\u0646 \u0644\u0637\u0628 \u0627\u0644\u0623\u0633\u0646\u0627\u0646 Leiden Dental Clinics",
-                "coordinates": [
-                    46.7057595,
-                    24.765350299999998
-                ],
-                "driving_distance_meters": 12
-            },
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0629 \u0627\u0633\u0646\u0627\u0646 \u062f.\u0641\u064a\u0635\u0644 \u0627\u0644\u0635\u064a\u0641\u064a",
-                "coordinates": [
-                    46.7063305,
-                    24.7663945
-                ],
-                "driving_distance_meters": 141
-            },
-            {
-                "name": "Dr.Khaled Dental Clinic",
-                "coordinates": [
-                    46.7130941,
-                    24.769028199999997
-                ],
-                "driving_distance_meters": 854
-            },
-            {
-                "name": "Dr. Mahmoud borg dental implants clinic",
-                "coordinates": [
-                    46.711409800000006,
-                    24.771768299999998
-                ],
-                "driving_distance_meters": 923
-            },
-            {
-                "name": "Pearl Dental and Derma Clinics",
-                "coordinates": [
-                    46.71159,
-                    24.771781
-                ],
-                "driving_distance_meters": 935
-            }
-        ],
-        "pharmacies_per_10k_population": 0.6196106779573501,
-        "num_of_businesses_around": 39,
-        "nearby_grocery_store": [
-            {
-                "name": "Meed nuza store",
-                "coordinates": [
-                    46.702459499999996,
-                    24.763941499999998
-                ],
-                "est_distance_meters": 361
-            },
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u0644\u062c\u0627\u0633\u0631",
-                "coordinates": [
-                    46.708028399999996,
-                    24.7703016
-                ],
-                "est_distance_meters": 606
-            },
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u062e\u064a\u0631\u0627\u062a \u0627\u0644\u062a\u0639\u0627\u0648\u0646",
-                "coordinates": [
-                    46.700708999999996,
-                    24.7684584
-                ],
-                "est_distance_meters": 620
-            },
-            {
-                "name": "Toko Mandiri",
-                "coordinates": [
-                    46.7057897,
-                    24.7584329
-                ],
-                "est_distance_meters": 754
-            },
-            {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u0648\u0645\u062d\u0627\u0645\u0635 \u0639\u0627\u0644 \u0627\u0644\u0643\u064a\u0641 - \u0627\u0644\u0646\u0632\u0647\u0647",
-                "coordinates": [
-                    46.7134327,
-                    24.766059
-                ],
-                "est_distance_meters": 783
-            }
-        ],
-        "nearby_supermarket": [
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0645\u0647\u062f\u064a \u0645\u0631\u0627\u0646 \u0627\u0644\u0639\u0646\u0632\u064a",
-                "coordinates": [
-                    46.7073915,
-                    24.7659654
-                ],
-                "est_distance_meters": 185
-            },
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0645\u0647\u062f\u064a \u0627\u0644\u0639\u0646\u0632\u064a3",
-                "coordinates": [
-                    46.7027216,
-                    24.7630533
-                ],
-                "est_distance_meters": 389
-            },
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0645\u062d\u0645\u062f \u0639\u0644\u064a \u0627\u0644\u0642\u062d\u0637\u0627\u0646\u064a(\u062d\u064a \u0627\u0644\u0646\u0632\u0647\u0629)",
-                "coordinates": [
-                    46.7052985,
-                    24.7584035
-                ],
-                "est_distance_meters": 758
-            },
-            {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u0648\u0645\u062d\u0627\u0645\u0635 \u0639\u0627\u0644 \u0627\u0644\u0643\u064a\u0641 - \u0627\u0644\u0646\u0632\u0647\u0647",
-                "coordinates": [
-                    46.7134327,
-                    24.766059
-                ],
-                "est_distance_meters": 783
-            },
-            {
-                "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0645\u062a\u0627\u062c\u0631 \u0627\u0644\u0631\u0648\u0634\u0646 \u0627\u0644\u0645\u0631\u0643\u0632\u064a\u0629",
-                "coordinates": [
-                    46.7107543,
-                    24.7713549
-                ],
-                "est_distance_meters": 846
-            }
-        ],
-        "nearby_restaurant": [
-            {
-                "name": "Wister",
-                "coordinates": [
-                    46.7138682,
-                    24.7652611
-                ],
-                "est_distance_meters": 822
-            },
-            {
-                "name": "Beit Omar",
-                "coordinates": [
-                    46.713935799999994,
-                    24.7644928
-                ],
-                "est_distance_meters": 833
-            },
-            {
-                "name": "Burger Hunch",
-                "coordinates": [
-                    46.7141817,
-                    24.764153600000004
-                ],
-                "est_distance_meters": 862
-            },
-            {
-                "name": "8 Portions Pizza",
-                "coordinates": [
-                    46.6976875,
-                    24.7720625
-                ],
-                "est_distance_meters": 1110
-            },
-            {
-                "name": "Three Cafe",
-                "coordinates": [
-                    46.6977282,
-                    24.7722631
-                ],
-                "est_distance_meters": 1122
-            }
-        ],
-        "nearby_atm": [
-            {
-                "name": "Alinma Bank and ATM",
-                "coordinates": [
-                    46.706668199999996,
-                    24.765793199999997
-                ],
-                "est_distance_meters": 112
-            },
-            {
-                "name": "The Saudi Investment Bank ATM",
-                "coordinates": [
-                    46.701883,
-                    24.7643
-                ],
-                "est_distance_meters": 403
-            },
-            {
-                "name": "\u0635\u0631\u0627\u0641 \u0628\u0646\u0643 \u0627\u0644\u0631\u064a\u0627\u0636",
-                "coordinates": [
-                    46.709686,
-                    24.7669769
-                ],
-                "est_distance_meters": 443
-            },
-            {
-                "name": "Al Rajhi ATM",
-                "coordinates": [
-                    46.711856499999996,
-                    24.768766
-                ],
-                "est_distance_meters": 732
-            },
-            {
-                "name": "Bank Aljazira ATM",
-                "coordinates": [
-                    46.706167400000005,
-                    24.7565036
-                ],
-                "est_distance_meters": 968
-            }
-        ],
-        "nearby_bank": [
-            {
-                "name": "Alinma Bank | \u0645\u0635\u0631\u0641 \u0627\u0644\u0625\u0646\u0645\u0627\u0621",
-                "coordinates": [
-                    46.7066775,
-                    24.765720299999998
-                ],
-                "est_distance_meters": 109
-            },
-            {
-                "name": "The Saudi Investment Bank ATM",
-                "coordinates": [
-                    46.701883,
-                    24.7643
-                ],
-                "est_distance_meters": 403
-            },
-            {
-                "name": "Riyad Bank",
-                "coordinates": [
-                    46.709486399999996,
-                    24.7668942
-                ],
-                "est_distance_meters": 421
-            },
-            {
-                "name": "\u0645\u0635\u0631\u0641 \u0627\u0644\u0631\u0627\u062c\u062d\u064a",
-                "coordinates": [
-                    46.711833299999995,
-                    24.768833299999997
-                ],
-                "est_distance_meters": 734
-            },
-            {
-                "name": "\u0628\u0646\u0643 \u0627\u0644\u0628\u0644\u0627\u062f",
-                "coordinates": [
-                    46.7146553,
-                    24.763179400000002
-                ],
-                "est_distance_meters": 930
-            }
-        ],
-        "id": "24.765239715576172,46.70573425292969",
-        "total_score": 62,
-        "weighted_scores": {
-            "traffic": 14.4350004196167,
-            "demographics": 18.524077987670896,
-            "competition": 0.0,
-            "healthcare": 20.0,
-            "complementary": 9.2822
-        },
-        "raw_scores": {
-            "traffic": 57,
-            "demographics": 61,
-            "competition": 0,
-            "healthcare": 100,
-            "complementary": 92
-        },
-        "percentage_difference": 28,
-        "comparison_type": "improvement",
-        "traffic_score_improvement": 19,
-        "demographics_score_improvement": 61,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
+        "traffic_score_improvement": 6,
+        "demographics_score_improvement": 16,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
         "complementary_businesses_score_improvement": 92
     },
     {
@@ -3055,753 +2007,1866 @@
             }
         ],
         "id": "24.765928268432617,46.71351623535156",
-        "total_score": 62,
+        "total_score": 92,
         "weighted_scores": {
             "traffic": 13.6850004196167,
             "demographics": 19.169660663604734,
             "competition": 0.0,
-            "healthcare": 20.0,
+            "healthcare": 50.0,
             "complementary": 9.9495
         },
         "raw_scores": {
             "traffic": 54,
             "demographics": 63,
             "competition": 0,
-            "healthcare": 100,
+            "healthcare": 250,
             "complementary": 99
         },
-        "percentage_difference": 28,
+        "percentage_difference": 66,
         "comparison_type": "improvement",
-        "traffic_score_improvement": 16,
-        "demographics_score_improvement": 63,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
+        "traffic_score_improvement": 1,
+        "demographics_score_improvement": 19,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
         "complementary_businesses_score_improvement": 99
     },
     {
         "source": "shop_for_rent",
-        "display_name": "\u0634\u0627\u0631\u0639-\u0646\u062c\u062f-\u062d\u064a-\u0638\u0647\u0631\u0629-\u0644\u0628\u0646-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
-        "lat": 24.630762100219727,
-        "lng": 46.56352996826172,
-        "price": 160000,
-        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u063a\u0631\u0628-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0638\u0647\u0631\u0629-\u0644\u0628\u0646/\u0634\u0627\u0631\u0639-\u0646\u062c\u062f-\u062d\u064a-\u0638\u0647\u0631\u0629-\u0644\u0628\u0646-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6386384",
-        "listing_id": 6386384,
+        "display_name": "\u0637\u0631\u064a\u0642-\u0627\u0644\u0623\u0645\u064a\u0631-\u0645\u062d\u0645\u062f-\u0628\u0646-\u0639\u0628\u062f\u0627\u0644\u0639\u0632\u064a\u0632-\u062d\u064a-\u0627\u0644\u0639\u0644\u064a\u0627-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
+        "lat": 24.69297981262207,
+        "lng": 46.67618942260742,
+        "price": 400000,
+        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0645\u0627\u0644-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u0639\u0644\u064a\u0627/\u0637\u0631\u064a\u0642-\u0627\u0644\u0623\u0645\u064a\u0631-\u0645\u062d\u0645\u062f-\u0628\u0646-\u0639\u0628\u062f\u0627\u0644\u0639\u0632\u064a\u0632-\u062d\u064a-\u0627\u0644\u0639\u0644\u064a\u0627-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6297503",
+        "listing_id": 6297503,
         "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
-        "latitude": 24.630762100219727,
-        "longitude": 46.56352996826172,
+        "latitude": 24.69297981262207,
+        "longitude": 46.67618942260742,
         "category": "shop_for_rent",
-        "direction_id": "6",
-        "total_population": 63206,
-        "avg_density": 6172.4501953125,
-        "avg_median_age": 27.0,
-        "avg_income": 9614.2802734375,
+        "direction_id": "4",
+        "total_population": 52789,
+        "avg_density": 5155.14990234375,
+        "avg_median_age": 33.75,
+        "avg_income": 10337.759765625,
         "percentage_age_above_20": 50.0,
         "percentage_age_above_25": 50.0,
-        "percentage_age_above_30": 42.5,
-        "percentage_age_above_35": 30.0,
-        "percentage_age_above_40": 17.5,
-        "percentage_age_above_45": 5.0,
-        "percentage_age_above_50": 0.0,
-        "demographics_analysis_date": "2025-09-29 17:12:19",
+        "percentage_age_above_30": 50.0,
+        "percentage_age_above_35": 46.875,
+        "percentage_age_above_40": 34.375,
+        "percentage_age_above_45": 21.875,
+        "percentage_age_above_50": 9.375,
+        "demographics_analysis_date": "2025-10-15 02:03:38",
         "income_category": "medium",
-        "low_income_score": 35.16360855102539,
-        "medium_income_score": 96.5497817993164,
-        "high_income_score": 64.83639526367188,
-        "total_housings": 20819,
-        "residential_housings": 16753,
-        "non_residential_housings": 1131,
-        "owned_housings": 4463,
-        "rented_housings": 10562,
-        "provided_housings": 1655,
-        "other_residential_housings": 73,
-        "public_housing": 17,
-        "work_camps": 2,
-        "commercial_housings": 1112,
-        "other_housings": 2935,
-        "housing_density_sum": 64.91999816894531,
-        "housing_analysis_date": "2025-09-29 22:12:17",
-        "housing_score": 86.35433959960938,
+        "low_income_score": 30.284637451171875,
+        "medium_income_score": 99.87915802001953,
+        "high_income_score": 69.71536254882812,
+        "total_housings": 24504,
+        "residential_housings": 18266,
+        "non_residential_housings": 2389,
+        "owned_housings": 2898,
+        "rented_housings": 11766,
+        "provided_housings": 3406,
+        "other_residential_housings": 196,
+        "public_housing": 64,
+        "work_camps": 1,
+        "commercial_housings": 2324,
+        "other_housings": 3849,
+        "housing_density_sum": 76.41000366210938,
+        "housing_analysis_date": "2025-10-15 07:09:52",
+        "housing_score": 62.11825942993164,
         "total_households": 4,
-        "avg_household_size": 3.799999952316284,
-        "median_household_size": 3.0,
-        "household_density_sum": 84.8499984741211,
-        "household_analysis_date": "2025-09-29 22:09:54",
-        "household_score": 77.70879364013672,
-        "traffic_score": 54.34000015258789,
-        "traffic_storefront_score": 70.0,
-        "traffic_area_score": 52.599998474121094,
-        "traffic_screenshot_filename": "traffic_24.630762_46.56353_Monday_6-00PM_pinned_frontscore=70_areascore=52.png",
-        "traffic_analysis_date": "2025-09-29 18:54:09",
-        "num_of_pharmacies": 16,
+        "avg_household_size": 2.9700000286102295,
+        "median_household_size": 2.0,
+        "household_density_sum": 59.849998474121094,
+        "household_analysis_date": "2025-10-15 07:07:33",
+        "household_score": 78.66382598876953,
+        "traffic_score": 58.599998474121094,
+        "traffic_storefront_score": 100.0,
+        "traffic_area_score": 53.9900016784668,
+        "traffic_screenshot_filename": "traffic_24.69298_46.676189_Monday_6-00PM_pinned_frontscore=100_areascore=53.png",
+        "traffic_analysis_date": "2025-10-15 02:10:29",
+        "num_of_pharmacies": 10,
         "nearby_pharmacy": [
             {
-                "name": "Nahdi pharmacy",
+                "name": "al-dawaa",
                 "coordinates": [
-                    46.561805199999995,
-                    24.6306828
+                    46.6758798,
+                    24.6934709
                 ],
-                "driving_distance_meters": 174
+                "driving_distance_meters": 62
             },
             {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0625\u0646\u0648\u0641\u0627 \u0627\u0644\u0635\u062d\u0629",
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0646\u0648\u0631\u0627",
                 "coordinates": [
-                    46.5663705,
-                    24.628062999999997
+                    46.6763414,
+                    24.6937437
                 ],
-                "driving_distance_meters": 414
-            },
-            {
-                "name": "Health Innova Pharmacy #3",
-                "coordinates": [
-                    46.5664057,
-                    24.628045
-                ],
-                "driving_distance_meters": 418
+                "driving_distance_meters": 86
             },
             {
                 "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
                 "coordinates": [
-                    46.566958,
-                    24.633899000000003
+                    46.673277999999996,
+                    24.689909
                 ],
-                "driving_distance_meters": 491
+                "driving_distance_meters": 450
             },
             {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0645\u0639\u0627\u0630",
+                "name": "\u0627\u0644\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u0625\u0633\u062a\u0634\u0627\u0631\u064a\u0629",
                 "coordinates": [
-                    46.5613682,
-                    24.6348228
+                    46.6741861,
+                    24.6878857
                 ],
-                "driving_distance_meters": 500
+                "driving_distance_meters": 599
+            },
+            {
+                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
+                "coordinates": [
+                    46.678506999999996,
+                    24.698349
+                ],
+                "driving_distance_meters": 639
             }
         ],
-        "num_of_hospitals": 13,
-        "num_of_dentists": 3,
+        "num_of_hospitals": 9,
+        "num_of_dentists": 9,
         "nearby_hospital": [
             {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0631\u0639\u0627\u064a\u0629 \u0627\u0644\u0623\u0648\u0644\u064a\u0629 - \u0641\u0631\u0639 \u0648\u0627\u062f\u064a \u0644\u0628\u0646",
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u062f. \u0645\u0633\u0627\u0639\u062f \u0627\u0644\u0632\u0644\u0627\u0644 \u0641\u0631\u0639 \u0627\u0644\u062a\u062d\u0644\u064a\u0629",
                 "coordinates": [
-                    46.564623399999995,
-                    24.630412800000002
+                    46.672873599999996,
+                    24.691492
                 ],
-                "driving_distance_meters": 117
+                "driving_distance_meters": 373
             },
             {
-                "name": "Primary Care - Laban",
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0645\u064a\u0633\u0627\u0646 \u0627\u0644\u0639\u0644\u064a\u0627 \u0627\u0644\u0637\u0628\u064a\u0629",
                 "coordinates": [
-                    46.564623399999995,
-                    24.630412800000002
+                    46.679465099999994,
+                    24.6958475
                 ],
-                "driving_distance_meters": 117
+                "driving_distance_meters": 459
             },
             {
-                "name": "7028 Al Wasta Nahdi Pharmacy",
+                "name": "Taif Medical Center",
                 "coordinates": [
-                    46.5615126,
-                    24.6342788
+                    46.6722822,
+                    24.690023099999998
                 ],
-                "driving_distance_meters": 439
+                "driving_distance_meters": 513
             },
             {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u0647\u064a\u062f\u0628 \u0644\u0637\u0628 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
+                "name": "\u0627\u0644\u062d\u0643\u0645\u0627\u0621 \u0627\u0644\u062a\u062e\u0635\u0635\u064a \u0644\u0644\u0639\u064a\u0648\u0646 - \u0641\u0631\u0639 \u0627\u0644\u062a\u062e\u0635\u0635\u064a",
                 "coordinates": [
-                    46.5582138,
-                    24.627492399999998
+                    46.6708129,
+                    24.6949144
                 ],
-                "driving_distance_meters": 648
+                "driving_distance_meters": 584
             },
             {
-                "name": "Fares Aljazeera Dental Clinic",
+                "name": "\u0645\u062e\u062a\u0628\u0631 \u0627\u0644\u062a\u0642\u0646\u064a\u0627\u062a \u0627\u0644\u062c\u062f\u064a\u062f\u0629",
                 "coordinates": [
-                    46.5581566,
-                    24.6273599
+                    46.6791794,
+                    24.6996194
                 ],
-                "driving_distance_meters": 661
+                "driving_distance_meters": 795
             }
         ],
         "nearby_dentist": [
             {
-                "name": "\u0645\u0631\u0643\u0632 \u0623\u0636\u0648\u0627\u0621 \u0627\u0644\u0627\u0628\u062a\u0633\u0627\u0645\u0629 \u0641\u0631\u0639 \u0644\u0628\u0646 \u0663\u0663",
+                "name": "Dima Dental Center \u0645\u062c\u0645\u0639 \u062f\u064a\u0645\u0647 \u0644\u0637\u0628 \u0627\u0644\u0623\u0633\u0646\u0627\u0646\u200e",
                 "coordinates": [
-                    46.5630436,
-                    24.6303261
+                    46.675595099999995,
+                    24.6923458
                 ],
-                "driving_distance_meters": 68
+                "driving_distance_meters": 92
             },
             {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0645\u0647\u064a\u062f\u0628 \u0644\u0637\u0628 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
+                "name": "Dr Osama Ahmad Clinic",
                 "coordinates": [
-                    46.5582138,
-                    24.627492399999998
+                    46.6766301,
+                    24.6937696
                 ],
-                "driving_distance_meters": 648
+                "driving_distance_meters": 98
             },
             {
-                "name": "\u0628\u064a\u062a \u0642\u0627\u0641 \u0644\u0637\u0628 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
+                "name": "Dr.Shanan Clinic",
                 "coordinates": [
-                    46.5550803,
-                    24.627219399999998
+                    46.6735981,
+                    24.6919747
                 ],
-                "driving_distance_meters": 941
+                "driving_distance_meters": 284
+            },
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0629 \u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0645\u062d\u0645\u0648\u062f \u0627\u0628\u0648 \u0627\u0644\u0639\u0646\u064a\u0646 \u0627\u062e\u0635\u0627\u0626\u0649 \u062a\u0642\u0648\u064a\u0645 \u0627\u0644\u0627\u0633\u0646\u0627\u0646 \u0628\u0639\u064a\u0627\u062f\u0627\u062a \u0631\u0648\u064a\u0627\u0644 \u0627\u0644\u0637\u0628\u064a\u0629",
+                "coordinates": [
+                    46.6733939,
+                    24.6919291
+                ],
+                "driving_distance_meters": 305
+            },
+            {
+                "name": "Sigal Dental Clinic \u0639\u064a\u0627\u062f\u0627\u062a \u0633\u062c\u0627\u0644 \u0644\u0637\u0628 \u0627\u0644\u0623\u0633\u0646\u0627\u0646 \u0641\u0631\u0639 \u0627\u0644\u062a\u062e\u0635\u0635\u064a",
+                "coordinates": [
+                    46.670885899999995,
+                    24.6949827
+                ],
+                "driving_distance_meters": 580
             }
         ],
-        "pharmacies_per_10k_population": 2.531405246337373,
-        "num_of_businesses_around": 41,
+        "pharmacies_per_10k_population": 1.8943340468658243,
+        "num_of_businesses_around": 44,
         "nearby_grocery_store": [
             {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u0627\u0644\u0639\u062b\u064a\u0645 (\u0633\u064a\u062a\u064a) | Othaim Markets (city)\u200f",
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u062c\u0645\u0644 \u0645\u0631\u062d\u0628\u0627 Hello mini market",
                 "coordinates": [
-                    46.563935,
-                    24.631024
+                    46.674317699999996,
+                    24.6877188
                 ],
-                "est_distance_meters": 50
+                "est_distance_meters": 612
             },
             {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u0648\u0645\u062d\u0627\u0645\u0635 \u0639\u0627\u0644 \u0627\u0644\u0643\u064a\u0641 - \u0641\u0631\u0639 \u0646\u062c\u062f - \u0638\u0647\u0631\u0629 \u0644\u064a\u0646",
+                "name": "Tamimi Markets",
                 "coordinates": [
-                    46.563062699999996,
-                    24.6314432
+                    46.681962999999996,
+                    24.6909541
                 ],
-                "est_distance_meters": 89
+                "est_distance_meters": 625
             },
             {
-                "name": "Alwatania Organic - \u0627\u0644\u0648\u0637\u0646\u064a\u0629 \u0639\u0636\u0648\u064a",
+                "name": "Danube",
                 "coordinates": [
-                    46.56501840000001,
-                    24.6326523
+                    46.6686099,
+                    24.6929773
                 ],
-                "est_distance_meters": 257
+                "est_distance_meters": 767
             },
             {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u062c\u0648\u0647\u0631\u0629 \u0644\u0628\u0646",
+                "name": "Speed",
                 "coordinates": [
-                    46.566397099999996,
-                    24.6335382
+                    46.683647699999995,
+                    24.694572299999997
                 ],
-                "est_distance_meters": 422
+                "est_distance_meters": 775
             },
             {
-                "name": "Othaim Markets",
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0628\u0647\u062c\u0629 \u0627\u0644\u062a\u0648\u0627\u0635\u0644",
                 "coordinates": [
-                    46.561510000000006,
-                    24.635804999999998
+                    46.673121099999996,
+                    24.7000237
                 ],
-                "est_distance_meters": 594
+                "est_distance_meters": 839
             }
         ],
         "nearby_supermarket": [
             {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u0627\u0644\u0639\u062b\u064a\u0645 (\u0633\u064a\u062a\u064a) | Othaim Markets (city)\u200f",
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0645\u0632\u0646 \u0627\u0644\u064a\u0645\u0627\u0645\u0629",
                 "coordinates": [
-                    46.563935,
-                    24.631024
+                    46.674609,
+                    24.6929531
                 ],
-                "est_distance_meters": 50
+                "est_distance_meters": 159
             },
             {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u0648\u0645\u062d\u0627\u0645\u0635 \u0639\u0627\u0644 \u0627\u0644\u0643\u064a\u0641 - \u0641\u0631\u0639 \u0646\u062c\u062f - \u0638\u0647\u0631\u0629 \u0644\u064a\u0646",
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u0644\u0645\u0631\u062c\u0627\u0646",
                 "coordinates": [
-                    46.563062699999996,
-                    24.6314432
+                    46.680462999999996,
+                    24.696775799999998
                 ],
-                "est_distance_meters": 89
+                "est_distance_meters": 603
             },
             {
-                "name": "Alrajabh Supermarket",
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u062c\u0645\u0644 \u0645\u0631\u062d\u0628\u0627 Hello mini market",
                 "coordinates": [
-                    46.5649946,
-                    24.6296835
+                    46.674317699999996,
+                    24.6877188
                 ],
-                "est_distance_meters": 190
+                "est_distance_meters": 612
             },
             {
-                "name": "Othaim Markets",
+                "name": "Tamimi Markets",
                 "coordinates": [
-                    46.561510000000006,
-                    24.635804999999998
+                    46.681962999999996,
+                    24.6909541
                 ],
-                "est_distance_meters": 594
+                "est_distance_meters": 625
             },
             {
-                "name": "\u0645\u062a\u062c\u0631 \u0633\u0643\u0631 \u0648\u062d\u0644\u0627\u0648\u0629 \u0644\u0644\u062d\u0644\u0648\u064a\u0627\u062a \u0648\u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u064a\u0647 \u0627\u0644\u0645\u062e\u0641\u0636\u0647",
+                "name": "AL HOGAIL TRADING COMPANY",
                 "coordinates": [
-                    46.5678722,
-                    24.6270396
+                    46.6752283,
+                    24.6858093
                 ],
-                "est_distance_meters": 602
+                "est_distance_meters": 800
             }
         ],
         "nearby_restaurant": [
             {
-                "name": "\u0645\u0637\u0639\u0645 \u0627\u0634\u0627\u0644",
+                "name": "Beit Omar",
                 "coordinates": [
-                    46.5612719,
-                    24.6294456
+                    46.6772244,
+                    24.6933592
                 ],
-                "est_distance_meters": 271
+                "est_distance_meters": 112
             },
             {
-                "name": "AlBaik",
+                "name": "ALBAIK",
                 "coordinates": [
-                    46.5653533,
-                    24.6327708
+                    46.673677000000005,
+                    24.689643999999998
                 ],
-                "est_distance_meters": 289
+                "est_distance_meters": 448
             },
             {
                 "name": "Hataba",
                 "coordinates": [
-                    46.5604626,
-                    24.628895999999997
+                    46.6732407,
+                    24.6897611
                 ],
-                "est_distance_meters": 373
+                "est_distance_meters": 464
             },
             {
-                "name": "\u0634\u0648\u0627\u064a\u0629 \u0627\u0644\u062e\u0644\u064a\u062c",
+                "name": "McDonald's",
                 "coordinates": [
-                    46.5668909,
-                    24.6329674
+                    46.674158,
+                    24.688615
                 ],
-                "est_distance_meters": 418
+                "est_distance_meters": 525
             },
             {
-                "name": "Al Romansiah",
+                "name": "\u062d\u0645\u0627\u0645 \u0639\u0628\u062f\u064f\u0647 - \u0627\u0644\u0639\u0644\u064a\u0627",
                 "coordinates": [
-                    46.568346999999996,
-                    24.634842
+                    46.680742599999995,
+                    24.6871644
                 ],
-                "est_distance_meters": 664
+                "est_distance_meters": 792
             }
         ],
         "nearby_atm": [
             {
-                "name": "Al Rajhi ATM",
+                "name": "Alinma ATM",
                 "coordinates": [
-                    46.5654116,
-                    24.6302976
+                    46.6716317,
+                    24.6930977
                 ],
-                "est_distance_meters": 197
+                "est_distance_meters": 461
             },
             {
-                "name": "alrajhi ATM",
+                "name": "The Saudi Investment Bank ATM",
                 "coordinates": [
-                    46.5655132,
-                    24.6329482
+                    46.670483499999996,
+                    24.691459899999998
                 ],
-                "est_distance_meters": 314
+                "est_distance_meters": 601
             },
             {
-                "name": "Money transfer al rahji",
+                "name": "ATM",
                 "coordinates": [
-                    46.5596337,
-                    24.637050499999997
+                    46.6702541,
+                    24.692029599999998
                 ],
-                "est_distance_meters": 800
+                "est_distance_meters": 609
             },
             {
-                "name": "Al Rajhi ATM",
+                "name": "The Saudi Investment Bank",
                 "coordinates": [
-                    46.5556122,
-                    24.6342392
+                    46.670221999999995,
+                    24.691332
                 ],
-                "est_distance_meters": 889
+                "est_distance_meters": 630
+            },
+            {
+                "name": "QNB Riyadh",
+                "coordinates": [
+                    46.682891999999995,
+                    24.6916899
+                ],
+                "est_distance_meters": 693
             }
         ],
         "nearby_bank": [
             {
-                "name": "\u0645\u0635\u0631\u0641\u064a\u0629 \u0627\u0644\u0645\u0646\u0634\u0622\u062a \u0627\u0644\u0635\u063a\u064a\u0631\u0629 \u0648\u0627\u0644\u0645\u062a\u0648\u0633\u0637\u0629",
+                "name": "BSF - Banque Saudi Fransi - King Fahad",
                 "coordinates": [
-                    46.56265,
-                    24.630378
+                    46.6805692,
+                    24.693721699999998
                 ],
-                "est_distance_meters": 98
+                "est_distance_meters": 450
             },
-            {
-                "name": "Alinma Bank",
-                "coordinates": [
-                    46.5678799,
-                    24.633454699999998
-                ],
-                "est_distance_meters": 531
-            }
-        ],
-        "id": "24.630762100219727,46.56352996826172",
-        "total_score": 62,
-        "weighted_scores": {
-            "traffic": 13.585000038146973,
-            "demographics": 19.054734992980958,
-            "competition": 0.0,
-            "healthcare": 20.0,
-            "complementary": 9.735500000000002
-        },
-        "raw_scores": {
-            "traffic": 54,
-            "demographics": 63,
-            "competition": 0,
-            "healthcare": 100,
-            "complementary": 97
-        },
-        "percentage_difference": 28,
-        "comparison_type": "improvement",
-        "traffic_score_improvement": 16,
-        "demographics_score_improvement": 63,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
-        "complementary_businesses_score_improvement": 97
-    },
-    {
-        "source": "shop_for_rent",
-        "display_name": "\u0637\u0631\u064a\u0642-\u0627\u0644\u062f\u0645\u0627\u0645-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0642\u0631\u0637\u0628\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
-        "lat": 24.802490234375,
-        "lng": 46.74397659301758,
-        "price": 70000,
-        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0631\u0642-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0642\u0631\u0637\u0628\u0629/\u0637\u0631\u064a\u0642-\u0627\u0644\u062f\u0645\u0627\u0645-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0642\u0631\u0637\u0628\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6274692",
-        "listing_id": 6274692,
-        "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
-        "latitude": 24.802490234375,
-        "longitude": 46.74397659301758,
-        "category": "shop_for_rent",
-        "direction_id": "3",
-        "total_population": 110121,
-        "avg_density": 7169.330078125,
-        "avg_median_age": 29.329999923706055,
-        "avg_income": 11903.8798828125,
-        "percentage_age_above_20": 50.0,
-        "percentage_age_above_25": 50.0,
-        "percentage_age_above_30": 48.32500076293945,
-        "percentage_age_above_35": 35.82500076293945,
-        "percentage_age_above_40": 23.325000762939453,
-        "percentage_age_above_45": 10.824999809265137,
-        "percentage_age_above_50": 0.0,
-        "demographics_analysis_date": "2025-09-29 17:11:21",
-        "income_category": "medium",
-        "low_income_score": 19.723098754882812,
-        "medium_income_score": 82.48417663574219,
-        "high_income_score": 80.27690124511719,
-        "total_housings": 40088,
-        "residential_housings": 31719,
-        "non_residential_housings": 1850,
-        "owned_housings": 7875,
-        "rented_housings": 20338,
-        "provided_housings": 3290,
-        "other_residential_housings": 216,
-        "public_housing": 92,
-        "work_camps": 3,
-        "commercial_housings": 1755,
-        "other_housings": 6519,
-        "housing_density_sum": 125.01000213623047,
-        "housing_analysis_date": "2025-09-29 22:11:35",
-        "housing_score": 50.0352783203125,
-        "total_households": 6,
-        "avg_household_size": 3.4700000286102295,
-        "median_household_size": 2.3299999237060547,
-        "household_density_sum": 112.12000274658203,
-        "household_analysis_date": "2025-09-29 22:09:12",
-        "household_score": 86.1184310913086,
-        "traffic_score": 64.7699966430664,
-        "traffic_storefront_score": 0.0,
-        "traffic_area_score": 71.97000122070312,
-        "traffic_screenshot_filename": "traffic_24.80249_46.743977_Monday_6-00PM_pinned_frontscore=0_areascore=71.png",
-        "traffic_analysis_date": "2025-09-29 17:26:22",
-        "num_of_pharmacies": 13,
-        "nearby_pharmacy": [
-            {
-                "name": "Al-Dawaa Pharmacy",
-                "coordinates": [
-                    46.742892999999995,
-                    24.800666999999997
-                ],
-                "driving_distance_meters": 229
-            },
-            {
-                "name": "Kunooz",
-                "coordinates": [
-                    46.740053599999996,
-                    24.8013501
-                ],
-                "driving_distance_meters": 416
-            },
-            {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
-                "coordinates": [
-                    46.748154799999995,
-                    24.8028497
-                ],
-                "driving_distance_meters": 424
-            },
-            {
-                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
-                "coordinates": [
-                    46.738722599999996,
-                    24.8001578
-                ],
-                "driving_distance_meters": 590
-            },
-            {
-                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
-                "coordinates": [
-                    46.7385625,
-                    24.8045625
-                ],
-                "driving_distance_meters": 593
-            }
-        ],
-        "num_of_hospitals": 5,
-        "num_of_dentists": 3,
-        "nearby_hospital": [
-            {
-                "name": "Best Care",
-                "coordinates": [
-                    46.740125299999995,
-                    24.8012466
-                ],
-                "driving_distance_meters": 413
-            },
-            {
-                "name": "\u0645\u0631\u0643\u0632 \u0646\u064a\u0648\u064a\u0648 \u0627\u0644\u0637\u0628\u064a - \u0642\u0631\u0637\u0628\u0629",
-                "coordinates": [
-                    46.739369599999996,
-                    24.8002842
-                ],
-                "driving_distance_meters": 526
-            },
-            {
-                "name": "TDAWEE-ALRIYADH MEDICAL COMPLEX \u0645\u062c\u0645\u0639 \u0639\u064a\u0627\u062f\u0627\u062a \u062a\u062f\u0627\u0648\u064a \u0627\u0644\u0631\u064a\u0627\u0636 \u0627\u0644\u0637\u0628\u064a",
-                "coordinates": [
-                    46.741611899999995,
-                    24.796242799999998
-                ],
-                "driving_distance_meters": 732
-            },
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0633\u0645\u0627\u064a\u0644\u0632",
-                "coordinates": [
-                    46.752339799999994,
-                    24.8059223
-                ],
-                "driving_distance_meters": 927
-            },
-            {
-                "name": "K|E|S|A|Y",
-                "coordinates": [
-                    46.7367432,
-                    24.809861700000003
-                ],
-                "driving_distance_meters": 1096
-            }
-        ],
-        "nearby_dentist": [
-            {
-                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0645\u062d\u0645\u062f \u064a\u062d\u064a\u0649 \u0644\u062a\u062c\u0645\u064a\u0644 \u0648 \u0632\u0631\u0627\u0639\u0629 \u0627\u0644\u0623\u0633\u0646\u0627\u0646",
-                "coordinates": [
-                    46.7393838,
-                    24.802761699999998
-                ],
-                "driving_distance_meters": 465
-            },
-            {
-                "name": "\u0645\u062c\u0645\u0639 \u062f\u064a\u0645 \u0627\u0644\u0631\u064a\u0627\u0636 \u0627\u0644\u0637\u0628\u064a",
-                "coordinates": [
-                    46.7386849,
-                    24.800252699999998
-                ],
-                "driving_distance_meters": 589
-            },
-            {
-                "name": "\u062f\u0643\u062a\u0648\u0631 \u0645\u0627\u0632\u0646 \u0632\u064a\u0646\u0629 \u0627\u0644\u0645\u0633\u0648\u0627\u0643",
-                "coordinates": [
-                    46.752282199999996,
-                    24.804586099999998
-                ],
-                "driving_distance_meters": 871
-            }
-        ],
-        "pharmacies_per_10k_population": 1.1805196102469102,
-        "num_of_businesses_around": 22,
-        "nearby_grocery_store": [
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0646\u0633\u0627\u0626\u0645 \u0642\u0631\u0637\u0628\u0629 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
-                "coordinates": [
-                    46.743476099999995,
-                    24.804964599999998
-                ],
-                "est_distance_meters": 278
-            },
-            {
-                "name": "Tamimi Markets - Qurtuba",
-                "coordinates": [
-                    46.7374045,
-                    24.8073758
-                ],
-                "est_distance_meters": 856
-            },
-            {
-                "name": "Okaz Supermarket",
-                "coordinates": [
-                    46.743124699999996,
-                    24.7935801
-                ],
-                "est_distance_meters": 990
-            },
-            {
-                "name": "\u0628\u0648\u064a\u0646\u062a \u0645\u0627\u0631\u0643\u062a Point Market",
-                "coordinates": [
-                    46.7357376,
-                    24.7973067
-                ],
-                "est_distance_meters": 1011
-            },
-            {
-                "name": "\u0633\u0648\u0628\u0631\u0645\u0627\u0631\u0643\u062a \u0631\u0648\u0627\u0641\u062f",
-                "coordinates": [
-                    46.7365561,
-                    24.8097764
-                ],
-                "est_distance_meters": 1101
-            }
-        ],
-        "nearby_supermarket": [
-            {
-                "name": "\u0627\u0633\u0648\u0627\u0642 \u0634\u0631\u0643\u0629 \u0646\u0628\u0636 \u0627\u0644\u0646\u062f\u0648\u0629 \u0644\u0644\u062a\u062c\u0627\u0631\u0629",
-                "coordinates": [
-                    46.74320960000001,
-                    24.804845999999998
-                ],
-                "est_distance_meters": 272
-            },
-            {
-                "name": "\u0625\u0628\u062f\u0627\u0639 \u062c\u0646\u0627\u0626\u0646 \u0644\u0644\u062e\u0636\u0627\u0631 \u0648\u0627\u0644\u0641\u0648\u0627\u0643\u0647",
-                "coordinates": [
-                    46.7400289,
-                    24.8014458
-                ],
-                "est_distance_meters": 415
-            },
-            {
-                "name": "Tamimi Markets - Qurtuba",
-                "coordinates": [
-                    46.7374045,
-                    24.8073758
-                ],
-                "est_distance_meters": 856
-            },
-            {
-                "name": "\u4e91\u8c37\u9c9c\u54c1\u8d85\u5e02",
-                "coordinates": [
-                    46.7370358,
-                    24.808090399999998
-                ],
-                "est_distance_meters": 936
-            },
-            {
-                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0646\u0633\u0627\u0626\u0645 \u0642\u0631\u0637\u0628\u0629 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
-                "coordinates": [
-                    46.736595699999995,
-                    24.808252
-                ],
-                "est_distance_meters": 981
-            }
-        ],
-        "nearby_restaurant": [
-            {
-                "name": "\u0645\u0637\u0639\u0645 \u0628\u064a\u0631\u0627\u062f\u064a\u0632 \u0627\u0644\u0647\u0646\u062f\u064a",
-                "coordinates": [
-                    46.7362775,
-                    24.8069998
-                ],
-                "est_distance_meters": 924
-            },
-            {
-                "name": "Shahrukh Khan Restaurant",
-                "coordinates": [
-                    46.736192200000005,
-                    24.8070575
-                ],
-                "est_distance_meters": 935
-            }
-        ],
-        "nearby_atm": [
-            {
-                "name": "Al Rajhi ATM",
-                "coordinates": [
-                    46.7462951,
-                    24.8076202
-                ],
-                "est_distance_meters": 614
-            },
-            {
-                "name": "Al Rajhi Bank ATM",
-                "coordinates": [
-                    46.7382123,
-                    24.8051577
-                ],
-                "est_distance_meters": 653
-            }
-        ],
-        "nearby_bank": [
             {
                 "name": "Alinma Bank | \u0645\u0635\u0631\u0641 \u0627\u0644\u0625\u0646\u0645\u0627\u0621",
                 "coordinates": [
-                    46.741219,
-                    24.801237999999998
+                    46.671653,
+                    24.692930999999998
                 ],
-                "est_distance_meters": 311
+                "est_distance_meters": 459
             },
             {
                 "name": "\u0645\u0635\u0631\u0641 \u0627\u0644\u0631\u0627\u062c\u062d\u064a",
                 "coordinates": [
-                    46.73835,
-                    24.805116700000003
+                    46.6733633,
+                    24.6882013
                 ],
-                "est_distance_meters": 638
+                "est_distance_meters": 601
             },
             {
-                "name": "Emirates NBD - Riyadh Qurtubah Branch \u0628\u0646\u0643 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u062f\u0628\u064a \u0627\u0644\u0648\u0637\u0646\u064a - \u0641\u0631\u0639 \u0627\u0644\u0631\u064a\u0627\u0636 - \u0642\u0631\u0637\u0628\u0629",
+                "name": "Riyad Bank",
                 "coordinates": [
-                    46.7360818,
-                    24.798910499999998
+                    46.668475099999995,
+                    24.6979985
                 ],
-                "est_distance_meters": 891
+                "est_distance_meters": 958
+            }
+        ],
+        "id": "24.69297981262207,46.67618942260742",
+        "total_score": 91,
+        "weighted_scores": {
+            "traffic": 14.649999618530273,
+            "demographics": 17.121156406402587,
+            "competition": 0.0,
+            "healthcare": 50.0,
+            "complementary": 9.400800000000002
+        },
+        "raw_scores": {
+            "traffic": 58,
+            "demographics": 57,
+            "competition": 0,
+            "healthcare": 250,
+            "complementary": 94
+        },
+        "percentage_difference": 65,
+        "comparison_type": "improvement",
+        "traffic_score_improvement": 3,
+        "demographics_score_improvement": 13,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
+        "complementary_businesses_score_improvement": 94
+    },
+    {
+        "source": "shop_for_rent",
+        "display_name": "\u0634\u0627\u0631\u0639-\u0627\u0644\u062c\u0628\u064a\u0644-\u062d\u064a-\u0627\u0644\u0646\u0647\u0636\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
+        "lat": 24.76650047302246,
+        "lng": 46.818511962890625,
+        "price": 300000,
+        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0631\u0642-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u0646\u0647\u0636\u0629/\u0634\u0627\u0631\u0639-\u0627\u0644\u062c\u0628\u064a\u0644-\u062d\u064a-\u0627\u0644\u0646\u0647\u0636\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6256144",
+        "listing_id": 6256144,
+        "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
+        "latitude": 24.76650047302246,
+        "longitude": 46.818511962890625,
+        "category": "shop_for_rent",
+        "direction_id": "3",
+        "total_population": 86999,
+        "avg_density": 8496.01953125,
+        "avg_median_age": 28.25,
+        "avg_income": 9617.080078125,
+        "percentage_age_above_20": 50.0,
+        "percentage_age_above_25": 50.0,
+        "percentage_age_above_30": 45.625,
+        "percentage_age_above_35": 33.125,
+        "percentage_age_above_40": 20.625,
+        "percentage_age_above_45": 8.125,
+        "percentage_age_above_50": 0.0,
+        "demographics_analysis_date": "2025-10-15 02:05:06",
+        "income_category": "medium",
+        "low_income_score": 35.14472579956055,
+        "medium_income_score": 96.56333923339844,
+        "high_income_score": 64.85527038574219,
+        "total_housings": 29776,
+        "residential_housings": 23790,
+        "non_residential_housings": 1449,
+        "owned_housings": 7113,
+        "rented_housings": 13801,
+        "provided_housings": 2654,
+        "other_residential_housings": 222,
+        "public_housing": 2,
+        "work_camps": 4,
+        "commercial_housings": 1443,
+        "other_housings": 4537,
+        "housing_density_sum": 92.8499984741211,
+        "housing_analysis_date": "2025-10-15 07:10:53",
+        "housing_score": 71.38373565673828,
+        "total_households": 4,
+        "avg_household_size": 3.6500000953674316,
+        "median_household_size": 2.5,
+        "household_density_sum": 80.30000305175781,
+        "household_analysis_date": "2025-10-15 07:08:33",
+        "household_score": 77.87285614013672,
+        "traffic_score": 58.09000015258789,
+        "traffic_storefront_score": 30.0,
+        "traffic_area_score": 61.209999084472656,
+        "traffic_screenshot_filename": "traffic_24.766501_46.818513_Monday_6-00PM_pinned_frontscore=30_areascore=61.png",
+        "traffic_analysis_date": "2025-10-15 04:17:34",
+        "num_of_pharmacies": 9,
+        "nearby_pharmacy": [
+            {
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0639\u0632\u064a\u0632",
+                "coordinates": [
+                    46.8197705,
+                    24.765821
+                ],
+                "driving_distance_meters": 147
             },
             {
-                "name": "Quickpay - SNB ALAhli",
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
                 "coordinates": [
-                    46.7427364,
-                    24.7941857
+                    46.8164375,
+                    24.7694375
                 ],
-                "est_distance_meters": 928
+                "driving_distance_meters": 387
             },
+            {
+                "name": "Pharmacy plus two 25 \u0635\u064a\u062f\u0644\u064a\u0629",
+                "coordinates": [
+                    46.815787799999995,
+                    24.7702131
+                ],
+                "driving_distance_meters": 495
+            },
+            {
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
+                "coordinates": [
+                    46.8185533,
+                    24.7613248
+                ],
+                "driving_distance_meters": 573
+            },
+            {
+                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
+                "coordinates": [
+                    46.818379,
+                    24.774587999999998
+                ],
+                "driving_distance_meters": 895
+            }
+        ],
+        "num_of_hospitals": 7,
+        "num_of_dentists": 7,
+        "nearby_hospital": [
+            {
+                "name": "\u0645\u062c\u0645\u0639 \u0627\u0644\u0633\u0644\u0627\u0645\u0647",
+                "coordinates": [
+                    46.819405599999996,
+                    24.7658551
+                ],
+                "driving_distance_meters": 115
+            },
+            {
+                "name": "\u0627\u0644\u0647\u0644\u0627\u0644 \u0627\u0644\u0627\u062d\u0645\u0631 \u0628\u062d\u0649 \u0627\u0644\u0646\u0647\u0636\u0629",
+                "coordinates": [
+                    46.823533000000005,
+                    24.762572900000002
+                ],
+                "driving_distance_meters": 668
+            },
+            {
+                "name": "Gulf Medical Complex",
+                "coordinates": [
+                    46.8123873,
+                    24.7708375
+                ],
+                "driving_distance_meters": 783
+            },
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0641\u064a\u0631\u0648\u0646\u0627 Verona Clinics",
+                "coordinates": [
+                    46.8168971,
+                    24.773474699999998
+                ],
+                "driving_distance_meters": 789
+            },
+            {
+                "name": "\u0645\u0631\u0643\u0632 \u0633\u0646\u0647 \u0627\u0644\u062a\u062e\u0635\u0635\u064a \u0644\u0644\u062d\u062c\u0627\u0645\u0647",
+                "coordinates": [
+                    46.812658600000006,
+                    24.7602694
+                ],
+                "driving_distance_meters": 909
+            }
+        ],
+        "nearby_dentist": [
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0641\u064a\u0631\u0648\u0646\u0627 Verona Clinics",
+                "coordinates": [
+                    46.8168971,
+                    24.773474699999998
+                ],
+                "driving_distance_meters": 789
+            },
+            {
+                "name": "\u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0642\u0635\u064a \u0632\u064a\u0627\u062f\u0629",
+                "coordinates": [
+                    46.8121745,
+                    24.760929299999997
+                ],
+                "driving_distance_meters": 889
+            },
+            {
+                "name": "Dr.Wassem Deeb \u062f. \u0648\u0633\u064a\u0645 \u062f\u064a\u0628 Orthodontist",
+                "coordinates": [
+                    46.8097949,
+                    24.7690847
+                ],
+                "driving_distance_meters": 926
+            },
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0645\u062d\u0645\u062f \u0639\u0628\u062f\u0627\u0644\u0643\u0631\u064a\u0645 \u0627\u0644\u0633\u0644\u0627\u0645\u0647 \u0644\u0637\u0628 \u0648\u062a\u062c\u0645\u064a\u0644 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
+                "coordinates": [
+                    46.8135385,
+                    24.7593581
+                ],
+                "driving_distance_meters": 937
+            },
+            {
+                "name": "smile",
+                "coordinates": [
+                    46.81350270000001,
+                    24.759338
+                ],
+                "driving_distance_meters": 941
+            }
+        ],
+        "pharmacies_per_10k_population": 1.0344946493637859,
+        "num_of_businesses_around": 25,
+        "nearby_grocery_store": [
+            {
+                "name": "\u0645\u064a\u062f",
+                "coordinates": [
+                    46.8171023,
+                    24.7692029
+                ],
+                "est_distance_meters": 331
+            },
+            {
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a",
+                "coordinates": [
+                    46.8249596,
+                    24.7671779
+                ],
+                "est_distance_meters": 656
+            },
+            {
+                "name": "Tafanin Super Market",
+                "coordinates": [
+                    46.81246470000001,
+                    24.770208999999998
+                ],
+                "est_distance_meters": 736
+            },
+            {
+                "name": "Tallha Shop",
+                "coordinates": [
+                    46.8137969,
+                    24.7729523
+                ],
+                "est_distance_meters": 859
+            },
+            {
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u0644\u0628\u064a\u062a \u0627\u0644\u0631\u064a\u0641\u064a",
+                "coordinates": [
+                    46.8269704,
+                    24.768471299999998
+                ],
+                "est_distance_meters": 882
+            }
+        ],
+        "nearby_supermarket": [
+            {
+                "name": "Tafanin Super Market",
+                "coordinates": [
+                    46.81246470000001,
+                    24.770208999999998
+                ],
+                "est_distance_meters": 736
+            },
+            {
+                "name": "Food house supermarket",
+                "coordinates": [
+                    46.8116182,
+                    24.7697661
+                ],
+                "est_distance_meters": 785
+            },
+            {
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0632\u0645\u0627\u0646 \u0623\u0648\u0644 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
+                "coordinates": [
+                    46.8106711,
+                    24.7691782
+                ],
+                "est_distance_meters": 846
+            },
+            {
+                "name": "Tamimi Markets",
+                "coordinates": [
+                    46.8108256,
+                    24.7616729
+                ],
+                "est_distance_meters": 943
+            },
+            {
+                "name": "\u0632\u0627\u0648\u064a\u0629 \u0627\u0644\u0646\u0633\u064a\u0645 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
+                "coordinates": [
+                    46.811487,
+                    24.7608109
+                ],
+                "est_distance_meters": 949
+            }
+        ],
+        "nearby_restaurant": [
+            {
+                "name": "Saj restaurant (Al Mukhtar)",
+                "coordinates": [
+                    46.8178631,
+                    24.760867599999997
+                ],
+                "est_distance_meters": 627
+            },
+            {
+                "name": "Al Romansiah",
+                "coordinates": [
+                    46.814082299999995,
+                    24.7585131
+                ],
+                "est_distance_meters": 991
+            }
+        ],
+        "nearby_atm": [
+            {
+                "name": "\u0645\u0635\u0631\u0641 \u0627\u0644\u0631\u0627\u062c\u062d\u064a",
+                "coordinates": [
+                    46.8264517,
+                    24.774296
+                ],
+                "est_distance_meters": 1179
+            }
+        ],
+        "nearby_bank": [
+            {
+                "name": "The Saudi Investment Bank ATM",
+                "coordinates": [
+                    46.8225736,
+                    24.763243
+                ],
+                "est_distance_meters": 546
+            },
+            {
+                "name": "BSF - Banque Saudi Fransi - Khaleej",
+                "coordinates": [
+                    46.811088899999994,
+                    24.762688699999998
+                ],
+                "est_distance_meters": 861
+            }
+        ],
+        "id": "24.76650047302246,46.818511962890625",
+        "total_score": 90,
+        "weighted_scores": {
+            "traffic": 14.522500038146973,
+            "demographics": 18.256744384765625,
+            "competition": 0.0,
+            "healthcare": 50.0,
+            "complementary": 7.263900000000001
+        },
+        "raw_scores": {
+            "traffic": 58,
+            "demographics": 60,
+            "competition": 0,
+            "healthcare": 250,
+            "complementary": 72
+        },
+        "percentage_difference": 64,
+        "comparison_type": "improvement",
+        "traffic_score_improvement": 3,
+        "demographics_score_improvement": 16,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
+        "complementary_businesses_score_improvement": 72
+    },
+    {
+        "source": "shop_for_rent",
+        "display_name": "\u0634\u0627\u0631\u0639-\u0623\u0628\u064a-\u0628\u0643\u0631-\u0627\u0644\u0631\u0627\u0632\u064a-\u062d\u064a-\u0627\u0644\u0633\u0644\u064a\u0645\u0627\u0646\u064a\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
+        "lat": 24.69184112548828,
+        "lng": 46.70746612548828,
+        "price": 100000,
+        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0645\u0627\u0644-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u0633\u0644\u064a\u0645\u0627\u0646\u064a\u0629/\u0634\u0627\u0631\u0639-\u0623\u0628\u064a-\u0628\u0643\u0631-\u0627\u0644\u0631\u0627\u0632\u064a-\u062d\u064a-\u0627\u0644\u0633\u0644\u064a\u0645\u0627\u0646\u064a\u0629-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6406682",
+        "listing_id": 6406682,
+        "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
+        "latitude": 24.69184112548828,
+        "longitude": 46.70746612548828,
+        "category": "shop_for_rent",
+        "direction_id": "4",
+        "total_population": 132743,
+        "avg_density": 8642.1201171875,
+        "avg_median_age": 34.0,
+        "avg_income": 10746.2197265625,
+        "percentage_age_above_20": 50.0,
+        "percentage_age_above_25": 50.0,
+        "percentage_age_above_30": 50.0,
+        "percentage_age_above_35": 47.5,
+        "percentage_age_above_40": 35.0,
+        "percentage_age_above_45": 22.5,
+        "percentage_age_above_50": 10.0,
+        "demographics_analysis_date": "2025-10-15 02:04:43",
+        "income_category": "medium",
+        "low_income_score": 27.530080795288086,
+        "medium_income_score": 95.34236907958984,
+        "high_income_score": 72.46991729736328,
+        "total_housings": 62837,
+        "residential_housings": 51802,
+        "non_residential_housings": 3026,
+        "owned_housings": 3527,
+        "rented_housings": 40073,
+        "provided_housings": 7781,
+        "other_residential_housings": 421,
+        "public_housing": 495,
+        "work_camps": 5,
+        "commercial_housings": 2526,
+        "other_housings": 8009,
+        "housing_density_sum": 195.9499969482422,
+        "housing_analysis_date": "2025-10-15 07:10:37",
+        "housing_score": 21.11159896850586,
+        "total_households": 6,
+        "avg_household_size": 2.569999933242798,
+        "median_household_size": 2.0,
+        "household_density_sum": 71.20999908447266,
+        "household_analysis_date": "2025-10-15 07:08:17",
+        "household_score": 91.31031036376953,
+        "traffic_score": 62.83000183105469,
+        "traffic_storefront_score": 100.0,
+        "traffic_area_score": 58.70000076293945,
+        "traffic_screenshot_filename": "traffic_24.691841_46.707468_Monday_6-00PM_pinned_frontscore=100_areascore=58.png",
+        "traffic_analysis_date": "2025-10-15 03:47:01",
+        "num_of_pharmacies": 7,
+        "nearby_pharmacy": [
+            {
+                "name": "Rose Pharmacy",
+                "coordinates": [
+                    46.707111399999995,
+                    24.691797899999997
+                ],
+                "driving_distance_meters": 36
+            },
+            {
+                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
+                "coordinates": [
+                    46.711441,
+                    24.694409999999998
+                ],
+                "driving_distance_meters": 492
+            },
+            {
+                "name": "Family Basket pharmacy",
+                "coordinates": [
+                    46.702671599999995,
+                    24.6959981
+                ],
+                "driving_distance_meters": 668
+            },
+            {
+                "name": "Care Pharmacy",
+                "coordinates": [
+                    46.700492999999994,
+                    24.690597999999998
+                ],
+                "driving_distance_meters": 718
+            },
+            {
+                "name": "Adama Pharmacy",
+                "coordinates": [
+                    46.705823800000005,
+                    24.6854178
+                ],
+                "driving_distance_meters": 730
+            }
+        ],
+        "num_of_hospitals": 15,
+        "num_of_dentists": 6,
+        "nearby_hospital": [
+            {
+                "name": "\u0645\u0628\u0646\u0649 \u0662 \u0643\u0628\u0627\u0631 \u0627\u0644\u0634\u062e\u0635\u064a\u0627\u062a",
+                "coordinates": [
+                    46.711307,
+                    24.691373499999997
+                ],
+                "driving_distance_meters": 392
+            },
+            {
+                "name": "KFMC PARKING",
+                "coordinates": [
+                    46.7050613,
+                    24.6869323
+                ],
+                "driving_distance_meters": 595
+            },
+            {
+                "name": "\u0628\u0648\u0627\u0628\u0629 \u0645\u062f\u064a\u0646\u0629 \u0627\u0644\u0645\u0644\u0643 \u0641\u0647\u062f \u0627\u0644\u0637\u0628\u064a\u0629 \u0631\u0642\u0645 \u0661",
+                "coordinates": [
+                    46.7060472,
+                    24.6865277
+                ],
+                "driving_distance_meters": 605
+            },
+            {
+                "name": "PSMMC Obstetrics and Gynecology Building (BLDG 4)",
+                "coordinates": [
+                    46.713532699999995,
+                    24.692202299999998
+                ],
+                "driving_distance_meters": 615
+            },
+            {
+                "name": "PSMMC General OPD",
+                "coordinates": [
+                    46.7135594,
+                    24.6906225
+                ],
+                "driving_distance_meters": 631
+            }
+        ],
+        "nearby_dentist": [
+            {
+                "name": "Sigal Dental Clinic",
+                "coordinates": [
+                    46.7025335,
+                    24.695960700000004
+                ],
+                "driving_distance_meters": 676
+            },
+            {
+                "name": "Gina's Orthodontis",
+                "coordinates": [
+                    46.7005663,
+                    24.6909386
+                ],
+                "driving_distance_meters": 705
+            },
+            {
+                "name": "Alobaid Clinic",
+                "coordinates": [
+                    46.7005268,
+                    24.6908839
+                ],
+                "driving_distance_meters": 710
+            },
+            {
+                "name": "\u0645\u062c\u0645\u0639 \u0627\u0644\u0627\u0637\u0628\u0627\u0621 \u0627\u0644\u0627\u0633\u062a\u0634\u0627\u0631\u064a\u0648\u0646",
+                "coordinates": [
+                    46.7004391,
+                    24.690810199999998
+                ],
+                "driving_distance_meters": 720
+            },
+            {
+                "name": "\u062c\u0631\u0627\u062d \u062a\u062c\u0645\u064a\u0644 \u062f\u0643\u062a\u0648\u0631 \u062c\u0645\u0627\u0644 \u062c\u0645\u0639\u0647 \u0639\u064a\u0627\u062f\u0627\u062a \u0645\u064a\u062f\u0627\u0631\u062a Medart Clinics",
+                "coordinates": [
+                    46.7044146,
+                    24.6990886
+                ],
+                "driving_distance_meters": 860
+            }
+        ],
+        "pharmacies_per_10k_population": 0.5273347747150509,
+        "num_of_businesses_around": 26,
+        "nearby_grocery_store": [
+            {
+                "name": "JAPANESE & KOREAN MART RIYADH",
+                "coordinates": [
+                    46.706289299999995,
+                    24.692057
+                ],
+                "est_distance_meters": 121
+            },
+            {
+                "name": "Kabayan Supermarket",
+                "coordinates": [
+                    46.7092843,
+                    24.6913183
+                ],
+                "est_distance_meters": 192
+            },
+            {
+                "name": "Al Mawaseem Super Market",
+                "coordinates": [
+                    46.7103827,
+                    24.6910734
+                ],
+                "est_distance_meters": 307
+            },
+            {
+                "name": "Othaim Markets",
+                "coordinates": [
+                    46.70144500000001,
+                    24.695384999999998
+                ],
+                "est_distance_meters": 724
+            },
+            {
+                "name": "Forsan Groceria - Riyadh Premium Meat | Bakery & Barbeque Products| Poultry | Groceries| Premium Dates| Buy Organic Dates",
+                "coordinates": [
+                    46.7046383,
+                    24.697938699999998
+                ],
+                "est_distance_meters": 733
+            }
+        ],
+        "nearby_supermarket": [
+            {
+                "name": "Kabayan Supermarket",
+                "coordinates": [
+                    46.7092843,
+                    24.6913183
+                ],
+                "est_distance_meters": 192
+            },
+            {
+                "name": "Al Mawaseem Super Market",
+                "coordinates": [
+                    46.7103827,
+                    24.6910734
+                ],
+                "est_distance_meters": 307
+            },
+            {
+                "name": "tamweenat near Mama Noura",
+                "coordinates": [
+                    46.7017664,
+                    24.692311399999998
+                ],
+                "est_distance_meters": 579
+            },
+            {
+                "name": "\u0633\u0648\u0628\u0631\u0645\u0627\u0631\u0643\u062a \u0627\u0644\u0647\u0648\u062c",
+                "coordinates": [
+                    46.7049027,
+                    24.6869648
+                ],
+                "est_distance_meters": 599
+            },
+            {
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u062e\u0627\u0644\u062f",
+                "coordinates": [
+                    46.713214099999995,
+                    24.6902367
+                ],
+                "est_distance_meters": 608
+            }
+        ],
+        "nearby_restaurant": [
+            {
+                "name": "Mama Noura",
+                "coordinates": [
+                    46.701884799999995,
+                    24.6916263
+                ],
+                "est_distance_meters": 565
+            },
+            {
+                "name": "Flour & Firewood (F&F)",
+                "coordinates": [
+                    46.7052171,
+                    24.6982088
+                ],
+                "est_distance_meters": 741
+            },
+            {
+                "name": "Public",
+                "coordinates": [
+                    46.703969199999996,
+                    24.699759399999998
+                ],
+                "est_distance_meters": 945
+            }
+        ],
+        "nearby_atm": [
+            {
+                "name": "Al Rajhi ATM",
+                "coordinates": [
+                    46.7120714,
+                    24.6902393
+                ],
+                "est_distance_meters": 498
+            },
+            {
+                "name": "The Saudi Investment Bank Head Office",
+                "coordinates": [
+                    46.710947,
+                    24.683618
+                ],
+                "est_distance_meters": 976
+            }
+        ],
+        "nearby_bank": [
+            {
+                "name": "\u0645\u0635\u0631\u0641 \u0627\u0644\u0631\u0627\u062c\u062d\u064a",
+                "coordinates": [
+                    46.70105480000001,
+                    24.692570999999997
+                ],
+                "est_distance_meters": 653
+            },
+            {
+                "name": "The Saudi Investment Bank Head Office",
+                "coordinates": [
+                    46.710947,
+                    24.683618
+                ],
+                "est_distance_meters": 976
+            }
+        ],
+        "id": "24.69184112548828,46.70746612548828",
+        "total_score": 89,
+        "weighted_scores": {
+            "traffic": 15.707500457763672,
+            "demographics": 14.931643199920655,
+            "competition": 0.0,
+            "healthcare": 50.0,
+            "complementary": 8.398166666666667
+        },
+        "raw_scores": {
+            "traffic": 62,
+            "demographics": 49,
+            "competition": 0,
+            "healthcare": 250,
+            "complementary": 83
+        },
+        "percentage_difference": 63,
+        "comparison_type": "improvement",
+        "traffic_score_improvement": 7,
+        "demographics_score_improvement": 5,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
+        "complementary_businesses_score_improvement": 83
+    },
+    {
+        "source": "shop_for_rent",
+        "display_name": "\u0634\u0627\u0631\u0639-\u0627\u0644\u0635\u062d\u0627\u0628\u0629-\u062d\u064a-\u0627\u0644\u064a\u0631\u0645\u0648\u0643-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
+        "lat": 24.81185531616211,
+        "lng": 46.77816390991211,
+        "price": 300000,
+        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0631\u0642-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u064a\u0631\u0645\u0648\u0643/\u0634\u0627\u0631\u0639-\u0627\u0644\u0635\u062d\u0627\u0628\u0629-\u062d\u064a-\u0627\u0644\u064a\u0631\u0645\u0648\u0643-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6420839",
+        "listing_id": 6420839,
+        "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
+        "latitude": 24.81185531616211,
+        "longitude": 46.77816390991211,
+        "category": "shop_for_rent",
+        "direction_id": "3",
+        "total_population": 85110,
+        "avg_density": 8311.51953125,
+        "avg_median_age": 28.25,
+        "avg_income": 10870.419921875,
+        "percentage_age_above_20": 50.0,
+        "percentage_age_above_25": 50.0,
+        "percentage_age_above_30": 45.625,
+        "percentage_age_above_35": 33.125,
+        "percentage_age_above_40": 20.625,
+        "percentage_age_above_45": 8.125,
+        "percentage_age_above_50": 0.0,
+        "demographics_analysis_date": "2025-10-15 02:04:14",
+        "income_category": "medium",
+        "low_income_score": 26.6925048828125,
+        "medium_income_score": 93.96287536621094,
+        "high_income_score": 73.3074951171875,
+        "total_housings": 31084,
+        "residential_housings": 24597,
+        "non_residential_housings": 1396,
+        "owned_housings": 5740,
+        "rented_housings": 15838,
+        "provided_housings": 2834,
+        "other_residential_housings": 185,
+        "public_housing": 22,
+        "work_camps": 6,
+        "commercial_housings": 1368,
+        "other_housings": 5091,
+        "housing_density_sum": 96.93000030517578,
+        "housing_analysis_date": "2025-10-15 07:10:17",
+        "housing_score": 75.67493438720703,
+        "total_households": 4,
+        "avg_household_size": 3.450000047683716,
+        "median_household_size": 2.25,
+        "household_density_sum": 74.23999786376953,
+        "household_analysis_date": "2025-10-15 07:07:57",
+        "household_score": 78.09410858154297,
+        "traffic_score": 45.380001068115234,
+        "traffic_storefront_score": 70.0,
+        "traffic_area_score": 42.63999938964844,
+        "traffic_screenshot_filename": "traffic_24.811855_46.778165_Monday_6-00PM_pinned_frontscore=70_areascore=42.png",
+        "traffic_analysis_date": "2025-10-15 03:03:45",
+        "num_of_pharmacies": 9,
+        "nearby_pharmacy": [
+            {
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
+                "coordinates": [
+                    46.776858999999995,
+                    24.812894
+                ],
+                "driving_distance_meters": 175
+            },
+            {
+                "name": "Nahdi Pharmacy",
+                "coordinates": [
+                    46.7756666,
+                    24.8143094
+                ],
+                "driving_distance_meters": 371
+            },
+            {
+                "name": "Shams pharmacy",
+                "coordinates": [
+                    46.7752726,
+                    24.806164799999998
+                ],
+                "driving_distance_meters": 694
+            },
+            {
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
+                "coordinates": [
+                    46.7714,
+                    24.8141
+                ],
+                "driving_distance_meters": 727
+            },
+            {
+                "name": "\u0643\u0646\u0648\u0632 \u0627\u0644\u0639\u0646\u0627\u064a\u0629",
+                "coordinates": [
+                    46.774113799999995,
+                    24.818258699999998
+                ],
+                "driving_distance_meters": 819
+            }
+        ],
+        "num_of_hospitals": 11,
+        "num_of_dentists": 5,
+        "nearby_hospital": [
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0623\u0643\u0646\u0627\u0646 \u0644\u0637\u0628 \u0627\u0644\u0623\u0633\u0646\u0627\u0646",
+                "coordinates": [
+                    46.777905499999996,
+                    24.8124947
+                ],
+                "driving_distance_meters": 75
+            },
+            {
+                "name": "Mozdanh clinic Alyarmouk",
+                "coordinates": [
+                    46.777893,
+                    24.811011
+                ],
+                "driving_distance_meters": 97
+            },
+            {
+                "name": "\u0645\u062c\u0645\u0639 \u0627\u0644\u0639\u0646\u0627\u064a\u0629 \u0627\u0644\u0646\u0645\u0648\u0630\u062c\u064a\u0629 \u0627\u0644\u0637\u0628\u064a",
+                "coordinates": [
+                    46.776249899999996,
+                    24.8136612
+                ],
+                "driving_distance_meters": 278
+            },
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0629 \u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0641\u064a\u0635\u0644 \u0627\u0644\u0641\u0631\u0627 \u0623\u062e\u0635\u0627\u0626\u064a \u0627\u0644\u062a\u0642\u0648\u064a\u0645 \u0628\u064a\u0631\u0644 \u0662",
+                "coordinates": [
+                    46.7766203,
+                    24.8148755
+                ],
+                "driving_distance_meters": 369
+            },
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0628\u064a\u0631\u0644 \u0641\u0631\u0639 \u0627\u0644\u064a\u0631\u0645\u0648\u0643 Pearl Yarmouk Clinic",
+                "coordinates": [
+                    46.7765285,
+                    24.814937999999998
+                ],
+                "driving_distance_meters": 379
+            }
+        ],
+        "nearby_dentist": [
+            {
+                "name": "\u062f. \u0645\u0624\u064a\u062f \u064a\u0627\u0642\u062a\u064a",
+                "coordinates": [
+                    46.7766856,
+                    24.8135579
+                ],
+                "driving_distance_meters": 240
+            },
+            {
+                "name": "Dr. Kethy Romero Colombian ENDODONTIST",
+                "coordinates": [
+                    46.7763442,
+                    24.813509
+                ],
+                "driving_distance_meters": 259
+            },
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0629 \u0627\u0644\u062f\u0643\u062a\u0648\u0631 \u0641\u064a\u0635\u0644 \u0627\u0644\u0641\u0631\u0627 \u0623\u062e\u0635\u0627\u0626\u064a \u0627\u0644\u062a\u0642\u0648\u064a\u0645 \u0628\u064a\u0631\u0644 \u0662",
+                "coordinates": [
+                    46.7766203,
+                    24.8148755
+                ],
+                "driving_distance_meters": 369
+            },
+            {
+                "name": "\u062f\u0643\u062a\u0648\u0631 \u0645\u062d\u0645\u0648\u062f \u0627\u0644\u062d\u062f\u0627\u062f \u0627\u062e\u0635\u0627\u0626\u064a \u0632\u0631\u0627\u0639\u0647 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
+                "coordinates": [
+                    46.776631099999996,
+                    24.8150604
+                ],
+                "driving_distance_meters": 387
+            },
+            {
+                "name": "Abdulrahman dental clinic",
+                "coordinates": [
+                    46.7742377,
+                    24.8178087
+                ],
+                "driving_distance_meters": 769
+            }
+        ],
+        "pharmacies_per_10k_population": 1.0574550581600284,
+        "num_of_businesses_around": 21,
+        "nearby_grocery_store": [
+            {
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0627\u0644\u0632\u0627\u0648\u064a\u0629 \u0627\u0644\u0630\u0647\u0628\u064a\u0629 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
+                "coordinates": [
+                    46.776202399999995,
+                    24.806564599999998
+                ],
+                "est_distance_meters": 618
+            },
+            {
+                "name": "Panda",
+                "coordinates": [
+                    46.782376199999995,
+                    24.8170398
+                ],
+                "est_distance_meters": 714
+            },
+            {
+                "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u062f\u0631\u0651\u0629 \u0627\u0644\u0639\u0642\u064a\u0642",
+                "coordinates": [
+                    46.781316399999994,
+                    24.8056716
+                ],
+                "est_distance_meters": 755
+            },
+            {
+                "name": "Danube | \u0627\u0644\u062f\u0627\u0646\u0648\u0628",
+                "coordinates": [
+                    46.770351399999996,
+                    24.811943
+                ],
+                "est_distance_meters": 789
+            },
+            {
+                "name": "\u0645\u062e\u0627\u0632\u0646 \u0633\u0648\u0628\u0631 \u0645\u0627\u0631\u0643\u062a",
+                "coordinates": [
+                    46.7814756,
+                    24.8184974
+                ],
+                "est_distance_meters": 808
+            }
+        ],
+        "nearby_supermarket": [
+            {
+                "name": "Panda",
+                "coordinates": [
+                    46.782376199999995,
+                    24.8170398
+                ],
+                "est_distance_meters": 714
+            },
+            {
+                "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u062f\u0631\u0651\u0629 \u0627\u0644\u0639\u0642\u064a\u0642",
+                "coordinates": [
+                    46.781316399999994,
+                    24.8056716
+                ],
+                "est_distance_meters": 755
+            },
+            {
+                "name": "Danube | \u0627\u0644\u062f\u0627\u0646\u0648\u0628",
+                "coordinates": [
+                    46.770351399999996,
+                    24.811943
+                ],
+                "est_distance_meters": 789
+            },
+            {
+                "name": "\u0645\u062e\u0627\u0632\u0646 \u0633\u0648\u0628\u0631 \u0645\u0627\u0631\u0643\u062a",
+                "coordinates": [
+                    46.7814756,
+                    24.8184974
+                ],
+                "est_distance_meters": 808
+            },
+            {
+                "name": "\u0645\u0631\u0643\u0632 \u0632\u0627\u062f \u0631\u0648\u064a\u062d\u0629",
+                "coordinates": [
+                    46.784994,
+                    24.815740599999998
+                ],
+                "est_distance_meters": 813
+            }
+        ],
+        "nearby_restaurant": [
+            {
+                "name": "AlBaik",
+                "coordinates": [
+                    46.779601799999995,
+                    24.809455399999997
+                ],
+                "est_distance_meters": 302
+            },
+            {
+                "name": "\u0627\u0644\u0631\u0648\u0645\u0627\u0646\u0633\u064a\u0629 -\u0627\u0644\u064a\u0631\u0645\u0648\u0643 | Al romansiah",
+                "coordinates": [
+                    46.781375,
+                    24.8167679
+                ],
+                "est_distance_meters": 633
+            }
+        ],
+        "nearby_atm": [
+            {
+                "name": "Al Rajhi ATM",
+                "coordinates": [
+                    46.7802272,
+                    24.805803899999997
+                ],
+                "est_distance_meters": 702
+            },
+            {
+                "name": "SNB AlAhli ATM",
+                "coordinates": [
+                    46.7816875,
+                    24.8185625
+                ],
+                "est_distance_meters": 823
+            }
+        ],
+        "nearby_bank": [
+            {
+                "name": "\u0645\u0624\u0633\u0633\u0629 \u062d\u0644\u0629 \u0644\u062a\u0642\u0646\u064a\u0629 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a",
+                "coordinates": [
+                    46.778640599999996,
+                    24.809319600000002
+                ],
+                "est_distance_meters": 284
+            },
+            {
+                "name": "\u0645\u0639\u0627\u0644\u0645 \u0644\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0627\u0639\u0645\u0627\u0644 \u0648\u0627\u0644\u0627\u0633\u062a\u0634\u0627\u0631\u0627\u062a",
+                "coordinates": [
+                    46.787013699999996,
+                    24.819298
+                ],
+                "est_distance_meters": 1216
+            }
+        ],
+        "id": "24.81185531616211,46.77816390991211",
+        "total_score": 88,
+        "weighted_scores": {
+            "traffic": 11.345000267028809,
+            "demographics": 18.59517822265625,
+            "competition": 0.0,
+            "healthcare": 50.0,
+            "complementary": 8.1074
+        },
+        "raw_scores": {
+            "traffic": 45,
+            "demographics": 61,
+            "competition": 0,
+            "healthcare": 250,
+            "complementary": 81
+        },
+        "percentage_difference": 62,
+        "comparison_type": "improvement",
+        "traffic_score_improvement": 10,
+        "demographics_score_improvement": 17,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
+        "complementary_businesses_score_improvement": 81
+    },
+    {
+        "source": "shop_for_rent",
+        "display_name": "\u0634\u0627\u0631\u0639-\u0627\u0644\u062f\u0627\u0626\u0631\u0649-\u0627\u0644\u0634\u0645\u0627\u0644\u0649-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u062a\u0639\u0627\u0648\u0646-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636",
+        "lat": 24.777462005615234,
+        "lng": 46.68803787231445,
+        "price": 474115,
+        "url": "https://sa.aqar.fm/\u0645\u062d\u0644\u0627\u062a-\u0644\u0644\u0625\u064a\u062c\u0627\u0631/\u0627\u0644\u0631\u064a\u0627\u0636/\u0634\u0645\u0627\u0644-\u0627\u0644\u0631\u064a\u0627\u0636/\u062d\u064a-\u0627\u0644\u062a\u0639\u0627\u0648\u0646/\u0634\u0627\u0631\u0639-\u0627\u0644\u062f\u0627\u0626\u0631\u0649-\u0627\u0644\u0634\u0645\u0627\u0644\u0649-\u0627\u0644\u0641\u0631\u0639\u064a-\u062d\u064a-\u0627\u0644\u062a\u0639\u0627\u0648\u0646-\u0645\u062f\u064a\u0646\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-\u0645\u0646\u0637\u0642\u0629-\u0627\u0644\u0631\u064a\u0627\u0636-6276943",
+        "listing_id": 6276943,
+        "city": "\u0627\u0644\u0631\u064a\u0627\u0636",
+        "latitude": 24.777462005615234,
+        "longitude": 46.68803787231445,
+        "category": "shop_for_rent",
+        "direction_id": "4",
+        "total_population": 131695,
+        "avg_density": 8573.900390625,
+        "avg_median_age": 30.670000076293945,
+        "avg_income": 11404.08984375,
+        "percentage_age_above_20": 50.0,
+        "percentage_age_above_25": 50.0,
+        "percentage_age_above_30": 50.0,
+        "percentage_age_above_35": 39.17499923706055,
+        "percentage_age_above_40": 26.674999237060547,
+        "percentage_age_above_45": 14.175000190734863,
+        "percentage_age_above_50": 1.6749999523162842,
+        "demographics_analysis_date": "2025-10-15 02:06:17",
+        "income_category": "medium",
+        "low_income_score": 23.093563079833984,
+        "medium_income_score": 88.03536987304688,
+        "high_income_score": 76.90643310546875,
+        "total_housings": 45812,
+        "residential_housings": 38880,
+        "non_residential_housings": 2404,
+        "owned_housings": 9099,
+        "rented_housings": 24561,
+        "provided_housings": 4892,
+        "other_residential_housings": 328,
+        "public_housing": 123,
+        "work_camps": 11,
+        "commercial_housings": 2270,
+        "other_housings": 4528,
+        "housing_density_sum": 142.86000061035156,
+        "housing_analysis_date": "2025-10-15 07:11:40",
+        "housing_score": 41.15764617919922,
+        "total_households": 6,
+        "avg_household_size": 3.380000114440918,
+        "median_household_size": 2.3299999237060547,
+        "household_density_sum": 108.33000183105469,
+        "household_analysis_date": "2025-10-15 07:09:19",
+        "household_score": 87.98051452636719,
+        "traffic_score": 47.65999984741211,
+        "traffic_storefront_score": 30.0,
+        "traffic_area_score": 49.619998931884766,
+        "traffic_screenshot_filename": "traffic_24.777462_46.688039_Monday_6-00PM_pinned_frontscore=30_areascore=49.png",
+        "traffic_analysis_date": "2025-10-15 06:00:24",
+        "num_of_pharmacies": 9,
+        "nearby_pharmacy": [
+            {
+                "name": "Allure pharmacy - \u0635\u064a\u062f\u0644\u064a\u0629 \u0623\u0644\u0648\u0631 \u0641\u0631\u0639 \u0627\u0644\u062a\u0639\u0627\u0648\u0646",
+                "coordinates": [
+                    46.6891718,
+                    24.7779891
+                ],
+                "driving_distance_meters": 128
+            },
+            {
+                "name": "Nahdi pharmacy | \u0635\u064a\u062f\u0644\u064a\u0647 \u0627\u0644\u0646\u0647\u062f\u0649",
+                "coordinates": [
+                    46.689457999999995,
+                    24.773308
+                ],
+                "driving_distance_meters": 482
+            },
+            {
+                "name": "\u0635\u064a\u062f\u0644\u064a\u0629 \u0627\u0644\u062f\u0648\u0627\u0621",
+                "coordinates": [
+                    46.683589999999995,
+                    24.77575
+                ],
+                "driving_distance_meters": 488
+            },
+            {
+                "name": "Kunooz",
+                "coordinates": [
+                    46.684447,
+                    24.7821507
+                ],
+                "driving_distance_meters": 633
+            },
+            {
+                "name": "Zahrat Al Rawdah Pharmacy 50 \u0635\u064a\u062f\u0644\u064a\u0629 \u0632\u0647\u0631\u0629 \u0627\u0644\u0631\u0648\u0636\u0629",
+                "coordinates": [
+                    46.6956389,
+                    24.7807778
+                ],
+                "driving_distance_meters": 851
+            }
+        ],
+        "num_of_hospitals": 12,
+        "num_of_dentists": 5,
+        "nearby_hospital": [
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0629 \u0633\u0644\u0627\u0645 \u0644\u0644\u062d\u064a\u0648\u0627\u0646\u0627\u062a \u0627\u0644\u0623\u0644\u064a\u0641\u0629 Salam Pets Clinics",
+                "coordinates": [
+                    46.6885109,
+                    24.7777675
+                ],
+                "driving_distance_meters": 58
+            },
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0629 \u0633\u0628\u0627\u062a",
+                "coordinates": [
+                    46.689729799999995,
+                    24.7783072
+                ],
+                "driving_distance_meters": 195
+            },
+            {
+                "name": "Qastarat & Dawali Clinics \u0639\u064a\u0627\u062f\u0627\u062a \u0627\u0644\u0642\u0633\u0637\u0631\u0627\u062a \u0648 \u0627\u0644\u062f\u0648\u0627\u0644\u064a",
+                "coordinates": [
+                    46.6919714,
+                    24.779099700000003
+                ],
+                "driving_distance_meters": 437
+            },
+            {
+                "name": "\u0633\u062c\u0627\u064a\u0627 \u0644\u0644\u0631\u0639\u0627\u064a\u0629 \u0627\u0644\u0637\u0628\u064a\u0629 - Sajaya Medical Care",
+                "coordinates": [
+                    46.6838376,
+                    24.775613399999997
+                ],
+                "driving_distance_meters": 471
+            },
+            {
+                "name": "SMC Hospital",
+                "coordinates": [
+                    46.693554299999995,
+                    24.7814098
+                ],
+                "driving_distance_meters": 708
+            }
+        ],
+        "nearby_dentist": [
+            {
+                "name": "\u0639\u064a\u0627\u062f\u0627\u062a \u0631\u064a\u0627\u0646\u0647 \u0627\u0644\u0637\u0628\u064a \u062c\u0644\u062f\u064a\u0629 - \u0627\u0633\u0646\u0627\u0646 \u0627\u0637\u0641\u0627\u0644 - \u062a\u062c\u0645\u064a\u0644 \u0646\u0633\u0627\u0626\u064a - \u0644\u064a\u0632\u0631",
+                "coordinates": [
+                    46.689685100000005,
+                    24.778255700000003
+                ],
+                "driving_distance_meters": 188
+            },
+            {
+                "name": "\u0639\u0627\u062c\u064a \u0644\u0637\u0628 \u0627\u0644\u0623\u0633\u0646\u0627\u0646",
+                "coordinates": [
+                    46.6868252,
+                    24.7759143
+                ],
+                "driving_distance_meters": 210
+            },
+            {
+                "name": "\u062f. \u0639\u0645\u0631 \u0643\u0644\u0627\u0648\u064a / \u0645\u0627\u062c\u0633\u062a\u064a\u0631 \u0623\u0645\u0631\u0627\u0636 \u0648\u062c\u0631\u0627\u062d\u0629 \u0627\u0644\u0644\u062b\u0629",
+                "coordinates": [
+                    46.6898717,
+                    24.7715537
+                ],
+                "driving_distance_meters": 680
+            },
+            {
+                "name": "Pretty Smile Dental",
+                "coordinates": [
+                    46.6837081,
+                    24.784036099999998
+                ],
+                "driving_distance_meters": 849
+            },
+            {
+                "name": "\u0645\u062c\u0645\u0639 \u0648\u0631\u0648\u0641 \u0644\u0637\u0628 \u0627\u0644\u0627\u0633\u0646\u0627\u0646",
+                "coordinates": [
+                    46.6855817,
+                    24.7857567
+                ],
+                "driving_distance_meters": 951
+            }
+        ],
+        "pharmacies_per_10k_population": 0.6833972436311174,
+        "num_of_businesses_around": 30,
+        "nearby_grocery_store": [
+            {
+                "name": "Almanea Dates",
+                "coordinates": [
+                    46.6849449,
+                    24.779433299999997
+                ],
+                "est_distance_meters": 381
+            },
+            {
+                "name": "Hedhab Alqaseem",
+                "coordinates": [
+                    46.6845855,
+                    24.7818094
+                ],
+                "est_distance_meters": 594
+            },
+            {
+                "name": "\u0628\u0648\u0627\u0633\u0642",
+                "coordinates": [
+                    46.6833896,
+                    24.782280099999998
+                ],
+                "est_distance_meters": 711
+            },
+            {
+                "name": "\u0627\u0633\u0648\u0627\u0642 \u0641\u0627\u0631\u0645\u064a\u0632",
+                "coordinates": [
+                    46.6904119,
+                    24.7837551
+                ],
+                "est_distance_meters": 737
+            },
+            {
+                "name": "Panda",
+                "coordinates": [
+                    46.688937499999994,
+                    24.770687499999998
+                ],
+                "est_distance_meters": 755
+            }
+        ],
+        "nearby_supermarket": [
+            {
+                "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0623\u0628\u0648 \u0628\u0643\u0631 \u0627\u0644\u0635\u062f\u064a\u0642",
+                "coordinates": [
+                    46.6875011,
+                    24.774429899999998
+                ],
+                "est_distance_meters": 340
+            },
+            {
+                "name": "\u0628\u0648\u0627\u0633\u0642",
+                "coordinates": [
+                    46.6833896,
+                    24.782280099999998
+                ],
+                "est_distance_meters": 711
+            },
+            {
+                "name": "\u0627\u0633\u0648\u0627\u0642 \u0641\u0627\u0631\u0645\u064a\u0632",
+                "coordinates": [
+                    46.6904119,
+                    24.7837551
+                ],
+                "est_distance_meters": 737
+            },
+            {
+                "name": "Panda",
+                "coordinates": [
+                    46.688937499999994,
+                    24.770687499999998
+                ],
+                "est_distance_meters": 755
+            },
+            {
+                "name": "\u0627\u0633\u0648\u0627\u0642 \u062c\u0648\u064a \u0645\u0627\u0631\u062a",
+                "coordinates": [
+                    46.690185,
+                    24.770616699999998
+                ],
+                "est_distance_meters": 788
+            }
+        ],
+        "nearby_restaurant": [
+            {
+                "name": "Beit Al-Khawajah",
+                "coordinates": [
+                    46.6884831,
+                    24.7740911
+                ],
+                "est_distance_meters": 376
+            },
+            {
+                "name": "\u062f\u0648\u0627\u0631 \u0627\u0644\u0641\u0637\u064a\u0631\u0629 ( \u0643\u0628\u062f\u062a\u0646\u0627 \u0637\u0627\u0632\u062c\u0629 )",
+                "coordinates": [
+                    46.6840918,
+                    24.781180400000004
+                ],
+                "est_distance_meters": 573
+            },
+            {
+                "name": "Coffee Address | \u0639\u0646\u0648\u0627\u0646 \u0627\u0644\u0642\u0647\u0648\u0629",
+                "coordinates": [
+                    46.6896117,
+                    24.7703401
+                ],
+                "est_distance_meters": 804
+            },
+            {
+                "name": "venor",
+                "coordinates": [
+                    46.695484699999994,
+                    24.7819702
+                ],
+                "est_distance_meters": 903
+            },
+            {
+                "name": "Lazzah Munawwan Boofiya",
+                "coordinates": [
+                    46.6883439,
+                    24.768992299999997
+                ],
+                "est_distance_meters": 938
+            }
+        ],
+        "nearby_atm": [
+            {
+                "name": "SNB AlAhli ATM",
+                "coordinates": [
+                    46.6899375,
+                    24.7783125
+                ],
+                "est_distance_meters": 213
+            },
+            {
+                "name": "SAB \u0627\u0644\u0623\u0648\u0644",
+                "coordinates": [
+                    46.6922626,
+                    24.779150899999998
+                ],
+                "est_distance_meters": 466
+            },
+            {
+                "name": "Bank Albilad ATM",
+                "coordinates": [
+                    46.685004799999994,
+                    24.7855155
+                ],
+                "est_distance_meters": 943
+            }
+        ],
+        "nearby_bank": [
             {
                 "name": "SNB AlAhli",
                 "coordinates": [
-                    46.73556250000001,
-                    24.8069375
+                    46.690021599999994,
+                    24.778272599999998
                 ],
-                "est_distance_meters": 983
+                "est_distance_meters": 219
+            },
+            {
+                "name": "SAB \u0627\u0644\u0623\u0648\u0644",
+                "coordinates": [
+                    46.69228,
+                    24.7793332
+                ],
+                "est_distance_meters": 476
+            },
+            {
+                "name": "\u0645\u0635\u0631\u0641 \u0627\u0644\u0631\u0627\u062c\u062d\u064a",
+                "coordinates": [
+                    46.6809375,
+                    24.774437499999998
+                ],
+                "est_distance_meters": 792
             }
         ],
-        "id": "24.802490234375,46.74397659301758",
-        "total_score": 61,
+        "id": "24.777462005615234,46.68803787231445",
+        "total_score": 87,
         "weighted_scores": {
-            "traffic": 16.1924991607666,
-            "demographics": 17.544028186798094,
+            "traffic": 11.914999961853027,
+            "demographics": 17.017862033843993,
             "competition": 0.0,
-            "healthcare": 20.0,
-            "complementary": 8.047600000000001
+            "healthcare": 50.0,
+            "complementary": 9.043066666666666
         },
         "raw_scores": {
-            "traffic": 64,
-            "demographics": 58,
+            "traffic": 47,
+            "demographics": 56,
             "competition": 0,
-            "healthcare": 100,
-            "complementary": 80
+            "healthcare": 250,
+            "complementary": 90
         },
-        "percentage_difference": 27,
+        "percentage_difference": 61,
         "comparison_type": "improvement",
-        "traffic_score_improvement": 26,
-        "demographics_score_improvement": 58,
-        "competition_score_improvement": 100,
-        "healthcare_ecosystem_score_improvement": 50,
-        "complementary_businesses_score_improvement": 80
+        "traffic_score_improvement": 8,
+        "demographics_score_improvement": 12,
+        "competition_score_improvement": 0,
+        "healthcare_ecosystem_score_improvement": 250,
+        "complementary_businesses_score_improvement": 90
     }
 ]
