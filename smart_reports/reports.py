@@ -31,7 +31,7 @@ from smart_reports.population import (
     get_demographic_info_for_listings,
 )
 from smart_reports.complementary_businesses import get_healthcare_data
-from smart_reports.complementary_businesses import get_other_bsusiness_data
+from smart_reports.complementary_businesses import get_nearby_other_bsusiness_data
 from smart_reports.scoring import (
     score_demographics,
     score_competitive,
@@ -828,7 +828,7 @@ async def group_criterion_data(
         area_polygon, lat, lng, hospital, dentists, pharmacies
     )
 
-    other_businesses = await get_other_bsusiness_data(
+    other_businesses = await get_nearby_other_bsusiness_data(
         area_polygon,
         lat,
         lng,

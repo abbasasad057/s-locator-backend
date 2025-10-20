@@ -38,7 +38,7 @@ def process_category_data(
     return results
 
 
-async def get_other_bsusiness_data(
+async def get_nearby_other_bsusiness_data(
     area_polygon: dict,
     lat: float,
     lng: float,
