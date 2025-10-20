@@ -30,8 +30,8 @@ from smart_reports.population import (
     fetch_household_sizes,
     get_demographic_info_for_listings,
 )
-from smart_reports.healthcare_system import get_healthcare_data
-from smart_reports.complementary_businesses import get_other_businesses_data
+from smart_reports.complementary_businesses import get_healthcare_data
+from smart_reports.complementary_businesses import get_other_bsusiness_data
 from smart_reports.scoring import (
     score_demographics,
     score_competitive,
@@ -125,9 +125,7 @@ async def fetch_demographics_score(
                 )
                 demo_score = 50
 
-    income_score = await fetch_income_score(
-        lat, lng, radius, req.target_income_level
-    )
+    income_score = await fetch_income_score(lat, lng, radius, req.target_income_level)
 
     return demo_score + income_score / 2
 
@@ -212,7 +210,7 @@ async def fetch_complementary_score(
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                complimentary_score = int(data.get("score")) 
+                complimentary_score = int(data.get("score"))
             else:
                 logging.warning(
                     f"Complementary API returned status {response.status}, using default score"
@@ -312,9 +310,7 @@ def write_html_file(file_path: Path, content: str) -> None:
         f.write(content)
 
 
-async def score_external_location(
-    all_shops_data, req, single_item=False
-) -> dict:
+async def score_external_location(all_shops_data, req, single_item=False) -> dict:
     """
     Score external locations using API calls to fetch real scores.
 
@@ -423,10 +419,8 @@ async def score_external_location(
                 "traffic": traffic_score * req.evaluation_metrics.traffic,
                 "demographics": demographics_score
                 * req.evaluation_metrics.demographics,
-                "competition": competition_score
-                * req.evaluation_metrics.competition,
-                "healthcare": healthcare_score
-                * req.evaluation_metrics.healthcare,
+                "competition": competition_score * req.evaluation_metrics.competition,
+                "healthcare": healthcare_score * req.evaluation_metrics.healthcare,
                 "complementary": complementary_score
                 * req.evaluation_metrics.complementary,
             },
@@ -481,10 +475,8 @@ def score_shops(all_shops_data, req, single_item=False) -> dict:
                 "traffic": traffic_score * req.evaluation_metrics.traffic,
                 "demographics": demographics_score
                 * req.evaluation_metrics.demographics,
-                "competition": competitive_score
-                * req.evaluation_metrics.competition,
-                "healthcare": healthcare_score
-                * req.evaluation_metrics.healthcare,
+                "competition": competitive_score * req.evaluation_metrics.competition,
+                "healthcare": healthcare_score * req.evaluation_metrics.healthcare,
                 "complementary": complementary_score
                 * req.evaluation_metrics.complementary,
             },
@@ -513,16 +505,24 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
     shops_for_rent = await loading_category_dataset(req_dataset)
 
     # We'll parallelize loading the other categories. Do NOT mutate req_dataset in-place.
-    categories = [
-        "pharmacy",
-        "hospital",
-        "dentist",
-        "grocery_store",
-        "supermarket",
-        "restaurant",
-        "atm",
-        "bank",
-    ]
+
+    categories = list(
+        set(
+            req.competition_categories
+            + req.complimentary_categories
+            + req.potential_business_type
+        )
+    )
+    # categories = [
+    #     "pharmacy",
+    #     "hospital",
+    #     "dentist",
+    #     "grocery_store",
+    #     "supermarket",
+    #     "restaurant",
+    #     "atm",
+    #     "bank",
+    # ]
 
     # Create independent ReqFetchDataset objects per category.
     reqs = []
@@ -530,9 +530,7 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
         reqs.append(req_dataset.model_copy(update={"boolean_query": category}))
 
     # Bounded concurrency to avoid overwhelming DB or upstream APIs. Tune this.
-    concurrency_limit = int(
-        MAX_POOL // 2
-    )  # Half of DB pool for fetching datasets
+    concurrency_limit = int(MAX_POOL // 2)  # Half of DB pool for fetching datasets
     sem = asyncio.Semaphore(concurrency_limit)
 
     async def _bounded_load(rq: ReqFetchDataset):
@@ -552,9 +550,7 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
 
     # get all demograhics + household + income for those shops_for_rent
     # isolate list of listing_ids from shops_for_rent
-    listing_demographic_info = await get_demographic_info_for_listings(
-        shops_for_rent
-    )
+    listing_demographic_info = await get_demographic_info_for_listings(shops_for_rent)
 
     ## in this part For Each location (shop for rent),
     # we fetch all the details of that specific locations
@@ -636,9 +632,7 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
 
     results = score_shops(all_shops_data, req)
     custom_sites = await score_external_location(custom_loc, req)
-    current_site = await score_external_location(
-        current_loc, req, single_item=True
-    )
+    current_site = await score_external_location(current_loc, req, single_item=True)
 
     stats = calculate_statistics(results)
     stats["total_competing_pharmacies"] = len(pharmacies)
@@ -720,6 +714,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
         custom_sites,
         current_site,
     ) = await get_and_score_listings(req)
+
     with open(debug_path_sites, "w") as f:
         json.dump(sites, f, indent=4)
     with open(debug_path_stats, "w") as f:
@@ -833,7 +828,7 @@ async def group_criterion_data(
         area_polygon, lat, lng, hospital, dentists, pharmacies
     )
 
-    other_businesses = await get_other_businesses_data(
+    other_businesses = await get_other_bsusiness_data(
         area_polygon,
         lat,
         lng,
@@ -871,7 +866,7 @@ async def group_criterion_data(
     }
 
 
-async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
+async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
     """
     Generate a comprehensive pharmacy report and return structured data.
 
@@ -913,16 +908,6 @@ async def generate_html_pharmacy_report(req: Reqsmartreport) -> Dict[str, Any]:
         current_results,
         report_text,
     ) = await generate_pharmacy_report(req)
-
-    # # save all_shops_data to json file for debugging
-    # debug_path = Path("processed_report_data.json")
-    # with open(debug_path, 'w') as f:
-    #     json.dump(processed_report_data, f, indent=4)
-
-    # # read from json file
-    # debug_path = Path("processed_report_data.json")
-    # with open(debug_path, "r") as f:
-    #     processed_report_data = json.load(f)
 
     # Generate the HTML report file
     html_content = generate_complete_html_report(

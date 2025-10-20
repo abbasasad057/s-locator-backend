@@ -31,7 +31,7 @@ from config_factory import CONF
 from dine_in_suitability_analysis import analyze_dine_in_sites
 from all_types.request_dtypes import ReqDineInSuitabilityAnalysis
 from all_types.response_dtypes import ResDineInSuitabilityAnalysis, ResIntelligenceViewport
-from smart_reports.reports import generate_html_pharmacy_report
+from smart_reports.reports import generate_html_report
 # from traffic_data import get_here_traffic_score
 from standalone_google_maps_traffic import analyze_traffic_at_location
 from pydantic import BaseModel
@@ -139,7 +139,7 @@ async def ep_pharmacy_site_selection(
         req.request_body,
         Reqsmartreport,         # request schema
         ResModel[dict[str, Any]],  
-        generate_html_pharmacy_report,
+        generate_html_report,
         wrap_output=True,
     )
     return response

@@ -72,6 +72,22 @@ with open(area_intelligence_categories_PATH, "r") as f:
 with open(COLOR_PATH, "r") as f:
     GRADIENT_COLORS = json.load(f)
 
+# SINGLE SOURCE OF TRUTH: POI categories loaded at startup
+# Combine all category dictionaries
+ALL_POI_CATEGORIES_DICT = {
+    **GOOGLE_CATEGORIES,
+    **REAL_ESTATE_CATEGORIES,
+    **AREA_INTELLIGENCE_CATEGORIES,
+}
+
+# Build flattened lists for validation (DRY approach)
+ALL_POI_CATEGORIES = [
+    category 
+    for category_list in ALL_POI_CATEGORIES_DICT.values() 
+    for category in category_list
+]
+ALL_POI_CATEGORIES_LOWER = [cat.lower() for cat in ALL_POI_CATEGORIES]
+
 
 def to_serializable(obj: Any) -> Any:
     """

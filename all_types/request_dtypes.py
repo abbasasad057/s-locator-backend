@@ -1,7 +1,7 @@
 from typing import Dict, List, TypeVar, Generic, Optional
 from fastapi import UploadFile
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 from typing import Optional
 
@@ -318,9 +318,14 @@ class EvaluationMetrics(BaseModel):
 class Reqsmartreport(UserId):
     city_name: str = "Riyadh"
     country_name: str = "Saudi Arabia"
-    Type: str = "Pharmacy"
+    potential_business_type: str = "pharmacy"
     target_income_level : str = "medium"  # low, medium, high
     target_age: int = 30
+    analysis_radius: int = 1000  # in meters
+    complimentary_categories: List[str] = ["hospital", "medical_clinic"]
+    optimal_num_complementary_businesses_per_category: int = 2  # add key for number of complimentary businesses considered ideal
+    competition_categories: List[str] = ["pharmacy"]
+    max_competition_threshold_per_category: int = 1  # add key for number of competition beyond which the score will decrease
     evaluation_metrics: EvaluationMetrics = EvaluationMetrics()
     custom_locations: Optional[List[Coordinate]] = (
         None  # In case the client or user wants to analyze specific locations that don't exist in our db so he will provide the coordinates
@@ -328,3 +333,37 @@ class Reqsmartreport(UserId):
     current_location: Optional[Coordinate] = (
         None  # In case a client wants to analyze his current location
     )
+
+    @field_validator('potential_business_type')
+    @classmethod
+    def validate_potential_business_type(cls, v):
+        """
+        Validate that the potential_business_type (single string) exists in the POI list.
+        Uses ALL_POI_CATEGORIES_LOWER loaded at app startup as the single source of truth.
+        """
+        from storage_methods import ALL_POI_CATEGORIES_LOWER
+        
+        if v.lower() not in ALL_POI_CATEGORIES_LOWER:
+            raise ValueError(
+                f"Category '{v}' is not in the valid POI list. "
+                f"Please use one of the available categories from the /nearby_categories endpoint."
+            )
+        return v
+
+    @field_validator('complimentary_categories', 'competition_categories')
+    @classmethod
+    def validate_category_lists(cls, v):
+        """
+        Validate that all categories in the list exist in the POI list.
+        Only validates complimentary_categories and competition_categories.
+        Uses ALL_POI_CATEGORIES_LOWER loaded at app startup as the single source of truth.
+        """
+        from storage_methods import ALL_POI_CATEGORIES_LOWER
+        
+        for category in v:
+            if category.lower() not in ALL_POI_CATEGORIES_LOWER:
+                raise ValueError(
+                    f"Category '{category}' is not in the valid POI list. "
+                    f"Please use one of the available categories from the /nearby_categories endpoint."
+                )
+        return v

@@ -50,6 +50,7 @@ from storage_methods import (
     REAL_ESTATE_CATEGORIES,
     AREA_INTELLIGENCE_CATEGORIES,
     GRADIENT_COLORS,
+    ALL_POI_CATEGORIES_DICT,
     # load_real_estate_categories,
     # load_area_intelligence_categories,
     get_real_estate_dataset_from_storage,
@@ -955,16 +956,11 @@ async def poi_categories(req: ReqCityCountry = "") -> Dict:
     """
     Provides a comprehensive list of place categories, including Google places,
     real estate, and other custom categories.
+    
+    Returns the pre-loaded ALL_POI_CATEGORIES_DICT from storage_methods.
+    This is the same source of truth used by validators.
     """
-
-    # combine all category types
-    categories = {
-        **GOOGLE_CATEGORIES,
-        **REAL_ESTATE_CATEGORIES,
-        **AREA_INTELLIGENCE_CATEGORIES,
-    }
-
-    return categories
+    return ALL_POI_CATEGORIES_DICT
 
 
 async def save_draft_catalog(req: ReqSavePrdcerLyer) -> str:
