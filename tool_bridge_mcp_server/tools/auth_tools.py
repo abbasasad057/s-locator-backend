@@ -64,7 +64,9 @@ def register_auth_tools(mcp: FastMCP):
                 session = await session_manager.create_session()
 
             # Prepare the request to your FastAPI login endpoint
-            endpoint_url = "http://localhost:8000" + CONF.login
+            # Use BACKEND_URL env var for Docker, fallback to localhost:8000 for local dev
+            backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+            endpoint_url = backend_url + CONF.login
             payload = {
                 "message": "login request from mcp server",
                 "request_info": {},

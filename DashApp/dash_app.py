@@ -72,7 +72,8 @@ async def authenticate_user_direct(email: str, password: str) -> dict:
         dict with 'success', 'data' (if success), 'error' (if failure)
     """
     try:
-        endpoint_url = "http://localhost:8000" + CONF.login
+        backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+        endpoint_url = backend_url + CONF.login
         payload = {
             "message": "login request from dash app",
             "request_info": {},
@@ -962,4 +963,4 @@ def update_interactive_scatter(selected_variable):
         return {}
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(host='0.0.0.0', port=8050, debug=False)

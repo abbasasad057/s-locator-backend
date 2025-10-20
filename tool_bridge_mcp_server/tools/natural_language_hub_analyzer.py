@@ -43,7 +43,8 @@ from app_logger import get_logger
 logger = get_logger(__name__)
 
 # Configuration
-FASTAPI_BASE_URL = "http://localhost:8000"
+# Use BACKEND_URL env var for Docker, fallback to localhost:8000 for local dev
+FASTAPI_BASE_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
 def register_natural_language_hub_analyzer_tools(mcp: FastMCP):
     """Register natural language hub analyzer tool."""

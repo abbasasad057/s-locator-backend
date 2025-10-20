@@ -38,7 +38,8 @@ from app_logger import get_logger
 logger = get_logger(__name__)
 
 # --- Configuration is now a simple module-level constant ---
-FASTAPI_BASE_URL = "http://localhost:8000"
+# Use BACKEND_URL env var for Docker, fallback to localhost:8000 for local dev
+FASTAPI_BASE_URL = os.getenv("BACKEND_URL", "http://localhost:8000")
 
 
 def register_territory_optimization_tools(mcp: FastMCP):

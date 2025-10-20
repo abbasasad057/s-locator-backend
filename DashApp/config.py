@@ -14,7 +14,7 @@ class AgentConfig:
     PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
     # Python executable path
-    PYTHON_EXECUTABLE = PROJECT_ROOT / ".venv" / "Scripts" / "python.exe"
+    PYTHON_EXECUTABLE = PROJECT_ROOT / ".venv" / "bin" / "python"
 
     # MCP Server path
     MCP_SERVER_PATH = PROJECT_ROOT / "tool_bridge_mcp_server" / "mcp_server.py"
@@ -43,14 +43,22 @@ class AgentConfig:
     @classmethod
     def get_mcp_config(cls) -> dict:
         """Get MCP client configuration"""
+        # Prepare environment variables for MCP server subprocess
+        mcp_env = {
+            "PYTHONPATH": str(cls.PROJECT_ROOT)
+        }
+
+        # Pass BACKEND_URL from parent process to MCP server subprocess (critical for Docker)
+        backend_url = os.getenv("BACKEND_URL")
+        if backend_url:
+            mcp_env["BACKEND_URL"] = backend_url
+
         return {
             cls.MCP_SERVER_NAME: {
                 "command": str(cls.PYTHON_EXECUTABLE),
                 "args": [str(cls.MCP_SERVER_PATH)],
                 "transport": cls.MCP_TRANSPORT,
-                "env": {
-                    "PYTHONPATH": str(cls.PROJECT_ROOT)
-                }
+                "env": mcp_env
             }
         }
     
