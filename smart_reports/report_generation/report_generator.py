@@ -43,11 +43,11 @@ def generate_detailed_insights(site: Dict) -> str:
     # 🏪 Business Environment
     nearby_businesses = site.get("num_of_businesses_around", 0)
     if nearby_businesses > 20:
-        bus_status = "✅ Strong ecosystem —  complementary businesses support customer flow."
+        bus_status = "✅ Strong ecosystem —  cross_shopping businesses support customer flow."
     elif nearby_businesses >= 10:
         bus_status = "⚠️ Moderate ecosystem — some opportunities exist, but growth potential remains."
     else:
-        bus_status = "❌ Weak ecosystem — limited complementary activity may reduce visibility."
+        bus_status = "❌ Weak ecosystem — limited cross_shopping activity may reduce visibility."
 
     insights.append(
         f"### 🏪 Business Environment\n"
@@ -74,7 +74,7 @@ def generate_detailed_insights(site: Dict) -> str:
         )
 
     # ☕ Competitive Position
-    pharm_per_10k = site.get("pharmacies_per_10k_population")
+    pharm_per_10k = site.get("pharmacy_per_10k_population")
     if pharm_per_10k is not None:
         if pharm_per_10k > 8:
             market_status = "🔴 Saturated market\nStrategy: Differentiation is essential to compete effectively."
@@ -85,21 +85,21 @@ def generate_detailed_insights(site: Dict) -> str:
 
         insights.append(
             f"### ☕ Competitive Position\n"
-            f"Pharmacies per 10k population: {pharm_per_10k}  \n"
-            f"Competing Pharmacies in the area: {site['num_of_pharmacies']}  \n"
+            f"pharmacy per 10k population: {pharm_per_10k}  \n"
+            f"Competing pharmacy in the area: {site['num_of_pharmacy']}  \n"
             f"{market_status}\n\n"
         )
-    hospitals = site.get("num_of_hospitals", 0)
-    dentists = site.get("num_of_dentists", 0)
+    hospitals = site.get("num_of_hospital", 0)
+    dentists = site.get("num_of_dentist", 0)
     if hospitals + dentists > 10:
-        health_status = "✅ Strong healthcare hub — high concentration of facilities ensures steady demand."
+        health_status = "✅ Strong complementary hub — high concentration of facilities ensures steady demand."
     elif hospitals + dentists >= 5:
-        health_status = "⚠️ Moderate healthcare presence — demand is supported but with limited spillover."
+        health_status = "⚠️ Moderate complementary presence — demand is supported but with limited spillover."
     else:
-        health_status = "❌ Weak healthcare presence — fewer facilities may reduce referral opportunities."
+        health_status = "❌ Weak complementary presence — fewer facilities may reduce referral opportunities."
 
     insights.append(
-        f"### 🏥 Healthcare Environment\n"
+        f"### 🏥 complementary Environment\n"
         f"Hospitals nearby: {hospitals}  \n"
         f"Dentists nearby: {dentists}  \n"
         f"Assessment: {health_status}\n\n"
@@ -134,7 +134,7 @@ def generate_insights(sites: List[Dict], best_site: Dict) -> str:
         market_status = "Emerging market with minimal competition"
 
     insights.append(
-        f"- **Market Dynamics:** {market_status} with {total_competitors} total competing pharmacies.\n"
+        f"- **Market Dynamics:** {market_status} with {total_competitors} total competing pharmacy.\n"
     )
 
     # Traffic advantage - normalize to 100 scale
@@ -155,7 +155,7 @@ def generate_insights(sites: List[Dict], best_site: Dict) -> str:
     nearby_businesses = best_site.get("num_of_businesses_around", 0)
 
     insights.append(
-        f"- **Business Ecosystem:** {nearby_businesses} nearby complementary businesses ensure "
+        f"- **Business Ecosystem:** {nearby_businesses} nearby cross_shopping businesses ensure "
         "consistent foot traffic and cross-selling opportunities.\n"
     )
 
@@ -188,7 +188,7 @@ def generate_enhanced_table(
 
     header = (
         "| Rank | Site Name |Rent Price (SAR) | Final Score | Traffic | Demographics | "
-        "Competition | Healthcare Environment | Complementary Businesses | View |\n"
+        "Competition | complementary Environment | cross_shopping Businesses | View |\n"
         "|:----:|:---------:|:-----------:|:-----------:|:-------:|:-----------:|"
         ":----------:|:-----------------:|:-------------------:|:---:|\n"
     )
@@ -206,15 +206,15 @@ def generate_enhanced_table(
             "demographics", 0
         )
         competitive_100 = site.get("weighted_scores", {}).get("competition", 0)
-        healthcare_100 = site.get("weighted_scores", {}).get("healthcare", 0)
-        complementary_100 = site.get("weighted_scores", {}).get(
-            "complementary", 0
+        complementary_100 = site.get("weighted_scores", {}).get("complementary", 0)
+        cross_shopping_100 = site.get("weighted_scores", {}).get(
+            "cross_shopping", 0
         )
 
         rows.append(
             f"| {site['rank']} | {site['display_name']} | {price_display} | {total_score_100} | "
             f"{traffic_100} | {demographics_100} | {competitive_100} | "
-            f"{healthcare_100} | {complementary_100} | "
+            f"{complementary_100} | {cross_shopping_100} | "
             f"[View]({site['url']}) |\n"
         )
     return header + "".join(rows) + "\n"
@@ -327,54 +327,54 @@ def write_detailed_analysis(
 
         # Competition scoring
         if "competition" in CRITERION_WEIGHTS:
-            comp_raw = s.get("num_of_pharmacies", 0)
+            comp_raw = s.get("num_of_pharmacy", 0)
             weighted_points = s.get("weighted_scores", {}).get(
                 "competition", 0.0
             )
             md.write(
-                f"| Competition | Nearby Pharmacies | {comp_raw} | {weighted_points} |\n"
+                f"| Competition | Nearby pharmacy | {comp_raw} | {weighted_points} |\n"
             )
             scoring_breakdown.append(
                 {
                     "criterion": "Competition",
-                    "sub_factor": "Nearby Pharmacies",
+                    "sub_factor": "Nearby pharmacy",
                     "raw_score": comp_raw,
                     "weighted_points": weighted_points,
                 }
             )
 
-        # Healthcare scoring
-        if "healthcare" in CRITERION_WEIGHTS:
-            health_raw = s.get("num_of_hospitals", 0) + s.get(
-                "num_of_dentists", 0
+        # complementary scoring
+        if "complementary" in CRITERION_WEIGHTS:
+            health_raw = s.get("num_of_hospital", 0) + s.get(
+                "num_of_dentist", 0
             )
             weighted_points = s.get("weighted_scores", {}).get(
-                "healthcare", 0.0
+                "complementary", 0.0
             )
             md.write(
-                f"| Healthcare | Hospitals + Dentists | {health_raw} | {weighted_points} |\n"
+                f"| complementary | Hospitals + Dentists | {health_raw} | {weighted_points} |\n"
             )
             scoring_breakdown.append(
                 {
-                    "criterion": "Healthcare",
+                    "criterion": "complementary",
                     "sub_factor": "Hospitals + Dentists",
                     "raw_score": health_raw,
                     "weighted_points": weighted_points,
                 }
             )
 
-        # Complementary businesses scoring
-        if "complementary" in CRITERION_WEIGHTS:
+        # cross_shopping businesses scoring
+        if "cross_shopping" in CRITERION_WEIGHTS:
             comp_raw = s.get("num_of_businesses_around", 0)
             weighted_points = s.get("weighted_scores", {}).get(
-                "complementary", 0.0
+                "cross_shopping", 0.0
             )
             md.write(
-                f"| Complementary | Nearby Businesses | {comp_raw} | {weighted_points} |\n"
+                f"| cross_shopping | Nearby Businesses | {comp_raw} | {weighted_points} |\n"
             )
             scoring_breakdown.append(
                 {
-                    "criterion": "Complementary",
+                    "criterion": "cross_shopping",
                     "sub_factor": "Nearby Businesses",
                     "raw_score": comp_raw,
                     "weighted_points": weighted_points,
@@ -523,7 +523,7 @@ def generate_markdown(
             f"- **Average Rent Price:** {stats['average_price']} SAR\n"
         )
         md.write(
-            f"- **Competing Pharmacies:** {stats['total_competing_pharmacies']}\n\n"
+            f"- **Competing pharmacy:** {stats['total_competing_pharmacy']}\n\n"
         )
 
         # Executive Summary
@@ -686,23 +686,23 @@ def generate_markdown(
                         "url": chart_path,
                     }
                 )
-        if charts.get("healthcare_competition") and os.path.exists(
-            charts["healthcare_competition"]
+        if charts.get("complementary_competition") and os.path.exists(
+            charts["complementary_competition"]
         ):
-            path = charts.get("healthcare_competition")
+            path = charts.get("complementary_competition")
             if path:
                 # Make path relative to markdown directory
                 chart_path = os.path.relpath(
                     path, os.path.dirname(md_path)
                 ).replace("\\", "/")
                 md.write(
-                    f"**Healthcare vs pharmacies competition :**\n\n![healthcare_competition]({chart_path})\n\n\n"
+                    f"**complementary vs pharmacy competition :**\n\n![complementary_competition]({chart_path})\n\n\n"
                 )
                 md.write(f"**Path : {chart_path}\n\n")
                 visual_analysis["charts"].append(
                     {
-                        "title": "Healthcare vs Pharmacy Competition",
-                        "type": "healthcare_competition",
+                        "title": "complementary vs Pharmacy Competition",
+                        "type": "complementary_competition",
                         "url": chart_path,
                     }
                 )
@@ -814,7 +814,7 @@ def generate_markdown(
         # Competition (15%)
         md.write("### 🏪 Competition (15%)\n")
         comp_method = (
-            "**Data Source:** POI analysis of Pharmacies shops  \n"
+            "**Data Source:** POI analysis of pharmacy shops  \n"
             "**Method:** Competitive mapping within analysis radius  \n"
             "**Scoring:** Perfect score for nearest phramacy is above 500m in living area; penalty of 10 points per excess competitor  \n"
             "**Rationale:** Balanced competition validates demand while avoiding oversaturation.\n\n"
@@ -823,45 +823,45 @@ def generate_markdown(
 
         methodology["criteria"]["competition"] = {
             "weight_percentage": 15,
-            "data_source": "POI analysis of Pharmacies shops",
+            "data_source": "POI analysis of pharmacy shops",
             "method": "Competitive mapping within analysis radius",
             "scoring": "Perfect score for nearest pharmacy is above 500m in living area; penalty of 10 points per excess competitor",
             "rationale": "Balanced competition validates demand while avoiding oversaturation.",
         }
 
-        # Healthcare Ecosystem (20%)
-        md.write("### 🏥 Healthcare Environment (20%)\n")
+        # complementary Ecosystem (20%)
+        md.write("### 🏥 complementary Environment (20%)\n")
         health_method = (
             "**Data Source:** POI analysis of hospitals and dental clinics  \n"
             "**Method:** Scoring based on proximity to nearby hospitals and dentists (≤1500m preferred)  \n"
-            "**Scoring:** Average of proximity scores; closer and more accessible healthcare improves score  \n"
-            "**Rationale:** A strong healthcare environment increases site attractiveness and convenience for residents.\n\n"
+            "**Scoring:** Average of proximity scores; closer and more accessible complementary improves score  \n"
+            "**Rationale:** A strong complementary environment increases site attractiveness and convenience for residents.\n\n"
         )
         md.write(health_method)
 
-        methodology["criteria"]["healthcare"] = {
+        methodology["criteria"]["complementary"] = {
             "weight_percentage": 20,
             "data_source": "POI analysis of hospitals and dental clinics",
             "method": "Scoring based on proximity to nearby hospitals and dentists (≤1500m preferred)",
-            "scoring": "Average of proximity scores; closer and more accessible healthcare improves score",
-            "rationale": "A strong healthcare environment increases site attractiveness and convenience for residents.",
+            "scoring": "Average of proximity scores; closer and more accessible complementary improves score",
+            "rationale": "A strong complementary environment increases site attractiveness and convenience for residents.",
         }
 
-        # Complementary Businesses (10%)
-        md.write("### 🏪 Complementary Businesses (10%)\n")
+        # cross_shopping Businesses (10%)
+        md.write("### 🏪 cross_shopping Businesses (10%)\n")
         comp_bus_method = (
             "**Data Source:** POI analysis of grocery stores, supermarkets, restaurants, ATMs, and banks  \n"
             "**Method:** Proximity-based scoring within 1000m; closer businesses improve accessibility  \n"
-            "**Scoring:** Average score across all complementary business types  \n"
+            "**Scoring:** Average score across all cross_shopping business types  \n"
             "**Rationale:** Access to everyday amenities supports sustained foot traffic and customer satisfaction.\n\n"
         )
         md.write(comp_bus_method)
 
-        methodology["criteria"]["complementary"] = {
+        methodology["criteria"]["cross_shopping"] = {
             "weight_percentage": 10,
             "data_source": "POI analysis of grocery stores, supermarkets, restaurants, ATMs, and banks",
             "method": "Proximity-based scoring within 1000m; closer businesses improve accessibility",
-            "scoring": "Average score across all complementary business types",
+            "scoring": "Average score across all cross_shopping business types",
             "rationale": "Access to everyday amenities supports sustained foot traffic and customer satisfaction.",
         }
 
@@ -870,7 +870,7 @@ def generate_markdown(
         formula_text = (
             "**Formula:**  \n"
             "`Final Score = (Traffic × 0.25) + (Demographics × 0.30) + (Competition × 0.15) + "
-            "(Healthcare × 0.20) + (Complementary × 0.10)`  \n\n"
+            "(complementary × 0.20) + (cross_shopping × 0.10)`  \n\n"
             "**Range:** 0–100 scale where 100 = optimal conditions across all criteria  \n\n"
             "**Interpretation:**  \n"
             "- 🟢 ≥80 → Excellent potential  \n"
@@ -880,7 +880,7 @@ def generate_markdown(
         md.write(formula_text)
 
         methodology["final_calculation"] = {
-            "formula": "Final Score = (Traffic × 0.25) + (Demographics × 0.30) + (Competition × 0.15) + (Healthcare × 0.20) + (Complementary × 0.10)",
+            "formula": "Final Score = (Traffic × 0.25) + (Demographics × 0.30) + (Competition × 0.15) + (complementary × 0.20) + (cross_shopping × 0.10)",
             "range": "0–100 scale where 100 = optimal conditions across all criteria",
             "interpretation": {
                 "excellent": "≥80 → Excellent potential",
@@ -969,7 +969,7 @@ def generate_table_with_current_comparison(
     current = current_location[0]  # baseline
     header = (
         "| Rank | Site Name | Rent Price (SAR) | Final Score | Traffic | Demographics | "
-        "Competition | Healthcare Environment  | Complementary Businesses | View |\n"
+        "Competition | complementary Environment  | cross_shopping Businesses | View |\n"
         "|:----:|:---------:|:-----------:|:-----------:|:-------:|:-----------:|"
         ":----------:|:-----------------:|:-------------------:|:---:|\n"
     )
@@ -998,16 +998,16 @@ def generate_table_with_current_comparison(
         traffic = site.get("weighted_scores", {}).get("traffic", 0)
         demographics = site.get("weighted_scores", {}).get("demographics", 0)
         competition = site.get("weighted_scores", {}).get("competition", 0)
-        healthcare = site.get("weighted_scores", {}).get("healthcare", 0)
         complementary = site.get("weighted_scores", {}).get("complementary", 0)
+        cross_shopping = site.get("weighted_scores", {}).get("cross_shopping", 0)
 
         curr_final = current["total_score"]
         curr_traffic = current.get("weighted_scores", {}).get("traffic", 0)
         curr_demo = current.get("weighted_scores", {}).get("demographics", 0)
         curr_comp = current.get("weighted_scores", {}).get("competition", 0)
-        curr_health = current.get("weighted_scores", {}).get("healthcare", 0)
+        curr_health = current.get("weighted_scores", {}).get("complementary", 0)
         curr_complement = current.get("weighted_scores", {}).get(
-            "complementary", 0
+            "cross_shopping", 0
         )
 
         # Format each score with comparison
@@ -1015,8 +1015,8 @@ def generate_table_with_current_comparison(
         traffic_display = compare(traffic, curr_traffic)
         demo_display = compare(demographics, curr_demo)
         comp_display = compare(competition, curr_comp)
-        health_display = compare(healthcare, curr_health)
-        complement_display = compare(complementary, curr_complement)
+        health_display = compare(complementary, curr_health)
+        complement_display = compare(cross_shopping, curr_complement)
 
         rows.append(
             f"| {site['rank']} | {site['display_name']} | {price_display} | {final_display} | "
@@ -1265,63 +1265,63 @@ def write_detailed_analysis_with_current(
 
         # Competition scoring
         if "competition" in CRITERION_WEIGHTS:
-            comp_raw = s.get("num_of_pharmacies", 0)
+            comp_raw = s.get("num_of_pharmacy", 0)
             weighted_points = s.get("weighted_scores", {}).get(
                 "competition", 0.0
             )
 
             if current_s:
-                current_comp_raw = current_s.get("num_of_pharmacies", 0)
+                current_comp_raw = current_s.get("num_of_pharmacy", 0)
                 current_weighted_points = current_s.get(
                     "weighted_scores", {}
                 ).get("competition", 0.0)
                 md.write(
-                    f"| Competition | Nearby Pharmacies | {comp_raw} | {weighted_points} | {current_comp_raw} | {current_weighted_points} |\n"
+                    f"| Competition | Nearby pharmacy | {comp_raw} | {weighted_points} | {current_comp_raw} | {current_weighted_points} |\n"
                 )
                 current_scoring_breakdown.append(
                     {
                         "criterion": "Competition",
-                        "sub_factor": "Nearby Pharmacies",
+                        "sub_factor": "Nearby pharmacy",
                         "raw_score": current_comp_raw,
                         "weighted_points": current_weighted_points,
                     }
                 )
             else:
                 md.write(
-                    f"| Competition | Nearby Pharmacies | {comp_raw} | {weighted_points} |\n"
+                    f"| Competition | Nearby pharmacy | {comp_raw} | {weighted_points} |\n"
                 )
 
             scoring_breakdown.append(
                 {
                     "criterion": "Competition",
-                    "sub_factor": "Nearby Pharmacies",
+                    "sub_factor": "Nearby pharmacy",
                     "raw_score": comp_raw,
                     "weighted_points": weighted_points,
                 }
             )
 
-        # Healthcare scoring
-        if "healthcare" in CRITERION_WEIGHTS:
-            health_raw = s.get("num_of_hospitals", 0) + s.get(
-                "num_of_dentists", 0
+        # complementary scoring
+        if "complementary" in CRITERION_WEIGHTS:
+            health_raw = s.get("num_of_hospital", 0) + s.get(
+                "num_of_dentist", 0
             )
             weighted_points = s.get("weighted_scores", {}).get(
-                "healthcare", 0.0
+                "complementary", 0.0
             )
 
             if current_s:
                 current_health_raw = current_s.get(
-                    "num_of_hospitals", 0
-                ) + current_s.get("num_of_dentists", 0)
+                    "num_of_hospital", 0
+                ) + current_s.get("num_of_dentist", 0)
                 current_weighted_points = current_s.get(
                     "weighted_scores", {}
-                ).get("healthcare", 0.0)
+                ).get("complementary", 0.0)
                 md.write(
-                    f"| Healthcare | Hospitals + Dentists | {health_raw} | {weighted_points} | {current_health_raw} | {current_weighted_points} |\n"
+                    f"| complementary | Hospitals + Dentists | {health_raw} | {weighted_points} | {current_health_raw} | {current_weighted_points} |\n"
                 )
                 current_scoring_breakdown.append(
                     {
-                        "criterion": "Healthcare",
+                        "criterion": "complementary",
                         "sub_factor": "Hospitals + Dentists",
                         "raw_score": current_health_raw,
                         "weighted_points": current_weighted_points,
@@ -1329,36 +1329,36 @@ def write_detailed_analysis_with_current(
                 )
             else:
                 md.write(
-                    f"| Healthcare | Hospitals + Dentists | {health_raw} | {weighted_points} |\n"
+                    f"| complementary | Hospitals + Dentists | {health_raw} | {weighted_points} |\n"
                 )
 
             scoring_breakdown.append(
                 {
-                    "criterion": "Healthcare",
+                    "criterion": "complementary",
                     "sub_factor": "Hospitals + Dentists",
                     "raw_score": health_raw,
                     "weighted_points": weighted_points,
                 }
             )
 
-        # Complementary businesses scoring
-        if "complementary" in CRITERION_WEIGHTS:
+        # cross_shopping businesses scoring
+        if "cross_shopping" in CRITERION_WEIGHTS:
             comp_raw = s.get("num_of_businesses_around", 0)
             weighted_points = s.get("weighted_scores", {}).get(
-                "complementary", 0.0
+                "cross_shopping", 0.0
             )
 
             if current_s:
                 current_comp_raw = current_s.get("num_of_businesses_around", 0)
                 current_weighted_points = current_s.get(
                     "weighted_scores", {}
-                ).get("complementary", 0.0)
+                ).get("cross_shopping", 0.0)
                 md.write(
-                    f"| Complementary | Nearby Businesses | {comp_raw} | {weighted_points} | {current_comp_raw} | {current_weighted_points} |\n"
+                    f"| cross_shopping | Nearby Businesses | {comp_raw} | {weighted_points} | {current_comp_raw} | {current_weighted_points} |\n"
                 )
                 current_scoring_breakdown.append(
                     {
-                        "criterion": "Complementary",
+                        "criterion": "cross_shopping",
                         "sub_factor": "Nearby Businesses",
                         "raw_score": current_comp_raw,
                         "weighted_points": current_weighted_points,
@@ -1366,12 +1366,12 @@ def write_detailed_analysis_with_current(
                 )
             else:
                 md.write(
-                    f"| Complementary | Nearby Businesses | {comp_raw} | {weighted_points} |\n"
+                    f"| cross_shopping | Nearby Businesses | {comp_raw} | {weighted_points} |\n"
                 )
 
             scoring_breakdown.append(
                 {
-                    "criterion": "Complementary",
+                    "criterion": "cross_shopping",
                     "sub_factor": "Nearby Businesses",
                     "raw_score": comp_raw,
                     "weighted_points": weighted_points,

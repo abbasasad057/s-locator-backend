@@ -83,7 +83,7 @@ def generate_all_site_map_image(sites: list[Dict]) -> str:
             <div style='width: 250px'>
                 <h4>🏢 {site_data['display_name']}</h4>
                 <b>Final Score:</b> {site_data['total_score']}<br>
-                <b>Competitors:</b> {len(competitor_markers)} pharmacies<br>
+                <b>Competitors:</b> {len(competitor_markers)} pharmacy<br>
                 <b>Businesses:</b> {total_businesses} total
             </div>
             """, max_width=300),
@@ -130,13 +130,13 @@ def generate_all_site_map_image(sites: list[Dict]) -> str:
         <div style="background-color: #e8f4f8; padding: 8px; margin-bottom: 8px; border-radius: 4px;">
             <b style="font-size: 14px;">📍 {site_data['display_name']}</b><br>
             <b>Final Score:</b> {site_data['total_score']}<br>
-            <b>Competitors:</b> {len(competitor_markers)} pharmacies<br>
+            <b>Competitors:</b> {len(competitor_markers)} pharmacy<br>
             <b>Businesses:</b> {total_businesses} total<br>
         </div>
         
         <b>Legend:</b><br>
         ⭐ <span style="color: red;"><b>Red Star</b></span> = Property<br>
-        🟤 <span style="color: brown;"><b>Brown</b></span> = Pharmacies<br>
+        🟤 <span style="color: brown;"><b>Brown</b></span> = pharmacy<br>
         🟠 <span style="color: orange;"><b>Orange</b></span> = Restaurants<br>
         🟣 <span style="color: purple;"><b>Purple</b></span> = Shopping<br>
         🔵 <span style="color: blue;"><b>Blue</b></span> = Hotels<br>

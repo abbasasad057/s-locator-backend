@@ -311,8 +311,8 @@ class EvaluationMetrics(BaseModel):
     traffic: float = 0.25
     demographics: float = 0.3
     competition: float = 0.15
-    healthcare: float = 0.2
-    complementary: float = 0.1
+    complementary: float = 0.2
+    cross_shopping: float = 0.1
 
 
 class Reqsmartreport(UserId):
@@ -322,8 +322,10 @@ class Reqsmartreport(UserId):
     target_income_level : str = "medium"  # low, medium, high
     target_age: int = 30
     analysis_radius: int = 1000  # in meters
-    complimentary_categories: List[str] = ["hospital", "medical_clinic"]
-    optimal_num_complementary_businesses_per_category: int = 2  # add key for number of complimentary businesses considered ideal
+    complementary_categories: List[str] = ["hospital", "dentist"]  # Medical complementary businesses
+    optimal_num_complementary_businesses_per_category: int = 2  # Ideal number of complementary businesses per category
+    cross_shopping_categories: List[str] = ["grocery_store", "supermarket"]  # Cross-shopping opportunities
+    optimal_num_cross_shopping_businesses_per_category: int = 3  # Ideal number of cross-shopping businesses per category
     competition_categories: List[str] = ["pharmacy"]
     max_competition_threshold_per_category: int = 1  # add key for number of competition beyond which the score will decrease
     evaluation_metrics: EvaluationMetrics = EvaluationMetrics()
@@ -350,12 +352,12 @@ class Reqsmartreport(UserId):
             )
         return v
 
-    @field_validator('complimentary_categories', 'competition_categories')
+    @field_validator('complementary_categories', 'cross_shopping_categories', 'competition_categories')
     @classmethod
     def validate_category_lists(cls, v):
         """
         Validate that all categories in the list exist in the POI list.
-        Only validates complimentary_categories and competition_categories.
+        Validates complementary_categories, cross_shopping_categories, and competition_categories.
         Uses ALL_POI_CATEGORIES_LOWER loaded at app startup as the single source of truth.
         """
         from storage_methods import ALL_POI_CATEGORIES_LOWER

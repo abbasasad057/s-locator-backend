@@ -38,7 +38,7 @@ def generate_executive_summary_section(
     total_locations = len(sites)
     average_score = stats["average_score"]
     average_price = stats["average_price"]
-    total_competing_pharmacies = stats["total_competing_pharmacies"]
+    total_competing_pharmacy = stats["total_competing_pharmacy"]
 
     return f"""
     <div class="page">
@@ -73,8 +73,8 @@ def generate_executive_summary_section(
           <div class="metric-label">Average Price</div>
         </div>
         <div class="metric-card">
-          <div class="metric-value">{total_competing_pharmacies}</div>
-          <div class="metric-label">Competing Pharmacies</div>
+          <div class="metric-value">{total_competing_pharmacy}</div>
+          <div class="metric-label">Competing pharmacy</div>
         </div>
       </div>
 
@@ -103,11 +103,11 @@ def generate_executive_summary_section(
           </div>
           <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
             <strong>🏪 Business Ecosystem:</strong>
-            <span style="color: {best_site['business_color']}; font-weight: bold;">
-              {best_site['business_icon']}
+            <span style="color: {best_site['cross_shopping_color']}; font-weight: bold;">
+              {best_site['cross_shopping_icon']}
             </span><br />
             {best_site["raw_scores"]["complementary"]}s<br />
-            <small style="color: #ecf0f1;">{best_site["business_description"]}</small>
+            <small style="color: #ecf0f1;">{best_site["cross_shopping_description"]}</small>
           </div>
           <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
             <strong>👥 Demographics:</strong>
@@ -127,11 +127,11 @@ def generate_executive_summary_section(
           </div>
           <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
             <strong>🏥 Healthcare Environment:</strong>
-            <span style="color: {best_site['healthcare_color']}; font-weight: bold;">
-              {best_site['healthcare_icon']}
+            <span style="color: {best_site['complementary_color']}; font-weight: bold;">
+              {best_site['complementary_icon']}
             </span><br />
-            {best_site["raw_scores"]["healthcare"]}s<br />
-            <small style="color: #ecf0f1;">{best_site["healthcare_description"]}</small>
+            {best_site["raw_scores"]["complementary"]}s<br />
+            <small style="color: #ecf0f1;">{best_site["complementary_description"]}</small>
           </div>
         </div>
       </div>
@@ -206,7 +206,7 @@ def generate_methodology_and_analysis_section(
               <ul>
                 <li>Entrepreneurs often start by driving around the city or browsing real estate websites for available spaces.</li>
                 <li>Our analysis goes beyond availability, evaluating if the site is in a high-traffic area where cars slow down, increasing visibility for your signage.</li>
-                <li>Traffic flow is assessed for ease of access and parking, which is essential for both cafes and pharmacies.</li>
+                <li>Traffic flow is assessed for ease of access and parking, which is essential for both cafes and pharmacy.</li>
                 <li>Sites with little or fast-moving traffic are deprioritized, as they are less likely to attract walk-ins or impulse visits.</li>
               </ul>
             </div>
@@ -241,7 +241,7 @@ def generate_methodology_and_analysis_section(
               <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
               <ul>
                 <li>Assess the competitive landscape after narrowing down your options.</li>
-                <li>Pharmacies: avoid areas saturated with competitors; seek locations with unmet demand.</li>
+                <li>pharmacy: avoid areas saturated with competitors; seek locations with unmet demand.</li>
                 <li>Cafes: proximity to other food and beverage outlets can be a risk or benefit, depending on foot traffic and customer preferences.</li>
                 <li>Analysis quantifies these factors, helping you avoid oversaturated markets and identify areas with opportunity.</li>
               </ul>
@@ -257,7 +257,7 @@ def generate_methodology_and_analysis_section(
               </ul>
               <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
               <ul>
-                <li>Pharmacies and health-focused cafes benefit from proximity to hospitals, clinics, or rehabilitation centers.</li>
+                <li>pharmacy and health-focused cafes benefit from proximity to hospitals, clinics, or rehabilitation centers.</li>
                 <li>Increases customer flow from patients, healthcare workers, and visitors.</li>
                 <li>Supports specialized offerings, such as accessibility for people with disabilities.</li>
                 <li>Cafes near hospitals may attract visitors seeking a comfortable place to rest or recover.</li>
@@ -277,7 +277,7 @@ def generate_methodology_and_analysis_section(
               <ul>
                 <li>Complementary businesses enhance your site's attractiveness and customer base by creating synergies and increasing convenience for customers.</li>
                 <li>Luxury cafes: proximity to high-end brands and malls increases prestige and draws the right clientele.</li>
-                <li>Pharmacies and everyday cafes: being near offices, schools, malls, and hospitals ensures steady foot traffic and convenience for customers.</li>
+                <li>pharmacy and everyday cafes: being near offices, schools, malls, and hospitals ensures steady foot traffic and convenience for customers.</li>
                 <li>This analysis identifies these synergies, helping you select locations that benefit from existing business ecosystems and maximize your visibility and customer base.</li>
                 <li>Unlike demographics, this score is based on the presence and diversity of nearby businesses, not the characteristics of the population.</li>
               </ul>

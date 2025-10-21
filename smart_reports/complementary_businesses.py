@@ -1,14 +1,30 @@
 # fetchers/complementary_businesses.py
-from smart_reports.healthcare_system import process_category_data
 from utils.geo_std_utils import calculate_distance_point
 from shapely.geometry import Point
 
 
-def process_category_data(
-    area_polygon: dict, lat: float, lng: float, typ, category_data
+def get_places_within_driving_distance(
+    area_polygon: dict, 
+    lat: float, 
+    lng: float, 
+    typ: str, 
+    category_data: list,
+    radius_meters: int
 ):
     """
     Extract places of a given category inside the polygon and compute their driving distance.
+    Only includes places within the specified radius.
+    
+    Args:
+        area_polygon: Polygon to check if points are inside
+        lat: Center latitude
+        lng: Center longitude
+        typ: Category type name
+        category_data: List of features for this category
+        radius_meters: Maximum driving distance in meters
+    
+    Returns:
+        Dictionary with nearby places within the radius
     """
     results = {f"nearby_{typ}": []}
     for feature in category_data:
@@ -16,104 +32,127 @@ def process_category_data(
         if len(coords) != 2:
             continue
 
-        place_lng, place_lat = (
-            coords[0],
-            coords[1],
-        )  # GeoJSON = [place_lng, place_lat]
+        place_lng, place_lat = coords[0], coords[1]  # GeoJSON = [lng, lat]
 
         # Check if point is inside polygon
         point = Point(place_lng, place_lat)
         if area_polygon.contains(point):
             # Calculate distance
             dist_data = calculate_distance_point(lat, lng, place_lat, place_lng)
-
-            results[f"nearby_{typ}"].append(
-                {
-                    "name": feature.get("properties", {}).get("name", ""),
-                    "coordinates": [place_lng, place_lat],
-                    "driving_distance_meters": dist_data["driving_distance_meters"],
-                }
-            )
+            driving_distance = dist_data["driving_distance_meters"]
+            
+            # Only include if within radius
+            if driving_distance <= radius_meters:
+                results[f"nearby_{typ}"].append(
+                    {
+                        "name": feature.get("properties", {}).get("name", ""),
+                        "coordinates": [place_lng, place_lat],
+                        "driving_distance_meters": driving_distance,
+                    }
+                )
 
     return results
 
 
-async def get_nearby_other_bsusiness_data(
+async def get_all_nearby_businesses(
     area_polygon: dict,
     lat: float,
     lng: float,
-    grocery_store_data,
-    supermarket_data,
-    restaurant_data,
-    bank_data,
-    atm_data,
+    category_data: dict,
+    radius_meters: int,
+    potential_business_type: str,
+    total_population: float = None,
+    competition_categories: list = None,
+    complementary_categories: list = None,
+    cross_shopping_categories: list = None,
 ):
-    def top_n_closest(category_results, key, n=5):
-        items = category_results.get(key, [])
-        items_sorted = sorted(items, key=lambda x: x["est_distance_meters"])
-        return items_sorted[:n]
-
-    categories = ["grocery_store", "supermarket", "restaurant", "atm", "bank"]
-
-    input_map = {
-        "grocery_store": grocery_store_data,
-        "supermarket": supermarket_data,
-        "restaurant": restaurant_data,
-        "atm": atm_data,
-        "bank": bank_data,
-    }
-
-    amenities = {}
-    num_of_businesses_around = 0
-    for category in categories:
-        data = input_map.get(category, {})
-        key = f"nearby_{category}"
-        # Keep the same key name used previously for amenities: 'est_distance_meters'
-        results = process_category_data(
-            area_polygon, lat, lng, typ=category, category_data=data
+    """
+    Dynamically process all categories from category_data and return nearby businesses
+    within the specified radius.
+    
+    Args:
+        area_polygon: Polygon to check if points are inside
+        lat: Center latitude
+        lng: Center longitude
+        category_data: Dictionary mapping category names to their data lists
+        radius_meters: Maximum driving distance in meters
+        potential_business_type: The main business type being analyzed (e.g., "pharmacy")
+        total_population: Total population in the area (optional, for per-10k calculations)
+        competition_categories: List of competition category names
+        complementary_categories: List of complementary category names
+        cross_shopping_categories: List of cross-shopping category names
+    
+    Returns:
+        Dictionary containing:
+        - num_of_{category}: Count for each category nearby
+        - nearby_{category}: List of nearby places for each category
+        - {category}_per_10k_population: Count per 10k population for each category
+        - closest_{category}: The closest place of this category (dict with name, coordinates, distance)
+        - closest_{category}_distance: Distance in meters to the closest place of this category
+        - num_of_competition: Total count of all competition businesses
+        - num_of_complementary: Total count of all complementary businesses
+        - num_of_cross_shopping: Total count of all cross-shopping businesses
+    """
+    results = {}
+    
+    # Initialize aggregate counters
+    num_of_competition = 0
+    num_of_complementary = 0
+    num_of_cross_shopping = 0
+    
+    for category, data in category_data.items():
+        if not data:  # Skip empty categories
+            continue
+            
+        category_results = get_places_within_driving_distance(
+            area_polygon, lat, lng, typ=category, category_data=data, radius_meters=radius_meters
         )
-        num_of_businesses_around += len(results[key])
-        results[key] = top_n_closest(results, key, 5)
-        amenities.update(results)
+        
+        nearby_key = f"nearby_{category}"
+        nearby_items = category_results.get(nearby_key, [])
+        
+        # Store the nearby items
+        results[nearby_key] = nearby_items
+        
+        # Store the count for this category
+        category_count = len(nearby_items)
+        results[f"num_of_{category}"] = category_count
+        
+        # Accumulate into aggregate counters
+        if competition_categories and category in competition_categories:
+            num_of_competition += category_count
+        if complementary_categories and category in complementary_categories:
+            num_of_complementary += category_count
+        if cross_shopping_categories and category in cross_shopping_categories:
+            num_of_cross_shopping += category_count
+        
+        # Calculate per 10k population for this category
+        if total_population and total_population > 0:
+            per_10k = category_count / (total_population / 10000)
+        else:
+            per_10k = 0
+        
+        results[f"{category}_per_10k_population"] = per_10k
+        
+        # Find the closest place for this category
+        if nearby_items:
+            closest_place = min(
+                nearby_items, 
+                key=lambda x: x.get("driving_distance_meters", float('inf'))
+            )
+            results[f"closest_{category}"] = closest_place
+            results[f"closest_{category}_distance"] = closest_place.get("driving_distance_meters", float('inf'))
+        else:
+            results[f"closest_{category}"] = None
+            results[f"closest_{category}_distance"] = float('inf')
+    
+    # Add aggregate counts to results
+    results["num_of_competition"] = num_of_competition
+    results["num_of_complementary"] = num_of_complementary
+    results["num_of_cross_shopping"] = num_of_cross_shopping
+    
+    return results
 
-    return {"num_of_businesses_around": num_of_businesses_around, **amenities}
 
 
-async def get_healthcare_data(
-    area_polygon: dict,
-    lat: float,
-    lng: float,
-    hospital_data,
-    dentist_data,
-    pharmacies_data,
-):
-    """
-    Collect healthcare data (hospitals, dentists, pharmacies), count them, and return top closest results.
-    """
-    types = ["hospital", "dentist"]
-    hospitals = process_category_data(area_polygon, lat, lng, types[0], hospital_data)
-    dentists = process_category_data(area_polygon, lat, lng, types[1], dentist_data)
-    pharmacies = process_category_data(
-        area_polygon, lat, lng, typ="pharmacy", category_data=pharmacies_data
-    )
-    num_pharmacies = len(pharmacies.get("nearby_pharmacy", []))
-    num_hospitals = len(hospitals.get("nearby_hospital", []))
-    num_dentists = len(dentists.get("nearby_dentist", []))
 
-    def top_n_closest(category_results, key, n=5):
-        items = category_results.get(key, [])
-        items_sorted = sorted(items, key=lambda x: x["driving_distance_meters"])
-        return items_sorted[:n]
-
-    hospitals["nearby_hospital"] = top_n_closest(hospitals, "nearby_hospital", 5)
-    dentists["nearby_dentist"] = top_n_closest(dentists, "nearby_dentist", 5)
-    pharmacies["nearby_pharmacy"] = top_n_closest(pharmacies, "nearby_pharmacy", 5)
-
-    return {
-        "num_of_pharmacies": num_pharmacies,
-        **pharmacies,
-        "num_of_hospitals": num_hospitals,
-        "num_of_dentists": num_dentists,
-        **hospitals,
-        **dentists,
-    }

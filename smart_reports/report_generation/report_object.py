@@ -28,7 +28,7 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
         }
 
     # Business Environment
-    nearby_businesses = site["num_of_businesses_around"]
+    nearby_businesses = site["num_of_cross_shopping"]
     if nearby_businesses > 20:
         bus_status = (
             "Strong ecosystem — complementary businesses support customer flow."
@@ -38,7 +38,9 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
         bus_status = "Moderate ecosystem — some opportunities exist, but growth potential remains."
         ecosystem_level = "moderate"
     else:
-        bus_status = "Weak ecosystem — limited complementary activity may reduce visibility."
+        bus_status = (
+            "Weak ecosystem — limited complementary activity may reduce visibility."
+        )
         ecosystem_level = "weak"
 
     insights["business_environment"] = {
@@ -55,12 +57,12 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
             age_status = "Strong alignment — high share of population above 35, consistent with core demand segment."
             alignment_level = "strong"
         elif age_above_35 >= 25:
-            age_status = (
-                "Partial alignment — balanced age structure with moderate fit."
-            )
+            age_status = "Partial alignment — balanced age structure with moderate fit."
             alignment_level = "partial"
         else:
-            age_status = "Weak alignment — younger population may reduce pharmacy demand."
+            age_status = (
+                "Weak alignment — younger population may reduce pharmacy demand."
+            )
             alignment_level = "weak"
 
         insights["demographics_match"] = {
@@ -71,7 +73,7 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
         }
 
     # Competitive Position
-    pharm_per_10k = site["pharmacies_per_10k_population"]
+    pharm_per_10k = site["pharmacy_per_10k_population"]
     if pharm_per_10k is not None:
         if pharm_per_10k > 8:
             market_status = "Saturated market - Differentiation is essential to compete effectively."
@@ -86,26 +88,26 @@ def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
             market_level = "underserved"
 
         insights["competitive_position"] = {
-            "pharmacies_per_10k_population": round(pharm_per_10k, 1),
-            "total_competing_pharmacies": site["num_of_pharmacies"],
+            "pharmacy_per_10k_population": round(pharm_per_10k, 1),
+            "total_competing_pharmacy": site["num_of_pharmacy"],
             "market_status": market_status,
             "market_level": market_level,
         }
-    hospitals = site["num_of_hospitals"]
-    dentists = site["num_of_dentists"]
+    hospitals = site["num_of_hospital"]
+    dentists = site["num_of_dentist"]
 
     if hospitals + dentists > 10:
-        health_status = "✅ Strong healthcare hub — high concentration of facilities ensures steady demand."
+        complementary_status = "✅ Strong complementary hub — high concentration of facilities ensures steady demand."
     elif hospitals + dentists >= 5:
-        health_status = "⚠️ Moderate healthcare presence — demand is supported but with limited spillover."
+        complementary_status = "⚠️ Moderate complementary presence — demand is supported but with limited spillover."
     else:
-        health_status = "❌ Weak healthcare presence — fewer facilities may reduce referral opportunities."
+        complementary_status = "❌ Weak complementary presence — fewer facilities may reduce referral opportunities."
 
-    insights["healthcare_environment"] = {
+    insights["complementary_environment"] = {
         "hospitals_around": hospitals,
         "dentists_around": dentists,
-        "healthcare_places": hospitals + dentists,
-        "healthcare_market_status": health_status,
+        "complementary_places": hospitals + dentists,
+        "complementary_market_status": complementary_status,
     }
     return insights
 
@@ -120,11 +122,10 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
         f"{best_site['display_name']} emerges as the clear market leader with exceptional potential scoring {best_site['total_score']} points."
     )
 
-
     # Market dynamics
-    competition_score = best_site["raw_scores"]['competition']
-    total_competitors = best_site["num_of_pharmacies"]
-    
+    competition_score = best_site["raw_scores"]["competition"]
+    total_competitors = best_site["num_of_competition"]
+
     # For competition, higher score means less competition (better for business)
     if competition_score >= 75:
         market_status = "Emerging market with minimal competition"
@@ -133,7 +134,9 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
         market_status = "Moderately competitive market with room for growth"
         market_level = "competitive"
     else:
-        market_status = "Highly saturated market requires strong differentiation strategy"
+        market_status = (
+            "Highly saturated market requires strong differentiation strategy"
+        )
         market_level = "saturated"
 
     # Market color and icon logic (for market competition, emerging is good)
@@ -149,15 +152,14 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
 
     best_site["market_category"] = "Market Dynamics"
     best_site["market_description"] = (
-        f"{market_status} scoring {competition_score} points with {total_competitors} total competing pharmacies."
+        f"{market_status} scoring {competition_score} points with {total_competitors} total competing pharmacy."
     )
     best_site["market_level"] = market_level
     best_site["market_color"] = market_color
     best_site["market_icon"] = market_icon
 
-
     # Traffic advantage
-    traffic_score = best_site["raw_scores"]['traffic']
+    traffic_score = best_site["raw_scores"]["traffic"]
     if traffic_score >= 75:
         traffic_status = "Excellent accessibility with optimal traffic flow"
         traffic_level = "excellent"
@@ -182,37 +184,45 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
     best_site["traffic_color"] = traffic_color
     best_site["traffic_icon"] = traffic_icon
 
-    # Business ecosystem
-    business_score = best_site["raw_scores"]['complementary']
-    num_businesses = best_site['num_of_businesses_around']
-    if business_score >= 75:
-        business_status = "Thriving commercial hub with exceptional foot traffic potential"
-        business_level = "excellent"
-        business_color = "#2ecc71"
-        business_icon = "🟢 Excellent"
-    elif business_score >= 50:
-        business_status = "Active business district with good cross-selling opportunities"
-        business_level = "good"
-        business_color = "#f39c12"
-        business_icon = "🟡 Good"
+    # Cross-shopping ecosystem
+    cross_shopping_score = best_site["raw_scores"]["cross_shopping"]
+    num_businesses = best_site["num_of_cross_shopping"]
+    if cross_shopping_score >= 75:
+        cross_shopping_status = (
+            "Thriving commercial hub with exceptional foot traffic potential"
+        )
+        cross_shopping_level = "excellent"
+        cross_shopping_color = "#2ecc71"
+        cross_shopping_icon = "🟢 Excellent"
+    elif cross_shopping_score >= 50:
+        cross_shopping_status = (
+            "Active business district with good cross-selling opportunities"
+        )
+        cross_shopping_level = "good"
+        cross_shopping_color = "#f39c12"
+        cross_shopping_icon = "🟡 Good"
     else:
-        business_status = "Moderate business presence with basic commercial activity"
-        business_level = "average"
-        business_color = "#e74c3c"
-        business_icon = "🔴 Average"
+        cross_shopping_status = (
+            "Moderate business presence with basic commercial activity"
+        )
+        cross_shopping_level = "average"
+        cross_shopping_color = "#e74c3c"
+        cross_shopping_icon = "🔴 Average"
 
-    best_site["business_category"] = "Business Ecosystem"
-    best_site["business_description"] = (
-        f"{business_status} scoring {business_score} points with {num_businesses} nearby complementary businesses."
+    best_site["cross_shopping_category"] = "Cross-Shopping Ecosystem"
+    best_site["cross_shopping_description"] = (
+        f"{cross_shopping_status} scoring {cross_shopping_score} points with {num_businesses} nearby cross-shopping businesses."
     )
-    best_site["business_level"] = business_level
-    best_site["business_color"] = business_color
-    best_site["business_icon"] = business_icon
+    best_site["cross_shopping_level"] = cross_shopping_level
+    best_site["cross_shopping_color"] = cross_shopping_color
+    best_site["cross_shopping_icon"] = cross_shopping_icon
 
     # Demographic alignment
-    demographics_score = best_site["raw_scores"]['demographics']
+    demographics_score = best_site["raw_scores"]["demographics"]
     if demographics_score >= 75:
-        demographics_status = "Exceptional demographic match with target customer profile"
+        demographics_status = (
+            "Exceptional demographic match with target customer profile"
+        )
         demographics_level = "excellent"
         demographics_color = "#2ecc71"
         demographics_icon = "🟢 Excellent"
@@ -235,42 +245,40 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
     best_site["demographics_color"] = demographics_color
     best_site["demographics_icon"] = demographics_icon
 
-    # Healthcare environment
-    healthcare_score = best_site["raw_scores"]['healthcare']
-    num_hospitals = best_site['num_of_hospitals']
-    num_dentists = best_site['num_of_dentists']
-    healthcare_facilities = num_hospitals + num_dentists
-    
-    if healthcare_score >= 75:
-        healthcare_status = "Prime healthcare hub with strong referral network"
-        healthcare_level = "excellent"
-        healthcare_color = "#2ecc71"
-        healthcare_icon = "🟢 Excellent"
-    elif healthcare_score >= 50:
-        healthcare_status = "Active medical district with good patient flow"
-        healthcare_level = "good"
-        healthcare_color = "#f39c12"
-        healthcare_icon = "🟡 Good"
+    # Complementary environment
+    complementary_score = best_site["raw_scores"]["complementary"]
+    num_hospitals = best_site["num_of_hospital"]
+    num_dentists = best_site["num_of_dentist"]
+    complementary_facilities = best_site["num_of_complementary"]
+
+    if complementary_score >= 75:
+        complementary_status = "Prime complementary hub with strong referral network"
+        complementary_level = "excellent"
+        complementary_color = "#2ecc71"
+        complementary_icon = "🟢 Excellent"
+    elif complementary_score >= 50:
+        complementary_status = "Active medical district with good patient flow"
+        complementary_level = "good"
+        complementary_color = "#f39c12"
+        complementary_icon = "🟡 Good"
     else:
-        healthcare_status = "Basic healthcare presence with limited medical synergy"
-        healthcare_level = "average"
-        healthcare_color = "#e74c3c"
-        healthcare_icon = "🔴 Average"
+        complementary_status = (
+            "Basic complementary presence with limited medical synergy"
+        )
+        complementary_level = "average"
+        complementary_color = "#e74c3c"
+        complementary_icon = "🔴 Average"
 
-    best_site["healthcare_category"] = "Healthcare Environment"
-    best_site["healthcare_description"] = (
-        f"{healthcare_status} scoring {healthcare_score} points with {healthcare_facilities} nearby medical facilities ({num_hospitals} hospitals, {num_dentists} dental clinics)."
+    best_site["complementary_category"] = "Complementary Environment"
+    best_site["complementary_description"] = (
+        f"{complementary_status} scoring {complementary_score} points with {complementary_facilities} nearby medical facilities ({num_hospitals} hospitals, {num_dentists} dental clinics)."
     )
-    best_site["healthcare_level"] = healthcare_level
-    best_site["healthcare_color"] = healthcare_color
-    best_site["healthcare_icon"] = healthcare_icon
+    best_site["complementary_level"] = complementary_level
+    best_site["complementary_color"] = complementary_color
+    best_site["complementary_icon"] = complementary_icon
 
 
-
-
-def generate_rankings_dict(
-    sites: List[Dict]
-) -> List[Dict[str, Any]]:
+def generate_rankings_dict(sites: List[Dict]) -> List[Dict[str, Any]]:
     """Generate rankings as structured data."""
 
     rankings = []
@@ -278,14 +286,10 @@ def generate_rankings_dict(
         # Convert all scores to 100 scale for display
         total_score_100 = (site["total_score"] / MAX_TOTAL) * 100
         traffic_100 = site["weighted_scores"]["traffic"]
-        demographics_100 = site["weighted_scores"][
-            "demographics"
-        ]
+        demographics_100 = site["weighted_scores"]["demographics"]
         competitive_100 = site["weighted_scores"]["competition"]
-        healthcare_100 = site["weighted_scores"]["healthcare"]
-        complementary_100 = site["weighted_scores"][
-            "complementary"
-        ]
+        complementary_100 = site["weighted_scores"]["complementary"]
+        cross_shopping_100 = site["weighted_scores"]["cross_shopping"]
 
         rankings.append(
             {
@@ -293,7 +297,7 @@ def generate_rankings_dict(
                 "traffic_score": round(traffic_100, 1),
                 "demographics_score": round(demographics_100, 1),
                 "competition_score": round(competitive_100, 1),
-                "healthcare_ecosystem_score": round(healthcare_100, 1),
+                "complementary_ecosystem_score": round(complementary_100, 1),
             }
         )
 
@@ -301,15 +305,13 @@ def generate_rankings_dict(
             {
                 "rank": site["rank"],
                 "display_name": site["display_name"],
-                "price": (
-                    site["price"] if site["price"] else None
-                ),
+                "price": (site["price"] if site["price"] else None),
                 "total_score": round(total_score_100, 1),
                 "traffic_score": round(traffic_100, 1),
                 "demographics_score": round(demographics_100, 1),
                 "competition_score": round(competitive_100, 1),
-                "healthcare_ecosystem_score": round(healthcare_100, 1),
-                "complementary_businesses_score": round(complementary_100, 1),
+                "complementary_ecosystem_score": round(complementary_100, 1),
+                "cross_shopping_businesses_score": round(cross_shopping_100, 1),
                 "url": site["url"],
             }
         )
@@ -325,15 +327,15 @@ def compare_values(site, current_site):
             "traffic_score_improvement": None,
             "demographics_score_improvement": None,
             "competition_score_improvement": None,
-            "healthcare_ecosystem_score_improvement": None,
-            "complementary_businesses_score_improvement": None,
+            "complementary_ecosystem_score_improvement": None,
+            "cross_shopping_businesses_score_improvement": None,
         }
-    
+
     # Total score comparison
     site_score = site["total_score"]
     current_score = current_site["total_score"]
     diff_pct = abs(site_score - current_score)
-    
+
     if site_score > current_score:
         comparison_type = "improvement"
     elif site_score < current_score:
@@ -349,26 +351,26 @@ def compare_values(site, current_site):
     traffic_site = site_raw_scores["traffic"]
     traffic_current = current_raw_scores["traffic"]
     traffic_diff = abs(traffic_site - traffic_current)
-    
+
     # Demographics score comparison
     demo_site = site_raw_scores["demographics"]
     demo_current = current_raw_scores["demographics"]
     demo_diff = abs(demo_site - demo_current)
-    
+
     # Competition score comparison
     comp_site = site_raw_scores["competition"]
     comp_current = current_raw_scores["competition"]
     comp_diff = abs(comp_site - comp_current)
-    
-    # Healthcare ecosystem score comparison
-    health_site = site_raw_scores["healthcare"]
-    health_current = current_raw_scores["healthcare"]
-    health_diff = abs(health_site - health_current)
-    
-    # Complementary businesses score comparison
+
+    # Complementary ecosystem score comparison
     complement_site = site_raw_scores["complementary"]
     complement_current = current_raw_scores["complementary"]
     complement_diff = abs(complement_site - complement_current)
+
+    # Cross-shopping businesses score comparison
+    cross_shopping_site = site_raw_scores["cross_shopping"]
+    cross_shopping_current = current_raw_scores["cross_shopping"]
+    cross_shopping_diff = abs(cross_shopping_site - cross_shopping_current)
 
     return {
         "percentage_difference": int(diff_pct),
@@ -376,8 +378,8 @@ def compare_values(site, current_site):
         "traffic_score_improvement": int(traffic_diff),
         "demographics_score_improvement": int(demo_diff),
         "competition_score_improvement": int(comp_diff),
-        "healthcare_ecosystem_score_improvement": int(health_diff),
-        "complementary_businesses_score_improvement": int(complement_diff),
+        "complementary_ecosystem_score_improvement": int(complement_diff),
+        "cross_shopping_businesses_score_improvement": int(cross_shopping_diff),
     }
 
 
@@ -412,44 +414,38 @@ def generate_rankings_dict_with_current_comparison(
         traffic = site["weighted_scores"]["traffic"]
         demographics = site["weighted_scores"]["demographics"]
         competition = site["weighted_scores"]["competition"]
-        healthcare = site["weighted_scores"]["healthcare"]
         complementary = site["weighted_scores"]["complementary"]
+        cross_shopping = site["weighted_scores"]["cross_shopping"]
 
         # Current location normalized scores
         curr_final = (current["total_score"] / MAX_TOTAL) * 100
         curr_traffic = current["weighted_scores"]["traffic"]
         curr_demo = current["weighted_scores"]["demographics"]
         curr_comp = current["weighted_scores"]["competition"]
-        curr_health = current["weighted_scores"]["healthcare"]
-        curr_complement = current["weighted_scores"][
-            "complementary"
-        ]
+        curr_complement = current["weighted_scores"]["complementary"]
+        curr_cross_shopping = current["weighted_scores"]["cross_shopping"]
 
         # Generate comparison data for each metric
         final_comparison = compare_values(total_score, curr_final)
         traffic_comparison = compare_values(traffic, curr_traffic)
         demographics_comparison = compare_values(demographics, curr_demo)
         competition_comparison = compare_values(competition, curr_comp)
-        healthcare_comparison = compare_values(healthcare, curr_health)
-        complementary_comparison = compare_values(
-            complementary, curr_complement
-        )
+        complementary_comparison = compare_values(complementary, curr_complement)
+        cross_shopping_comparison = compare_values(cross_shopping, curr_cross_shopping)
 
         rankings.append(
             {
                 "rank": site["rank"],
                 "display_name": site["display_name"],
-                "price": (
-                    site["price"] if site["price"] else None
-                ),
+                "price": (site["price"] if site["price"] else None),
                 "total_score_comparison": (
                     final_comparison if final_comparison else {}
                 ),
                 "traffic_score_improvement": traffic_comparison,
                 "demographics_score_improvement": demographics_comparison,
                 "competition_score_improvement": competition_comparison,
-                "healthcare_ecosystem_score_improvement": healthcare_comparison,
-                "complementary_businesses_score_improvement": complementary_comparison,
+                "complementary_ecosystem_score_improvement": complementary_comparison,
+                "cross_shopping_businesses_score_improvement": cross_shopping_comparison,
                 "url": site["url"],
             }
         )

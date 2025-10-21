@@ -24,9 +24,9 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
         # Traffic data - using available traffic_score instead of nested structure
         current_speed = site["raw_scores"]["traffic"] # Using traffic_score as proxy for speed data
         current_speed_display = f"{round(current_speed, 1)}"
-        
-        # Business environment - using num_of_businesses_around
-        nearby_businesses = site['num_of_businesses_around']
+
+        # Business environment - using num_of_cross_shopping
+        nearby_businesses = site['num_of_cross_shopping']
         nearby_businesses_display = str(nearby_businesses)
         
         # Demographics - using available demographic fields
@@ -35,9 +35,9 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
         average_income = site['avg_income']
         average_income_display = f"{round(average_income, 2)} SAR"
         
-        # Competition - using num_of_pharmacies
-        total_competing_pharmacies = site['num_of_pharmacies']
-        competing_pharmacies_display = str(total_competing_pharmacies)
+        # Competition - using num_of_pharmacy
+        total_competing_pharmacy = site['num_of_pharmacy']
+        competing_pharmacy_display = str(total_competing_pharmacy)
 
         # Use actual scores from the site data instead of looking for rankings
         traffic_score_value = site["raw_scores"]["traffic"]
@@ -101,7 +101,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
               </div>
               <div class="score-item">
                 <div class="value">{competition_score_display}</div>
-                <div class="label">Competition<br />({competing_pharmacies_display} pharmacies)</div>
+                <div class="label">Competition<br />({competing_pharmacy_display} pharmacy)</div>
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
             </div>
             <div>
               <strong>☕ Competitive Position:</strong><br />
-              <small>{competing_pharmacies_display} pharmacies in area ({round(site['pharmacies_per_10k_population'], 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
+              <small>{competing_pharmacy_display} pharmacy in area ({round(site['pharmacy_per_10k_population'], 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
             </div>
           </div>
         </div>

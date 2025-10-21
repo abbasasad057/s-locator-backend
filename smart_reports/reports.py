@@ -4,6 +4,9 @@ import asyncio
 import logging
 import aiohttp
 from logging_wrapper import apply_decorator_to_module
+from smart_reports.complementary_businesses import get_all_nearby_businesses
+from smart_reports.report_generation.report_config import source_shop_for_rent
+from utils.geo_std_utils import bbox_to_polygon, generate_bbox
 from .report_generation.data_processor import calculate_statistics
 from pathlib import Path
 from smart_reports.report_generation.map_generator import (
@@ -12,10 +15,8 @@ from smart_reports.report_generation.map_generator import (
     create_demographic_heatmap_png,
 )
 from all_types.request_dtypes import Reqsmartreport, ReqFetchDataset
-from utils.geo_std_utils import bbox_to_polygon
 from data_fetcher import fetch_dataset
 from .report_generation.pharmacy_report_final import (
-    generate_all_maps,
     generate_all_charts,
 )
 from utils.utils import create_report_asset_path
@@ -30,16 +31,11 @@ from smart_reports.population import (
     fetch_household_sizes,
     get_demographic_info_for_listings,
 )
-from smart_reports.complementary_businesses import get_healthcare_data
-from smart_reports.complementary_businesses import get_nearby_other_bsusiness_data
 from smart_reports.scoring import (
     score_demographics,
-    score_competitive,
-    score_healthcare_ecosystem,
-    score_complementary_businesses,
+    score_categories,
 )
 from typing import Dict, Any
-from utils.geo_std_utils import generate_bbox
 from utils.utils import DIR_REPORTS
 
 # Import the modular generator
@@ -50,7 +46,6 @@ from typing import Optional
 from .report_generation.report_config import (
     source_current_location,
     source_custom_locations,
-    source_shop_for_rent,
 )
 from app_logger import get_logger
 
@@ -210,14 +205,14 @@ async def fetch_complementary_score(
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                complimentary_score = int(data.get("score"))
+                complementary_score = int(data.get("score"))
             else:
                 logging.warning(
                     f"Complementary API returned status {response.status}, using default score"
                 )
-                complimentary_score = 50
+                complementary_score = 50
 
-    return complimentary_score
+    return complementary_score
 
 
 async def fetch_income_score(
@@ -304,12 +299,6 @@ async def fetch_traffic_score(
     return traffic_score
 
 
-def write_html_file(file_path: Path, content: str) -> None:
-    """Write HTML content to file"""
-    with open(file_path, "w", encoding="utf-8") as f:
-        f.write(content)
-
-
 async def score_external_location(all_shops_data, req, single_item=False) -> dict:
     """
     Score external locations using API calls to fetch real scores.
@@ -366,14 +355,14 @@ async def score_external_location(all_shops_data, req, single_item=False) -> dic
                 competition_categories,
                 target_num_per_category,
             ),
-            "healthcare": fetch_complementary_score(
+            "complementary": fetch_complementary_score(
                 lat,
                 lng,
                 radius,
                 ["dental_clinic", "dentist", "doctor", "hospital"],
                 target_num_per_category,
             ),
-            "complementary": fetch_complementary_score(
+            "cross_shopping": fetch_complementary_score(
                 lat,
                 lng,
                 radius,
@@ -390,8 +379,8 @@ async def score_external_location(all_shops_data, req, single_item=False) -> dic
             tasks["traffic"],
             tasks["demographics"],
             tasks["competition"],
-            tasks["healthcare"],
             tasks["complementary"],
+            tasks["cross_shopping"],
             return_exceptions=True,
         )
 
@@ -399,16 +388,16 @@ async def score_external_location(all_shops_data, req, single_item=False) -> dic
         traffic_score = scores[0]
         demographics_score = scores[1]
         competition_score = scores[2]
-        healthcare_score = scores[3]
-        complementary_score = scores[4]
+        complementary_score = scores[3]
+        cross_shopping_score = scores[4]
 
         # Calculate total score with weights
         total_score = (
             traffic_score * req.evaluation_metrics.traffic
             + demographics_score * req.evaluation_metrics.demographics
             + competition_score * req.evaluation_metrics.competition
-            + healthcare_score * req.evaluation_metrics.healthcare
             + complementary_score * req.evaluation_metrics.complementary
+            + cross_shopping_score * req.evaluation_metrics.cross_shopping
         )
 
         results[loc_key] = {
@@ -420,22 +409,29 @@ async def score_external_location(all_shops_data, req, single_item=False) -> dic
                 "demographics": demographics_score
                 * req.evaluation_metrics.demographics,
                 "competition": competition_score * req.evaluation_metrics.competition,
-                "healthcare": healthcare_score * req.evaluation_metrics.healthcare,
                 "complementary": complementary_score
                 * req.evaluation_metrics.complementary,
+                "cross_shopping": cross_shopping_score
+                * req.evaluation_metrics.cross_shopping,
             },
             "raw_scores": {
                 "traffic": int(traffic_score),
                 "demographics": int(demographics_score),
                 "competition": int(competition_score),
-                "healthcare": int(healthcare_score),
                 "complementary": int(complementary_score),
+                "cross_shopping": int(cross_shopping_score),
             },
         }
 
     if single_item:
         results = list(results.values())[0] if results else None
     return results
+
+
+def write_html_file(file_path: Path, content: str) -> None:
+    """Write HTML content to file"""
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(content)
 
 
 def score_shops(all_shops_data, req, single_item=False) -> dict:
@@ -455,16 +451,34 @@ def score_shops(all_shops_data, req, single_item=False) -> dict:
         loc_key = f"{lat},{lng}"
         traffic_score = shop.get("traffic_score")
         demographics_score = score_demographics(shop, req)
-        healthcare_score = score_healthcare_ecosystem(shop)
-        competitive_score = score_competitive(shop)
-        complementary_score = score_complementary_businesses(shop)
+        competitive_score = score_categories(
+            shop,
+            req.competition_categories,
+            req.analysis_radius,
+            closer_is_better=False,
+            per_10k_threshold=req.max_competition_threshold_per_category,
+        )
+        complementary_score = score_categories(
+            shop,
+            req.complementary_categories,
+            req.analysis_radius,
+            True,
+            optimal_count=req.optimal_num_complementary_businesses_per_category,
+        )
+        cross_shopping_score = score_categories(
+            shop,
+            req.cross_shopping_categories,
+            req.analysis_radius,
+            True,
+            optimal_count=req.optimal_num_cross_shopping_businesses_per_category,
+        )
 
         total_score = (
             traffic_score * req.evaluation_metrics.traffic
             + demographics_score * req.evaluation_metrics.demographics
-            + healthcare_score * req.evaluation_metrics.healthcare
             + competitive_score * req.evaluation_metrics.competition
             + complementary_score * req.evaluation_metrics.complementary
+            + cross_shopping_score * req.evaluation_metrics.cross_shopping
         )
 
         results[loc_key] = {
@@ -476,20 +490,96 @@ def score_shops(all_shops_data, req, single_item=False) -> dict:
                 "demographics": demographics_score
                 * req.evaluation_metrics.demographics,
                 "competition": competitive_score * req.evaluation_metrics.competition,
-                "healthcare": healthcare_score * req.evaluation_metrics.healthcare,
                 "complementary": complementary_score
                 * req.evaluation_metrics.complementary,
+                "cross_shopping": cross_shopping_score
+                * req.evaluation_metrics.cross_shopping,
             },
             "raw_scores": {
                 "traffic": int(traffic_score),
                 "demographics": int(demographics_score),
                 "competition": int(competitive_score),
-                "healthcare": int(healthcare_score),
                 "complementary": int(complementary_score),
+                "cross_shopping": int(cross_shopping_score),
             },
         }
 
     return results
+
+
+async def loading_category_dataset(req: ReqFetchDataset):
+    data = await fetch_dataset(req)
+    features = data.get("features", [])
+    return features
+
+
+async def group_criterion_data(
+    lat: float,
+    lng: float,
+    Userid: str,
+    category_data: dict,
+    listing_demographic_info,
+    analysis_radius: int,
+    potential_business_type: str,
+    req: Reqsmartreport,
+    source: str = source_shop_for_rent,
+    place_name: Optional[str] = None,
+    place_price: Optional[float] = None,
+    place_url: Optional[str] = None,
+):
+    """
+    Fetch all relevant criterion data for evaluating a shop location.
+    Combines demographics and all nearby businesses dynamically.
+
+    Args:
+        lat: Latitude of the location
+        lng: Longitude of the location
+        Userid: User ID
+        category_data: Dictionary mapping category names to their data lists.
+                      e.g., {"hospital": [...], "pharmacy": [...], "dentist": [...]}
+        listing_demographic_info: Demographic information for listings
+        analysis_radius: Radius in meters for nearby business search
+        potential_business_type: The main business type being analyzed (e.g., "pharmacy")
+        req: Request object containing category lists for competition, complementary, and cross_shopping
+        source: Source of the location data
+        place_name: Name of the place
+        place_price: Price of the place
+        place_url: URL of the place
+
+    Returns:
+        Dictionary containing all location data including demographics and nearby businesses
+    """
+    info_for_place: dict = listing_demographic_info.get(place_url, {})
+    bbox = generate_bbox(lat, lng)
+    area_polygon = bbox_to_polygon(bbox=bbox)
+
+    demographics = {key: info_for_place.get(key) for key in POPULATION_KEYS}
+    total_population = demographics.get("total_population")
+
+    # Get all nearby businesses dynamically with per-10k calculations
+    nearby_businesses = await get_all_nearby_businesses(
+        area_polygon,
+        lat,
+        lng,
+        category_data,
+        analysis_radius,
+        potential_business_type,
+        total_population,
+        req.competition_categories,
+        req.complementary_categories,
+        req.cross_shopping_categories,
+    )
+
+    return {
+        "source": source,
+        "display_name": place_name,
+        "lat": lat,
+        "lng": lng,
+        "price": place_price,
+        "url": place_url,
+        **info_for_place,
+        **nearby_businesses,
+    }
 
 
 async def get_and_score_listings(req: Reqsmartreport) -> dict:
@@ -509,44 +599,31 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
     categories = list(
         set(
             req.competition_categories
-            + req.complimentary_categories
-            + req.potential_business_type
+            + req.complementary_categories
+            + req.cross_shopping_categories
+            + [req.potential_business_type]
         )
     )
-    # categories = [
-    #     "pharmacy",
-    #     "hospital",
-    #     "dentist",
-    #     "grocery_store",
-    #     "supermarket",
-    #     "restaurant",
-    #     "atm",
-    #     "bank",
-    # ]
-
-    # Create independent ReqFetchDataset objects per category.
-    reqs = []
-    for category in categories:
-        reqs.append(req_dataset.model_copy(update={"boolean_query": category}))
 
     # Bounded concurrency to avoid overwhelming DB or upstream APIs. Tune this.
     concurrency_limit = int(MAX_POOL // 2)  # Half of DB pool for fetching datasets
     sem = asyncio.Semaphore(concurrency_limit)
 
-    async def _bounded_load(rq: ReqFetchDataset):
+    async def _bounded_load(category: str):
         async with sem:
+            rq = req_dataset.model_copy(update={"boolean_query": category})
             return await loading_category_dataset(rq)
 
-    (
-        pharmacies,
-        hospitals,
-        dentists,
-        grocery_store,
-        supermarket,
-        restaurant,
-        atm,
-        bank,
-    ) = await asyncio.gather(*(_bounded_load(r) for r in reqs))
+    # Load all categories in parallel and store in a dictionary
+    category_tasks = {category: _bounded_load(category) for category in categories}
+    category_data = {}
+
+    # Gather all results
+    results = await asyncio.gather(*category_tasks.values(), return_exceptions=True)
+
+    # Map results back to category names
+    for category, result in zip(category_tasks.keys(), results):
+        category_data[category] = result
 
     # get all demograhics + household + income for those shops_for_rent
     # isolate list of listing_ids from shops_for_rent
@@ -568,14 +645,10 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
             lat=lat,
             lng=lng,
             Userid=req.user_id,
-            hospital=hospitals,
-            pharmacies=pharmacies,
-            dentists=dentists,
-            grocery_store=grocery_store,
-            supermarket=supermarket,
-            restaurant=restaurant,
-            atm=atm,
-            bank=bank,
+            category_data=category_data,
+            analysis_radius=req.analysis_radius,
+            potential_business_type=req.potential_business_type,
+            req=req,
             place_name=extracted_part,
             place_price=price,
             place_url=place_url,
@@ -592,14 +665,10 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
                     lat=coord.lat,
                     lng=coord.lng,
                     Userid=req.user_id,
-                    hospital=hospitals,
-                    pharmacies=pharmacies,
-                    dentists=dentists,
-                    grocery_store=grocery_store,
-                    supermarket=supermarket,
-                    restaurant=restaurant,
-                    atm=atm,
-                    bank=bank,
+                    category_data=category_data,
+                    analysis_radius=req.analysis_radius,
+                    potential_business_type=req.potential_business_type,
+                    req=req,
                     source=source_custom_locations,
                     place_name=f"Num {i} custom location",  # no URL for custom
                     place_price=None,  # no price for custom
@@ -615,14 +684,10 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
                 lat=req.current_location.lat,
                 lng=req.current_location.lng,
                 Userid=req.user_id,
-                hospital=hospitals,
-                pharmacies=pharmacies,
-                dentists=dentists,
-                grocery_store=grocery_store,
-                supermarket=supermarket,
-                restaurant=restaurant,
-                atm=atm,
-                bank=bank,
+                category_data=category_data,
+                analysis_radius=req.analysis_radius,
+                potential_business_type=req.potential_business_type,
+                req=req,
                 source=source_current_location,
                 place_name="Your current location",
                 place_price=None,
@@ -635,7 +700,9 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
     current_site = await score_external_location(current_loc, req, single_item=True)
 
     stats = calculate_statistics(results)
-    stats["total_competing_pharmacies"] = len(pharmacies)
+    stats[f"total_competing_{req.potential_business_type}"] = len(
+        category_data.get(req.potential_business_type, [])
+    )
     list_top_n_sites = sorted(
         results.values(), key=lambda s: s.get("total_score", 0), reverse=True
     )[:10]
@@ -680,7 +747,7 @@ def make_report_text_sections(
         f"This Comprehensive analysis evaluates {len(sites)} pharmacy locations accorss Riyadh "
         "using advanced location intelligence methodologies. Each locations is systematically socred using "
         "our propiertary, wieghted methodolgy considering "
-        "traffic, demographics, competition, healthcare proximity, and complementary businesses."
+        "traffic, demographics, competition, complementary businesses, and cross-shopping opportunities."
     )
 
     return report_text
@@ -690,7 +757,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     """
     Generate a pharmacy site report with multi-criteria scoring.
 
-    Loads datasets, computes scores for traffic, demographics, healthcare,
+    Loads datasets, computes scores for traffic, demographics, complementary,
     competition, and nearby amenities, then returns top-ranked sites.
 
     Args:
@@ -706,27 +773,27 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     debug_path_custom_sites = Path("custom_sites.json")
     debug_path_current_site = Path("current_site.json")
 
-    (
-        sites,
-        stats,
-        list_top_n_sites,
-        best_site,
-        custom_sites,
-        current_site,
-    ) = await get_and_score_listings(req)
+    # (
+    #     sites,
+    #     stats,
+    #     list_top_n_sites,
+    #     best_site,
+    #     custom_sites,
+    #     current_site,
+    # ) = await get_and_score_listings(req)
 
-    with open(debug_path_sites, "w") as f:
-        json.dump(sites, f, indent=4)
-    with open(debug_path_stats, "w") as f:
-        json.dump(stats, f, indent=4)
-    with open(debug_path_list_top_n_sites, "w") as f:
-        json.dump(list_top_n_sites, f, indent=4)
-    with open(debug_path_best_site, "w") as f:
-        json.dump(best_site, f, indent=4)
-    with open(debug_path_custom_sites, "w") as f:
-        json.dump(custom_sites, f, indent=4)
-    with open(debug_path_current_site, "w") as f:
-        json.dump(current_site, f, indent=4)
+    # with open(debug_path_sites, "w") as f:
+    #     json.dump(sites, f, indent=4)
+    # with open(debug_path_stats, "w") as f:
+    #     json.dump(stats, f, indent=4)
+    # with open(debug_path_list_top_n_sites, "w") as f:
+    #     json.dump(list_top_n_sites, f, indent=4)
+    # with open(debug_path_best_site, "w") as f:
+    #     json.dump(best_site, f, indent=4)
+    # with open(debug_path_custom_sites, "w") as f:
+    #     json.dump(custom_sites, f, indent=4)
+    # with open(debug_path_current_site, "w") as f:
+    #     json.dump(current_site, f, indent=4)
 
     # read from json files
     with open(debug_path_sites, "r") as f:
@@ -798,74 +865,6 @@ async def generate_pharmacy_report(req: Reqsmartreport):
     )
 
 
-async def group_criterion_data(
-    lat: float,
-    lng: float,
-    Userid: str,
-    hospital: dict,
-    pharmacies: dict,
-    dentists: dict,
-    grocery_store: dict,
-    supermarket: dict,
-    restaurant: dict,
-    atm: dict,
-    bank: dict,
-    listing_demographic_info,
-    source: str = source_shop_for_rent,
-    place_name: Optional[str] = None,
-    place_price: Optional[float] = None,  # or str, depending on your data
-    place_url: Optional[str] = None,
-):
-    """
-    Fetch all relevant criterion data for evaluating a shop location.
-    Combines traffic, households, demographics, healthcare, and other businesses.
-    """
-    info_for_place: dict = listing_demographic_info.get(place_url, {})
-    bbox = generate_bbox(lat, lng)
-    area_polygon = bbox_to_polygon(bbox=bbox)
-
-    healthcare = await get_healthcare_data(
-        area_polygon, lat, lng, hospital, dentists, pharmacies
-    )
-
-    other_businesses = await get_nearby_other_bsusiness_data(
-        area_polygon,
-        lat,
-        lng,
-        grocery_store_data=grocery_store,
-        supermarket_data=supermarket,
-        restaurant_data=restaurant,
-        bank_data=bank,
-        atm_data=atm,
-    )
-
-    demographics = {key: info_for_place.get(key) for key in POPULATION_KEYS}
-
-    # Calculate pharmacies per 10k population
-    total_population = demographics.get("total_population")
-    if total_population and total_population > 0:
-        pharmacies_per_10k = healthcare.get("num_of_pharmacies") / (
-            total_population / 10000
-        )
-    else:
-        pharmacies_per_10k = 0
-
-    # Add the new key right under num_of_pharmacies
-    healthcare["pharmacies_per_10k_population"] = pharmacies_per_10k
-
-    return {
-        "source": source,
-        "display_name": place_name,
-        "lat": lat,
-        "lng": lng,
-        "price": place_price,
-        "url": place_url,
-        **info_for_place,
-        **healthcare,
-        **other_businesses,
-    }
-
-
 async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
     """
     Generate a comprehensive pharmacy report and return structured data.
@@ -886,7 +885,7 @@ async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
         metrics.traffic
         + metrics.demographics
         + metrics.competition
-        + metrics.healthcare
+        + metrics.cross_shopping
         + metrics.complementary
     )
 
@@ -895,7 +894,7 @@ async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
         metrics.traffic /= 100.0
         metrics.demographics /= 100.0
         metrics.competition /= 100.0
-        metrics.healthcare /= 100.0
+        metrics.cross_shopping /= 100.0
         metrics.complementary /= 100.0
 
     # Generate the processed report data
@@ -927,13 +926,6 @@ async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
     return {
         "html_file_path": html_file_path,
     }
-
-
-async def loading_category_dataset(req: ReqFetchDataset):
-
-    data = await fetch_dataset(req)
-    features = data.get("features", [])
-    return features
 
 
 # Apply the decorator to all functions in this module

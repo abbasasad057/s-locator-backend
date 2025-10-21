@@ -5,7 +5,6 @@ Main generator for pharmacy HTML reports using modular components
 
 import logging
 from typing import Dict, Any
-from smart_reports.html_generator.data_validator import validate_response_data
 from all_types.request_dtypes import Reqsmartreport
 from pathlib import Path
 from all_types.request_dtypes import Reqsmartreport

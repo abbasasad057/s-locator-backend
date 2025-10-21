@@ -24,6 +24,10 @@ COPY pyproject.toml uv.lock ./
 # Install dependencies with uv
 RUN uv sync --frozen
 
+# Copy scoring_algorithms package and install it
+COPY ../scoring_apis_repo/scoring_algorithms /app/scoring_algorithms
+RUN uv pip install -e /app/scoring_algorithms
+
 COPY . /app
 EXPOSE 8000
 

@@ -63,13 +63,13 @@ def generate_rankings_table(list_top_n_sites: List[Dict[str, Any]]) -> str:
             site["competition_score_improvement"],
             site["raw_scores"]["competition"],
         )
-        healthcare_score = _get_display_text_with_icon(
-            site["healthcare_ecosystem_score_improvement"],
-            site["raw_scores"]["healthcare"],
-        )
         complementary_score = _get_display_text_with_icon(
-            site["complementary_businesses_score_improvement"],
+            site["complementary_ecosystem_score_improvement"],
             site["raw_scores"]["complementary"],
+        )
+        cross_shopping_score = _get_display_text_with_icon(
+            site["cross_shopping_businesses_score_improvement"],
+            site["raw_scores"]["cross_shopping"],
         )
 
         # Generate Google Maps URL if coordinates are available
@@ -89,8 +89,8 @@ def generate_rankings_table(list_top_n_sites: List[Dict[str, Any]]) -> str:
         <td>{traffic_score}</td>
         <td>{demographics_score}</td>
         <td>{competition_score}</td>
-        <td>{healthcare_score}</td>
         <td>{complementary_score}</td>
+        <td>{cross_shopping_score}</td>
       </tr>"""
     return table_rows
 
@@ -112,8 +112,8 @@ def generate_current_location_table(site: Dict[str, Any]) -> str:
     traffic_score = f"{site['raw_scores']['traffic']}"
     demographics_score = f"{site['raw_scores']['demographics']}"
     competition_score = f"{site['raw_scores']['competition']}"
-    healthcare_score = f"{site['raw_scores']['healthcare']}"
     complementary_score = f"{site['raw_scores']['complementary']}"
+    cross_shopping_score = f"{site['raw_scores']['cross_shopping']}"
 
     # Format price display
     price_display = site["price"]
@@ -127,8 +127,8 @@ def generate_current_location_table(site: Dict[str, Any]) -> str:
     <td>{traffic_score}</td>
     <td>{demographics_score}</td>
     <td>{competition_score}</td>
-    <td>{healthcare_score}</td>
     <td>{complementary_score}</td>
+    <td>{cross_shopping_score}</td>
   </tr>"""
 
     return f"""
@@ -144,8 +144,8 @@ def generate_current_location_table(site: Dict[str, Any]) -> str:
         <th>Traffic</th>
         <th>Demographics</th>
         <th>Competition</th>
-        <th>Healthcare Environment</th>
-        <th>Complementary Businesses</th>
+        <th>Complementary Environment</th>
+        <th>Cross Shopping Businesses</th>
       </tr>
     </thead>
     <tbody>
@@ -166,8 +166,8 @@ def generate_custom_locations_table(custom_results: Dict[str, Any]) -> str:
         traffic_score = f"{site['raw_scores']['traffic']}"
         demographics_score = f"{site['raw_scores']['demographics']}"
         competition_score = f"{site['raw_scores']['competition']}"
-        healthcare_score = f"{site['raw_scores']['healthcare']}"
         complementary_score = f"{site['raw_scores']['complementary']}"
+        cross_shopping_score = f"{site['raw_scores']['cross_shopping']}"
 
         table_rows += f"""
       <tr>
@@ -178,8 +178,8 @@ def generate_custom_locations_table(custom_results: Dict[str, Any]) -> str:
         <td>{traffic_score}</td>
         <td>{demographics_score}</td>
         <td>{competition_score}</td>
-        <td>{healthcare_score}</td>
         <td>{complementary_score}</td>
+        <td>{cross_shopping_score}</td>
       </tr>"""
 
     return f"""
@@ -195,8 +195,8 @@ def generate_custom_locations_table(custom_results: Dict[str, Any]) -> str:
         <th>Traffic</th>
         <th>Demographics</th>
         <th>Competition</th>
-        <th>Healthcare Environment</th>
-        <th>Complementary Businesses</th>
+        <th>Complementary Environment</th>
+        <th>Cross Shopping Businesses</th>
       </tr>
     </thead>
     <tbody>

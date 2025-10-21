@@ -19,7 +19,7 @@ from all_types.request_dtypes import Reqsmartreport
 
 from utils.utils import create_report_asset_path
 from .chart_generator import (
-    plot_healthcare_vs_competition,
+    plot_complementary_vs_competition,
     plot_score_vs_price,
 )
 from .map_generator import create_static_map_png, create_demographic_heatmap_png
@@ -40,21 +40,15 @@ def generate_all_charts(top_n_sites: list) -> dict:
         "price_vs_score": create_report_asset_path(
             "price_vs_score.png", "image"
         ),
-        "healthcare_competition": create_report_asset_path(
-            "healthcare_competition.png", "image"
+        "complementary_competition": create_report_asset_path(
+            "complementary_competition.png", "image"
         ),
     }
 
     plot_score_vs_price(top_n_sites, outpath=charts["price_vs_score"])
-    plot_healthcare_vs_competition(
-        top_n_sites, outpath=charts["healthcare_competition"]
+    plot_complementary_vs_competition(
+        top_n_sites, outpath=charts["complementary_competition"]
     )
     return charts
 
 
-def generate_all_maps(sites: list, top_n: int) -> tuple:
-    """Generate all required maps and return their file paths."""
-    # Use image directory from config
-
-
-    return map_png, heat_png
