@@ -16,7 +16,7 @@ from interactive_plots import plotter, load_and_create_plots
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from backend_common.common_config import CONF
+
 
 # Initialize the Dash app
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
