@@ -1,118 +1,118 @@
 from typing import List, Dict, Optional, Any
-
+from all_types.request_dtypes import Reqsmartreport
 MAX_TOTAL = 100
 
 
-def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
-    """Generate detailed insights as a dictionary structure."""
-    insights = {}
+# def generate_detailed_insights_dict(site: Dict) -> Dict[str, Any]:
+#     """Generate detailed insights as a dictionary structure."""
+#     insights = {}
 
-    # Traffic Performance
-    traffic_score = site["raw_scores"]["traffic"]
-    if traffic_score is not None:
-        if 20 <= traffic_score <= 30:
-            traffic_status = "Optimal traffic — moderate traffic flow ensures both convenience and visibility."
-            traffic_level = "optimal"
-        elif traffic_score < 20:
-            traffic_status = "Heavy congestion — low traffic speed may reduce accessibility but can increase local visibility."
-            traffic_level = "congested"
-        else:
-            traffic_status = "Light traffic — smooth access but potentially less exposure to passersby."
-            traffic_level = "light"
+#     # Traffic Performance
+#     traffic_score = site["raw_scores"]["traffic"]
+#     if traffic_score is not None:
+#         if 20 <= traffic_score <= 30:
+#             traffic_status = "Optimal traffic — moderate traffic flow ensures both convenience and visibility."
+#             traffic_level = "optimal"
+#         elif traffic_score < 20:
+#             traffic_status = "Heavy congestion — low traffic speed may reduce accessibility but can increase local visibility."
+#             traffic_level = "congested"
+#         else:
+#             traffic_status = "Light traffic — smooth access but potentially less exposure to passersby."
+#             traffic_level = "light"
 
-        insights["traffic_performance"] = {
-            "current_speed_kmh": round(traffic_score, 1),
-            "target_range": "20-30 km/h",
-            "status": traffic_status,
-            "level": traffic_level,
-        }
+#         insights["traffic_performance"] = {
+#             "current_speed_kmh": round(traffic_score, 1),
+#             "target_range": "20-30 km/h",
+#             "status": traffic_status,
+#             "level": traffic_level,
+#         }
 
-    # Business Environment
-    nearby_businesses = site["num_of_cross_shopping"]
-    if nearby_businesses > 20:
-        bus_status = (
-            "Strong ecosystem — complementary businesses support customer flow."
-        )
-        ecosystem_level = "strong"
-    elif nearby_businesses >= 10:
-        bus_status = "Moderate ecosystem — some opportunities exist, but growth potential remains."
-        ecosystem_level = "moderate"
-    else:
-        bus_status = (
-            "Weak ecosystem — limited complementary activity may reduce visibility."
-        )
-        ecosystem_level = "weak"
+#     # Business Environment
+#     nearby_businesses = site["num_of_cross_shopping"]
+#     if nearby_businesses > 20:
+#         bus_status = (
+#             "Strong ecosystem — complementary businesses support customer flow."
+#         )
+#         ecosystem_level = "strong"
+#     elif nearby_businesses >= 10:
+#         bus_status = "Moderate ecosystem — some opportunities exist, but growth potential remains."
+#         ecosystem_level = "moderate"
+#     else:
+#         bus_status = (
+#             "Weak ecosystem — limited complementary activity may reduce visibility."
+#         )
+#         ecosystem_level = "weak"
 
-    insights["business_environment"] = {
-        "nearby_businesses_500m": nearby_businesses,
-        "assessment": bus_status,
-        "ecosystem_level": ecosystem_level,
-    }
+#     insights["business_environment"] = {
+#         "nearby_businesses_500m": nearby_businesses,
+#         "assessment": bus_status,
+#         "ecosystem_level": ecosystem_level,
+#     }
 
-    # Demographics Match
-    age_above_35 = site["percentage_age_above_35"]
-    avg_income = site["avg_income"]
-    if age_above_35 is not None:
-        if age_above_35 >= 40:
-            age_status = "Strong alignment — high share of population above 35, consistent with core demand segment."
-            alignment_level = "strong"
-        elif age_above_35 >= 25:
-            age_status = "Partial alignment — balanced age structure with moderate fit."
-            alignment_level = "partial"
-        else:
-            age_status = (
-                "Weak alignment — younger population may reduce pharmacy demand."
-            )
-            alignment_level = "weak"
+#     # Demographics Match
+#     age_above_35 = site["percentage_age_above_35"]
+#     avg_income = site["avg_income"]
+#     if age_above_35 is not None:
+#         if age_above_35 >= 40:
+#             age_status = "Strong alignment — high share of population above 35, consistent with core demand segment."
+#             alignment_level = "strong"
+#         elif age_above_35 >= 25:
+#             age_status = "Partial alignment — balanced age structure with moderate fit."
+#             alignment_level = "partial"
+#         else:
+#             age_status = (
+#                 "Weak alignment — younger population may reduce pharmacy demand."
+#             )
+#             alignment_level = "weak"
 
-        insights["demographics_match"] = {
-            "population_age_35_plus_percent": round(age_above_35, 1),
-            "average_income_sar": avg_income,
-            "assessment": age_status,
-            "alignment_level": alignment_level,
-        }
+#         insights["demographics_match"] = {
+#             "population_age_35_plus_percent": round(age_above_35, 1),
+#             "average_income_sar": avg_income,
+#             "assessment": age_status,
+#             "alignment_level": alignment_level,
+#         }
 
-    # Competitive Position
-    pharm_per_10k = site["pharmacy_per_10k_population"]
-    if pharm_per_10k is not None:
-        if pharm_per_10k > 8:
-            market_status = "Saturated market - Differentiation is essential to compete effectively."
-            market_level = "saturated"
-        elif pharm_per_10k >= 4:
-            market_status = "Moderately competitive - Focus on service quality and location advantage."
-            market_level = "moderate"
-        else:
-            market_status = (
-                "Underserved market - Strong opportunity for entry and growth."
-            )
-            market_level = "underserved"
+#     # Competitive Position
+#     pharm_per_10k = site["pharmacy_per_10k_population"]
+#     if pharm_per_10k is not None:
+#         if pharm_per_10k > 8:
+#             market_status = "Saturated market - Differentiation is essential to compete effectively."
+#             market_level = "saturated"
+#         elif pharm_per_10k >= 4:
+#             market_status = "Moderately competitive - Focus on service quality and location advantage."
+#             market_level = "moderate"
+#         else:
+#             market_status = (
+#                 "Underserved market - Strong opportunity for entry and growth."
+#             )
+#             market_level = "underserved"
 
-        insights["competitive_position"] = {
-            "pharmacy_per_10k_population": round(pharm_per_10k, 1),
-            "total_competing_pharmacy": site["num_of_pharmacy"],
-            "market_status": market_status,
-            "market_level": market_level,
-        }
-    hospitals = site["num_of_hospital"]
-    dentists = site["num_of_dentist"]
+#         insights["competitive_position"] = {
+#             "pharmacy_per_10k_population": round(pharm_per_10k, 1),
+#             "total_competing_pharmacy": site["num_of_pharmacy"],
+#             "market_status": market_status,
+#             "market_level": market_level,
+#         }
+#     hospitals = site["num_of_hospital"]
+#     dentists = site["num_of_dentist"]
 
-    if hospitals + dentists > 10:
-        complementary_status = "✅ Strong complementary hub — high concentration of facilities ensures steady demand."
-    elif hospitals + dentists >= 5:
-        complementary_status = "⚠️ Moderate complementary presence — demand is supported but with limited spillover."
-    else:
-        complementary_status = "❌ Weak complementary presence — fewer facilities may reduce referral opportunities."
+#     if hospitals + dentists > 10:
+#         complementary_status = "✅ Strong complementary hub — high concentration of facilities ensures steady demand."
+#     elif hospitals + dentists >= 5:
+#         complementary_status = "⚠️ Moderate complementary presence — demand is supported but with limited spillover."
+#     else:
+#         complementary_status = "❌ Weak complementary presence — fewer facilities may reduce referral opportunities."
 
-    insights["complementary_environment"] = {
-        "hospitals_around": hospitals,
-        "dentists_around": dentists,
-        "complementary_places": hospitals + dentists,
-        "complementary_market_status": complementary_status,
-    }
-    return insights
+#     insights["complementary_environment"] = {
+#         "hospitals_around": hospitals,
+#         "dentists_around": dentists,
+#         "complementary_places": hospitals + dentists,
+#         "complementary_market_status": complementary_status,
+#     }
+#     return insights
 
 
-def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
+def generate_best_site_insights(best_site: Dict, req: Reqsmartreport) -> List[Dict[str, Any]]:
     """Generate key investment insights as structured data."""
     # insights = []
 
@@ -149,10 +149,11 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
     else:  # saturated
         market_color = "#e74c3c"
         market_icon = "🔴 Saturated"
+    competition_label = "(" + " & ".join(req.competition_categories) + ")"
 
     best_site["market_category"] = "Market Dynamics"
     best_site["market_description"] = (
-        f"{market_status} scoring {competition_score} points with {total_competitors} total competing pharmacy."
+        f"{market_status} scoring {competition_score} points with {total_competitors} total competing {competition_label}."
     )
     best_site["market_level"] = market_level
     best_site["market_color"] = market_color
@@ -247,8 +248,7 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
 
     # Complementary environment
     complementary_score = best_site["raw_scores"]["complementary"]
-    num_hospitals = best_site["num_of_hospital"]
-    num_dentists = best_site["num_of_dentist"]
+    complementary_label = "(" + " & ".join(req.complementary_categories) + ")"
     complementary_facilities = best_site["num_of_complementary"]
 
     if complementary_score >= 75:
@@ -271,7 +271,7 @@ def generate_best_site_insights(best_site: Dict) -> List[Dict[str, Any]]:
 
     best_site["complementary_category"] = "Complementary Environment"
     best_site["complementary_description"] = (
-        f"{complementary_status} scoring {complementary_score} points with {complementary_facilities} nearby medical facilities ({num_hospitals} hospitals, {num_dentists} dental clinics)."
+        f"{complementary_status} scoring {complementary_score} points with {complementary_facilities} nearby facilities including {complementary_label}."
     )
     best_site["complementary_level"] = complementary_level
     best_site["complementary_color"] = complementary_color

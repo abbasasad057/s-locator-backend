@@ -31,8 +31,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
         current_speed_display = f"{round(current_speed, 1)}"
 
         # Business environment - using num_of_cross_shopping
-        nearby_businesses = site["num_of_cross_shopping"]
-        nearby_businesses_display = str(nearby_businesses)
+        nearby_businesses_display = str(site["num_of_cross_shopping"])
 
         # Demographics - using available demographic fields
         population_age_35_plus = site["percentage_age_above_35"]
@@ -40,9 +39,8 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
         average_income = site["avg_income"]
         average_income_display = f"{round(average_income, 2)} SAR"
 
-        # Competition - using num_of_pharmacy
-        total_competing_target_business = site["num_of_pharmacy"]
-        competing_target_business_display = str(total_competing_target_business)
+        # Competition
+        competing_target_business_display = str(site["num_of_competition"])
 
         # Use actual scores from the site data instead of looking for rankings
         traffic_score_value = site["raw_scores"]["traffic"]
@@ -110,7 +108,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
               </div>
               <div class="score-item">
                 <div class="value">{competition_score_display}</div>
-                <div class="label">Competition<br />({competing_target_business_display} pharmacy)</div>
+                <div class="label">Competition<br />({competing_target_business_display} competitors)</div>
               </div>
             </div>
           </div>
@@ -137,7 +135,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
             </div>
             <div>
               <strong>☕ Competitive Position:</strong><br />
-              <small>{competing_target_business_display} pharmacy in area ({round(site['pharmacy_per_10k_population'], 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
+              <small>{competing_target_business_display} competitors in area ({round(site['competition_per_10k_population'], 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
             </div>
           </div>
         </div>

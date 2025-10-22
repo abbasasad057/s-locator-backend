@@ -1,1 +1,1 @@
-# Report generation module for pharmacy analysis
+# Report generation module for analysis

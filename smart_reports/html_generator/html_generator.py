@@ -59,7 +59,7 @@ def generate_complete_html_report(
     <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Riyadh Pharmacy Site Analysis Report</title>
+    <title>Riyadh {req.potential_business_type.capitalize()} Site Analysis Report</title>
     <style>
         {get_target_business_report_css()}
     </style>

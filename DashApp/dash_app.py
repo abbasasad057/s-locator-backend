@@ -73,7 +73,7 @@ async def authenticate_user_direct(email: str, password: str) -> dict:
     """
     try:
         backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
-        endpoint_url = backend_url + CONF.login
+        endpoint_url = backend_url + "/fastapi/login"
         payload = {
             "message": "login request from dash app",
             "request_info": {},

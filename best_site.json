@@ -52,6 +52,59 @@
     "traffic_area_score": 70.12000274658203,
     "traffic_screenshot_filename": "traffic_24.756342_46.684637_Monday_6-00PM_pinned_frontscore=100_areascore=70.png",
     "traffic_analysis_date": "2025-10-08 02:49:44",
+    "nearby_supermarket": [
+        {
+            "name": "Meed Stores",
+            "coordinates": [
+                46.6792818,
+                24.7491274
+            ],
+            "driving_distance_meters": 965
+        },
+        {
+            "name": "Aljazera Hypermarket",
+            "coordinates": [
+                46.683812499999995,
+                24.755937499999998
+            ],
+            "driving_distance_meters": 94
+        },
+        {
+            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0639\u0631\u0628\u0629 \u0627\u0644\u0642\u0648\u0627\u0641\u0644 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
+            "coordinates": [
+                46.6853103,
+                24.760998299999997
+            ],
+            "driving_distance_meters": 520
+        },
+        {
+            "name": "Alhadaf Super Market",
+            "coordinates": [
+                46.690790299999996,
+                24.7597845
+            ],
+            "driving_distance_meters": 730
+        },
+        {
+            "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0645\u062b\u0645\u0631\u0629 \u0641\u0631\u0639 \u0627\u0644\u0645\u0635\u064a\u0641",
+            "coordinates": [
+                46.692685499999996,
+                24.760550799999997
+            ],
+            "driving_distance_meters": 938
+        }
+    ],
+    "num_of_supermarket": 5,
+    "supermarket_per_10k_population": 0.7146226078008204,
+    "closest_supermarket": {
+        "name": "Aljazera Hypermarket",
+        "coordinates": [
+            46.683812499999995,
+            24.755937499999998
+        ],
+        "driving_distance_meters": 94
+    },
+    "closest_supermarket_distance": 94,
     "nearby_pharmacy": [
         {
             "name": "Al Badri Pharmacy",
@@ -110,6 +163,43 @@
         "driving_distance_meters": 130
     },
     "closest_dentist_distance": 130,
+    "nearby_grocery_store": [
+        {
+            "name": "Aljazera Hypermarket",
+            "coordinates": [
+                46.683812499999995,
+                24.755937499999998
+            ],
+            "driving_distance_meters": 94
+        },
+        {
+            "name": "\u0637\u0627\u062d\u0648\u0646\u0629 \u062f\u0642\u064a\u0642",
+            "coordinates": [
+                46.6863691,
+                24.758979699999998
+            ],
+            "driving_distance_meters": 340
+        },
+        {
+            "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0645\u062b\u0645\u0631\u0629 \u0641\u0631\u0639 \u0627\u0644\u0645\u0635\u064a\u0641",
+            "coordinates": [
+                46.692685499999996,
+                24.760550799999997
+            ],
+            "driving_distance_meters": 938
+        }
+    ],
+    "num_of_grocery_store": 3,
+    "grocery_store_per_10k_population": 0.42877356468049227,
+    "closest_grocery_store": {
+        "name": "Aljazera Hypermarket",
+        "coordinates": [
+            46.683812499999995,
+            24.755937499999998
+        ],
+        "driving_distance_meters": 94
+    },
+    "closest_grocery_store_distance": 94,
     "nearby_hospital": [
         {
             "name": "\u0645\u0631\u0643\u0632 \u062f \u0627\u0644\u0644\u0647\u0628\u064a \u0644\u063a\u0633\u064a\u0644 \u0627\u0644\u0643\u0644\u0649",
@@ -155,99 +245,12 @@
         "driving_distance_meters": 130
     },
     "closest_hospital_distance": 130,
-    "nearby_grocery_store": [
-        {
-            "name": "Aljazera Hypermarket",
-            "coordinates": [
-                46.683812499999995,
-                24.755937499999998
-            ],
-            "driving_distance_meters": 94
-        },
-        {
-            "name": "\u0637\u0627\u062d\u0648\u0646\u0629 \u062f\u0642\u064a\u0642",
-            "coordinates": [
-                46.6863691,
-                24.758979699999998
-            ],
-            "driving_distance_meters": 340
-        },
-        {
-            "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0645\u062b\u0645\u0631\u0629 \u0641\u0631\u0639 \u0627\u0644\u0645\u0635\u064a\u0641",
-            "coordinates": [
-                46.692685499999996,
-                24.760550799999997
-            ],
-            "driving_distance_meters": 938
-        }
-    ],
-    "num_of_grocery_store": 3,
-    "grocery_store_per_10k_population": 0.42877356468049227,
-    "closest_grocery_store": {
-        "name": "Aljazera Hypermarket",
-        "coordinates": [
-            46.683812499999995,
-            24.755937499999998
-        ],
-        "driving_distance_meters": 94
-    },
-    "closest_grocery_store_distance": 94,
-    "nearby_supermarket": [
-        {
-            "name": "Meed Stores",
-            "coordinates": [
-                46.6792818,
-                24.7491274
-            ],
-            "driving_distance_meters": 965
-        },
-        {
-            "name": "Aljazera Hypermarket",
-            "coordinates": [
-                46.683812499999995,
-                24.755937499999998
-            ],
-            "driving_distance_meters": 94
-        },
-        {
-            "name": "\u062a\u0645\u0648\u064a\u0646\u0627\u062a \u0639\u0631\u0628\u0629 \u0627\u0644\u0642\u0648\u0627\u0641\u0644 \u0644\u0644\u0645\u0648\u0627\u062f \u0627\u0644\u063a\u0630\u0627\u0626\u064a\u0629",
-            "coordinates": [
-                46.6853103,
-                24.760998299999997
-            ],
-            "driving_distance_meters": 520
-        },
-        {
-            "name": "Alhadaf Super Market",
-            "coordinates": [
-                46.690790299999996,
-                24.7597845
-            ],
-            "driving_distance_meters": 730
-        },
-        {
-            "name": "\u0623\u0633\u0648\u0627\u0642 \u0648\u0645\u062e\u0627\u0628\u0632 \u0645\u062b\u0645\u0631\u0629 \u0641\u0631\u0639 \u0627\u0644\u0645\u0635\u064a\u0641",
-            "coordinates": [
-                46.692685499999996,
-                24.760550799999997
-            ],
-            "driving_distance_meters": 938
-        }
-    ],
-    "num_of_supermarket": 5,
-    "supermarket_per_10k_population": 0.7146226078008204,
-    "closest_supermarket": {
-        "name": "Aljazera Hypermarket",
-        "coordinates": [
-            46.683812499999995,
-            24.755937499999998
-        ],
-        "driving_distance_meters": 94
-    },
-    "closest_supermarket_distance": 94,
     "num_of_competition": 2,
     "num_of_complementary": 6,
     "num_of_cross_shopping": 8,
+    "competition_per_10k_population": 0.28584904312032816,
+    "complementary_per_10k_population": 0.8575471293609845,
+    "cross_shopping_per_10k_population": 1.1433961724813126,
     "id": "24.7563419342041,46.684635162353516",
     "total_score": 70,
     "weighted_scores": {

@@ -1,11 +1,11 @@
 """
-HTML Sections Module for Pharmacy Report Generation
-Contains main section generation functions for pharmacy reports
+HTML Sections Module for Report Generation
+Contains main section generation functions for reports
 """
 
 from typing import Dict, Any, List
 from datetime import datetime
-
+from all_types.request_dtypes import Reqsmartreport
 # Import functional modules
 from .html_tables import (
     generate_rankings_table,
@@ -20,7 +20,7 @@ from .html_charts_visuals import (
 
 
 def generate_executive_summary_section(
-    req,
+    req: Reqsmartreport,
     sites,
     stats,
     list_top_n_sites,
@@ -38,7 +38,7 @@ def generate_executive_summary_section(
     total_locations = len(sites)
     average_score = stats["average_score"]
     average_price = stats["average_price"]
-    total_competing_target_business = stats["total_competing_pharmacy"]
+    total_competing_target_business = stats[f"total_competing_{req.potential_business_type}"]
 
     return f"""
     <div class="page">
@@ -55,7 +55,7 @@ def generate_executive_summary_section(
           📊 Executive Summary
         </h2>
         <p style="margin-bottom: 0">
-          This comprehensive analysis evaluates {total_locations} pharmacy locations across {city_name} using advanced location intelligence methodologies. Our assessment integrates multiple data sources including traffic flow analysis, demographic profiling, healthcare ecosystem mapping, competitive landscape evaluation, and complementary business assessment. Each location is systematically scored using our proprietary weighted methodology, considering market opportunity, accessibility, and business environment factors to provide data-driven investment recommendations.
+          This comprehensive analysis evaluates {total_locations} {req.potential_business_type.capitalize()} locations across {city_name} using advanced location intelligence methodologies. Our assessment integrates multiple data sources including traffic flow analysis, demographic profiling, {req.ecosystem_string_name.capitalize()} ecosystem mapping, competitive landscape evaluation, and complementary business assessment. Each location is systematically scored using our proprietary weighted methodology, considering market opportunity, accessibility, and business environment factors to provide data-driven investment recommendations.
         </p>
       </div>
 
@@ -74,7 +74,7 @@ def generate_executive_summary_section(
         </div>
         <div class="metric-card">
           <div class="metric-value">{total_competing_target_business}</div>
-          <div class="metric-label">Competing pharmacy</div>
+          <div class="metric-label">Competing {req.potential_business_type.capitalize()}</div>
         </div>
       </div>
 
@@ -126,7 +126,7 @@ def generate_executive_summary_section(
             <small style="color: #ecf0f1;">{best_site["market_description"]}</small>
           </div>
           <div style="padding: 15px; background: rgba(255,255,255,0.1); border-radius: 8px;">
-            <strong>🏥 Healthcare Environment:</strong>
+            <strong>🏥 {req.ecosystem_string_name.capitalize()} Environment:</strong>
             <span style="color: {best_site['complementary_color']}; font-weight: bold;">
               {best_site['complementary_icon']}
             </span><br />
@@ -151,7 +151,7 @@ def generate_executive_summary_section(
             <th>Traffic</th>
             <th>Demographics</th>
             <th>Competition</th>
-            <th>Healthcare Ecosystem</th>
+            <th>{req.ecosystem_string_name} Ecosystem</th>
             <th>Complementary Businesses</th>
           </tr>
         </thead>
@@ -163,7 +163,7 @@ def generate_executive_summary_section(
 
 
 def generate_methodology_and_analysis_section(
-    req,
+    req: Reqsmartreport,
     sites,
     stats,
     list_top_n_sites,
@@ -179,7 +179,7 @@ def generate_methodology_and_analysis_section(
     print(
         f"DEBUG: First 500 chars of property cards: {property_cards_html[:500]}"
     )
-
+    Complementary_locations = "(" + " & ".join(req.complementary_categories) + ")"
     return f"""
     <div class="page page-break">
       <h1 class="section-title">📈 Analysis Methodology</h1>
@@ -192,7 +192,7 @@ def generate_methodology_and_analysis_section(
               This analysis leverages advanced data aggregation and scoring methodologies. We utilize real estate listings, demographic data, traffic patterns, and proximity to key amenities to objectively evaluate each location. The result is a shortlist of optimal sites, tailored to your business objectives and target audience, enabling confident investment and expansion decisions.
           </p>
           <div style="background: #e8f4fd; padding: 16px; border-radius: 8px; margin-bottom: 18px; font-size: 1em;">
-              <strong>Summary:</strong> Locations are assessed using five key criteria: traffic, demographics, competition, healthcare ecosystem, and complementary businesses. Each criterion is scored and weighted to reflect its impact on business success. Detailed explanations are available in the sections below.
+              <strong>Summary:</strong> Locations are assessed using five key criteria: traffic, demographics, competition, {req.ecosystem_string_name.capitalize()} ecosystem, and complementary businesses. Each criterion is scored and weighted to reflect its impact on business success. Detailed explanations are available in the sections below.
           </div>
           <details class="collapsible-card">
             <summary>🚦 Traffic Analysis (25%) – Evaluates accessibility and visibility</summary>
@@ -206,7 +206,7 @@ def generate_methodology_and_analysis_section(
               <ul>
                 <li>Entrepreneurs often start by driving around the city or browsing real estate websites for available spaces.</li>
                 <li>Our analysis goes beyond availability, evaluating if the site is in a high-traffic area where cars slow down, increasing visibility for your signage.</li>
-                <li>Traffic flow is assessed for ease of access and parking, which is essential for both cafes and pharmacy.</li>
+                <li>Traffic flow is assessed for ease of access and parking, which is essential for {req.potential_business_type}.</li>
                 <li>Sites with little or fast-moving traffic are deprioritized, as they are less likely to attract walk-ins or impulse visits.</li>
               </ul>
             </div>
@@ -241,26 +241,26 @@ def generate_methodology_and_analysis_section(
               <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
               <ul>
                 <li>Assess the competitive landscape after narrowing down your options.</li>
-                <li>pharmacy: avoid areas saturated with competitors; seek locations with unmet demand.</li>
+                <li>{req.potential_business_type.capitalize()}: avoid areas saturated with competitors; seek locations with unmet demand.</li>
                 <li>Cafes: proximity to other food and beverage outlets can be a risk or benefit, depending on foot traffic and customer preferences.</li>
                 <li>Analysis quantifies these factors, helping you avoid oversaturated markets and identify areas with opportunity.</li>
               </ul>
             </div>
           </details>
           <details class="collapsible-card">
-            <summary>🏥 Healthcare Ecosystem (20%) – Evaluates proximity to healthcare providers</summary>
+            <summary>🏥 {req.ecosystem_string_name.capitalize()} Ecosystem (20%) – Evaluates proximity to {req.ecosystem_string_name.capitalize()} providers</summary>
             <div class="card-content">
               <ul style="margin-bottom:12px;">
-                <li><strong>Method:</strong> Scoring based on proximity to hospitals, clinics, and dentists (≤1500m preferred).</li>
-                <li><strong>Scoring:</strong> Higher scores for closer and more accessible healthcare providers. Accessibility for people with disabilities is also considered.</li>
-                <li><strong>Rationale:</strong> A strong healthcare ecosystem increases site attractiveness and convenience for residents and patients. For specialty businesses, proximity to hospitals can drive significant customer traffic.</li>
+                <li><strong>Method:</strong> Scoring based on proximity to {Complementary_locations}(≤1500m preferred).</li>
+                <li><strong>Scoring:</strong> Higher scores for closer and more accessible {req.ecosystem_string_name.capitalize()} providers. Accessibility for people with disabilities is also considered.</li>
+                <li><strong>Rationale:</strong> A strong {req.ecosystem_string_name.capitalize()} ecosystem increases site attractiveness and convenience for residents and patients. For specialty businesses, proximity to {Complementary_locations} can drive significant customer traffic.</li>
               </ul>
               <div style="margin-bottom:8px; color:#3498db; font-weight:600;">Business Logic</div>
               <ul>
-                <li>pharmacy and health-focused cafes benefit from proximity to hospitals, clinics, or rehabilitation centers.</li>
-                <li>Increases customer flow from patients, healthcare workers, and visitors.</li>
+                <li>{req.potential_business_type.capitalize()} benefit from proximity to {Complementary_locations}.</li>
+                <li>Increases customer flow from patients, {req.ecosystem_string_name.capitalize()} workers, and visitors.</li>
                 <li>Supports specialized offerings, such as accessibility for people with disabilities.</li>
-                <li>Cafes near hospitals may attract visitors seeking a comfortable place to rest or recover.</li>
+                <li>{req.potential_business_type.capitalize()} near {Complementary_locations} may attract visitors seeking a comfortable place to rest or recover.</li>
                 <li>Analysis highlights these opportunities, ensuring your business serves both general and specialized needs.</li>
               </ul>
             </div>
@@ -269,7 +269,7 @@ def generate_methodology_and_analysis_section(
             <summary>🏪 Complementary Businesses (10%) – Assesses access to amenities and brand positioning</summary>
             <div class="card-content">
               <ul style="margin-bottom:12px;">
-                <li><strong>Method:</strong> Proximity-based scoring within 1000m to nearby businesses and amenities. High-end brands (e.g., Gucci, Prada) are favored for luxury businesses; everyday amenities (offices, schools, malls, hospitals) for general businesses.</li>
+                <li><strong>Method:</strong> Proximity-based scoring within 1000m to nearby businesses and amenities. High-end brands (e.g., Gucci, Prada) are favored for luxury businesses; everyday amenities (offices, schools, malls) for general businesses.</li>
                 <li><strong>Scoring:</strong> Higher scores for locations near a greater number and diversity of complementary businesses and amenities.</li>
                 <li><strong>Rationale:</strong> Access to amenities and high-end brands supports sustained foot traffic, customer satisfaction, and brand positioning. This criterion is about the business ecosystem, not the population.</li>
               </ul>
@@ -277,7 +277,7 @@ def generate_methodology_and_analysis_section(
               <ul>
                 <li>Complementary businesses enhance your site's attractiveness and customer base by creating synergies and increasing convenience for customers.</li>
                 <li>Luxury cafes: proximity to high-end brands and malls increases prestige and draws the right clientele.</li>
-                <li>pharmacy and everyday cafes: being near offices, schools, malls, and hospitals ensures steady foot traffic and convenience for customers.</li>
+                <li>{req.potential_business_type.capitalize()} and everyday cafes: being near offices, schools, malls, and {Complementary_locations} ensures steady foot traffic and convenience for customers.</li>
                 <li>This analysis identifies these synergies, helping you select locations that benefit from existing business ecosystems and maximize your visibility and customer base.</li>
                 <li>Unlike demographics, this score is based on the presence and diversity of nearby businesses, not the characteristics of the population.</li>
               </ul>
@@ -293,7 +293,7 @@ def generate_methodology_and_analysis_section(
           <h4 style="color: #2c3e50; margin-bottom: 10px">🧮 Final Score Calculation</h4>
           <p>
             <strong>Formula:</strong> Final Score = (Traffic × 0.25) + (Demographics × 0.30) + (Competition × 0.15) +
-            (Healthcare × 0.20) + (Complementary × 0.10)
+            ({req.ecosystem_string_name.capitalize()} × 0.20) + (Complementary × 0.10)
           </p>
           <p>
             <strong>Range:</strong> 0–100 scale where 100 = optimal conditions across all criteria
@@ -350,7 +350,7 @@ def generate_visual_analysis_section(
             <h4>Market Performance</h4>
             <p>• Central Business District: High traffic, premium demographics</p>
             <p>• Residential Zones: Stable demand, moderate competition</p>
-            <p>• Healthcare Corridors: Strong referral potential</p>
+            <p>• {req.ecosystem_string_name.capitalize()} Corridors: Strong referral potential</p>
           </div>
           <div class="performance-metrics">
             <h4>Market Insights</h4>
@@ -410,7 +410,7 @@ def generate_visual_analysis_section(
             <div>
               <strong>📊 Market Distribution:</strong><br />
               <small>Geographic clustering analysis reveals optimal zones
-                for pharmacy establishment and expansion</small>
+                for {req.potential_business_type.capitalize()} establishment and expansion</small>
             </div>
             <div>
               <strong>🎯 Strategic Positioning:</strong><br />

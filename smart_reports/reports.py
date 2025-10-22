@@ -34,9 +34,9 @@ from smart_reports.scoring import score_categories, score_demographics
 from smart_reports.traffic import fetch_traffic_data
 
 # Import the modular generator
-from .html_generator.pharmacy_generator import generate_complete_html_report
+from .html_generator.html_generator import generate_complete_html_report
 from .report_generation.data_processor import calculate_statistics
-from .report_generation.pharmacy_report_final import generate_all_charts
+from .report_generation.report_final import generate_all_charts
 from .report_generation.report_config import (
     source_current_location,
     source_custom_locations,
@@ -295,7 +295,7 @@ async def fetch_traffic_score(
     return traffic_score
 
 
-async def score_external_location(all_shops_data, req, single_item=False) -> dict:
+async def score_external_location(all_shops_data, req: Reqsmartreport, single_item=False) -> dict:
     """
     Score external locations using API calls to fetch real scores.
 
@@ -318,14 +318,6 @@ async def score_external_location(all_shops_data, req, single_item=False) -> dic
 
     # Default parameters for scoring APIs
     radius = 1000  # 1km radius for scoring
-    competition_categories = ["pharmacy"]
-    complementary_categories = [
-        "grocery_store",
-        "supermarket",
-        "restaurant",
-        "bank",
-        "atm",
-    ]
     target_num_per_category = 5
 
     # Prepare all scoring tasks
@@ -348,21 +340,21 @@ async def score_external_location(all_shops_data, req, single_item=False) -> dic
                 lat,
                 lng,
                 radius,
-                competition_categories,
+                req.competition_categories,
                 target_num_per_category,
             ),
             "complementary": fetch_complementary_score(
                 lat,
                 lng,
                 radius,
-                ["dental_clinic", "dentist", "doctor", "hospital"],
+                req.complementary_categories,
                 target_num_per_category,
             ),
             "cross_shopping": fetch_complementary_score(
                 lat,
                 lng,
                 radius,
-                complementary_categories,
+                req.cross_shopping_categories,
                 target_num_per_category,
             ),
         }
@@ -532,10 +524,9 @@ async def group_criterion_data(
         lng: Longitude of the location
         Userid: User ID
         category_data: Dictionary mapping category names to their data lists.
-                      e.g., {"hospital": [...], "pharmacy": [...], "dentist": [...]}
         listing_demographic_info: Demographic information for listings
         analysis_radius: Radius in meters for nearby business search
-        potential_business_type: The main business type being analyzed (e.g., "pharmacy")
+        potential_business_type: The main business type being analyzed
         req: Request object containing category lists for competition, complementary, and cross_shopping
         source: Source of the location data
         place_name: Name of the place
@@ -729,7 +720,7 @@ async def get_and_score_listings(req: Reqsmartreport) -> dict:
 
 
 def make_report_text_sections(
-    req,
+    req: Reqsmartreport,
     sites,
     stats,
     list_top_n_sites,
@@ -738,9 +729,9 @@ def make_report_text_sections(
     current_site,
 ):
     report_text = {}
-    report_text["title"] = "🏥 Pharmacy Expansion Analysis — Riyadh"
+    report_text["title"] = f"🏥 {req.potential_business_type.capitalize()} Expansion Analysis — Riyadh"
     report_text["description"] = (
-        f"This Comprehensive analysis evaluates {len(sites)} pharmacy locations accorss Riyadh "
+        f"This Comprehensive analysis evaluates {len(sites)} {req.potential_business_type} locations accorss Riyadh "
         "using advanced location intelligence methodologies. Each locations is systematically socred using "
         "our propiertary, wieghted methodolgy considering "
         "traffic, demographics, competition, complementary businesses, and cross-shopping opportunities."
@@ -816,19 +807,16 @@ async def generate_target_business_report(req: Reqsmartreport):
 
     # Generate maps
     logging.info("🗺️  Generating maps...")
-    charts = generate_all_charts(list_top_n_sites)
+    charts = generate_all_charts(list_top_n_sites, req)
     map_png = create_report_asset_path("candidates_map.png", "image")
     heat_png = create_report_asset_path("demographics_heatmap.png", "image")
-
-    # Generate candidates map
-    extent = None
 
     extent = create_static_map_png(sites, map_png, list_top_n_sites)
     logging.info("✅ Generated candidates map")
     # Generate demographic heatmap
     # create_demographic_heatmap_png(list_top_n_sites, heat_png, extent=extent)
     logging.info("✅ Generated demographic heatmap")
-    map_image, html_map = generate_all_site_map_image(list_top_n_sites)
+    map_image, html_map = generate_all_site_map_image(list_top_n_sites, req)
     # report_data = generate_markdown(
     #     sites,
     #     output_dir,
@@ -856,7 +844,7 @@ async def generate_target_business_report(req: Reqsmartreport):
         current_site,
     )
 
-    generate_best_site_insights(best_site)
+    generate_best_site_insights(best_site, req)
 
     logging.info("✅ Report generation completed successfully")
     return (

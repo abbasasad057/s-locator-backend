@@ -76,7 +76,7 @@ async def get_all_nearby_businesses(
         lng: Center longitude
         category_data: Dictionary mapping category names to their data lists
         radius_meters: Maximum driving distance in meters
-        potential_business_type: The main business type being analyzed (e.g., "pharmacy")
+        potential_business_type: The main business type being analyzed
         total_population: Total population in the area (optional, for per-10k calculations)
         competition_categories: List of competition category names
         complementary_categories: List of complementary category names
@@ -150,6 +150,16 @@ async def get_all_nearby_businesses(
     results["num_of_competition"] = num_of_competition
     results["num_of_complementary"] = num_of_complementary
     results["num_of_cross_shopping"] = num_of_cross_shopping
+
+    # Calculate aggregated per-10k-population metrics for the three groups
+    if total_population and total_population > 0:
+        results["competition_per_10k_population"] = num_of_competition / (total_population / 10000)
+        results["complementary_per_10k_population"] = num_of_complementary / (total_population / 10000)
+        results["cross_shopping_per_10k_population"] = num_of_cross_shopping / (total_population / 10000)
+    else:
+        results["competition_per_10k_population"] = 0
+        results["complementary_per_10k_population"] = 0
+        results["cross_shopping_per_10k_population"] = 0
     
     return results
 

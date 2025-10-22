@@ -144,7 +144,7 @@ def plot_score_vs_price(top_sites: List[Dict], outpath: str):
 
 
 def plot_complementary_vs_competition(
-    top_n_sites: List[Dict], outpath: str
+    top_n_sites: List[Dict], outpath: str, req: Reqsmartreport
 ):
     """
     Generates a scatter plot of complementary facility count vs. competition for the top N sites.
@@ -165,14 +165,11 @@ def plot_complementary_vs_competition(
     competition_counts = []
     
     for site in top_n_sites:
-        # X-axis: Sum of hospitals and dentists from complementary data
-        num_hospitals = site.get("num_of_hospital", 0) or 0
-        num_dentists = site.get("num_of_dentist", 0) or 0
-        complementary_total = num_hospitals + num_dentists
-        complementary_counts.append(complementary_total)
-        
-        # Y-axis: Number of competing pharmacy
-        num_target_business = site.get("num_of_pharmacy", 0) or 0
+        # X-axis: Sum of from complementary data
+        complementary_counts.append(site["num_of_complementary"])
+
+        # Y-axis: Number of competition
+        num_target_business = site["num_of_competition"]
         competition_counts.append(num_target_business)
 
     # --- Plotting ---
@@ -195,10 +192,10 @@ def plot_complementary_vs_competition(
         fontweight="bold",
         pad=20,
     )
-    ax.set_xlabel(
-        "Number of Complementary Facilities (Hospitals & Dentists)", fontsize=12
-    )
-    ax.set_ylabel("Number of Competing target business", fontsize=12)
+    label = "Number of Complementary Facilities (" + " & ".join(req.complementary_categories) + ")"
+    ax.set_xlabel(label, fontsize=12)
+
+    ax.set_ylabel("Number of Competing Facilities", fontsize=12)
 
     # --- Grid and Layout ---
     ax.grid(True, which="both", linestyle="--", linewidth=0.5, color="gray")

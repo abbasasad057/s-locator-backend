@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-pharmacy_report_final.py
+report_final.py
 
-Enhanced pharmacy site selection report generator with modular architecture.
+Enhanced target business site selection report generator with modular architecture.
 Generates comprehensive 3-page markdown reports with:
 - Enhanced visual design and styling
 - Investment insights and market analysis
@@ -10,7 +10,7 @@ Generates comprehensive 3-page markdown reports with:
 - Interactive charts and maps
 - Arabic text support
 
-Usage: python pharmacy_report_final.py [scores_path] [output_dir] [output_filename] [top_n]
+Usage: python report_final.py [scores_path] [output_dir] [output_filename] [top_n]
 """
 import os
 import logging
@@ -32,7 +32,7 @@ plt.rcParams["font.family"] = FONT_FAMILY
 plt.rcParams["axes.unicode_minus"] = UNICODE_MINUS
 
 
-def generate_all_charts(top_n_sites: list) -> dict:
+def generate_all_charts(top_n_sites: list, req) -> dict:
     """Generate all required charts and return their file paths."""
     # Use image directory for static plot images
 
@@ -47,7 +47,7 @@ def generate_all_charts(top_n_sites: list) -> dict:
 
     plot_score_vs_price(top_n_sites, outpath=charts["price_vs_score"])
     plot_complementary_vs_competition(
-        top_n_sites, outpath=charts["complementary_competition"]
+        top_n_sites, outpath=charts["complementary_competition"], req=req
     )
     return charts
 
