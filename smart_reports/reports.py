@@ -1,53 +1,49 @@
-import os
-import json
 import asyncio
+import json
 import logging
-import aiohttp
-from logging_wrapper import apply_decorator_to_module
-from smart_reports.complementary_businesses import get_all_nearby_businesses
-from smart_reports.report_generation.report_config import source_shop_for_rent
-from utils.geo_std_utils import bbox_to_polygon, generate_bbox
-from .report_generation.data_processor import calculate_statistics
+import os
 from pathlib import Path
-from smart_reports.report_generation.map_generator import (
-    generate_all_site_map_image,
-    create_static_map_png,
-    create_demographic_heatmap_png,
-)
-from all_types.request_dtypes import Reqsmartreport, ReqFetchDataset
-from data_fetcher import fetch_dataset
-from .report_generation.pharmacy_report_final import (
-    generate_all_charts,
-)
-from utils.utils import create_report_asset_path
-from smart_reports.report_generation.report_object import (
-    compare_values,
-    generate_best_site_insights,
-)
-from smart_reports.traffic import fetch_traffic_data
+from typing import Any, Dict, Optional
+
+import aiohttp
+from all_types.request_dtypes import ReqFetchDataset, Reqsmartreport
+from app_logger import get_logger
 from backend_common.database import MAX_POOL
+from data_fetcher import fetch_dataset
+from logging_wrapper import apply_decorator_to_module
+from utils.geo_std_utils import bbox_to_polygon, generate_bbox
+from utils.utils import DIR_REPORTS, create_report_asset_path
+
+from smart_reports.complementary_businesses import get_all_nearby_businesses
 from smart_reports.population import (
     fetch_demographics,
     fetch_household_sizes,
     get_demographic_info_for_listings,
 )
-from smart_reports.scoring import (
-    score_demographics,
-    score_categories,
+from smart_reports.report_generation.map_generator import (
+    create_demographic_heatmap_png,
+    create_static_map_png,
+    generate_all_site_map_image,
 )
-from typing import Dict, Any
-from utils.utils import DIR_REPORTS
+from smart_reports.report_generation.report_config import source_shop_for_rent
+from smart_reports.report_generation.report_object import (
+    compare_values,
+    generate_best_site_insights,
+)
+from smart_reports.scoring import score_categories, score_demographics
+from smart_reports.traffic import fetch_traffic_data
 
 # Import the modular generator
-from .html_generator.pharmacy_generator import (
-    generate_complete_html_report,
-)
-from typing import Optional
+from .html_generator.pharmacy_generator import generate_complete_html_report
+from .report_generation.data_processor import calculate_statistics
+from .report_generation.pharmacy_report_final import generate_all_charts
 from .report_generation.report_config import (
     source_current_location,
     source_custom_locations,
 )
-from app_logger import get_logger
+
+# Traffic API import section
+from .traffic_analysis_api import process_traffic_batch
 
 logger = get_logger(__name__)
 
@@ -753,9 +749,9 @@ def make_report_text_sections(
     return report_text
 
 
-async def generate_pharmacy_report(req: Reqsmartreport):
+async def generate_target_business_report(req: Reqsmartreport):
     """
-    Generate a pharmacy site report with multi-criteria scoring.
+    Generate a target_business site report with multi-criteria scoring.
 
     Loads datasets, computes scores for traffic, demographics, complementary,
     competition, and nearby amenities, then returns top-ranked sites.
@@ -764,7 +760,7 @@ async def generate_pharmacy_report(req: Reqsmartreport):
         req (Reqsmartreport): Request with user info and evaluation metrics.
 
     Returns:
-        dict: Pharmacy report with scores and insights.
+        dict: Target business report with scores and insights.
     """
     debug_path_sites = Path("sites.json")
     debug_path_stats = Path("stats.json")
@@ -808,6 +804,15 @@ async def generate_pharmacy_report(req: Reqsmartreport):
         custom_sites = json.load(f)
     with open(debug_path_current_site, "r") as f:
         current_site = json.load(f)
+
+    logging.info("Fetching traffic map...")
+    process_traffic_batch(
+        [
+            {"lat": site_data["lat"], "lng": site_data["lng"]}
+            for site_data in list_top_n_sites
+        ]
+    )
+    logging.info("✅ Generated traffic map")
 
     # Generate maps
     logging.info("🗺️  Generating maps...")
@@ -867,13 +872,13 @@ async def generate_pharmacy_report(req: Reqsmartreport):
 
 async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
     """
-    Generate a comprehensive pharmacy report and return structured data.
+    Generate a comprehensive target business report and return structured data.
 
     Creates a multi-page HTML report with executive summary, methodology,
     detailed analysis, and visual components following the specified structure.
 
     Args:
-        req (Reqsmartreport): User request containing pharmacy analysis parameters
+        req (Reqsmartreport): User request containing target business analysis parameters
 
     Returns:
         Dict[str, Any]
@@ -906,7 +911,7 @@ async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
         custom_results,
         current_results,
         report_text,
-    ) = await generate_pharmacy_report(req)
+    ) = await generate_target_business_report(req)
 
     # Generate the HTML report file
     html_content = generate_complete_html_report(

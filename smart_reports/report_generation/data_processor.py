@@ -1,5 +1,5 @@
 """
-Data processing utilities for pharmacy site selection analysis.
+Data processing utilities for target business site selection analysis.
 """
 
 import json

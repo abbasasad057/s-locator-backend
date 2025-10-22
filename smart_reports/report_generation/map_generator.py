@@ -1,5 +1,5 @@
 """
-Map generation utilities for pharmacy site selection analysis.
+Map generation utilities for target business site selection analysis.
 """
 import numpy as np
 import matplotlib

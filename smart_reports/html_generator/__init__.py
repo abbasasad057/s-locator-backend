@@ -1,1 +1,1 @@
-# HTML generator module for pharmacy reports
+# HTML generator module for target business reports

@@ -1,1 +1,1 @@
-# Smart reports package for pharmacy site selection analysis
+# Smart reports package for target_business site selection analysis

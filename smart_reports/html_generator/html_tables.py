@@ -1,6 +1,6 @@
 """
-HTML Tables Module for Pharmacy Report Generation
-Contains all table generation functions for pharmacy reports
+HTML Tables Module for Target Business Report Generation
+Contains all table generation functions for target business reports
 """
 
 from typing import Dict, Any, List

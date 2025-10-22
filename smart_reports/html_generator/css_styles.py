@@ -1,9 +1,9 @@
 """
 CSS Styles Module for HTML Report Generation
-Contains all CSS styles used in pharmacy reports
+Contains all CSS styles used in target business reports
 """
 
-PHARMACY_REPORT_CSS = """
+TARGET_BUSINESS_REPORT_CSS = """
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 * {
@@ -352,11 +352,11 @@ border-top: 1px solid #ecf0f1;
 """
 
 
-def get_pharmacy_report_css() -> str:
+def get_target_business_report_css() -> str:
     """
-    Get the complete CSS styles for pharmacy reports
+    Get the complete CSS styles for target business reports
     
     Returns:
         str: Complete CSS styles as a string
     """
-    return PHARMACY_REPORT_CSS
+    return TARGET_BUSINESS_REPORT_CSS

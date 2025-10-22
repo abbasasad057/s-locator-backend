@@ -1,6 +1,6 @@
 """
-HTML Charts and Visuals Module for Pharmacy Report Generation
-Contains chart and visual component generation functions for pharmacy reports
+HTML Charts and Visuals Module for Target Business Report Generation
+Contains chart and visual component generation functions for target business reports
 """
 
 from typing import Dict, Any, List

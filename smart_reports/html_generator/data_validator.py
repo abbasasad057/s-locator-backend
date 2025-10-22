@@ -1,10 +1,11 @@
 """
-Data Validation Module for Pharmacy Report Generation
+Data Validation Module for Target Business Report Generation
 Validates response data before HTML generation to prevent N/A values
 """
-from all_types.request_dtypes import Reqsmartreport
-from typing import Dict, Any, List, Tuple
 import logging
+from typing import Any, Dict, List, Tuple
+
+from all_types.request_dtypes import Reqsmartreport
 
 logger = logging.getLogger(__name__)
 

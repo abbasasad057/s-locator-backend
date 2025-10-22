@@ -1,5 +1,5 @@
 """
-Chart generation utilities for pharmacy site selection analysis.
+Chart generation utilities for target business site selection analysis.
 """
 
 import math
@@ -172,8 +172,8 @@ def plot_complementary_vs_competition(
         complementary_counts.append(complementary_total)
         
         # Y-axis: Number of competing pharmacy
-        num_pharmacy = site.get("num_of_pharmacy", 0) or 0
-        competition_counts.append(num_pharmacy)
+        num_target_business = site.get("num_of_pharmacy", 0) or 0
+        competition_counts.append(num_target_business)
 
     # --- Plotting ---
     fig, ax = plt.subplots(figsize=CHART_FIGSIZE, dpi=CHART_DPI)
@@ -198,7 +198,7 @@ def plot_complementary_vs_competition(
     ax.set_xlabel(
         "Number of Complementary Facilities (Hospitals & Dentists)", fontsize=12
     )
-    ax.set_ylabel("Number of Competing pharmacy", fontsize=12)
+    ax.set_ylabel("Number of Competing target business", fontsize=12)
 
     # --- Grid and Layout ---
     ax.grid(True, which="both", linestyle="--", linewidth=0.5, color="gray")

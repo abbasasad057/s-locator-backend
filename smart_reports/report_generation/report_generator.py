@@ -1,5 +1,5 @@
 """
-Report generation utilities for pharmacy site selection analysis.
+Report generation utilities for target business site selection analysis.
 """
 
 import os

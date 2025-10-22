@@ -1,58 +1,66 @@
 """
-HTML Property Cards Module for Pharmacy Report Generation
-Contains property card generation functions for pharmacy reports
+HTML Property Cards Module for Target Business Report Generation
+Contains property card generation functions for target business reports
 """
 
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
 from .html_tables import _get_display_text_with_icon
 
 
 def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
     """Generate property cards HTML"""
     # Interactive maps mapping removed - not used in current implementation
-    print(f"DEBUG: _generate_methodology_and_analysis_section called with {len(list_top_n_sites)} items")
+    print(
+        f"DEBUG: _generate_methodology_and_analysis_section called with {len(list_top_n_sites)} items"
+    )
     property_cards_html = ""
     for i, site in enumerate(list_top_n_sites, 1):
-        site_name = site['display_name']
-        total_score = site['total_score']
+        site_name = site["display_name"]
+        total_score = site["total_score"]
         total_score_display = f"{round(total_score, 1)}"
-        price_display = str(int(site['price'])) + " SAR"
-        category = site['category']
-        listing_url = site['url']
+        price_display = str(int(site["price"])) + " SAR"
+        category = site["category"]
+        listing_url = site["url"]
 
         # Extract data directly from site structure based on available JSON keys
         # Traffic data - using available traffic_score instead of nested structure
-        current_speed = site["raw_scores"]["traffic"] # Using traffic_score as proxy for speed data
+        current_speed = site["raw_scores"][
+            "traffic"
+        ]  # Using traffic_score as proxy for speed data
         current_speed_display = f"{round(current_speed, 1)}"
 
         # Business environment - using num_of_cross_shopping
-        nearby_businesses = site['num_of_cross_shopping']
+        nearby_businesses = site["num_of_cross_shopping"]
         nearby_businesses_display = str(nearby_businesses)
-        
+
         # Demographics - using available demographic fields
-        population_age_35_plus = site['percentage_age_above_35']
+        population_age_35_plus = site["percentage_age_above_35"]
         population_age_35_plus_display = f"{round(population_age_35_plus, 1)}"
-        average_income = site['avg_income']
+        average_income = site["avg_income"]
         average_income_display = f"{round(average_income, 2)} SAR"
-        
+
         # Competition - using num_of_pharmacy
-        total_competing_pharmacy = site['num_of_pharmacy']
-        competing_pharmacy_display = str(total_competing_pharmacy)
+        total_competing_target_business = site["num_of_pharmacy"]
+        competing_target_business_display = str(total_competing_target_business)
 
         # Use actual scores from the site data instead of looking for rankings
         traffic_score_value = site["raw_scores"]["traffic"]
-        demographics_score_value = site['raw_scores']['demographics']  # Using raw_scores.demographics
-        competition_score_value = site['raw_scores']['competition']   # Using raw_scores.competition
+        demographics_score_value = site["raw_scores"][
+            "demographics"
+        ]  # Using raw_scores.demographics
+        competition_score_value = site["raw_scores"][
+            "competition"
+        ]  # Using raw_scores.competition
 
         # Get improvement values from the site data
-        traffic_improvement = site['traffic_score_improvement']
-        demographics_improvement = site['demographics_score_improvement']
-        competition_improvement = site['competition_score_improvement']
+        traffic_improvement = site["traffic_score_improvement"]
+        demographics_improvement = site["demographics_score_improvement"]
+        competition_improvement = site["competition_score_improvement"]
 
         traffic_score_display = _get_display_text_with_icon(
             traffic_improvement,
             traffic_score_value,
-            
         )
         demographics_score_display = _get_display_text_with_icon(
             demographics_improvement,
@@ -64,6 +72,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
         )
 
         maps_path = f"assets/interactive_html/site_{site['lat']},{site['lng']}_map.html"
+        traffic_maps_path = f"assets/image/traffic_screenshots/traffic_{site['lat']},{site['lng']}_pinned.png"
 
         property_cards_html += f"""
       <div class="property-card">
@@ -101,7 +110,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
               </div>
               <div class="score-item">
                 <div class="value">{competition_score_display}</div>
-                <div class="label">Competition<br />({competing_pharmacy_display} pharmacy)</div>
+                <div class="label">Competition<br />({competing_target_business_display} pharmacy)</div>
               </div>
             </div>
           </div>
@@ -128,7 +137,7 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
             </div>
             <div>
               <strong>☕ Competitive Position:</strong><br />
-              <small>{competing_pharmacy_display} pharmacy in area ({round(site['pharmacy_per_10k_population'], 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
+              <small>{competing_target_business_display} pharmacy in area ({round(site['pharmacy_per_10k_population'], 1)} per 10k population)<br />🟢 Underserved market<br />Strategy: Strong opportunity for entry and growth.</small>
             </div>
           </div>
         </div>
@@ -139,6 +148,13 @@ def generate_property_cards(list_top_n_sites: Dict[str, Any] = None) -> str:
           <p style="margin-top: 15px; color: #7f8c8d; font-size: 0.9em">
             <strong>Map shows:</strong> Property location, nearby businesses, analysis radius, and traffic patterns.
           </p>
+          <br/>
+          <div>
+            <img src="{traffic_maps_path}" alt="Traffic API" width="70%" height="400" style="border:0; border-radius: 12px; display: block; margin-left: auto; margin-right: auto;">
+            <p style="margin-top: 15px; color: #7f8c8d; font-size: 0.9em"> 
+              <strong>Map Image shows:</strong> Property location, Storefront direction, traffic info.
+            </p>
+          </div>
         </div>
       </div>"""
     return property_cards_html

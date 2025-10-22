@@ -38,7 +38,7 @@ def generate_executive_summary_section(
     total_locations = len(sites)
     average_score = stats["average_score"]
     average_price = stats["average_price"]
-    total_competing_pharmacy = stats["total_competing_pharmacy"]
+    total_competing_target_business = stats["total_competing_pharmacy"]
 
     return f"""
     <div class="page">
@@ -73,7 +73,7 @@ def generate_executive_summary_section(
           <div class="metric-label">Average Price</div>
         </div>
         <div class="metric-card">
-          <div class="metric-value">{total_competing_pharmacy}</div>
+          <div class="metric-value">{total_competing_target_business}</div>
           <div class="metric-label">Competing pharmacy</div>
         </div>
       </div>

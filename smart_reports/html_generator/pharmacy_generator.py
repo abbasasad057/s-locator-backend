@@ -1,14 +1,15 @@
 """
-Pharmacy Report Generator
-Main generator for pharmacy HTML reports using modular components
+Target Business Report Generator
+Main generator for target business HTML reports using modular components
 """
 
 import logging
-from typing import Dict, Any
-from all_types.request_dtypes import Reqsmartreport
 from pathlib import Path
+from typing import Any, Dict
+
 from all_types.request_dtypes import Reqsmartreport
-from .css_styles import get_pharmacy_report_css
+
+from .css_styles import get_target_business_report_css
 from .html_sections import (
     generate_executive_summary_section,
     generate_methodology_and_analysis_section,
@@ -26,7 +27,7 @@ def generate_complete_html_report(
     best_site,
     custom_results,
     current_results,
-    report_text
+    report_text,
 ):
     """
     Generate the HTML report with data validation
@@ -60,7 +61,7 @@ def generate_complete_html_report(
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Riyadh Pharmacy Site Analysis Report</title>
     <style>
-        {get_pharmacy_report_css()}
+        {get_target_business_report_css()}
     </style>
     </head>
     <body>
