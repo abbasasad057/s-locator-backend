@@ -259,7 +259,9 @@ class SessionManager:
                 from config_factory import CONF
 
                 async with aiohttp.ClientSession() as http_session:
-                    endpoint_url = "http://localhost:8000" + CONF.refresh_token
+                    # Use BACKEND_URL env var for Docker, fallback to localhost:8000 for local dev
+                    backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+                    endpoint_url = backend_url + CONF.refresh_token
                     payload = {
                         "message": "refreshing token",
                         "request_info": {},

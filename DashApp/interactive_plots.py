@@ -8,6 +8,9 @@ import pandas as pd
 import plotly.express as px
 from typing import Dict, Optional, Tuple
 from pathlib import Path
+import os
+import aiohttp
+import asyncio
 
 
 class InteractivePlotter:
@@ -20,72 +23,135 @@ class InteractivePlotter:
         self.places_geojson = None
         self.data_loaded = False
         
+    def _load_geojson(self, file_path: str) -> Optional[dict]:
+        """
+        Load GeoJSON from local file or HTTP URL
+
+        Args:
+            file_path: Local file path or HTTP URL to GeoJSON file
+
+        Returns:
+            GeoJSON dict or None if error
+        """
+        try:
+            # Check if it's an HTTP URL
+            if file_path.startswith('http://') or file_path.startswith('https://'):
+                print(f"[DEBUG] Fetching GeoJSON from URL: {file_path}")
+                # Use asyncio to fetch the URL
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                geojson_data = loop.run_until_complete(self._fetch_url(file_path))
+                loop.close()
+                return geojson_data
+            else:
+                # Local file path
+                if Path(file_path).exists():
+                    print(f"[DEBUG] Reading GeoJSON from local file: {file_path}")
+                    with open(file_path) as f:
+                        return json.load(f)
+                else:
+                    print(f"❌ Local file not found: {file_path}")
+                    return None
+        except Exception as e:
+            print(f"❌ Error loading GeoJSON from {file_path}: {str(e)}")
+            return None
+
+    async def _fetch_url(self, url: str) -> Optional[dict]:
+        """
+        Async function to fetch JSON from URL
+
+        Args:
+            url: HTTP URL to fetch
+
+        Returns:
+            JSON data or None if error
+        """
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        return await response.json()
+                    else:
+                        print(f"❌ HTTP error {response.status} fetching {url}")
+                        return None
+        except Exception as e:
+            print(f"❌ Error fetching URL {url}: {str(e)}")
+            return None
+
     def load_data_files(self, data_files: Dict[str, str]) -> bool:
         """
         Load GeoJSON data files into DataFrames for plotting
-        
+        Supports both local file paths and HTTP URLs
+
         Args:
-            data_files: Dictionary with file paths for grid_data, places_data, boundaries
-            
+            data_files: Dictionary with file paths/URLs for grid_data, places_data, boundaries
+
         Returns:
             True if data loaded successfully, False otherwise
         """
         try:
             print(f"[DEBUG] Loading data files for interactive plotting...")
-            
+            print(f"[DEBUG] Data files provided: {data_files}")
+
             # Load grid data GeoJSON
             grid_path = data_files.get('grid_data')
-            if grid_path and Path(grid_path).exists():
-                with open(grid_path) as f:
-                    self.grid_geojson = json.load(f)
-                    
-                # Extract feature properties into DataFrame
-                self.grid_df = pd.DataFrame([
-                    feature['properties'] for feature in self.grid_geojson['features']
-                ])
-                # Add unique ID for choropleth mapping
-                self.grid_df['id'] = [
-                    feature['id'] for feature in self.grid_geojson['features']
-                ]
-                print(f"✅ Grid data loaded: {len(self.grid_df)} features")
+            if grid_path:
+                self.grid_geojson = self._load_geojson(grid_path)
+                if self.grid_geojson:
+                    # Extract feature properties into DataFrame
+                    self.grid_df = pd.DataFrame([
+                        feature['properties'] for feature in self.grid_geojson['features']
+                    ])
+                    # Add unique ID for choropleth mapping
+                    self.grid_df['id'] = [
+                        feature['id'] for feature in self.grid_geojson['features']
+                    ]
+                    print(f"✅ Grid data loaded: {len(self.grid_df)} features")
+                else:
+                    print(f"❌ Failed to load grid data from: {grid_path}")
+                    return False
             else:
-                print(f"❌ Grid data file not found: {grid_path}")
+                print(f"❌ No grid_data path provided")
                 return False
-            
+
             # Load places data GeoJSON
             places_path = data_files.get('places_data')
-            if places_path and Path(places_path).exists():
-                with open(places_path) as f:
-                    self.places_geojson = json.load(f)
-                    
-                # Extract feature properties and coordinates
-                places_df = pd.DataFrame([
-                    feature['properties'] for feature in self.places_geojson['features']
-                ])
-                places_df['lon'] = [
-                    feature['geometry']['coordinates'][0] 
-                    for feature in self.places_geojson['features']
-                ]
-                places_df['lat'] = [
-                    feature['geometry']['coordinates'][1] 
-                    for feature in self.places_geojson['features']
-                ]
-                
-                # Filter for supermarkets
-                self.supermarkets_df = places_df[
-                    places_df['primaryType'] == 'supermarket'
-                ].reset_index(drop=True)
-                print(f"✅ Places data loaded: {len(self.supermarkets_df)} supermarkets")
+            if places_path:
+                self.places_geojson = self._load_geojson(places_path)
+                if self.places_geojson:
+                    # Extract feature properties and coordinates
+                    places_df = pd.DataFrame([
+                        feature['properties'] for feature in self.places_geojson['features']
+                    ])
+                    places_df['lon'] = [
+                        feature['geometry']['coordinates'][0]
+                        for feature in self.places_geojson['features']
+                    ]
+                    places_df['lat'] = [
+                        feature['geometry']['coordinates'][1]
+                        for feature in self.places_geojson['features']
+                    ]
+
+                    # Filter for supermarkets
+                    self.supermarkets_df = places_df[
+                        places_df['primaryType'] == 'supermarket'
+                    ].reset_index(drop=True)
+                    print(f"✅ Places data loaded: {len(self.supermarkets_df)} supermarkets")
+                else:
+                    print(f"❌ Failed to load places data from: {places_path}")
+                    return False
             else:
-                print(f"❌ Places data file not found: {places_path}")
+                print(f"❌ No places_data path provided")
                 return False
-            
+
             self.data_loaded = True
             print(f"✅ All data files loaded successfully")
             return True
-            
+
         except Exception as e:
             print(f"❌ Error loading data files: {str(e)}")
+            import traceback
+            traceback.print_exc()
             return False
     
     def get_available_variables(self) -> Dict[str, str]:

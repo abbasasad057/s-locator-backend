@@ -415,10 +415,12 @@ The territory optimization analysis generated comprehensive visualizations to va
     market_plots = []
     
     for plot_name, plot_filename in plots.items():
-        # Ensure only the filename is used for the URL, and use ../../static/plots/ as prefix
+        # Ensure only the filename is used for the URL
+        # Use BACKEND_URL to generate absolute URLs so dashapp can fetch from middle_api
         import os
         filename_only = os.path.basename(plot_filename)
-        plot_url = f"../static/plots/{filename_only}"
+        backend_url = os.getenv("BACKEND_URL", "http://localhost:8000")
+        plot_url = f"{backend_url}/static/plots/{filename_only}"
         if 'cluster' in plot_name.lower() or 'market' in plot_name.lower():
             territory_plots.append((plot_name, plot_url))
         elif 'population' in plot_name.lower() or 'person' in plot_name.lower():

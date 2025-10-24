@@ -180,32 +180,37 @@ class ReportAppUIBuilder:
     def _fix_image_paths(self, content: str) -> str:
         """
         Fix image paths, resize to 500x500px, and center images for Dash static file serving
-        
+
         Args:
             content: Raw markdown content with potentially broken image paths
-            
+
         Returns:
             Content with fixed image paths, properly sized (500x500px), and centered images
         """
         import re
-        
-        # Pattern to match image tags with relative paths and add 500x500 sizing
+
+        # Pattern to match image tags with paths and add 500x500 sizing
         # Converts both HTML img tags and markdown images to properly sized HTML
+        # Now handles absolute URLs from BACKEND_URL (e.g., http://middle_api:8000/static/plots/...)
         patterns = [
-            # HTML img tags - add size attributes and centering styling
+            # HTML img tags with absolute URLs (http://...) - keep the URL as-is, just add size attributes
+            (r'<img\s+src="(https?://[^"]+/static/plots/[^"]+)"([^>]*?)>', r'<div style="text-align: center; margin: 20px 0;"><img src="\1" width="500" height="500" style="object-fit: contain; display: block; margin: 0 auto;"\2></div>'),
+            # Markdown images with absolute URLs (http://...)
+            (r'!\[([^\]]*)\]\((https?://[^)]+/static/plots/[^)]+)\)', r'<div style="text-align: center; margin: 20px 0;"><img src="\2" alt="\1" width="500" height="500" style="object-fit: contain; display: block; margin: 0 auto;"></div>'),
+            # HTML img tags with relative paths (../) - convert to /static/plots/
             (r'<img\s+src="\.\.\/static\/plots\/([^"]+)"([^>]*?)>', r'<div style="text-align: center; margin: 20px 0;"><img src="/static/plots/\1" width="500" height="500" style="object-fit: contain; display: block; margin: 0 auto;"\2></div>'),
-            # Markdown image syntax - convert to HTML with size attributes and centering
+            # Markdown image syntax with relative paths
             (r'!\[([^\]]*)\]\(\.\.\/static\/plots\/([^)]+)\)', r'<div style="text-align: center; margin: 20px 0;"><img src="/static/plots/\2" alt="\1" width="500" height="500" style="object-fit: contain; display: block; margin: 0 auto;"></div>'),
-            # Catch any remaining absolute static/plots images and resize them with centering
+            # Catch any remaining absolute static/plots images (starting with /) and resize them with centering
             (r'<img\s+src="\/static\/plots\/([^"]+)"([^>]*?)>', r'<div style="text-align: center; margin: 20px 0;"><img src="/static/plots/\1" width="500" height="500" style="object-fit: contain; display: block; margin: 0 auto;"\2></div>'),
-            # Handle markdown images with absolute paths and centering
+            # Handle markdown images with absolute paths starting with /
             (r'!\[([^\]]*)\]\(\/static\/plots\/([^)]+)\)', r'<div style="text-align: center; margin: 20px 0;"><img src="/static/plots/\2" alt="\1" width="500" height="500" style="object-fit: contain; display: block; margin: 0 auto;"></div>')
         ]
-        
+
         fixed_content = content
         for pattern, replacement in patterns:
             fixed_content = re.sub(pattern, replacement, fixed_content)
-            
+
         return fixed_content
     
     def format_markdown_for_dash(self, content: str) -> html.Div:
