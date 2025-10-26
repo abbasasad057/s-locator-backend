@@ -12,6 +12,12 @@ padding: 0;
 box-sizing: border-box;
 }
 
+@media print {
+    body {
+        display: none;
+    }
+}
+
 body {
 font-family: "Inter", sans-serif;
 line-height: 1.6;
