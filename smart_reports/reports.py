@@ -6,22 +6,15 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 import aiohttp
+
 from all_types.request_dtypes import ReqFetchDataset, Reqsmartreport
 from app_logger import get_logger
 from backend_common.database import MAX_POOL
 from data_fetcher import fetch_dataset
 from logging_wrapper import apply_decorator_to_module
-from utils.geo_std_utils import bbox_to_polygon, generate_bbox
-from utils.utils import DIR_REPORTS, create_report_asset_path
-
 from smart_reports.complementary_businesses import get_all_nearby_businesses
-from smart_reports.population import (
-    fetch_demographics,
-    fetch_household_sizes,
-    get_demographic_info_for_listings,
-)
+from smart_reports.population import get_demographic_info_for_listings
 from smart_reports.report_generation.map_generator import (
-    create_demographic_heatmap_png,
     create_static_map_png,
     generate_all_site_map_image,
 )
@@ -31,16 +24,18 @@ from smart_reports.report_generation.report_object import (
     generate_best_site_insights,
 )
 from smart_reports.scoring import score_categories, score_demographics
-from smart_reports.traffic import fetch_traffic_data
+from utils.geo_std_utils import bbox_to_polygon, generate_bbox
+from utils.utils import DIR_REPORTS, create_report_asset_path
 
 # Import the modular generator
 from .html_generator.html_generator import generate_complete_html_report
+from .html_generator.html_sections import HEADER_ICONS
 from .report_generation.data_processor import calculate_statistics
-from .report_generation.report_final import generate_all_charts
 from .report_generation.report_config import (
     source_current_location,
     source_custom_locations,
 )
+from .report_generation.report_final import generate_all_charts
 
 # Traffic API import section
 from .traffic_analysis_api import process_traffic_batch
@@ -103,6 +98,7 @@ async def fetch_demographics_score(
         "target_age": target_age,
     }
 
+    # try:
     async with aiohttp.ClientSession() as session:
         async with session.post(
             url, json=payload, timeout=aiohttp.ClientTimeout(total=30)
@@ -115,6 +111,8 @@ async def fetch_demographics_score(
                     f"Demographics API returned status {response.status}, using default score"
                 )
                 demo_score = 50
+    # except Exception:
+    # demo_score = 50
 
     income_score = await fetch_income_score(lat, lng, radius, req.target_income_level)
 
@@ -150,6 +148,7 @@ async def fetch_competition_score(
         "target_num_per_category": target_num_per_category,
     }
 
+    # try:
     async with aiohttp.ClientSession() as session:
         async with session.post(
             url, json=payload, timeout=aiohttp.ClientTimeout(total=30)
@@ -162,6 +161,8 @@ async def fetch_competition_score(
                     f"Competition API returned status {response.status}, using default score"
                 )
                 competition_score = 50
+    # except Exception:
+    # competition_score = 50
 
     return competition_score
 
@@ -195,6 +196,7 @@ async def fetch_complementary_score(
         "target_num_per_category": target_num_per_category,
     }
 
+    # try:
     async with aiohttp.ClientSession() as session:
         async with session.post(
             url, json=payload, timeout=aiohttp.ClientTimeout(total=30)
@@ -207,6 +209,8 @@ async def fetch_complementary_score(
                     f"Complementary API returned status {response.status}, using default score"
                 )
                 complementary_score = 50
+    # except Exception:
+    # complementary_score = 50
 
     return complementary_score
 
@@ -234,6 +238,7 @@ async def fetch_income_score(
         "target_income_level": target_income_level,
     }
 
+    # try:
     async with aiohttp.ClientSession() as session:
         async with session.post(
             url, json=payload, timeout=aiohttp.ClientTimeout(total=30)
@@ -246,6 +251,8 @@ async def fetch_income_score(
                     f"Income API returned status {response.status}, using default score"
                 )
                 income_score = 50
+    # except Exception:
+    # income_score = 50
 
     return income_score
 
@@ -279,23 +286,28 @@ async def fetch_traffic_score(
         "time": time,
     }
 
+    # try:
     async with aiohttp.ClientSession() as session:
         async with session.post(
             url, json=payload, timeout=aiohttp.ClientTimeout(total=360)
         ) as response:
             if response.status == 200:
                 data = await response.json()
-                traffic_score = int(data.get("score"))
+                traffic_score = int(data.get("score", 50))
             else:
                 logging.warning(
                     f"Traffic API returned status {response.status}, using default score"
                 )
                 traffic_score = 50
+    # except Exception:
+    # traffic_score = 50
 
     return traffic_score
 
 
-async def score_external_location(all_shops_data, req: Reqsmartreport, single_item=False) -> dict:
+async def score_external_location(
+    all_shops_data, req: Reqsmartreport, single_item=False
+) -> dict:
     """
     Score external locations using API calls to fetch real scores.
 
@@ -729,7 +741,10 @@ def make_report_text_sections(
     current_site,
 ):
     report_text = {}
-    report_text["title"] = f"🏥 {req.potential_business_type.capitalize()} Expansion Analysis — Riyadh"
+    emoji: str = HEADER_ICONS.get(req.potential_business_type.strip().lower(), "🏢")
+    report_text["title"] = (
+        f"{emoji} {req.potential_business_type.capitalize()} Expansion Analysis — Riyadh"
+    )
     report_text["description"] = (
         f"This Comprehensive analysis evaluates {len(sites)} {req.potential_business_type} locations accorss Riyadh "
         "using advanced location intelligence methodologies. Each locations is systematically socred using "
@@ -753,6 +768,7 @@ async def generate_target_business_report(req: Reqsmartreport):
     Returns:
         dict: Target business report with scores and insights.
     """
+
     debug_path_sites = Path("sites.json")
     debug_path_stats = Path("stats.json")
     debug_path_list_top_n_sites = Path("list_top_n_sites.json")
@@ -760,14 +776,14 @@ async def generate_target_business_report(req: Reqsmartreport):
     debug_path_custom_sites = Path("custom_sites.json")
     debug_path_current_site = Path("current_site.json")
 
-    # (
-    #     sites,
-    #     stats,
-    #     list_top_n_sites,
-    #     best_site,
-    #     custom_sites,
-    #     current_site,
-    # ) = await get_and_score_listings(req)
+    (
+        sites,
+        stats,
+        list_top_n_sites,
+        best_site,
+        custom_sites,
+        current_site,
+    ) = await get_and_score_listings(req)
 
     # with open(debug_path_sites, "w") as f:
     #     json.dump(sites, f, indent=4)
@@ -783,27 +799,30 @@ async def generate_target_business_report(req: Reqsmartreport):
     #     json.dump(current_site, f, indent=4)
 
     # read from json files
-    with open(debug_path_sites, "r") as f:
-        sites = json.load(f)
-    with open(debug_path_stats, "r") as f:
-        stats = json.load(f)
-    with open(debug_path_list_top_n_sites, "r") as f:
-        list_top_n_sites = json.load(f)
-    with open(debug_path_best_site, "r") as f:
-        best_site = json.load(f)
-    with open(debug_path_custom_sites, "r") as f:
-        custom_sites = json.load(f)
-    with open(debug_path_current_site, "r") as f:
-        current_site = json.load(f)
+    # with open(debug_path_sites, "r") as f:
+    #     sites = json.load(f)
+    # with open(debug_path_stats, "r") as f:
+    #     stats = json.load(f)
+    # with open(debug_path_list_top_n_sites, "r") as f:
+    #     list_top_n_sites = json.load(f)
+    # with open(debug_path_best_site, "r") as f:
+    #     best_site = json.load(f)
+    # with open(debug_path_custom_sites, "r") as f:
+    #     custom_sites = json.load(f)
+    # with open(debug_path_current_site, "r") as f:
+    #     current_site = json.load(f)
 
-    logging.info("Fetching traffic map...")
-    process_traffic_batch(
-        [
-            {"lat": site_data["lat"], "lng": site_data["lng"]}
-            for site_data in list_top_n_sites
-        ]
-    )
-    logging.info("✅ Generated traffic map")
+    # custom_sites = req.custom_locations
+    # current_site = req.current_location
+
+    # logging.info("Fetching traffic map...")
+    # process_traffic_batch(
+    #     [
+    #         {"lat": site_data["lat"], "lng": site_data["lng"]}
+    #         for site_data in list_top_n_sites
+    #     ]
+    # )
+    # logging.info("✅ Generated traffic map")
 
     # Generate maps
     logging.info("🗺️  Generating maps...")
