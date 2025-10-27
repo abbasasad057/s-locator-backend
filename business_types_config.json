@@ -29,10 +29,10 @@
         "min_weight": 0,
         "max_weight": 100
       },
-      "healthcare": {
-        "name": "Healthcare Infrastructure",
-        "description": "Nearby hospitals, clinics, and medical facilities",
-        "icon": "🏥",
+      "cross_shopping": {
+        "name": "Cross Shopping",
+        "description": "Nearby businesses that could drive pharmacy traffic",
+        "icon": "🛍️",
         "default_weight": 20,
         "min_weight": 0,
         "max_weight": 100

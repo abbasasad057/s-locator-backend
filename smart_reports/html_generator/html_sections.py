@@ -17,7 +17,13 @@ from .html_charts_visuals import (
     generate_chart_grid,
     generate_investment_insights_list,
 )
-
+HEADER_ICONS: dict[str, str] = {
+    "pharmacy": "🏥",
+    "cafe": "☕",
+    "retail": "🛍️",
+    "restaurant": "🍽️",
+    "warehouse": "🏭",
+}
 
 def generate_executive_summary_section(
     req: Reqsmartreport,
