@@ -334,7 +334,7 @@ async def refresh_id_token(req: ReqRefreshToken) -> dict[str, Any]:
 
 def my_verify_id_token(token: str = Depends(oauth2_scheme)):
     try:
-        return auth.verify_id_token(token)
+        return auth.verify_id_token(token, clock_skew_seconds=10)
     except auth.InvalidIdTokenError as e:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
