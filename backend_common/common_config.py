@@ -111,6 +111,13 @@ class CommonApiConfig:
         else:
             conf.secrets_dir = "secrets"
 
+        # vscode debugging override
+        vscode_debugging_secrets_dir = os.getenv("vscode_debugging_secrets_dir")
+        if vscode_debugging_secrets_dir:
+            conf.secrets_dir = vscode_debugging_secrets_dir
+
+        print(f"Using secrets directory: {conf.secrets_dir}")
+
         try:
             if os.path.exists(f"{conf.secrets_dir}/secrets_firebase.json"):
                 with open(
@@ -118,7 +125,7 @@ class CommonApiConfig:
                 ) as config_file:
                     data = json.load(config_file)
                     conf.firebase_api_key = data.get("firebase_api_key", "")
-                    conf.firebase_sp_path = data.get("firebase_sp_path", "")
+                    conf.firebase_sp_path = f"{conf.secrets_dir}/{data.get("firebase_sp_path", "")}"
 
             if os.path.exists(f"{conf.secrets_dir}/secret_stripe.json"):
                 with open(f"{conf.secrets_dir}/secret_stripe.json", "r", encoding="utf-8") as config_file:
