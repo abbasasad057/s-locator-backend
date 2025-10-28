@@ -34,3 +34,5 @@ tests/integration/test_logs/*
 app.log
 
 processed_report_data.json
+
+tree.txt

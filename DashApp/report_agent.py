@@ -21,7 +21,7 @@ from pydantic import BaseModel, Field
 
 from system_prompts import TERRITORY_OPTIMIZATION_PROMPT
 from config import Config
-
+from config_factory import CONF
 
 
 class AnalysisOutput(BaseModel):
@@ -101,7 +101,7 @@ class SimpleMCPClient:
         
         # Load API keys from secrets file (cache for reuse)
         if not self.secrets:
-            secrets_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'secrets', 'secrets_llm.json')
+            secrets_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), CONF.secrets_dir, 'secrets_llm.json')
             with open(secrets_path, 'r') as f:
                 self.secrets = json.load(f)
             print(f"🔑 Loaded Gemini API key: {self.secrets['gemini_api_key'][:20]}...{self.secrets['gemini_api_key'][-4:]}")

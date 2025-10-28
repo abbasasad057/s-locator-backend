@@ -19,7 +19,7 @@ WRITE_TO_FIRESTORE = False
 
 # Initialize Firestore client
 google_auth_creds = service_account.Credentials.from_service_account_file(
-    "secrets/secret_dev-s-locator-SA.json"
+    f"{CONF.secrets_dir}/secret_dev-s-locator-SA.json"
 )
 db = firestore_async.AsyncClient(credentials=google_auth_creds)
 
@@ -152,7 +152,7 @@ async def truncate_postgresql_table():
     """
     Truncates the `schema_marketplace.datasets` table in PostgreSQL.
     """
-    with open("secrets/postgres_db.json", "r") as file:
+    with open(f"{CONF.secrets_dir}/postgres_db.json", "r") as file:
         config = json.load(file)
         db_url = config["DATABASE_URL"]
     

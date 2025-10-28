@@ -17,7 +17,7 @@ from langchain_core.messages import SystemMessage, HumanMessage
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..")))
 from tool_bridge_mcp_server.context import get_app_context
-
+from config_factory import CONF
 
 
 import sys
@@ -38,7 +38,7 @@ def get_cached_secrets():
     """Get cached secrets or load them if not cached"""
     global _secrets_cache
     if not _secrets_cache:
-        secrets_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'secrets', 'secrets_llm.json')
+        secrets_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), CONF.secrets_dir, 'secrets_llm.json')
         with open(secrets_path, 'r') as f:
             _secrets_cache = json.load(f)
         print(f"🔑 Loaded and cached Gemini API key: {_secrets_cache['gemini_api_key'][:20]}...{_secrets_cache['gemini_api_key'][-4:]}")

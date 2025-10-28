@@ -319,7 +319,7 @@ class Reqsmartreport(UserId):
     city_name: str = "Riyadh"
     country_name: str = "Saudi Arabia"
     potential_business_type: str = "pharmacy"
-    ecosystem_string_name: str = "healthcare"
+    ecosystem_string_name: str = "ecosystem"
     target_income_level : str = "medium"  # low, medium, high
     target_age: int = 30
     analysis_radius: int = 1000  # in meters
