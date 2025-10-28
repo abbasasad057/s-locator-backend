@@ -178,7 +178,7 @@ async def get_user_profile_endpoint(
 
 
 @auth_router.post(CONF.create_user_profile, response_model=list[dict[Any, Any]])
-async def create_user_profile_endpoint(req: ReqModel[ReqCreateFirebaseUser]):
+async def create_user_profile_endpoint(req: ReqModel[ReqCreateUserProfile]):
 
     response_1 = await request_handling(
         req.request_body,
