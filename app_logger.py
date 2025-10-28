@@ -4,7 +4,7 @@ import sys
 from typing import Optional
 
 # Flag to ensure setup only runs once
-_logging_configured = False
+LOGGER_CONFIGURED = False
 
 class UvicornAccessFormatter(logging.Formatter):
     """Custom formatter that mimics uvicorn's original access log format"""
@@ -26,17 +26,16 @@ def setup_logging(log_file: str = 'app.log', log_level: int = logging.INFO, forc
         log_level: Logging level (default: INFO)
         force_reset: Whether to force reset existing configuration
     """
-    global _logging_configured
+    global LOGGER_CONFIGURED
     
-    if _logging_configured and not force_reset:
+    if LOGGER_CONFIGURED and not force_reset:
         return
     
     # Close all existing handlers for the log file
     root_logger = logging.getLogger()
     for handler in root_logger.handlers[:]:
-        if isinstance(handler, logging.FileHandler) and handler.baseFilename.endswith(log_file):
-            handler.close()
-            root_logger.removeHandler(handler)
+        handler.close()
+        root_logger.removeHandler(handler)
 
     # Try to remove the existing log file for a fresh start
     if os.path.exists(log_file):
@@ -79,7 +78,7 @@ def setup_logging(log_file: str = 'app.log', log_level: int = logging.INFO, forc
     except Exception:
         pass
     
-    _logging_configured = True
+    LOGGER_CONFIGURED = True
     print(f"Logging configured - all logs will be written to '{log_file}'")
 
 def setup_uvicorn_logging(log_file: str = 'app.log') -> None:
@@ -114,7 +113,7 @@ def get_logger(name: Optional[str] = None) -> logging.Logger:
         Logger instance for the specified name
     """
     # Ensure logging is configured before creating loggers
-    if not _logging_configured:
+    if not LOGGER_CONFIGURED:
         setup_logging()
     
     return logging.getLogger(name)

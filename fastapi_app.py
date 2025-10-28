@@ -13,7 +13,7 @@ from backend_common.database import Database
 from backend_common.auth import firebase_db
 from config_factory import CONF
 from app_logger import get_logger
-
+from app_logger import setup_logging
 # Import routers
 from routers.authentication import auth_router
 from routers.data_layers import data_layers_router
@@ -124,7 +124,7 @@ async def background_tasks_middleware(request, call_next):
 @app.on_event("startup")
 async def startup_event():
     # Re-establish our logging configuration after uvicorn startup
-    from app_logger import setup_logging
+    
     setup_logging(force_reset=True)
     logger.info("FastAPI startup - logging re-configured")
     
