@@ -45,39 +45,8 @@ async def get_business_category_metrics(business_type: str):
     """
     Get evaluation metrics configuration for a specific business type.
     """
-    # Validate business type first
-    if business_type not in [bt.value for bt in BusinessType]:
-        raise HTTPException(
-            status_code=400,
-            detail={
-                "success": False,
-                "error": "INVALID_BUSINESS_TYPE",
-                "message": f"Business type '{business_type}' is not supported. Valid types: {', '.join([bt.value for bt in BusinessType])}",
-            },
-        )
+    # Get configuration
+    config_data = BUSINESS_TYPE_CONFIGS[business_type]
+    config = BusinessTypeConfig(**config_data)
 
-    try:
-        # Get configuration
-        config_data = BUSINESS_TYPE_CONFIGS[business_type]
-        config = BusinessTypeConfig(**config_data)
-
-        return BusinessTypeResponse(success=True, data=config)
-
-    except KeyError:
-        raise HTTPException(
-            status_code=404,
-            detail={
-                "success": False,
-                "error": "BUSINESS_TYPE_NOT_FOUND",
-                "message": f"Configuration for business type '{business_type}' not found",
-            },
-        )
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail={
-                "success": False,
-                "error": "INTERNAL_SERVER_ERROR",
-                "message": "An error occurred while fetching business type configuration",
-            },
-        )
+    return BusinessTypeResponse(success=True, data=config)
