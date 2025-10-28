@@ -29,7 +29,6 @@ def preserve_space_for_text_search_items(query: str, reverse: bool = False) -> s
     # The content is captured in group 1.
     # Content is defined as zero or more characters that are not '@'.
     # This robustly handles '@' symbols that might appear outside of our
-    # intended search item delimiters (e.g., in an email address test@example.com).
     pattern = r'@([^@]*)@'
 
     # Determine the source and target substrings for replacement based on the 'reverse' flag.

@@ -377,31 +377,6 @@ async def fetch_user_catalogs(user_id: str) -> Dict[str, Any]:
     return user_catalogs
 
 
-# def create_new_user(user_id: str, username: str, email: str) -> None:
-#     user_file_path = os.path.join(USERS_PATH, f"user_{user_id}.json")
-
-#     if os.path.exists(user_file_path):
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST,
-#             detail="User profile already exists",
-#         )
-
-#     user_data = {
-#         "user_id": user_id,
-#         "username": username,
-#         "email": email,
-#         "prdcer": {"prdcer_lyrs": {}, "prdcer_ctlgs": {}},
-#     }
-
-#     try:
-#         with open(user_file_path, "w") as f:
-#             json.dump(user_data, f, indent=2)
-#     except IOError:
-#         raise HTTPException(
-#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-#             detail="Error creating new user profile",
-#         )
-
 
 def load_store_catalogs() -> Dict[str, Any]:
     try:
