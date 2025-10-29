@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_1ad8413f593802901c5b1c80dc581844 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+        <div style="position: fixed; 
+                    top: 20px; left: 50%; transform: translateX(-50%);
+                    background-color: rgba(233, 30, 99, 0.9); 
+                    color: white;
+                    padding: 10px 20px; border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    z-index: 9999;">
+            <h3 style="margin: 0; color: white;">📍 Site Location Map</h3>
+        </div>
+        
+    
+        <div style="position: fixed; 
+                    top: 80px; left: 50px; width: 250px; height: auto; 
+                    background-color: white; border:2px solid grey; z-index:9999; 
+                    font-size:12px; padding: 10px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <div style="background-color: #e8f4f8; padding: 8px; margin-bottom: 8px; border-radius: 4px;">
+            <b style="font-size: 14px;">📍 شارع-الأمير-سعود-بن-فيصل-بن-عبدالعزيز-حي-النموذجية-مدينة-الرياض-منطقة-الرياض</b><br>
+            <b>Final Score:</b> 65<br>
+            <b>Competitors:</b> 0 <br>
+            <b>Businesses:</b> 8 total<br>
+        </div>
+        <b>Legend:</b><br>
+        <div style='margin-bottom:6px;display:flex;align-items:center;'><span style='font-size:16px;margin-right:6px;'>🟣</span><span style='display:inline-block;width:14px;height:14px;background:#85663f;border-radius:3px;margin-right:8px;'></span><b>Supermarket</b></div><div style='margin-bottom:6px;display:flex;align-items:center;'><span style='font-size:16px;margin-right:6px;'>🔵</span><span style='display:inline-block;width:14px;height:14px;background:#b0a66e;border-radius:3px;margin-right:8px;'></span><b>Dentist</b></div><div style='margin-bottom:6px;display:flex;align-items:center;'><span style='font-size:16px;margin-right:6px;'>🔵</span><span style='display:inline-block;width:14px;height:14px;background:#bc8e30;border-radius:3px;margin-right:8px;'></span><b>Pharmacy</b></div><div style='margin-bottom:6px;display:flex;align-items:center;'><span style='font-size:16px;margin-right:6px;'>🟡</span><span style='display:inline-block;width:14px;height:14px;background:#a5bf32;border-radius:3px;margin-right:8px;'></span><b>Grocery_Store</b></div><div style='margin-bottom:6px;display:flex;align-items:center;'><span style='font-size:16px;margin-right:6px;'>🔵</span><span style='display:inline-block;width:14px;height:14px;background:#a8a833;border-radius:3px;margin-right:8px;'></span><b>Hospital</b></div>
+        <div style='margin-top:8px;'><span style='display:inline-block;width:14px;height:14px;background:red;border-radius:3px;margin-right:8px;'></span><b>Property</b></div>
+        </div>
+        
+    
+            <div class="folium-map" id="map_1ad8413f593802901c5b1c80dc581844" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_1ad8413f593802901c5b1c80dc581844 = L.map(
+                "map_1ad8413f593802901c5b1c80dc581844",
+                {
+                    center: [24.651378631591797, 46.68978500366211],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 16,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_afe08ad42cbf3bd25cc3e4a938028d5c = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_afe08ad42cbf3bd25cc3e4a938028d5c.addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+            var circle_marker_697cc296f58e47f9c49c04f92b98a279 = L.circleMarker(
+                [24.656305099999997, 46.6862929],
+                {"bubblingMouseEvents": true, "color": "#85663f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#85663f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 10, "stroke": true, "weight": 1}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_81c9410f57a267cce4dae1b44db479cd = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_3e2a5470df2a63b195c541fa7ffa250f = $(`<div id="html_3e2a5470df2a63b195c541fa7ffa250f" style="width: 100.0%; height: 100.0%;"><b>تموينات كيفان</b><br>Category: supermarket<br>Distance: 650 m<br></div>`)[0];
+                popup_81c9410f57a267cce4dae1b44db479cd.setContent(html_3e2a5470df2a63b195c541fa7ffa250f);
+            
+        
+
+        circle_marker_697cc296f58e47f9c49c04f92b98a279.bindPopup(popup_81c9410f57a267cce4dae1b44db479cd)
+        ;
+
+        
+    
+    
+            circle_marker_697cc296f58e47f9c49c04f92b98a279.bindTooltip(
+                `<div>
+                     تموينات كيفان
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b69d3d20ceb97b1506b38e5e7fa7fe1e = L.circleMarker(
+                [24.6569102, 46.6865026],
+                {"bubblingMouseEvents": true, "color": "#85663f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#85663f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 10, "stroke": true, "weight": 1}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_85ea259d59c458f0afb06c701b508e02 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_57254c01ac0856df0ad144b83cddafc7 = $(`<div id="html_57254c01ac0856df0ad144b83cddafc7" style="width: 100.0%; height: 100.0%;"><b>اسواق خيرات الحزم للمواد الغذائيه</b><br>Category: supermarket<br>Distance: 697 m<br></div>`)[0];
+                popup_85ea259d59c458f0afb06c701b508e02.setContent(html_57254c01ac0856df0ad144b83cddafc7);
+            
+        
+
+        circle_marker_b69d3d20ceb97b1506b38e5e7fa7fe1e.bindPopup(popup_85ea259d59c458f0afb06c701b508e02)
+        ;
+
+        
+    
+    
+            circle_marker_b69d3d20ceb97b1506b38e5e7fa7fe1e.bindTooltip(
+                `<div>
+                     اسواق خيرات الحزم للمواد الغذائيه
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_b11a2e1176f5ee7fe5607643a30104f8 = L.circleMarker(
+                [24.6546889, 46.688277400000004],
+                {"bubblingMouseEvents": true, "color": "#85663f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#85663f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 10, "stroke": true, "weight": 1}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_11b8213b20ec26eddc2fa32a839c065b = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_cca5d70aab657b3adbb9044a3e38aeca = $(`<div id="html_cca5d70aab657b3adbb9044a3e38aeca" style="width: 100.0%; height: 100.0%;"><b>تاج فايف ماركت</b><br>Category: supermarket<br>Distance: 397 m<br></div>`)[0];
+                popup_11b8213b20ec26eddc2fa32a839c065b.setContent(html_cca5d70aab657b3adbb9044a3e38aeca);
+            
+        
+
+        circle_marker_b11a2e1176f5ee7fe5607643a30104f8.bindPopup(popup_11b8213b20ec26eddc2fa32a839c065b)
+        ;
+
+        
+    
+    
+            circle_marker_b11a2e1176f5ee7fe5607643a30104f8.bindTooltip(
+                `<div>
+                     تاج فايف ماركت
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_beed8ad0fba36f6fdeec42da5cf1810b = L.circleMarker(
+                [24.6436794, 46.6933563],
+                {"bubblingMouseEvents": true, "color": "#85663f", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#85663f", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 10, "stroke": true, "weight": 1}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_e38ae9a036802a87700942ebd18117de = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_dd72908d0771b1db64f47779814ee5b5 = $(`<div id="html_dd72908d0771b1db64f47779814ee5b5" style="width: 100.0%; height: 100.0%;"><b>Rawad Supermarket</b><br>Category: supermarket<br>Distance: 926 m<br></div>`)[0];
+                popup_e38ae9a036802a87700942ebd18117de.setContent(html_dd72908d0771b1db64f47779814ee5b5);
+            
+        
+
+        circle_marker_beed8ad0fba36f6fdeec42da5cf1810b.bindPopup(popup_e38ae9a036802a87700942ebd18117de)
+        ;
+
+        
+    
+    
+            circle_marker_beed8ad0fba36f6fdeec42da5cf1810b.bindTooltip(
+                `<div>
+                     Rawad Supermarket
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_382d709ac61d1d0d0f75d2a0fd9d2e9b = L.circleMarker(
+                [24.6569102, 46.6865026],
+                {"bubblingMouseEvents": true, "color": "#a5bf32", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a5bf32", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 10, "stroke": true, "weight": 1}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_d54274a3a11904dde33f2e0bcb8c889e = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_7fe71ae356db585fc46eb4b645c8a045 = $(`<div id="html_7fe71ae356db585fc46eb4b645c8a045" style="width: 100.0%; height: 100.0%;"><b>اسواق خيرات الحزم للمواد الغذائيه</b><br>Category: grocery_store<br>Distance: 697 m<br></div>`)[0];
+                popup_d54274a3a11904dde33f2e0bcb8c889e.setContent(html_7fe71ae356db585fc46eb4b645c8a045);
+            
+        
+
+        circle_marker_382d709ac61d1d0d0f75d2a0fd9d2e9b.bindPopup(popup_d54274a3a11904dde33f2e0bcb8c889e)
+        ;
+
+        
+    
+    
+            circle_marker_382d709ac61d1d0d0f75d2a0fd9d2e9b.bindTooltip(
+                `<div>
+                     اسواق خيرات الحزم للمواد الغذائيه
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2782896936fc1463af81f702a6c14598 = L.circleMarker(
+                [24.6546889, 46.688277400000004],
+                {"bubblingMouseEvents": true, "color": "#a5bf32", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a5bf32", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 10, "stroke": true, "weight": 1}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_67d037832c9f683afe9128493a4a9ae2 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_e48abaf23081b992814d92aa89651ff9 = $(`<div id="html_e48abaf23081b992814d92aa89651ff9" style="width: 100.0%; height: 100.0%;"><b>تاج فايف ماركت</b><br>Category: grocery_store<br>Distance: 397 m<br></div>`)[0];
+                popup_67d037832c9f683afe9128493a4a9ae2.setContent(html_e48abaf23081b992814d92aa89651ff9);
+            
+        
+
+        circle_marker_2782896936fc1463af81f702a6c14598.bindPopup(popup_67d037832c9f683afe9128493a4a9ae2)
+        ;
+
+        
+    
+    
+            circle_marker_2782896936fc1463af81f702a6c14598.bindTooltip(
+                `<div>
+                     تاج فايف ماركت
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_faace1c24b1feff59012dd35f9e6328d = L.circleMarker(
+                [24.653534099999998, 46.6888724],
+                {"bubblingMouseEvents": true, "color": "#a5bf32", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a5bf32", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 10, "stroke": true, "weight": 1}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_00c75e5adccd0efb9dc2073de0caea50 = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_9674e6c19394f4c77bca4c2a6ba02771 = $(`<div id="html_9674e6c19394f4c77bca4c2a6ba02771" style="width: 100.0%; height: 100.0%;"><b>الوزن المثالي - Al Mithaly</b><br>Category: grocery_store<br>Distance: 256 m<br></div>`)[0];
+                popup_00c75e5adccd0efb9dc2073de0caea50.setContent(html_9674e6c19394f4c77bca4c2a6ba02771);
+            
+        
+
+        circle_marker_faace1c24b1feff59012dd35f9e6328d.bindPopup(popup_00c75e5adccd0efb9dc2073de0caea50)
+        ;
+
+        
+    
+    
+            circle_marker_faace1c24b1feff59012dd35f9e6328d.bindTooltip(
+                `<div>
+                     الوزن المثالي - Al Mithaly
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_00792ed6ac6e92d8268923dad2ee6868 = L.circleMarker(
+                [24.6497144, 46.6960859],
+                {"bubblingMouseEvents": true, "color": "#a8a833", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "#a8a833", "fillOpacity": 0.9, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.9, "radius": 10, "stroke": true, "weight": 1}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_dbf00da88d278139dfafb5ea32e522fc = L.popup({
+  "maxWidth": 250,
+});
+
+        
+            
+                var html_2fab3a48eda0b74f7385bcfc975a9db8 = $(`<div id="html_2fab3a48eda0b74f7385bcfc975a9db8" style="width: 100.0%; height: 100.0%;"><b>مركز الحرس الملكي الطبي</b><br>Category: hospital<br>Distance: 663 m<br></div>`)[0];
+                popup_dbf00da88d278139dfafb5ea32e522fc.setContent(html_2fab3a48eda0b74f7385bcfc975a9db8);
+            
+        
+
+        circle_marker_00792ed6ac6e92d8268923dad2ee6868.bindPopup(popup_dbf00da88d278139dfafb5ea32e522fc)
+        ;
+
+        
+    
+    
+            circle_marker_00792ed6ac6e92d8268923dad2ee6868.bindTooltip(
+                `<div>
+                     مركز الحرس الملكي الطبي
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_dcf33554a0d82caab59cbfe8a89c0c0d = L.marker(
+                [24.651378631591797, 46.68978500366211],
+                {
+}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+            var icon_efbcaf15e8be5d68663ba0204463981d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_65ef568b9624260e6bfcdf7a84e08a11 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_2b28539dd2eabf6e16d11417a730015e = $(`<div id="html_2b28539dd2eabf6e16d11417a730015e" style="width: 100.0%; height: 100.0%;">             <div style='width: 250px'>                 <h4>🏢 شارع-الأمير-سعود-بن-فيصل-بن-عبدالعزيز-حي-النموذجية-مدينة-الرياض-منطقة-الرياض</h4>                 <b>Final Score:</b> 65<br>                 <b>Competitors:</b> 0<br>                 <b>Businesses:</b> 8 total             </div>             </div>`)[0];
+                popup_65ef568b9624260e6bfcdf7a84e08a11.setContent(html_2b28539dd2eabf6e16d11417a730015e);
+            
+        
+
+        marker_dcf33554a0d82caab59cbfe8a89c0c0d.bindPopup(popup_65ef568b9624260e6bfcdf7a84e08a11)
+        ;
+
+        
+    
+    
+            marker_dcf33554a0d82caab59cbfe8a89c0c0d.bindTooltip(
+                `<div>
+                     شارع-الأمير-سعود-بن-فيصل-بن-عبدالعزيز-حي-النموذجية-مدينة-الرياض-منطقة-الرياض - Score: 65
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_dcf33554a0d82caab59cbfe8a89c0c0d.setIcon(icon_efbcaf15e8be5d68663ba0204463981d);
+            
+    
+            var circle_067126c63fe8f10447395278f7161423 = L.circle(
+                [24.651378631591797, 46.68978500366211],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.6, "radius": 1000, "stroke": true, "weight": 2}
+            ).addTo(map_1ad8413f593802901c5b1c80dc581844);
+        
+    
+        var popup_b87494de39e7b7e97d68c9ad8feb8f27 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_05c7d574468b8b8d900aa7530d51cfe1 = $(`<div id="html_05c7d574468b8b8d900aa7530d51cfe1" style="width: 100.0%; height: 100.0%;">Analysis radius: 300m</div>`)[0];
+                popup_b87494de39e7b7e97d68c9ad8feb8f27.setContent(html_05c7d574468b8b8d900aa7530d51cfe1);
+            
+        
+
+        circle_067126c63fe8f10447395278f7161423.bindPopup(popup_b87494de39e7b7e97d68c9ad8feb8f27)
+        ;
+
+        
+    
+</script>
+</html>

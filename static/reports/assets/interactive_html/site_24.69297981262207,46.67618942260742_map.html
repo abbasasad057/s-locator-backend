@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_a75c21f825b82275410b8c7adde1f29a {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+</head>
+<body>
+    
+    
+        <div style="position: fixed; 
+                    top: 20px; left: 50%; transform: translateX(-50%);
+                    background-color: rgba(233, 30, 99, 0.9); 
+                    color: white;
+                    padding: 10px 20px; border-radius: 8px;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+                    z-index: 9999;">
+            <h3 style="margin: 0; color: white;">📍 Site Location Map</h3>
+        </div>
+        
+    
+        <div style="position: fixed; 
+                    top: 80px; left: 50px; width: 250px; height: auto; 
+                    background-color: white; border:2px solid grey; z-index:9999; 
+                    font-size:12px; padding: 10px;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        
+        <div style="background-color: #e8f4f8; padding: 8px; margin-bottom: 8px; border-radius: 4px;">
+            <b style="font-size: 14px;">📍 طريق-الأمير-محمد-بن-عبدالعزيز-حي-العليا-الرياض-منطقة-الرياض</b><br>
+            <b>Final Score:</b> 91<br>
+            <b>Competitors:</b> 5 pharmacies<br>
+            <b>Businesses:</b> 25 total<br>
+        </div>
+        
+        <b>Legend:</b><br>
+        ⭐ <span style="color: red;"><b>Red Star</b></span> = Property<br>
+        🟤 <span style="color: brown;"><b>Brown</b></span> = Pharmacies<br>
+        🟠 <span style="color: orange;"><b>Orange</b></span> = Restaurants<br>
+        🟣 <span style="color: purple;"><b>Purple</b></span> = Shopping<br>
+        🔵 <span style="color: blue;"><b>Blue</b></span> = Hotels<br>
+        🔘 <span style="color: gray;"><b>Gray</b></span> = Banks<br>
+        🔴 <span style="color: red;"><b>Dark Red</b></span> = Traffic<br>
+        </div>
+        
+    
+            <div class="folium-map" id="map_a75c21f825b82275410b8c7adde1f29a" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_a75c21f825b82275410b8c7adde1f29a = L.map(
+                "map_a75c21f825b82275410b8c7adde1f29a",
+                {
+                    center: [24.69297981262207, 46.67618942260742],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 16,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_852540d1f7edb9a4597e5b0924041cee = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_852540d1f7edb9a4597e5b0924041cee.addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+            var circle_marker_cd31cc31e6f5159d1a8d51df46e0a6f4 = L.circleMarker(
+                [24.693531214830546, 46.67524773707659],
+                {"bubblingMouseEvents": true, "color": "brown", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "brown", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_5b9635b9a29fdde0017e4086bb4130df = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_6fabb3eeadc5030793acd4a1363baf53 = $(`<div id="html_6fabb3eeadc5030793acd4a1363baf53" style="width: 100.0%; height: 100.0%;">                     <b>Pharmacy 1</b><br>                     Category: pharmacy, pharmacy, pharmacy<br>                     Distance: 90m                     </div>`)[0];
+                popup_5b9635b9a29fdde0017e4086bb4130df.setContent(html_6fabb3eeadc5030793acd4a1363baf53);
+            
+        
+
+        circle_marker_cd31cc31e6f5159d1a8d51df46e0a6f4.bindPopup(popup_5b9635b9a29fdde0017e4086bb4130df)
+        ;
+
+        
+    
+    
+            circle_marker_cd31cc31e6f5159d1a8d51df46e0a6f4.bindTooltip(
+                `<div>
+                     Pharmacy 1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_717f71884c1ac846b398c69238e4a2fc = L.circleMarker(
+                [24.694975428194027, 46.67703885365767],
+                {"bubblingMouseEvents": true, "color": "brown", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "brown", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_1470140f93fc6a06d0de94d66ee9e3d4 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_7c446157b4762c7d16746d12185c7c73 = $(`<div id="html_7c446157b4762c7d16746d12185c7c73" style="width: 100.0%; height: 100.0%;">                     <b>Pharmacy 2</b><br>                     Category: pharmacy, pharmacy, pharmacy<br>                     Distance: 280m                     </div>`)[0];
+                popup_1470140f93fc6a06d0de94d66ee9e3d4.setContent(html_7c446157b4762c7d16746d12185c7c73);
+            
+        
+
+        circle_marker_717f71884c1ac846b398c69238e4a2fc.bindPopup(popup_1470140f93fc6a06d0de94d66ee9e3d4)
+        ;
+
+        
+    
+    
+            circle_marker_717f71884c1ac846b398c69238e4a2fc.bindTooltip(
+                `<div>
+                     Pharmacy 2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_781801b726d7b4c9e4f46725275af079 = L.circleMarker(
+                [24.694086607537322, 46.67710893912127],
+                {"bubblingMouseEvents": true, "color": "brown", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "brown", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_42202d988ed1fa263247e60c69c2e6da = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_209fb0e42166acd948abc748cd7134ec = $(`<div id="html_209fb0e42166acd948abc748cd7134ec" style="width: 100.0%; height: 100.0%;">                     <b>Pharmacy 3</b><br>                     Category: pharmacy, pharmacy, pharmacy<br>                     Distance: 82m                     </div>`)[0];
+                popup_42202d988ed1fa263247e60c69c2e6da.setContent(html_209fb0e42166acd948abc748cd7134ec);
+            
+        
+
+        circle_marker_781801b726d7b4c9e4f46725275af079.bindPopup(popup_42202d988ed1fa263247e60c69c2e6da)
+        ;
+
+        
+    
+    
+            circle_marker_781801b726d7b4c9e4f46725275af079.bindTooltip(
+                `<div>
+                     Pharmacy 3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6460a5e07f9b621cdd7b3e2f8230a85f = L.circleMarker(
+                [24.691827895885748, 46.674536087158344],
+                {"bubblingMouseEvents": true, "color": "brown", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "brown", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_39dbb879888bd8736368448e5134ad46 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_022798330dbd114603fc078ae96414a5 = $(`<div id="html_022798330dbd114603fc078ae96414a5" style="width: 100.0%; height: 100.0%;">                     <b>Pharmacy 4</b><br>                     Category: pharmacy, pharmacy, pharmacy<br>                     Distance: 129m                     </div>`)[0];
+                popup_39dbb879888bd8736368448e5134ad46.setContent(html_022798330dbd114603fc078ae96414a5);
+            
+        
+
+        circle_marker_6460a5e07f9b621cdd7b3e2f8230a85f.bindPopup(popup_39dbb879888bd8736368448e5134ad46)
+        ;
+
+        
+    
+    
+            circle_marker_6460a5e07f9b621cdd7b3e2f8230a85f.bindTooltip(
+                `<div>
+                     Pharmacy 4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_c040f86b1561e5da149fe56cc824cd8c = L.circleMarker(
+                [24.69264962915998, 46.67495411894561],
+                {"bubblingMouseEvents": true, "color": "brown", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "brown", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 12, "stroke": true, "weight": 2}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_d1812b5aa0c555c6f00b2956ee142827 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_326e124827110b733ecd43d95628d9c8 = $(`<div id="html_326e124827110b733ecd43d95628d9c8" style="width: 100.0%; height: 100.0%;">                     <b>Pharmacy 5</b><br>                     Category: pharmacy, pharmacy, pharmacy<br>                     Distance: 293m                     </div>`)[0];
+                popup_d1812b5aa0c555c6f00b2956ee142827.setContent(html_326e124827110b733ecd43d95628d9c8);
+            
+        
+
+        circle_marker_c040f86b1561e5da149fe56cc824cd8c.bindPopup(popup_d1812b5aa0c555c6f00b2956ee142827)
+        ;
+
+        
+    
+    
+            circle_marker_c040f86b1561e5da149fe56cc824cd8c.bindTooltip(
+                `<div>
+                     Pharmacy 5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_a46a6aff782e057da65a1428e606eada = L.circleMarker(
+                [24.69444562930088, 46.678070956852565],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_3809747b5e13c5b498c8b43f9e5e9c54 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_a39d50ba6c57b7ca1901893970636a35 = $(`<div id="html_a39d50ba6c57b7ca1901893970636a35" style="width: 100.0%; height: 100.0%;">                     <b>Hospital 1</b><br>                     Category: hospital, hospital, hospital, hospital, hospital, hospital, hospital, hospital<br>                     Distance: 113m                     </div>`)[0];
+                popup_3809747b5e13c5b498c8b43f9e5e9c54.setContent(html_a39d50ba6c57b7ca1901893970636a35);
+            
+        
+
+        circle_marker_a46a6aff782e057da65a1428e606eada.bindPopup(popup_3809747b5e13c5b498c8b43f9e5e9c54)
+        ;
+
+        
+    
+    
+            circle_marker_a46a6aff782e057da65a1428e606eada.bindTooltip(
+                `<div>
+                     Hospital 1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_bf6313727e5a970e4cc99f3ca50bc8fa = L.circleMarker(
+                [24.69374175378534, 46.67610402119427],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_916181b11b9151c326e798afffc92e8e = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_300d2745a96052a1b731eb7a18ef09f0 = $(`<div id="html_300d2745a96052a1b731eb7a18ef09f0" style="width: 100.0%; height: 100.0%;">                     <b>Hospital 2</b><br>                     Category: hospital, hospital, hospital, hospital, hospital, hospital, hospital, hospital<br>                     Distance: 151m                     </div>`)[0];
+                popup_916181b11b9151c326e798afffc92e8e.setContent(html_300d2745a96052a1b731eb7a18ef09f0);
+            
+        
+
+        circle_marker_bf6313727e5a970e4cc99f3ca50bc8fa.bindPopup(popup_916181b11b9151c326e798afffc92e8e)
+        ;
+
+        
+    
+    
+            circle_marker_bf6313727e5a970e4cc99f3ca50bc8fa.bindTooltip(
+                `<div>
+                     Hospital 2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_6b64a575142498de4f2d74315929884f = L.circleMarker(
+                [24.691792199513987, 46.67526824555824],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_d7bbc9a64556adc7256904e7d5530e93 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_5af5ecebbb82b24e1cc1383e2ece03dd = $(`<div id="html_5af5ecebbb82b24e1cc1383e2ece03dd" style="width: 100.0%; height: 100.0%;">                     <b>Hospital 3</b><br>                     Category: hospital, hospital, hospital, hospital, hospital, hospital, hospital, hospital<br>                     Distance: 270m                     </div>`)[0];
+                popup_d7bbc9a64556adc7256904e7d5530e93.setContent(html_5af5ecebbb82b24e1cc1383e2ece03dd);
+            
+        
+
+        circle_marker_6b64a575142498de4f2d74315929884f.bindPopup(popup_d7bbc9a64556adc7256904e7d5530e93)
+        ;
+
+        
+    
+    
+            circle_marker_6b64a575142498de4f2d74315929884f.bindTooltip(
+                `<div>
+                     Hospital 3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7519a61cfe6877bad662d1567a411268 = L.circleMarker(
+                [24.691109190570884, 46.676005272931405],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_fa245ce2859c6ba8209b684d4804ab73 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_05f0cec9b2ad4b1beca08c10fde4abd2 = $(`<div id="html_05f0cec9b2ad4b1beca08c10fde4abd2" style="width: 100.0%; height: 100.0%;">                     <b>Hospital 4</b><br>                     Category: hospital, hospital, hospital, hospital, hospital, hospital, hospital, hospital<br>                     Distance: 282m                     </div>`)[0];
+                popup_fa245ce2859c6ba8209b684d4804ab73.setContent(html_05f0cec9b2ad4b1beca08c10fde4abd2);
+            
+        
+
+        circle_marker_7519a61cfe6877bad662d1567a411268.bindPopup(popup_fa245ce2859c6ba8209b684d4804ab73)
+        ;
+
+        
+    
+    
+            circle_marker_7519a61cfe6877bad662d1567a411268.bindTooltip(
+                `<div>
+                     Hospital 4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_357f1670f5b892ec05a8d33718ddd74d = L.circleMarker(
+                [24.692949352807126, 46.67535887854958],
+                {"bubblingMouseEvents": true, "color": "orange", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "orange", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_fa1561263dd755db39bae6fc6ccd38b3 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_0aa9b6cec1a28e2c018853f0acea3fc0 = $(`<div id="html_0aa9b6cec1a28e2c018853f0acea3fc0" style="width: 100.0%; height: 100.0%;">                     <b>Hospital 5</b><br>                     Category: hospital, hospital, hospital, hospital, hospital, hospital, hospital, hospital<br>                     Distance: 244m                     </div>`)[0];
+                popup_fa1561263dd755db39bae6fc6ccd38b3.setContent(html_0aa9b6cec1a28e2c018853f0acea3fc0);
+            
+        
+
+        circle_marker_357f1670f5b892ec05a8d33718ddd74d.bindPopup(popup_fa1561263dd755db39bae6fc6ccd38b3)
+        ;
+
+        
+    
+    
+            circle_marker_357f1670f5b892ec05a8d33718ddd74d.bindTooltip(
+                `<div>
+                     Hospital 5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9ee9aa75001f95ab369d8c238e4ddda6 = L.circleMarker(
+                [24.692781174976385, 46.677615208020505],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_2929a1760be273c7142de51ed2f6a147 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_e14fa5f338f9638ea05aa08434983795 = $(`<div id="html_e14fa5f338f9638ea05aa08434983795" style="width: 100.0%; height: 100.0%;">                     <b>Dentist 1</b><br>                     Category: dentist, dentist<br>                     Distance: 115m                     </div>`)[0];
+                popup_2929a1760be273c7142de51ed2f6a147.setContent(html_e14fa5f338f9638ea05aa08434983795);
+            
+        
+
+        circle_marker_9ee9aa75001f95ab369d8c238e4ddda6.bindPopup(popup_2929a1760be273c7142de51ed2f6a147)
+        ;
+
+        
+    
+    
+            circle_marker_9ee9aa75001f95ab369d8c238e4ddda6.bindTooltip(
+                `<div>
+                     Dentist 1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7c472c5ed1a59e17e80793ab13886eb0 = L.circleMarker(
+                [24.694607091558996, 46.67658283113747],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_2affe311ccde41aa3063ba6ea1a61c3d = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_31af1e63a693e0607a315a6e5aeef5be = $(`<div id="html_31af1e63a693e0607a315a6e5aeef5be" style="width: 100.0%; height: 100.0%;">                     <b>Dentist 2</b><br>                     Category: dentist, dentist<br>                     Distance: 155m                     </div>`)[0];
+                popup_2affe311ccde41aa3063ba6ea1a61c3d.setContent(html_31af1e63a693e0607a315a6e5aeef5be);
+            
+        
+
+        circle_marker_7c472c5ed1a59e17e80793ab13886eb0.bindPopup(popup_2affe311ccde41aa3063ba6ea1a61c3d)
+        ;
+
+        
+    
+    
+            circle_marker_7c472c5ed1a59e17e80793ab13886eb0.bindTooltip(
+                `<div>
+                     Dentist 2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3d2c5b93cbcce40f51bc15f452ac62e4 = L.circleMarker(
+                [24.694490658992752, 46.67784672605624],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_4e09f6ddf4bbc349409a0b69067f21b1 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_e53c8bff8b077cdd8bf3fcd4080a80cc = $(`<div id="html_e53c8bff8b077cdd8bf3fcd4080a80cc" style="width: 100.0%; height: 100.0%;">                     <b>Dentist 3</b><br>                     Category: dentist, dentist<br>                     Distance: 151m                     </div>`)[0];
+                popup_4e09f6ddf4bbc349409a0b69067f21b1.setContent(html_e53c8bff8b077cdd8bf3fcd4080a80cc);
+            
+        
+
+        circle_marker_3d2c5b93cbcce40f51bc15f452ac62e4.bindPopup(popup_4e09f6ddf4bbc349409a0b69067f21b1)
+        ;
+
+        
+    
+    
+            circle_marker_3d2c5b93cbcce40f51bc15f452ac62e4.bindTooltip(
+                `<div>
+                     Dentist 3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_5a93f6f7749792375450e7180cde6c27 = L.circleMarker(
+                [24.69411043824372, 46.67733253552493],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_3083012f0ed4fc6dfe7d8a5a61873cc2 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_a6bc59bbcaa02d382a6fbbe2d7079fa7 = $(`<div id="html_a6bc59bbcaa02d382a6fbbe2d7079fa7" style="width: 100.0%; height: 100.0%;">                     <b>Dentist 4</b><br>                     Category: dentist, dentist<br>                     Distance: 158m                     </div>`)[0];
+                popup_3083012f0ed4fc6dfe7d8a5a61873cc2.setContent(html_a6bc59bbcaa02d382a6fbbe2d7079fa7);
+            
+        
+
+        circle_marker_5a93f6f7749792375450e7180cde6c27.bindPopup(popup_3083012f0ed4fc6dfe7d8a5a61873cc2)
+        ;
+
+        
+    
+    
+            circle_marker_5a93f6f7749792375450e7180cde6c27.bindTooltip(
+                `<div>
+                     Dentist 4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_90fbbeadc859456e762261f51544f430 = L.circleMarker(
+                [24.691348881409372, 46.67676909343472],
+                {"bubblingMouseEvents": true, "color": "blue", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "blue", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_e01c79fb003d51f5fcf800b4b2943d86 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_75d2c263859e117ed90d3652fd19fc03 = $(`<div id="html_75d2c263859e117ed90d3652fd19fc03" style="width: 100.0%; height: 100.0%;">                     <b>Dentist 5</b><br>                     Category: dentist, dentist<br>                     Distance: 74m                     </div>`)[0];
+                popup_e01c79fb003d51f5fcf800b4b2943d86.setContent(html_75d2c263859e117ed90d3652fd19fc03);
+            
+        
+
+        circle_marker_90fbbeadc859456e762261f51544f430.bindPopup(popup_e01c79fb003d51f5fcf800b4b2943d86)
+        ;
+
+        
+    
+    
+            circle_marker_90fbbeadc859456e762261f51544f430.bindTooltip(
+                `<div>
+                     Dentist 5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_3d49519ac1866b1c5b019c6f2071ed83 = L.circleMarker(
+                [24.6941336737459, 46.67491073477388],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_e4422192842e25fe1d63791817d33e65 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_f07e93f2a26f99209e6fa615296b521e = $(`<div id="html_f07e93f2a26f99209e6fa615296b521e" style="width: 100.0%; height: 100.0%;">                     <b>Supermarket 1</b><br>                     Category: supermarket, supermarket, supermarket, supermarket<br>                     Distance: 182m                     </div>`)[0];
+                popup_e4422192842e25fe1d63791817d33e65.setContent(html_f07e93f2a26f99209e6fa615296b521e);
+            
+        
+
+        circle_marker_3d49519ac1866b1c5b019c6f2071ed83.bindPopup(popup_e4422192842e25fe1d63791817d33e65)
+        ;
+
+        
+    
+    
+            circle_marker_3d49519ac1866b1c5b019c6f2071ed83.bindTooltip(
+                `<div>
+                     Supermarket 1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_8cc8aba35da5d34fc54b3dca489eba85 = L.circleMarker(
+                [24.69218674451318, 46.676769644910486],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_bb8a49e4aea09022903860bbfe721fe0 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_041bbaaaa5064015eee5492d65c53f88 = $(`<div id="html_041bbaaaa5064015eee5492d65c53f88" style="width: 100.0%; height: 100.0%;">                     <b>Supermarket 2</b><br>                     Category: supermarket, supermarket, supermarket, supermarket<br>                     Distance: 155m                     </div>`)[0];
+                popup_bb8a49e4aea09022903860bbfe721fe0.setContent(html_041bbaaaa5064015eee5492d65c53f88);
+            
+        
+
+        circle_marker_8cc8aba35da5d34fc54b3dca489eba85.bindPopup(popup_bb8a49e4aea09022903860bbfe721fe0)
+        ;
+
+        
+    
+    
+            circle_marker_8cc8aba35da5d34fc54b3dca489eba85.bindTooltip(
+                `<div>
+                     Supermarket 2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_37d31e8340a86b1f3551170d581cb168 = L.circleMarker(
+                [24.69134523457291, 46.67707131401622],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_6b8dcfd08d320f6ed644ac87e2c6e258 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_90f2b74d2775c5a621212feb78770a4b = $(`<div id="html_90f2b74d2775c5a621212feb78770a4b" style="width: 100.0%; height: 100.0%;">                     <b>Supermarket 3</b><br>                     Category: supermarket, supermarket, supermarket, supermarket<br>                     Distance: 181m                     </div>`)[0];
+                popup_6b8dcfd08d320f6ed644ac87e2c6e258.setContent(html_90f2b74d2775c5a621212feb78770a4b);
+            
+        
+
+        circle_marker_37d31e8340a86b1f3551170d581cb168.bindPopup(popup_6b8dcfd08d320f6ed644ac87e2c6e258)
+        ;
+
+        
+    
+    
+            circle_marker_37d31e8340a86b1f3551170d581cb168.bindTooltip(
+                `<div>
+                     Supermarket 3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_7127bc19869efd808cba40560935d54c = L.circleMarker(
+                [24.693394738748317, 46.67603914735676],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_d35f62ac4327d772458ccc74615bac0b = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_82b1f55febe48e8569628fc3c888a9c9 = $(`<div id="html_82b1f55febe48e8569628fc3c888a9c9" style="width: 100.0%; height: 100.0%;">                     <b>Supermarket 4</b><br>                     Category: supermarket, supermarket, supermarket, supermarket<br>                     Distance: 292m                     </div>`)[0];
+                popup_d35f62ac4327d772458ccc74615bac0b.setContent(html_82b1f55febe48e8569628fc3c888a9c9);
+            
+        
+
+        circle_marker_7127bc19869efd808cba40560935d54c.bindPopup(popup_d35f62ac4327d772458ccc74615bac0b)
+        ;
+
+        
+    
+    
+            circle_marker_7127bc19869efd808cba40560935d54c.bindTooltip(
+                `<div>
+                     Supermarket 4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_2f8e450d65c5dcc49521efe8f6127b3c = L.circleMarker(
+                [24.691550170797903, 46.67718686976061],
+                {"bubblingMouseEvents": true, "color": "gray", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "gray", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_ed2e3d5241541d2d0aeea64dbd34438d = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_e9c05ec3cb5b8b8fa47b249d15c57d77 = $(`<div id="html_e9c05ec3cb5b8b8fa47b249d15c57d77" style="width: 100.0%; height: 100.0%;">                     <b>Supermarket 5</b><br>                     Category: supermarket, supermarket, supermarket, supermarket<br>                     Distance: 267m                     </div>`)[0];
+                popup_ed2e3d5241541d2d0aeea64dbd34438d.setContent(html_e9c05ec3cb5b8b8fa47b249d15c57d77);
+            
+        
+
+        circle_marker_2f8e450d65c5dcc49521efe8f6127b3c.bindPopup(popup_ed2e3d5241541d2d0aeea64dbd34438d)
+        ;
+
+        
+    
+    
+            circle_marker_2f8e450d65c5dcc49521efe8f6127b3c.bindTooltip(
+                `<div>
+                     Supermarket 5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_9ee49f5f418cd6c80c05ad55fd84b9a7 = L.circleMarker(
+                [24.69323243654764, 46.67449549638366],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_e0b90282621f29e6593508216d5c2b37 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_171cf657503cd8fa7c9f1944d4d1e229 = $(`<div id="html_171cf657503cd8fa7c9f1944d4d1e229" style="width: 100.0%; height: 100.0%;">                     <b>Bank 1</b><br>                     Category: bank, bank, bank, bank, bank, bank<br>                     Distance: 216m                     </div>`)[0];
+                popup_e0b90282621f29e6593508216d5c2b37.setContent(html_171cf657503cd8fa7c9f1944d4d1e229);
+            
+        
+
+        circle_marker_9ee49f5f418cd6c80c05ad55fd84b9a7.bindPopup(popup_e0b90282621f29e6593508216d5c2b37)
+        ;
+
+        
+    
+    
+            circle_marker_9ee49f5f418cd6c80c05ad55fd84b9a7.bindTooltip(
+                `<div>
+                     Bank 1
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f8a3f000f189632797499ab8768ca69b = L.circleMarker(
+                [24.692884230708582, 46.675978685837556],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_d6fbf93627ab2fab68b9c4577df254bf = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_9f8fd48ed4a8fba7e8ebc5895a1a9014 = $(`<div id="html_9f8fd48ed4a8fba7e8ebc5895a1a9014" style="width: 100.0%; height: 100.0%;">                     <b>Bank 2</b><br>                     Category: bank, bank, bank, bank, bank, bank<br>                     Distance: 56m                     </div>`)[0];
+                popup_d6fbf93627ab2fab68b9c4577df254bf.setContent(html_9f8fd48ed4a8fba7e8ebc5895a1a9014);
+            
+        
+
+        circle_marker_f8a3f000f189632797499ab8768ca69b.bindPopup(popup_d6fbf93627ab2fab68b9c4577df254bf)
+        ;
+
+        
+    
+    
+            circle_marker_f8a3f000f189632797499ab8768ca69b.bindTooltip(
+                `<div>
+                     Bank 2
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_f4ac4efc65800fe3d7eeff2e60e5c6ec = L.circleMarker(
+                [24.69186515872043, 46.677315419538424],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_3ca3b91b0ce11c02b393abb656524bac = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_4ff82bfddf93ae0e1b4642693485055e = $(`<div id="html_4ff82bfddf93ae0e1b4642693485055e" style="width: 100.0%; height: 100.0%;">                     <b>Bank 3</b><br>                     Category: bank, bank, bank, bank, bank, bank<br>                     Distance: 185m                     </div>`)[0];
+                popup_3ca3b91b0ce11c02b393abb656524bac.setContent(html_4ff82bfddf93ae0e1b4642693485055e);
+            
+        
+
+        circle_marker_f4ac4efc65800fe3d7eeff2e60e5c6ec.bindPopup(popup_3ca3b91b0ce11c02b393abb656524bac)
+        ;
+
+        
+    
+    
+            circle_marker_f4ac4efc65800fe3d7eeff2e60e5c6ec.bindTooltip(
+                `<div>
+                     Bank 3
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_118227455cfad62372f68c61045bd966 = L.circleMarker(
+                [24.69143916337309, 46.67526399545187],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_20882ea3bf31e991ac24c4f5204c512b = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_127885649ecd87a1526c946bcfab3ea3 = $(`<div id="html_127885649ecd87a1526c946bcfab3ea3" style="width: 100.0%; height: 100.0%;">                     <b>Bank 4</b><br>                     Category: bank, bank, bank, bank, bank, bank<br>                     Distance: 109m                     </div>`)[0];
+                popup_20882ea3bf31e991ac24c4f5204c512b.setContent(html_127885649ecd87a1526c946bcfab3ea3);
+            
+        
+
+        circle_marker_118227455cfad62372f68c61045bd966.bindPopup(popup_20882ea3bf31e991ac24c4f5204c512b)
+        ;
+
+        
+    
+    
+            circle_marker_118227455cfad62372f68c61045bd966.bindTooltip(
+                `<div>
+                     Bank 4
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var circle_marker_1d4d43806d3482c7ccf1c93e3a668e8e = L.circleMarker(
+                [24.694495227670643, 46.6755782834356],
+                {"bubblingMouseEvents": true, "color": "purple", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "purple", "fillOpacity": 0.2, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.8, "radius": 8, "stroke": true, "weight": 1}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_0d2295ccf370118e36d1190eb77d1e99 = L.popup({
+  "maxWidth": 200,
+});
+
+        
+            
+                var html_c526539bde61596ad284ed4b52ccdce5 = $(`<div id="html_c526539bde61596ad284ed4b52ccdce5" style="width: 100.0%; height: 100.0%;">                     <b>Bank 5</b><br>                     Category: bank, bank, bank, bank, bank, bank<br>                     Distance: 174m                     </div>`)[0];
+                popup_0d2295ccf370118e36d1190eb77d1e99.setContent(html_c526539bde61596ad284ed4b52ccdce5);
+            
+        
+
+        circle_marker_1d4d43806d3482c7ccf1c93e3a668e8e.bindPopup(popup_0d2295ccf370118e36d1190eb77d1e99)
+        ;
+
+        
+    
+    
+            circle_marker_1d4d43806d3482c7ccf1c93e3a668e8e.bindTooltip(
+                `<div>
+                     Bank 5
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_a21ffdf34081d42095187225329e0db8 = L.marker(
+                [24.69297981262207, 46.67618942260742],
+                {
+}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+            var icon_b3e890d8a6ceaf1474e8f2044015035c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_920421ff1482e37d54fd9c9913320f48 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b89afab82f094e879c54b04ef0c86567 = $(`<div id="html_b89afab82f094e879c54b04ef0c86567" style="width: 100.0%; height: 100.0%;">             <div style='width: 250px'>                 <h4>🏢 طريق-الأمير-محمد-بن-عبدالعزيز-حي-العليا-الرياض-منطقة-الرياض</h4>                 <b>Final Score:</b> 91<br>                 <b>Competitors:</b> 5 pharmacies<br>                 <b>Businesses:</b> 25 total             </div>             </div>`)[0];
+                popup_920421ff1482e37d54fd9c9913320f48.setContent(html_b89afab82f094e879c54b04ef0c86567);
+            
+        
+
+        marker_a21ffdf34081d42095187225329e0db8.bindPopup(popup_920421ff1482e37d54fd9c9913320f48)
+        ;
+
+        
+    
+    
+            marker_a21ffdf34081d42095187225329e0db8.bindTooltip(
+                `<div>
+                     طريق-الأمير-محمد-بن-عبدالعزيز-حي-العليا-الرياض-منطقة-الرياض - Score: 91
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a21ffdf34081d42095187225329e0db8.setIcon(icon_b3e890d8a6ceaf1474e8f2044015035c);
+            
+    
+            var circle_0e30c3b66aac1bdab01c78227b2baeaa = L.circle(
+                [24.69297981262207, 46.67618942260742],
+                {"bubblingMouseEvents": true, "color": "red", "dashArray": null, "dashOffset": null, "fill": true, "fillColor": "red", "fillOpacity": 0.1, "fillRule": "evenodd", "lineCap": "round", "lineJoin": "round", "opacity": 0.6, "radius": 1000, "stroke": true, "weight": 2}
+            ).addTo(map_a75c21f825b82275410b8c7adde1f29a);
+        
+    
+        var popup_f18a67b0cd6edfe5b18560dca9aa1db5 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_e2a90ac26df475bdf5e89ff1efbc8535 = $(`<div id="html_e2a90ac26df475bdf5e89ff1efbc8535" style="width: 100.0%; height: 100.0%;">Analysis radius: 300m</div>`)[0];
+                popup_f18a67b0cd6edfe5b18560dca9aa1db5.setContent(html_e2a90ac26df475bdf5e89ff1efbc8535);
+            
+        
+
+        circle_0e30c3b66aac1bdab01c78227b2baeaa.bindPopup(popup_f18a67b0cd6edfe5b18560dca9aa1db5)
+        ;
+
+        
+    
+</script>
+</html>

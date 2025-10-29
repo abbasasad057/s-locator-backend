@@ -21,11 +21,8 @@ reports/*
 # IDE - VSCode
 .vscode/
 .DS_Store
+
 # user files
-static/pharmacy_report/*
-static/plots/*
-static/reports/*
-static/traffic_screenshots/*
 tool_bridge_mcp_server/sessions/*
 tool_bridge_mcp_server/logs/*
 

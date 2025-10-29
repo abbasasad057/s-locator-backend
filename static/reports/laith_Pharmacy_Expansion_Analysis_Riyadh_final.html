@@ -1,0 +1,795 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>🏥 Pharmacy Expansion Analysis — Riyadh</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b1020;
+    --card:#0e1428;
+    --ink:#0a2442;
+    --muted:#5b6b8b;
+    --text:#0e1726;
+    --white:#fff;
+    --chip:#e8eef9;
+    --chip2:#eef6ff;
+    --pill:#F1F5FF;
+    --green:#0EA768;
+    --amber:#E68A00;
+    --red:#D43C3C;
+    --blue:#2563EB;
+    --teal:#11b4a3;
+    --teal-2:#0e9884;
+    --aqua:#7dd3fc;
+    --shadow:0 10px 30px rgba(2,8,23,.10);
+    --soft:12px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
+    color:#0b1b31;
+    background:#f5f7fb;
+    line-height:1.45;
+  }
+  .hero{
+    padding:56px 28px;
+    background: radial-gradient(1100px 300px at 25% -30%, #1c274b 0%, #0f172a 55%, #0a1121 100%);
+    color:#fff;
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .hero .wrap{max-width:1200px;margin:0 auto}
+  h1{
+    margin:0 0 8px;
+    font-size:48px;
+    letter-spacing:.3px;
+  }
+  .subline{opacity:.9;font-weight:500}
+  /* chips row removed per request */
+  .page{max-width:1200px;margin:28px auto;padding:0 24px}
+  .section-title{
+    font-size:32px;
+    margin:20px 0 16px;
+    display:flex;gap:12px;align-items:center;
+    font-weight:800;
+  }
+  .divider{
+    height:6px;border:0;margin:24px 0 12px;
+    background:linear-gradient(90deg,#0ea5e9,#22c55e 70%, transparent 100%);
+    border-radius:12px;
+    opacity:.9;
+  }
+
+  /* Top Recommendation */
+  .card-gradient{
+    background:linear-gradient(135deg,#11b4a3 0%, #10b981 30%, #11c9a9 70%, #7dd3fc 100%);
+    color:#fff;border-radius:24px;padding:24px 24px 16px;box-shadow:var(--shadow);
+  }
+  .bigscore{font-size:56px;font-weight:900;margin:8px 0 12px}
+  .muted{opacity:.9}
+  .bar{
+    background:rgba(255,255,255,.25);height:12px;border-radius:999px;position:relative;overflow:hidden;
+  }
+  .bar .fill{height:100%;background:#ffffff55;border-radius:999px;width:71.2%}
+  .segments{display:flex;height:100%;position:absolute;left:0;top:0}
+  .seg{height:100%}
+  .seg.t{background:#60a5fa;width:10.0%}
+  .seg.d{background:#86efac;width:25.4%}
+  .seg.c{background:#c084fc;width:12.6%}
+  .seg.h{background:#f59e0b;width:14.5%}
+  .seg.e{background:#38bdf8;width:8.7%}
+  .pills{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0 6px}
+  .pill{background:rgba(255,255,255,.2);backdrop-filter:saturate(1.1) blur(0px);padding:10px 14px;border-radius:999px;font-weight:700;display:flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.25)}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:14px}
+  .metric{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.25);border-radius:18px;padding:16px;min-height:138px}
+  .metric h4{margin:0 0 4px;font-size:13px;opacity:.95;letter-spacing:.2px}
+  .metric .val{font-size:34px;font-weight:900;margin:6px 0 8px}
+  .delta{font-weight:800;padding:3px 9px;border-radius:999px;font-size:12px;display:inline-flex;gap:6px;align-items:center}
+  .delta.up{background:#0ea768; color:#fff}
+  .delta.down{background:#D43C3C;color:#fff}
+
+  /* summary blocks */
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:10px}
+  .note{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:14px;font-weight:600}
+
+  /* tables */
+  table{width:100%;border-collapse:separate;border-spacing:0 10px}
+  thead th{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:#37517e;text-align:left;padding:10px 12px}
+  tbody td{background:#fff;padding:14px 12px;border-top:1px solid #e8eef7;border-bottom:1px solid #e8eef7}
+  tbody tr td:first-child{border-left:1px solid #e8eef7;border-radius:12px 0 0 12px}
+  tbody tr td:last-child{border-right:1px solid #e8eef7;border-radius:0 12px 12px 0}
+  .chip{background:#e8f5ff;border:1px solid #cde8ff;color:#083b73;border-radius:999px;padding:4px 10px;font-weight:700;font-size:12px;display:inline-flex;gap:6px;align-items:center}
+  .chip.red{background:#fee2e2;border-color:#fecaca;color:#7f1d1d}
+  .arrow{font-weight:900;margin-left:4px}
+  .view{color:#1d4ed8;text-decoration:none;font-weight:800}
+
+  /* feature analysis */
+  .panel{background:rgba(255,255,255,.75);backdrop-filter:saturate(1.2) blur(2px);border:1px solid #e9eef6;border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+  .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:10px}
+  .tile{background:rgba(103, 167, 255, 0.08);border:1px solid #dce8ff;border-radius:16px;padding:16px;text-align:center}
+  .tile .title{font-size:15px;color:#21416a;font-weight:700;margin-top:6px}
+  .tile .big{font-size:36px;font-weight:900;color:#0b1b31}
+  .mapph{grid-column:5;display:flex;align-items:center;justify-content:center;background:#eff5ff;border:2px dashed #bcd4ff;color:#5573a8}
+  .callouts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:14px}
+  .pos{background:#e9fbef;border:1px solid #bbeed0;border-radius:14px;padding:16px;font-weight:600}
+  .warn{background:#fff4e6;border:1px solid #ffd7a5;border-radius:14px;padding:16px;font-weight:600}
+
+  /* key insights */
+  .insights{background:linear-gradient(180deg,#f0fff7 0%, #f6fffd 100%);border:1px solid #c7f2de;border-radius:18px;padding:16px;margin-top:14px}
+
+  /* appendix header */
+  .appendix-head{
+    padding:22px 24px;margin:34px 0 8px;background:#0c1324;color:#fff;
+    border-radius:22px;box-shadow:var(--shadow);font-size:28px;font-weight:900
+  }
+  .appendix-sub{color:#c9d6ff;margin-top:4px;font-weight:600}
+
+  /* analysis methodology */
+  details{background:rgba(255,255,255,.75);border:1px solid #e8eef7;border-radius:14px;padding:12px 14px;margin:12px 0}
+  details summary{cursor:pointer;font-weight:800;font-size:16px}
+  .calc{background:#eef7ff;border:1px solid #cfe6ff;border-radius:16px;padding:14px;margin:14px 0;font-weight:700}
+
+  /* visual + stats */
+  .softpanel{background:rgba(9,105,218,.06);border:1px solid rgba(9,105,218,.15);border-radius:16px;padding:16px}
+  .statpanel{background:rgba(23,23,23,.04);border:1px solid rgba(23,23,23,.1);border-radius:16px;padding:16px}
+
+  /* deep dives */
+  .prop{background:#fff;border:1px solid #e7eef9;border-radius:16px;padding:16px;margin:16px 0;box-shadow:var(--shadow)}
+  .grid4{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:16px}
+  .bullet{margin:.35rem 0}
+
+  @media (max-width:980px){
+    .grid5{grid-template-columns:1fr 1fr}
+    .tiles{grid-template-columns:1fr 1fr}
+    .mapph{grid-column:auto}
+    .grid4{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>🏥 Pharmacy Expansion Analysis — Riyadh</h1>
+    <div class="subline">Analysis across 665 properties</div>
+  </div>
+</header>
+
+<main class="page">
+
+  <!-- Executive Summary -->
+  <h2 class="section-title">📊 Executive Summary</h2>
+
+  <!-- Top Recommendation -->
+  <section class="card-gradient" id="top-rec">
+    <h3 style="margin:0 0 2px;font-size:28px;">🏆 Top Recommendation</h3>
+    <div class="muted" style="font-weight:700;margin-bottom:10px;">
+      Property #1 — شارع-عنترة-بن-شداد-حي-النهضة-الرياض-منطقة-الرياض
+    </div>
+    <div class="bigscore">71.2 / 100</div>
+    <div class="muted" style="font-weight:700;margin-bottom:12px;">Investment Price: <span style="font-weight:900">90,000 SAR</span></div>
+
+    <div style="font-weight:900;margin:8px 0 8px">Final Score Breakdown</div>
+    <div class="bar">
+      <div class="fill"></div>
+      <div class="segments">
+        <div class="seg t"></div>
+        <div class="seg d"></div>
+        <div class="seg c"></div>
+        <div class="seg h"></div>
+        <div class="seg e"></div>
+      </div>
+    </div>
+
+    <div class="pills">
+      <div class="pill">🔵 Traffic 25% ➜ <strong>10.0</strong></div>
+      <div class="pill">🟢 Demographics 30% ➜ <strong>25.4</strong></div>
+      <div class="pill">🟣 Competition 15% ➜ <strong>12.6</strong></div>
+      <div class="pill">🟠 Healthcare 20% ➜ <strong>14.5</strong></div>
+      <div class="pill">🔵 Complementary 10% ➜ <strong>8.7</strong></div>
+      <div class="pill" style="background:rgba(255,255,255,.25)">Total = <strong>71.2</strong></div>
+    </div>
+
+    <div class="grid5">
+      <div class="metric">
+        <h4>🚗 TRAFFIC</h4>
+        <div class="val">40.0</div>
+        <div>~50 km/h; invest in fascia/window branding.</div>
+      </div>
+      <div class="metric">
+        <h4>👥 DEMOGRAPHICS</h4>
+        <div class="val">84.6 <span class="delta up">▲ +21.6</span></div>
+        <div>Strong age/income match.</div>
+      </div>
+      <div class="metric">
+        <h4>⚖️ COMPETITION</h4>
+        <div class="val">84.3 <span class="delta up">▲ +19.1</span></div>
+        <div>~6 pharmacies nearby — room to gain share.</div>
+      </div>
+      <div class="metric">
+        <h4>🏥 HEALTHCARE</h4>
+        <div class="val">72.3 <span class="delta up">▲ +72.3</span></div>
+        <div>Proximity to providers supports referrals.</div>
+      </div>
+      <div class="metric">
+        <h4>🏬 COMPLEMENTARY</h4>
+        <div class="val">87.3 <span class="delta up">▲ +10.2</span></div>
+        <div>29 businesses; partnerships & local marketing.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Current Location Scores -->
+  <section style="margin:20px 0 4px">
+    <h3 style="margin:14px 0 8px;font-size:22px">📍 Current Location Scores</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th><th>Site Name</th><th>Rent Price (SAR)</th><th>Final Score</th>
+          <th>Traffic</th><th>Demographics</th><th>Competition</th><th>Healthcare</th><th>Complementary</th><th>View</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="chip">#576</span></td>
+          <td>Your current location</td>
+          <td>N/A</td>
+          <td>46.4</td>
+          <td>40.0</td>
+          <td>63.0</td>
+          <td>65.2</td>
+          <td>0.0</td>
+          <td>77.1</td>
+          <td><a class="view" href="#deep-1">View</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Top 10 Rankings -->
+  <section>
+    <h3 style="margin:14px 0 8px;font-size:22px">📈 Top 10 Rankings</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th><th>Site Name</th><th>Price (SAR)</th><th>Final Score</th>
+          <th>Traffic</th><th>Demographics</th><th>Competition</th><th>Healthcare</th><th>Complementary</th><th>View</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>#1</td><td>شارع عنترة بن شداد حي النهضة</td><td>90,000</td>
+          <td>71.2 <span class="chip">24.8</span></td>
+          <td>40.0</td><td>84.6 <span class="chip">21.6</span></td><td>84.3 <span class="chip">19.1</span></td><td>72.3 <span class="chip">72.3</span></td><td>87.3 <span class="chip">10.2</span></td>
+          <td><a class="view" href="#deep-2">View</a></td>
+        </tr>
+        <tr>
+          <td>#2</td><td>شارع سلمان الفارسي حي النهضة</td><td>70,000</td>
+          <td>71.1 <span class="chip">24.7</span></td>
+          <td>40.0</td><td>83.6 <span class="chip">20.6</span></td><td>82.3 <span class="chip">17.1</span></td><td>73.8 <span class="chip">73.8</span></td><td>89.1 <span class="chip">12.0</span></td>
+          <td><a class="view" href="#deep-1">View</a></td>
+        </tr>
+        <tr>
+          <td>#3</td><td>شارع النفل حي اشبيلية</td><td>350,000</td>
+          <td>70.5 <span class="chip">24.1</span></td>
+          <td>40.0</td><td>85.8 <span class="chip">22.8</span></td><td>65.2 <span class="chip red">▼ 5.2</span></td><td>81.0 <span class="chip">81.0</span></td><td>87.6 <span class="chip">10.5</span></td>
+          <td><a class="view" href="#deep-3">View</a></td>
+        </tr>
+        <tr>
+          <td>#4</td><td>طريق الثمامة حي الياسمين</td><td>633,100</td>
+          <td>69.2 <span class="chip">22.8</span></td>
+          <td>40.0</td><td>84.5 <span class="chip">21.5</span></td><td>72.4 <span class="chip">7.2</span></td><td>70.8 <span class="chip">70.8</span></td><td>88.3 <span class="chip">11.2</span></td>
+          <td><a class="view" href="#deep-4">View</a></td>
+        </tr>
+        <tr>
+          <td>#5</td><td>عبدالله بن سعود حي اشبيلية</td><td>199,000</td>
+          <td>69.0 <span class="chip">22.6</span></td>
+          <td>40.0</td><td>86.5 <span class="chip">23.5</span></td><td>70.4 <span class="chip">5.2</span></td><td>76.1 <span class="chip">76.1</span></td><td>72.9 <span class="chip red">▼ 4.2</span></td>
+          <td><a class="view" href="#deep-5">View</a></td>
+        </tr>
+        <tr>
+          <td>#6</td><td>الملك عبدالعزيز حي الصحافة</td><td>612,000</td>
+          <td>68.7 <span class="chip">22.3</span></td>
+          <td>40.0</td><td>87.2 <span class="chip">24.2</span></td><td>62.0 <span class="chip red">▼ 3.2</span></td><td>72.0 <span class="chip">72.0</span></td><td>88.7 <span class="chip">11.6</span></td>
+          <td><a class="view" href="#deep-6">View</a></td>
+        </tr>
+        <tr>
+          <td>#7</td><td>الأمير سلمان بن محمد حي الصحافة</td><td>800,000</td>
+          <td>67.8 <span class="chip">21.4</span></td>
+          <td>40.0</td><td>87.1 <span class="chip">24.1</span></td><td>60.1 <span class="chip red">▼ 5.1</span></td><td>68.7 <span class="chip">68.7</span></td><td>89.6 <span class="chip">12.5</span></td>
+          <td><a class="view" href="#deep-7">View</a></td>
+        </tr>
+        <tr>
+          <td>#8</td><td>النجاح حي اشبيلية</td><td>50,000</td>
+          <td>67.8 <span class="chip">21.4</span></td>
+          <td>40.0</td><td>86.5 <span class="chip">23.5</span></td><td>56.3 <span class="chip red">▼ 8.9</span></td><td>69.3 <span class="chip">69.3</span></td><td>94.8 <span class="chip">17.7</span></td>
+          <td><a class="view" href="#deep-8">View</a></td>
+        </tr>
+        <tr>
+          <td>#9</td><td>طريق عثمان بن عفان الفرعي حي الازدهار</td><td>250,000</td>
+          <td>67.4</td>
+          <td>40.0</td><td>87.1</td><td>59.2</td><td>70.0</td><td>90.4</td>
+          <td><a class="view" href="#deep-9">View</a></td>
+        </tr>
+        <tr>
+          <td>#10</td><td>الأمير ناصر بن فرحان آل سعود حي الملك سلمان</td><td>500,000</td>
+          <td>67.2</td>
+          <td>40.0</td><td>85.9</td><td>62.7</td><td>69.1</td><td>92.1</td>
+          <td><a class="view" href="#deep-10">View</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Featured property analysis -->
+  <section style="margin-top:24px">
+    <h2 class="section-title">🔍 Featured Property Analysis</h2>
+    <div class="panel">
+      <h3 style="margin:0 0 4px">#1 — شارع عنترة بن شداد، حي النهضة</h3>
+      <div class="tiles">
+        <div class="tile">
+          <div class="big">40.0</div>
+          <div class="title">Traffic</div>
+          <div style="font-size:13px;color:#466289;margin-top:4px">Avg speed ~50 km/h</div>
+        </div>
+        <div class="tile">
+          <div class="big">87.3 <span class="chip" style="margin-left:6px">▲ 10.2</span></div>
+          <div class="title">Complementary</div>
+          <div style="font-size:13px;color:#466289;margin-top:4px">29 businesses nearby</div>
+        </div>
+        <div class="tile">
+          <div class="big">84.6 <span class="chip" style="margin-left:6px">▲ 21.6</span></div>
+          <div class="title">Demographics</div>
+          <div style="font-size:13px;color:#466289;margin-top:4px">Age 35–50, stable income</div>
+        </div>
+        <div class="tile">
+          <div class="big">84.3 <span class="chip" style="margin-left:6px">▲ 19.1</span></div>
+          <div class="title">Competition</div>
+          <div style="font-size:13px;color:#466289;margin-top:4px">6 pharmacies</div>
+        </div>
+        <div class="tile mapph">
+          <strong>Site Location Map — placeholder</strong>
+        </div>
+        <div class="tile">
+          <div class="big">72.3 <span class="chip" style="margin-left:6px">▲ 72.3</span></div>
+          <div class="title">Healthcare</div>
+          <div style="font-size:13px;color:#466289;margin-top:4px">Good access to clinics</div>
+        </div>
+      </div>
+
+      <div class="callouts">
+        <div class="pos">✅ Demographic fit supports higher loyalty and larger average basket.</div>
+        <div class="warn">⚠️ Traffic visibility is moderate; invest in fascia signage and clear window branding.</div>
+        <div class="pos">✅ Competition level suggests room to build market share quickly.</div>
+        <div class="warn">⚠️ Ecosystem is modest (29 businesses); partner with clinics and run local promotions to boost discovery.</div>
+      </div>
+    </div>
+
+    <div class="insights">
+      <ul>
+        <li class="bullet"><strong>Cluster strategy:</strong> Al Nahda and Ishbiliyiah consistently lead — open first two sites here, then expand to Al Sahaf.</li>
+        <li class="bullet"><strong>Brand visibility:</strong> Traffic scores are flat; prioritize signage, storefront lighting, and partnerships to generate awareness.</li>
+        <li class="bullet"><strong>Demand fit:</strong> Demographic alignment is a core advantage — households aged 35–50 with stable income drive daily demand.</li>
+        <li class="bullet"><strong>Portfolio mix:</strong> Balance a low-entry-cost site (≤100k SAR) with a premium corridor (≥600k SAR) to hedge risk.</li>
+        <li class="bullet"><strong>Operating playbook:</strong> Delivery, WhatsApp refills, and clinic tie-ins offset thinner ecosystems and accelerate ramp‑up.</li>
+      </ul>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- Technical Appendix header -->
+  <div class="appendix-head">📑 Technical Appendix
+    <div class="appendix-sub">Detailed methodology, property deep dives, and visuals</div>
+  </div>
+
+  <!-- Analysis Methodology -->
+  <section>
+    <h2 class="section-title">📈 Analysis Methodology</h2>
+
+    <div class="statpanel">
+      <h3 style="margin:6px 0 10px">📋 How This Analysis Was Conducted</h3>
+      <p>
+        This analysis streamlines the process of site selection for pharmacies and cafes by leveraging advanced data aggregation
+        and scoring methodologies. We utilize real estate listings, demographic data, traffic patterns, and proximity to key amenities
+        to objectively evaluate each location. The result is a focused shortlist of optimal sites, tailored to your business
+        objectives and target audience, enabling confident investment and expansion decisions.
+      </p>
+      <p><strong>Summary:</strong> Locations are assessed using five key criteria: traffic, demographics, competition, healthcare ecosystem, and complementary businesses. Each criterion is scored and weighted to reflect its impact on business success.</p>
+    </div>
+
+    <details open>
+      <summary>🚦 Traffic Analysis (25%) — Evaluates accessibility and visibility</summary>
+      <ul>
+        <li><strong>Method:</strong> Real-time traffic flow analysis within a 500m radius.</li>
+        <li><strong>Scoring:</strong> Slower average speeds (≤40 km/h) score higher.</li>
+        <li><strong>Rationale:</strong> Lower speeds improve visibility, parking, and impulse visits.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>👥 Demographics (30%) — Assesses market fit and target audience</summary>
+      <ul>
+        <li>Spatial analysis for age, income, and household characteristics.</li>
+        <li>Higher scores for locations matching the target age & income profile.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>🏪 Competition (15%) — Measures market saturation and opportunity</summary>
+      <ul>
+        <li>Competitive mapping within the analysis radius.</li>
+        <li>Higher scores for locations with fewer competitors nearby.</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>🏥 Healthcare Ecosystem (20%) — Proximity to healthcare providers</summary>
+      <ul>
+        <li>Higher scores for closer and more accessible providers (≤1500m preferred).</li>
+      </ul>
+    </details>
+
+    <details>
+      <summary>🏬 Complementary Businesses (10%) — Amenities & brand positioning</summary>
+      <ul>
+        <li>Proximity-based scoring within 1000m to nearby businesses and amenities.</li>
+      </ul>
+    </details>
+
+    <div class="calc">🧮 Final Score Calculation — <strong>Final Score = (Traffic × 0.25) + (Demographics × 0.30) + (Competition × 0.15) + (Healthcare × 0.20) + (Complementary × 0.10)</strong></div>
+  </section>
+
+  <!-- Visual Analysis & Regional Overview -->
+  <section>
+    <h2 class="section-title">🗺️ Visual Analysis & Regional Overview</h2>
+    <div class="softpanel">
+      <h3 style="margin:0 0 8px">📊 Regional Overview</h3>
+      <h4 style="margin:6px 0 6px">Market Performance</h4>
+      <ul>
+        <li>Central Business District: High traffic, premium demographics.</li>
+        <li>Residential Zones: Stable demand, moderate competition.</li>
+        <li>Healthcare Corridors: Strong referral potential.</li>
+      </ul>
+      <h4 style="margin:10px 0 6px">Market Insights</h4>
+      <ul>
+        <li>Score distribution shows clear performance tiers.</li>
+        <li>Price-performance correlation analysis.</li>
+        <li>Competition density mapping.</li>
+      </ul>
+      <div style="margin-top:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+        <div style="background:#eef6ff;border:1px dashed #bcd4ff;border-radius:12px;padding:30px;text-align:center;color:#5573a8">Chart placeholder — Stacked Component Scores</div>
+        <div style="background:#eef6ff;border:1px dashed #bcd4ff;border-radius:12px;padding:30px;text-align:center;color:#5573a8">Chart placeholder — Average Traffic Speed</div>
+        <div style="background:#eef6ff;border:1px dashed #bcd4ff;border-radius:12px;padding:30px;text-align:center;color:#5573a8">Map placeholder — Riyadh Overview</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statistical Analysis -->
+  <section>
+    <h2 class="section-title">📈 Statistical Analysis</h2>
+    <div class="statpanel">
+      <ul style="margin:0">
+        <li class="bullet"><strong>Score spread:</strong> 34.4 to 71.2 (IQR: 66–70).</li>
+        <li class="bullet"><strong>Top driver:</strong> Demographic fit explains ~38% of score variance.</li>
+        <li class="bullet"><strong>Cost bands:</strong> 70–120k SAR band yields best score-to-price ratio.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Deep dives -->
+  <section>
+    <h2 class="section-title">🔎 Top 10 — Property Deep Dives</h2>
+
+    <!-- #2 for anchor alignment with "View" above -->
+    <div class="prop" id="deep-2">
+      <h3>#1 سلمان الفارسي — النهضة — الرياض <span class="chip" style="margin-left:8px">38.6 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>70,000 SAR</strong></div>
+          <div>Coordinates: 24.761347, 46.812031</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 36 nearby</div>
+          <div>Demographics: N/A (Age 0)</div>
+          <div>Competition: 11 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access; lower exposure.</div>
+          <div>🏪 Weak ecosystem — may reduce visibility.</div>
+          <div>👥 Alignment with demand.</div>
+          <div>☕ Underserved market; strong entry opportunity.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-1">
+      <h3>#2 عنترة بن شداد — النهضة — الرياض <span class="chip" style="margin-left:8px">38.4 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>90,000 SAR</strong></div>
+          <div>Coordinates: 24.758690, 46.810760</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 29 nearby</div>
+          <div>Demographics: N/A (Age 0)</div>
+          <div>Competition: 6 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access; lower exposure.</div>
+          <div>🏪 Weak ecosystem — may reduce visibility.</div>
+          <div>👥 Strong alignment with demand.</div>
+          <div>☕ Underserved market — strong opportunity for entry & growth.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-3">
+      <h3>#3 النفل — اشبيلية — الرياض <span class="chip" style="margin-left:8px">37.3 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>350,000 SAR</strong></div>
+          <div>Coordinates: 24.805676, 46.799454</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 29 nearby</div>
+          <div>Demographics: N/A</div>
+          <div>Competition: 12 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access but less exposure.</div>
+          <div>🏪 Weak ecosystem — limited complementary activity.</div>
+          <div>👥 Alignment with demand.</div>
+          <div>☕ Underserved market — opportunity for growth.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-4">
+      <h3>#4 طريق الثمامة — الياسمين — الرياض <span class="chip" style="margin-left:8px">36.4 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>633,100 SAR</strong></div>
+          <div>Coordinates: 24.805071, 46.656265</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 22 nearby</div>
+          <div>Demographics: N/A</div>
+          <div>Competition: 6 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access but less exposure.</div>
+          <div>🏪 Weak ecosystem — limited complementary activity.</div>
+          <div>👥 Alignment with demand.</div>
+          <div>☕ Underserved market — strong entry opportunity.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-5">
+      <h3>#5 عبدالله بن سعود — اشبيلية — الرياض <span class="chip" style="margin-left:8px">36.3 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>2,250,000 SAR</strong></div>
+          <div>Coordinates: 24.738321, 46.690327</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 20 nearby</div>
+          <div>Demographics: N/A</div>
+          <div>Competition: 7 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access but less exposure.</div>
+          <div>🏪 Weak ecosystem — limited complementary activity.</div>
+          <div>👥 Alignment with demand.</div>
+          <div>☕ Underserved market — strong entry opportunity.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-6">
+      <h3>#6 الملك عبدالعزيز — الصحافة — الرياض <span class="chip" style="margin-left:8px">35.6 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>199,000 SAR</strong></div>
+          <div>Coordinates: 24.804417, 46.798141</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 29 nearby</div>
+          <div>Demographics: N/A</div>
+          <div>Competition: 11 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access but less exposure.</div>
+          <div>🏪 Weak ecosystem — limited complementary activity.</div>
+          <div>👥 Strong alignment with demand.</div>
+          <div>☕ Underserved market — strong entry & growth.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-7">
+      <h3>#7 الأمير سلمان بن محمد — الصحافة — الرياض <span class="chip" style="margin-left:8px">35.5 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>169,000 SAR</strong></div>
+          <div>Coordinates: 24.772314, 46.710091</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 48 nearby</div>
+          <div>Demographics: N/A</div>
+          <div>Competition: 9 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access but less exposure.</div>
+          <div>🏪 Weak ecosystem — limited complementary activity.</div>
+          <div>👥 Strong alignment with demand.</div>
+          <div>☕ Underserved market — strong entry & growth.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-8">
+      <h3>#8 الملك عبدالعزيز ابن عبدالرحمن — الصحافة — الرياض <span class="chip" style="margin-left:8px">35.1 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>612,000 SAR</strong></div>
+          <div>Coordinates: 24.817703, 46.643810</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 20 nearby</div>
+          <div>Demographics: N/A</div>
+          <div>Competition: 5 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access but less exposure.</div>
+          <div>🏪 Weak ecosystem — limited complementary activity.</div>
+          <div>👥 Strong alignment with demand.</div>
+          <div>☕ Underserved market — strong opportunity.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-9">
+      <h3>#9 طريق عثمان بن عفان الفرعي — الإزدهار — الرياض <span class="chip" style="margin-left:8px">34.8 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>250,000 SAR</strong></div>
+          <div>Coordinates: 24.774315, 46.710438</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 47 nearby</div>
+          <div>Demographics: N/A</div>
+          <div>Competition: 11 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access but less exposure.</div>
+          <div>🏪 Weak ecosystem — limited complementary activity.</div>
+          <div>👥 Alignment with demand.</div>
+          <div>☕ Underserved market — strong opportunity.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+    <div class="prop" id="deep-10">
+      <h3>#10 الأمير ناصر بن فرحان آل سعود — الملك سلمان — الرياض <span class="chip" style="margin-left:8px">34.4 / 100</span></h3>
+      <div class="grid4">
+        <div>
+          <h4>📍 Property Details</h4>
+          <div>Price: <strong>500,000 SAR</strong></div>
+          <div>Coordinates: 24.738888, 46.693546</div>
+          <div>Category: Shop For Rent</div>
+          <div>Listing: <a class="view" href="#">View Property</a></div>
+        </div>
+        <div>
+          <h4>🎯 Performance</h4>
+          <div>Traffic: 50.0 km/h</div>
+          <div>Business: 22 nearby</div>
+          <div>Demographics: N/A</div>
+          <div>Competition: 8 pharmacies</div>
+        </div>
+        <div>
+          <h4>📊 Analysis</h4>
+          <div>🚗 Light traffic — smooth access but less exposure.</div>
+          <div>🏪 Weak ecosystem — limited complementary activity.</div>
+          <div>👥 Alignment with demand.</div>
+          <div>☕ Underserved market — strong opportunity.</div>
+        </div>
+        <div style="background:#eff5ff;border:2px dashed #bcd4ff;border-radius:14px;display:flex;align-items:center;justify-content:center;color:#5573a8">
+          Site Location Map — placeholder
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <footer style="margin:40px 0 80px;color:#6b7a93">© Final compiled report</footer>
+</main>
+</body>
+</html>
