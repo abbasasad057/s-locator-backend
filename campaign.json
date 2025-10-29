@@ -18,7 +18,7 @@
     "description": "💊 Retail Store/Pharmacy optimal location in Riyadh (Free Sample Report)",
     "bgImage": "http://localhost:8000/static/pharmacy-analysis.png",
     "options": {
-      "free_redirect": "static/reports/JnaGDCKoSoWtj6NWEVW8MDMBCiA2.html",
+      "free_redirect": "static/reports/pharmacy_sales_report.html",
       "custom_redirect": {
         "has_account": "/custom-report/pharmacy",
         "no_account": "/plans"
