@@ -5,7 +5,7 @@
     "description": "☕️ Dine-in Cafe/Restaurant optimal location in Riyadh (Free Sample Report)",
     "bgImage": "http://localhost:8000/static/cafe-analysis.png",
     "options": {
-      "free_redirect": "http://localhost:8050/cafe-analysis",
+      "free_redirect": "static/reports/cafe_sales_report.html",
       "custom_redirect": {
         "has_account": "/custom-report/cafe",
         "no_account": "/plans"
@@ -31,7 +31,7 @@
     "description": "🚚 Warehouse optimal location for my delivery service (Free Sample Report)",
     "bgImage": "http://localhost:8000/static/warehouse-analysis.png",
     "options": {
-      "free_redirect": "http://localhost:8050/warehouse-analysis",
+      "free_redirect": "static/reports/warehouse_sales_report.html",
       "custom_redirect": {
         "has_account": "/custom-report/warehouse",
         "no_account": "/plans"
@@ -44,7 +44,7 @@
     "description": "🔍 Do my own custom analysis (Free Sample data)",
     "bgImage": "http://localhost:8000/static/custom-analysis.png",
     "options": {
-      "free_redirect": "http://localhost:3000/",
+      "free_redirect": "http://localhost:8050/",
       "custom_redirect": {
         "has_account": "http://localhost:3000/",
         "no_account": "/plans"
