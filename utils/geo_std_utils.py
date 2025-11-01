@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any, List, Tuple
 from geopy.geocoders import Nominatim
 from shapely.geometry import box
 from all_types.request_dtypes import ReqFetchDataset, ReqGeodata
-from constants import load_country_city
+from preloaded_constants import load_country_city
 
 
 from app_logger import get_logger

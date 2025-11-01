@@ -43,7 +43,7 @@ from logging_wrapper import (
     preserve_validate_decorator,
 )
 from logging_wrapper import log_and_validate
-from constants import load_country_city
+from preloaded_constants import load_country_city
 from mapbox_connector import MapBoxConnector
 from storage_methods import (
     REAL_ESTATE_CATEGORIES,
