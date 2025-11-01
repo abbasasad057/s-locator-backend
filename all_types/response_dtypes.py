@@ -8,13 +8,6 @@ from all_types.request_dtypes import ReqFetchDataset
 T = TypeVar("T")
 
 
-class ResDineInSuitabilityAnalysis(BaseModel):
-    report_url: str
-    analysis_summary: dict
-    top_properties: list
-    total_properties_analyzed: int
-    report_filename: str
-
 
 class PropertyAnalysisResult(BaseModel):
     """Individual property analysis result"""

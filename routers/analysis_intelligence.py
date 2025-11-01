@@ -28,9 +28,7 @@ from hub_expansion_analysis import (
 )
 from config_factory import CONF
 
-from dine_in_suitability_analysis import analyze_dine_in_sites
-from all_types.request_dtypes import ReqDineInSuitabilityAnalysis
-from all_types.response_dtypes import ResDineInSuitabilityAnalysis, ResIntelligenceViewport
+from all_types.response_dtypes import ResIntelligenceViewport
 from smart_reports.reports import generate_html_report
 # from traffic_data import get_here_traffic_score
 from standalone_google_maps_traffic import analyze_traffic_at_location
@@ -106,26 +104,6 @@ async def ep_hub_expansion_analysis(
     )
     return response
 
-
-@analysis_router.post(
-    "/dine_in_suitability_analysis", response_model=ResModel[ResDineInSuitabilityAnalysis]
-)
-async def ep_dine_in_suitability_analysis(
-    req: ReqModel[ReqDineInSuitabilityAnalysis],
-):
-    try:
-        # Direct call - bypass request_handling wrapper
-        result = await analyze_dine_in_sites(req.request_body)
-        
-        return ResModel(
-            message="Analysis completed successfully",
-            request_id="dine_in_analysis",
-            data=result
-        )
-    except ValueError as e:
-        if "Failed to get traffic data from API" in str(e):
-            raise HTTPException(status_code=503, detail=str(e))
-        raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
 @analysis_router.post(
     CONF.smart_pharmacy_report,   # <-- add a new path constant in CONF
