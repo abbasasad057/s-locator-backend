@@ -30,8 +30,6 @@ from config_factory import CONF
 
 from all_types.response_dtypes import ResIntelligenceViewport
 from smart_reports.reports import generate_html_report
-# from traffic_data import get_here_traffic_score
-from standalone_google_maps_traffic import analyze_traffic_at_location
 from pydantic import BaseModel
 
 analysis_router = APIRouter()

@@ -101,7 +101,7 @@ async def clear_user_data(user_id: str):
         print(f"User profile not found for user: {user_id}")
 
 
-async def clear_all_users_data():
+async def clear_all_users_profile():
     """
     Clears the datasets, layers, and catalogs for all users.
     """
@@ -169,7 +169,7 @@ async def truncate_postgresql_table():
 
 async def main():
     # # Clear all user profiles' datasets, layers, and catalogs
-    await clear_all_users_data()
+    await clear_all_users_profile()
 
     # # Clear fields in dataset_matching and user_matching documents
     await clear_dataset_and_user_matching()

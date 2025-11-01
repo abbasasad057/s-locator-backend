@@ -601,8 +601,8 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
         feat_collec = select_sub_properties(feat_collec)
 
     elif "real_estate" in dataset_id:
-        # Parse the real estate dataset ID to extract bounding box and type
-        # Format: saudi_real_estate_riyadh_box=46.082,24.172,47.268,25.255_type=warehouse_for_rent
+        # Parse the real estate dataset ID to extract bounding box, type, and action
+        # Format: saudi_real_estate_riyadh_box=46.082,24.172,47.268,25.255_type=warehouse_for_rent_action=sample
         # Extract bounding box
         box_start = dataset_id.find("box=") + 4
         box_end = dataset_id.find("_type=")
@@ -611,9 +611,14 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
 
         # Extract type
         type_start = dataset_id.find("type=") + 5
-        type_str = dataset_id[type_start:]
+        type_end = dataset_id.find("_action=")
+        type_str = dataset_id[type_start:type_end]
         # Handle multiple types separated by commas
         property_types = [t.strip() for t in type_str.split(",")]
+
+        # Extract action
+        action_start = dataset_id.find("action=") + 7
+        action = dataset_id[action_start:]
 
         # bbox_coords format: [bottom_lng, bottom_lat, top_lng, top_lat]
         bottom_lng = bbox_coords[0]
@@ -621,15 +626,29 @@ async def load_dataset(dataset_id: str, fetch_full_plan_datasets=False) -> Dict:
         top_lng = bbox_coords[2]
         top_lat = bbox_coords[3]
 
-        # Query the database using the correct parameter mapping
-        city_data = await Database.fetch(
-            SqlObject.real_estate_full_data,
-            property_types,  # $1 - category array
-            bottom_lng,
-            bottom_lat,
-            top_lng,
-            top_lat,
-        )
+        # Query the database using the appropriate query based on action
+        if action == "sample":
+            page_number = 0
+            offset = page_number * DEFAULT_LIMIT
+            city_data = await Database.fetch(
+                SqlObject.saudi_real_estate_w_bounding_box_and_category,
+                property_types,  # $1 - category array
+                bottom_lng,
+                bottom_lat,
+                top_lng,
+                top_lat,
+                DEFAULT_LIMIT,
+                offset,
+            )
+        else:  # full data
+            city_data = await Database.fetch(
+                SqlObject.real_estate_full_data,
+                property_types,  # $1 - category array
+                bottom_lng,
+                bottom_lat,
+                top_lng,
+                top_lat,
+            )
 
         # Convert to DataFrame and then to GeoJSON format
         city_df = pd.DataFrame([dict(record) for record in city_data])
@@ -864,7 +883,7 @@ async def get_real_estate_dataset_from_storage(
         type_str = str(data_type)
 
     # Create the new filename format with explicit prefixes
-    bknd_dataset_id = f"saudi_real_estate_{req.city_name.lower()}_box={bbox_str}_type={type_str}"
+    bknd_dataset_id = f"saudi_real_estate_{req.city_name.lower()}_box={bbox_str}_type={type_str}_action={req.action}"
 
     return geojson_data, bknd_dataset_id, next_page_token
 
