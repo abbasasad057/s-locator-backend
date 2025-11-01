@@ -11,6 +11,7 @@ from all_types.response_dtypes import (
     BusinessTypeResponse,
     BusinessTypeConfig,
 )
+from storage_methods import ALL_POI_CATEGORIES_LOWER
 
 business_metrics_router = APIRouter()
 
@@ -45,8 +46,36 @@ async def get_business_category_metrics(business_type: str):
     """
     Get evaluation metrics configuration for a specific business type.
     """
-    # Get configuration
-    config_data = BUSINESS_TYPE_CONFIGS[business_type]
+    # Get configuration, fallback to pharmacy if business_type not found
+    config_data = BUSINESS_TYPE_CONFIGS.get(business_type)
+    if config_data is None:
+        # Use pharmacy as fallback for metrics, but empty categories
+        pharmacy_config = BUSINESS_TYPE_CONFIGS["pharmacy"].copy()
+        config_data = {
+            "business_type": business_type,
+            "display_name": business_type.title(),
+            "icon": "🏪",  # Generic business icon
+            "description": f"Analysis for {business_type.title()} business type",
+            "competition_categories": [],
+            "complementary_categories": [],
+            "cross_shopping_categories": [],
+            "metrics": pharmacy_config["metrics"]
+        }
+    
+    # Validate categories exist in POI list
+    all_categories = (
+        config_data.get("competition_categories", []) +
+        config_data.get("complementary_categories", []) +
+        config_data.get("cross_shopping_categories", [])
+    )
+    
+    invalid_categories = [cat for cat in all_categories if cat.lower() not in ALL_POI_CATEGORIES_LOWER]
+    if invalid_categories:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid categories in config: {invalid_categories}"
+        )
+    
     config = BusinessTypeConfig(**config_data)
 
     return BusinessTypeResponse(success=True, data=config)

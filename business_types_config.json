@@ -4,6 +4,9 @@
     "display_name": "Pharmacy",
     "icon": "💊",
     "description": "Analyze the viability of opening a pharmacy in your chosen location",
+    "competition_categories": ["pharmacy"],
+    "complementary_categories": ["hospital", "dentist", "dental_clinic"],
+    "cross_shopping_categories": ["grocery_store", "supermarket", "convenience_store"],
     "metrics": {
       "traffic": {
         "name": "Traffic",
@@ -52,6 +55,9 @@
     "display_name": "Café",
     "icon": "☕",
     "description": "Evaluate the potential for a successful café business",
+    "competition_categories": ["cafe", "coffee_shop"],
+    "complementary_categories": ["restaurant", "bakery", "book_store"],
+    "cross_shopping_categories": ["grocery_store", "shopping_mall", "park"],
     "metrics": {
       "traffic": {
         "name": "Traffic",
@@ -92,6 +98,9 @@
     "display_name": "Retail Store",
     "icon": "🛍️",
     "description": "Assess the market potential for a retail business",
+    "competition_categories": ["store", "clothing_store", "department_store"],
+    "complementary_categories": ["restaurant", "cafe", "shopping_mall"],
+    "cross_shopping_categories": ["grocery_store", "supermarket", "bank"],
     "metrics": {
       "traffic": {
         "name": "Traffic",
@@ -132,6 +141,9 @@
     "display_name": "Restaurant",
     "icon": "🍽️",
     "description": "Analyze the dining market and competition landscape",
+    "competition_categories": ["restaurant", "fast_food_restaurant"],
+    "complementary_categories": ["cafe", "bar", "hotel"],
+    "cross_shopping_categories": ["grocery_store", "shopping_mall", "movie_theater"],
     "metrics": {
       "traffic": {
         "name": "Traffic",
@@ -172,6 +184,9 @@
     "display_name": "Warehouse",
     "icon": "🏭",
     "description": "Evaluate optimal warehouse location for logistics and distribution",
+    "competition_categories": ["storage", "wholesaler"],
+    "complementary_categories": ["transit_depot", "truck_stop"],
+    "cross_shopping_categories": ["gas_station", "restaurant", "hotel"],
     "metrics": {
       "traffic": {
         "name": "Traffic",

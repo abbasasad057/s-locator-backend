@@ -237,6 +237,9 @@ class BusinessTypeConfig(BaseModel):
     display_name: str
     icon: str
     description: str
+    competition_categories: List[str]
+    complementary_categories: List[str]
+    cross_shopping_categories: List[str]
     metrics: Dict[str, MetricConfig]
 
 
