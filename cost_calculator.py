@@ -1,13 +1,15 @@
-from all_types.request_dtypes import ReqFetchDataset
+from all_types.request_dtypes import ReqFetchDataset, ReqCityCountry
 from all_types.response_dtypes import ResCostEstimate
 from logging_wrapper import apply_decorator_to_module
 from boolean_query_processor import optimize_query_sequence
 import json
 import math
 from typing import Dict, Optional
-
+from preloaded_constants import poi_categories
+from boolean_query_processor import reduce_to_single_query
 
 from app_logger import get_logger
+from data_fetcher_helper import determine_data_type
 logger = get_logger(__name__)
 
 COST_PER_1000_CALLS = 40
@@ -25,44 +27,20 @@ def ensure_city_categories(country_name: str, city_name: str) -> Dict:
     
     if city_key not in CITY_CATEGORIES:
         file_path = f"Backend/country_info/{country_name.lower().replace(' ', '_')}/city_info/{city_name.lower().replace(' ', '_')}/ggl_categories.json"
-        try:
-            with open(file_path, 'r') as f:
-                categories_data = json.load(f)
-                # Flatten the categories
-                CITY_CATEGORIES[city_key] = {
-                    subcat: value
-                    for cat in categories_data
-                    for subcat, value in categories_data[cat].items()
-                }
-                logger.info(f"Loaded categories for {city_key}")
-        except Exception as e:
-            logger.error(f"Error loading categories for {city_key}: {str(e)}")
-            CITY_CATEGORIES[city_key] = {}
+
+        with open(file_path, 'r') as f:
+            categories_data = json.load(f)
+            # Flatten the categories
+            CITY_CATEGORIES[city_key] = {
+                subcat: value
+                for cat in categories_data
+                for subcat, value in categories_data[cat].items()
+            }
+            logger.info(f"Loaded categories for {city_key}")
     
     return CITY_CATEGORIES[city_key]
 
-async def load_city_categories(country_name: str, city_name: str) -> None:
-    """Load category popularity data for a specific city if not already loaded"""
-    city_key = get_city_key(country_name, city_name)
-    if city_key not in CITY_CATEGORIES:
-        file_path = f"Backend/country_info/{country_name.lower().replace(' ', '_')}/city_info/{city_name.lower().replace(' ', '_')}/ggl_categories.json"
-        try:
-            with open(file_path, 'r') as f:
-                categories_data = json.load(f)
-                # Flatten the categories
-                CITY_CATEGORIES[city_key] = {
-                    subcat: value
-                    for cat in categories_data
-                    for subcat, value in categories_data[cat].items()
-                }
-        except Exception as e:
-            print(f"Error loading categories for {city_key}: {str(e)}")
-            CITY_CATEGORIES[city_key] = {}
 
-def get_city_categories(country_name: str, city_name: str) -> Dict:
-    """Get category popularity data for a specific city"""
-    city_key = get_city_key(country_name, city_name)
-    return CITY_CATEGORIES.get(city_key, {})
 
 def estimate_active_circles(density_score: float, total_circles: int) -> int:
     """
@@ -102,6 +80,29 @@ def estimate_active_circles(density_score: float, total_circles: int) -> int:
     return min(active_circles, total_circles)
 
 async def calculate_cost(req: ReqFetchDataset, text_search:bool=False):
+    # Check if this is real estate data
+    categories = await poi_categories()
+    data_type = determine_data_type(req, categories)
+
+    real_total_cost = 0
+    real_estate_api_calls = 0
+    if data_type == "real_estate":
+        with open("Backend/real_estate_pricing.json", "r") as f:
+            real_estate_pricing = json.load(f)
+        
+        # Parse boolean query to get categories
+        
+        included_types, excluded_types = reduce_to_single_query(req.boolean_query)
+        
+        # Calculate total cost based on categories
+        real_total_cost = 0
+        for category in included_types:
+            real_total_cost += real_estate_pricing[category]
+        
+
+    # Logic for Google categories
+    cost = 0
+    total_api_calls = 0
     if not text_search:
         # Get the flattened categories, loading if necessary
         flattened_categories = ensure_city_categories(req.country_name, req.city_name)
@@ -134,5 +135,8 @@ async def calculate_cost(req: ReqFetchDataset, text_search:bool=False):
             
         cost = (total_api_calls / 1000) * COST_PER_1000_CALLS
         cost *= 50
-            
-        return ResCostEstimate(cost=cost, api_calls=total_api_calls)
+
+
+    final_cost = cost + real_total_cost
+    final_total_api_calls = total_api_calls + real_estate_api_calls
+    return ResCostEstimate(cost=final_cost, api_calls=final_total_api_calls)

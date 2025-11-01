@@ -40,14 +40,13 @@ from data_fetcher import (
     delete_layer,
     aquire_user_lyrs,
     fetch_lyr_map_data,
-    poi_categories,
     fetch_gradient_colors,
     fetch_dataset,
-    load_area_intelligence_categories,
 )
 from data_fetcher_llm import process_llm_query
 from cost_calculator import calculate_cost
 from google_api_connector import check_street_view_availability
+from preloaded_constants import load_area_intelligence_categories, poi_categories
 from recolor_filter import (
     recolor_based_on_agent,
     recolor_based_on,

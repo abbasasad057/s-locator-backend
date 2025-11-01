@@ -5,7 +5,8 @@ from all_types.response_dtypes import ResLLMFetchDataset
 from all_types.request_dtypes import ReqLLMFetchDataset, ReqFetchDataset
 from cost_calculator import calculate_cost
 from config_factory import CONF
-from data_fetcher import fetch_country_city_data, poi_categories
+from data_fetcher import fetch_country_city_data
+from preloaded_constants import poi_categories
 from utils.geo_std_utils import fetch_lat_lng_bounding_box
 import time 
 import uuid

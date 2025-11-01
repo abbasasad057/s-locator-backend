@@ -1,7 +1,5 @@
 from datetime import timedelta, datetime, timezone
 import random
-from fuzzywuzzy import process, fuzz
-import re
 import asyncio
 from urllib.parse import unquote, urlparse
 import uuid
@@ -21,6 +19,8 @@ from backend_common.auth import (
 from backend_common.background import get_background_tasks
 from dataset_helper import excecute_dataset_plan
 from backend_common.stripe_backend.customers import fetch_customer
+from data_fetcher_helper import determine_data_type
+from preloaded_constants import poi_categories
 from utils.utils import convert_strings_to_ints
 from backend_common.gbucket import (
     upload_file_to_google_cloud_bucket,
@@ -46,16 +46,11 @@ from logging_wrapper import log_and_validate
 from constants import load_country_city
 from mapbox_connector import MapBoxConnector
 from storage_methods import (
-    GOOGLE_CATEGORIES,
     REAL_ESTATE_CATEGORIES,
     AREA_INTELLIGENCE_CATEGORIES,
     GRADIENT_COLORS,
-    ALL_POI_CATEGORIES_DICT,
-    # load_real_estate_categories,
-    # load_area_intelligence_categories,
     get_real_estate_dataset_from_storage,
     get_census_dataset_from_storage,
-    get_commercial_properties_dataset_from_storage,
     fetch_dataset_id,
     load_dataset,
     update_dataset_layer_matching,
@@ -214,129 +209,6 @@ async def fetch_country_city_data() -> Dict[str, List[Dict[str, float]]]:
     return data
 
 
-def determine_data_type(
-    req: ReqFetchDataset, categories: Dict
-) -> Optional[str]:
-    """
-    Determines the data type based on boolean query.
-    Returns:
-    - Special category if ALL terms belong to that category
-    - "google_categories" if ANY terms are Google or custom terms
-    - Raises HTTPException if any terms are not in approved categories (with fuzzy suggestions)
-    - Raises HTTPException if mixing Google/custom with special categories
-    """
-    boolean_query = req.boolean_query
-
-    if not boolean_query:
-        return None
-
-    # check if text search is in the boolean query. indicated by @ sign wrapping the search term like @auto parts@ OR @car repair@ OR قطع غيار السيارات NOT بنشر
-    # if so remove it from the boolean query and add it to the text search text_search_terms
-    text_search_terms = re.findall(r"@([^@]+)@", boolean_query)
-    for term in text_search_terms:
-        boolean_query = boolean_query.replace(f"@{term}@", f"{term}")
-
-    # Extract just the terms
-    terms = set(
-        term.strip()
-        for term in boolean_query.replace("(", " ")
-        .replace(")", " ")
-        .replace("AND", " ")
-        .replace("OR", " ")
-        .replace("NOT", " ")
-        .split()
-    )
-
-    if not terms:
-        return None
-
-    if req.search_type == "keyword_search":
-        # If the search type is text_search, we can assume it's a Google search
-        # and return the google_categories directly
-        return "google_categories"
-
-    # Create a set of all approved terms from all categories and organize by category
-    approved_terms = set()
-    categories_with_terms = {}
-
-    for category_name, category_terms in categories.items():
-        if isinstance(category_terms, list):
-            approved_terms.update(category_terms)
-            categories_with_terms[category_name] = category_terms
-
-    # Check if all terms are in the approved list
-    invalid_terms = terms - approved_terms
-    if invalid_terms:
-        # Generate fuzzy suggestions for each invalid term
-        suggestions = {}
-        for invalid_term in invalid_terms:
-            # Get top 1 closest match
-            closest_match = process.extractOne(
-                invalid_term, list(approved_terms), scorer=fuzz.ratio
-            )
-
-            # Only suggest if score > 60 to avoid poor suggestions
-            if closest_match and closest_match[1] > 60:
-                suggestions[invalid_term] = {"did_you_mean": closest_match[0]}
-            else:
-                suggestions[invalid_term] = {"message": "No close match found"}
-
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={
-                "message": "Invalid terms found in boolean query",
-                "invalid_terms": list(invalid_terms),
-                "suggestions": suggestions,
-                "help": "Use terms from the approved categories list below or try the suggested alternatives",
-                "available_categories": categories_with_terms,
-                "total_available_terms": len(approved_terms),
-            },
-        )
-
-    # Check non-Google categories first
-    for category, category_terms in categories.items():
-        if category not in GOOGLE_CATEGORIES:
-            matches = terms.intersection(set(category_terms))
-            if matches:
-                # If we found any special category terms, ALL terms must belong to this category
-                if len(matches) != len(terms):
-                    non_matching_terms = terms - matches
-
-                    # Generate suggestions for non-matching terms within this category
-                    category_suggestions = {}
-                    for term in non_matching_terms:
-                        closest_in_category = process.extractOne(
-                            term, category_terms, scorer=fuzz.ratio
-                        )
-
-                        if closest_in_category and closest_in_category[1] > 60:
-                            category_suggestions[term] = {
-                                "did_you_mean": closest_in_category[0]
-                            }
-                        else:
-                            category_suggestions[term] = {
-                                "message": f"No close match in {category} category"
-                            }
-
-                    raise HTTPException(
-                        status_code=status.HTTP_400_BAD_REQUEST,
-                        detail={
-                            "message": f"Cannot mix {category} terms with other category terms",
-                            "category": category,
-                            "valid_category_terms": list(matches),
-                            "invalid_mixed_terms": list(non_matching_terms),
-                            "suggestions": category_suggestions,
-                            "suggestion": f"Use only {category} terms or only general/Google category terms",
-                            "available_categories": categories_with_terms,
-                        },
-                    )
-                return category
-
-    # If we get here, no special category matches were found
-    # So we can safely return google_categories for either Google terms or custom terms
-    return "google_categories"
-
-
 async def check_purchase(req: ReqFetchDataset, plan_name: str):
     # Skip payment check in test mode
     if CONF.test_mode:
@@ -471,9 +343,7 @@ async def fetch_dataset(req: ReqFetchDataset):
 
     # Load all categories
 
-    categories = await poi_categories(
-        ReqCityCountry(country_name=req.country_name, city_name=req.city_name)
-    )
+    categories = await poi_categories()
 
     data_type = determine_data_type(req, categories)
 
@@ -983,24 +853,6 @@ async def fetch_ctlg_lyrs(req: ReqFetchCtlgLyrs) -> List[ResLyrMapData]:
         return ctlg_lyrs_map_data
     except HTTPException:
         raise
-
-
-async def load_area_intelligence_categories(req: ReqCityCountry = "") -> Dict:
-    """
-    Loads and returns a dictionary of area intelligence categories.
-    """
-    return AREA_INTELLIGENCE_CATEGORIES
-
-
-async def poi_categories(req: ReqCityCountry = "") -> Dict:
-    """
-    Provides a comprehensive list of place categories, including Google places,
-    real estate, and other custom categories.
-    
-    Returns the pre-loaded ALL_POI_CATEGORIES_DICT from storage_methods.
-    This is the same source of truth used by validators.
-    """
-    return ALL_POI_CATEGORIES_DICT
 
 
 async def save_draft_catalog(req: ReqSavePrdcerLyer) -> str:
