@@ -583,4 +583,4 @@ def main(test_file=None, test_keyword=None):
     sys.exit(exit_code)
 
 if __name__ == "__main__":
-    main(test_file="test_viewport.py", test_keyword="test_viewport_population")
+    main()

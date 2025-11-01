@@ -180,7 +180,7 @@ LAYER_MANAGEMENT_TESTS = [
             "response_body": {
                 "message": "Request received.",
                 "request_id": "min_length:1",
-                "data": "length:2"  # Should have exactly 2 layers from the seeded profile
+                "data": "length:4"
             },
         },
     ),

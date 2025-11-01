@@ -669,6 +669,46 @@ async def aquire_user_lyrs(req: UserId) -> List[LayerInfo]:
             # Continue to next layer instead of failing the entire request
             continue
 
+    # Auto-create layers for purchased datasets that don't have layers yet
+    user_data = await load_user_profile(req.user_id)
+    purchased_datasets = user_data.get("prdcer", {}).get("prdcer_dataset", {})
+
+    # Get existing bknd_dataset_ids to avoid duplicates
+    existing_dataset_ids = {layer.bknd_dataset_id for layer in user_layers_metadata}
+
+    for plan_name in purchased_datasets.keys():
+        if plan_name not in existing_dataset_ids:
+            # Create auto-generated layer for this purchased dataset
+            # Parse plan_name to extract metadata
+            # Format: plan_{type_string}_{country_name}_{city_name}
+            parts = plan_name.split("_")
+            if len(parts) >= 4 and parts[0] == "plan":
+                type_string = parts[1]
+                # Country and city might have spaces, so join the rest
+                remaining = "_".join(parts[2:])
+                # Try to split on last occurrence of known country names or just use as is
+                city_name = remaining.split("_")[-1] if "_" in remaining else remaining
+                country_name = remaining.replace(f"_{city_name}", "") if "_" in remaining else ""
+
+                # Create auto-generated layer name
+                display_name = type_string.replace("_", " ").title()
+                auto_layer_name = f"[Auto] {display_name} - {country_name} - {city_name}"
+
+                user_layers_metadata.append(
+                    LayerInfo(
+                        prdcer_lyr_id=f"auto_{plan_name}",  # Auto-generated ID
+                        prdcer_layer_name=auto_layer_name,
+                        points_color="#FF6B6B",  # Default color for auto layers
+                        layer_legend=auto_layer_name,
+                        layer_description=f"Auto-generated layer for purchased dataset: {display_name}",
+                        records_count=0,
+                        city_name=city_name,
+                        bknd_dataset_id=plan_name,
+                        is_zone_lyr="false",
+                        progress=100,  # Auto layers are complete
+                    )
+                )
+
     # if not user_layers_metadata:
     #     raise HTTPException(
     #         status_code=404, detail="No valid layers found for the user"
