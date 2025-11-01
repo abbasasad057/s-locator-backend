@@ -505,6 +505,7 @@ async def create_user_profile(req: ReqCreateUserProfile):
             "prdcer_lyrs": {},
             "prdcer_ctlgs": {},
             "draft_ctlgs": {},
+            "purchased_reports": {},
         },
     }
 
@@ -555,6 +556,9 @@ async def update_user_profile(user_id: str, user_data: dict):
             ),
             "draft_ctlgs": prdcer_data.get(
                 "draft_ctlgs", existing_prdcer.get("draft_ctlgs", {})
+            ),
+            "purchased_reports": prdcer_data.get(
+                "purchased_reports", existing_prdcer.get("purchased_reports", {})
             ),
         },
     }

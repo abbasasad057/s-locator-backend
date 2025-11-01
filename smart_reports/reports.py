@@ -9,6 +9,8 @@ import aiohttp
 
 from all_types.request_dtypes import ReqFetchDataset, Reqsmartreport
 from app_logger import get_logger
+from backend_common.auth import load_user_profile, update_user_profile
+from datetime import datetime
 from backend_common.database import MAX_POOL
 from data_fetcher import fetch_dataset
 from logging_wrapper import apply_decorator_to_module
@@ -877,6 +879,38 @@ async def generate_target_business_report(req: Reqsmartreport):
     )
 
 
+async def register_report_in_profile(req: Reqsmartreport):
+    """
+    Register the smart report purchase in the user's Firebase profile.
+    
+    Args:
+        req: The request object containing report parameters
+        html_file_path: Path to the generated HTML report file
+    """
+
+    # Load the user's current profile
+    user_data = await load_user_profile(req.user_id)
+    
+    # Prepare the report data to store
+    report_data = {
+        "report_type": f"{req.potential_business_type}",
+        "purchased_at": datetime.now().isoformat(),
+        "parameters": req.model_dump(),  # Store all request parameters
+    }
+    
+    # Ensure reports exists
+    if "reports" not in user_data.get("prdcer", {}):
+        user_data["prdcer"]["reports"] = {}
+    
+    # Add the report to the user's profile
+    user_data["prdcer"]["reports"][report_data["report_type"]] = report_data
+
+    # Update the user profile
+    await update_user_profile(req.user_id, user_data)
+
+    logger.info(f"Successfully registered smart report for user {req.user_id}: {report_data['report_type']}")
+
+
 async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
     """
     Generate a comprehensive target business report and return structured data.
@@ -908,6 +942,11 @@ async def generate_html_report(req: Reqsmartreport) -> Dict[str, Any]:
         metrics.competition /= 100.0
         metrics.cross_shopping /= 100.0
         metrics.complementary /= 100.0
+
+
+    # Register the report purchase in the user's Firebase profile
+    await register_report_in_profile(req)
+
 
     # Generate the processed report data
     (
