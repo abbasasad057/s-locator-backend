@@ -1,5 +1,39 @@
-from all_types.request_dtypes import Dict, ReqCityCountry
-from storage_methods import ALL_POI_CATEGORIES_DICT, AREA_INTELLIGENCE_CATEGORIES
+import os
+import json
+from all_types.request_dtypes import Dict
+
+COLOR_PATH = "Backend/gradient_colors.json"
+GOOGLE_CATEGORIES_PATH = "Backend/google_categories.json"
+REAL_ESTATE_CATEGORIES_PATH = "Backend/real_estate_categories.json"
+AREA_INTELLIGENCE_CATEGORIES_PATH = "Backend/area_intelligence_categories.json"
+STORAGE_DIR = "Backend/storage"
+os.makedirs(STORAGE_DIR, exist_ok=True)
+
+
+with open(GOOGLE_CATEGORIES_PATH, "r") as f:
+    GOOGLE_CATEGORIES = json.load(f)
+with open(REAL_ESTATE_CATEGORIES_PATH, "r") as f:
+    REAL_ESTATE_CATEGORIES = json.load(f)
+with open(AREA_INTELLIGENCE_CATEGORIES_PATH, "r") as f:
+    AREA_INTELLIGENCE_CATEGORIES = json.load(f)
+with open(COLOR_PATH, "r") as f:
+    GRADIENT_COLORS = json.load(f)
+
+# SINGLE SOURCE OF TRUTH: POI categories loaded at startup
+# Combine all category dictionaries
+ALL_POI_CATEGORIES_DICT = {
+    **GOOGLE_CATEGORIES,
+    **REAL_ESTATE_CATEGORIES,
+    **AREA_INTELLIGENCE_CATEGORIES,
+}
+
+# Build flattened lists for validation (DRY approach)
+ALL_POI_CATEGORIES = [
+    category 
+    for category_list in ALL_POI_CATEGORIES_DICT.values() 
+    for category in category_list
+]
+ALL_POI_CATEGORIES_LOWER = [cat.lower() for cat in ALL_POI_CATEGORIES]
 
 
 async def poi_categories() -> Dict:
@@ -13,7 +47,7 @@ async def poi_categories() -> Dict:
     return ALL_POI_CATEGORIES_DICT
 
 
-async def load_area_intelligence_categories(req: ReqCityCountry = "") -> Dict:
+async def load_area_intelligence_categories() -> Dict:
     """
     Loads and returns a dictionary of area intelligence categories.
     """

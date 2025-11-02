@@ -42,51 +42,9 @@ DATASET_LAYER_MATCHING_PATH = "Backend/dataset_layer_matching.json"
 DATASETS_PATH = "Backend/datasets"
 USER_LAYER_MATCHING_PATH = "Backend/user_layer_matching.json"
 METASTORE_PATH = "Backend/layer_category_country_city_matching"
-STORAGE_DIR = "Backend/storage"
-COLOR_PATH = "Backend/gradient_colors.json"
-USERS_INFO_PATH = "Backend/users_info.json"
-RIYADH_VILLA_ALLROOMS = "Backend/riyadh_villa_allrooms.json"  # to be change to real estate id needed
-GOOGLE_CATEGORIES_PATH = "Backend/google_categories.json"
-REAL_ESTATE_CATEGORIES_PATH = "Backend/real_estate_categories.json"
-# Add a new constant for census categories path
-area_intelligence_categories_PATH = "Backend/area_intelligence_categories.json"
-# Map census types to their respective CSV files
-CENSUS_FILE_MAPPING = {
-    "household": "Backend/census_data/Final_household_all.csv",
-    "population": "Backend/census_data/Final_population_all.csv",
-    "housing": "Backend/census_data/Final_housing_all.csv",
-    "economic": "Backend/census_data/Final_economic_all.csv",
-}
 
 DEFAULT_LIMIT = 20
 
-os.makedirs(STORAGE_DIR, exist_ok=True)
-
-
-with open(GOOGLE_CATEGORIES_PATH, "r") as f:
-    GOOGLE_CATEGORIES = json.load(f)
-with open(REAL_ESTATE_CATEGORIES_PATH, "r") as f:
-    REAL_ESTATE_CATEGORIES = json.load(f)
-with open(area_intelligence_categories_PATH, "r") as f:
-    AREA_INTELLIGENCE_CATEGORIES = json.load(f)
-with open(COLOR_PATH, "r") as f:
-    GRADIENT_COLORS = json.load(f)
-
-# SINGLE SOURCE OF TRUTH: POI categories loaded at startup
-# Combine all category dictionaries
-ALL_POI_CATEGORIES_DICT = {
-    **GOOGLE_CATEGORIES,
-    **REAL_ESTATE_CATEGORIES,
-    **AREA_INTELLIGENCE_CATEGORIES,
-}
-
-# Build flattened lists for validation (DRY approach)
-ALL_POI_CATEGORIES = [
-    category 
-    for category_list in ALL_POI_CATEGORIES_DICT.values() 
-    for category in category_list
-]
-ALL_POI_CATEGORIES_LOWER = [cat.lower() for cat in ALL_POI_CATEGORIES]
 
 
 def to_serializable(obj: Any) -> Any:

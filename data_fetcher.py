@@ -42,13 +42,11 @@ from logging_wrapper import (
     apply_decorator_to_module,
     preserve_validate_decorator,
 )
+from preloaded_constants import AREA_INTELLIGENCE_CATEGORIES, GRADIENT_COLORS
 from logging_wrapper import log_and_validate
 from preloaded_constants import load_country_city
 from mapbox_connector import MapBoxConnector
 from storage_methods import (
-    REAL_ESTATE_CATEGORIES,
-    AREA_INTELLIGENCE_CATEGORIES,
-    GRADIENT_COLORS,
     get_real_estate_dataset_from_storage,
     get_census_dataset_from_storage,
     fetch_dataset_id,

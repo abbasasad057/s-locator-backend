@@ -11,7 +11,7 @@ from all_types.response_dtypes import (
     BusinessTypeResponse,
     BusinessTypeConfig,
 )
-from storage_methods import ALL_POI_CATEGORIES_LOWER
+from preloaded_constants import ALL_POI_CATEGORIES_LOWER
 
 business_metrics_router = APIRouter()
 

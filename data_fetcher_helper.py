@@ -1,5 +1,5 @@
 from all_types.request_dtypes import Dict, ReqFetchDataset
-from storage_methods import GOOGLE_CATEGORIES
+from preloaded_constants import GOOGLE_CATEGORIES
 
 
 from fastapi import HTTPException, status

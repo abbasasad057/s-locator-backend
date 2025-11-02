@@ -4,7 +4,7 @@ from fastapi import UploadFile
 from pydantic import BaseModel, Field, field_validator
 
 from typing import Optional
-
+from preloaded_constants import ALL_POI_CATEGORIES_LOWER
 from all_types.internal_types import CtlgItems, UserId, BooleanQuery
 
 U = TypeVar("U")
@@ -317,7 +317,7 @@ class Reqsmartreport(UserId):
         Validate that the potential_business_type (single string) exists in the POI list.
         Uses ALL_POI_CATEGORIES_LOWER loaded at app startup as the single source of truth.
         """
-        from storage_methods import ALL_POI_CATEGORIES_LOWER
+        
         
         if v.lower() not in ALL_POI_CATEGORIES_LOWER:
             raise ValueError(
@@ -334,7 +334,6 @@ class Reqsmartreport(UserId):
         Validates complementary_categories, cross_shopping_categories, and competition_categories.
         Uses ALL_POI_CATEGORIES_LOWER loaded at app startup as the single source of truth.
         """
-        from storage_methods import ALL_POI_CATEGORIES_LOWER
         
         for category in v:
             if category.lower() not in ALL_POI_CATEGORIES_LOWER:
